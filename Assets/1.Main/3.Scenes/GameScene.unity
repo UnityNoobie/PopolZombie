@@ -1010,7 +1010,7 @@ MonoBehaviour:
   m_Score: {fileID: 1399666919}
   m_Money: {fileID: 240681696}
   m_quickSlot: {fileID: 72392543}
-  m_store: {fileID: 0}
+  m_store: {fileID: 1073680397}
 --- !u!114 &163482170 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 421907680720212644, guid: 9f728d44025ea7743960ce2fe4f34367,
@@ -6796,7 +6796,7 @@ MonoBehaviour:
   Shopareas: []
   m_StoreName: {fileID: 1825854833}
   m_buyItem: {fileID: 1886898836}
-  m_info: {fileID: 0}
+  m_info: {fileID: 1988195976}
 --- !u!4 &1090257464 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7542981432600359336, guid: cf900bff92e44924baf1b7b47bd75ac9,

@@ -8,9 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
-    <ProjectGuid>{B213C269-B32E-2494-2388-6E5520170FF2}</ProjectGuid>
+    <RootNamespace></RootNamespace>
+    <ProjectGuid>{F3FF4403-624C-EEE5-3EA2-93C6ABB9A8E9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
@@ -57,7 +56,6 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\1.Main\2.Script\UI\HUDController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Editor\UIProgressBarEditor.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Editor\UISpriteAnimationInspector.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Editor\UIPlayAnimationEditor.cs" />
@@ -971,11 +969,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{3FAAFCA5-C475-7B48-81CF-98E034F3CE3C}</Project>
+      <Project>{6687B25B-9291-F8D9-75E4-BE4803C574E0}</Project>
       <Name>Assembly-CSharp</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
