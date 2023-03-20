@@ -64,6 +64,7 @@ public class Inventory : MonoBehaviour
     public void SetPlayer(PlayerController player)
     {
         m_player = player;
+        //과연될까용
     }
     public void GetStatusInfo(PlayerController player)   //플레이어의 스탯정보를 장비변경 등의 효과 발생 시 불러와줌.
     {

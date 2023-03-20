@@ -37,7 +37,7 @@ public class BossController : MonsterController
     {
         isRage = true;
         m_state = MonsterState.Rage;
-        var effectName = TableEffect.Instance.m_tableData[7].Prefab[2];
+        var effectName = TableEffect.Instance.m_tableData[8].Prefab[2];
         var effect = EffectPool.Instance.Create(effectName);
         m_fire = effect.gameObject.GetComponent<ProjectileController>();
         m_fire.SetFollowProjectile(gameObject.GetComponent<MonsterController>(), 0.05f);
@@ -63,7 +63,7 @@ public class BossController : MonsterController
     {
         m_skill2Pos.gameObject.SetActive(false);
         m_skill1Pos.gameObject.SetActive(false);
-        var effectName = TableEffect.Instance.m_tableData[7].Prefab[0];
+        var effectName = TableEffect.Instance.m_tableData[8].Prefab[0];
         var effect = EffectPool.Instance.Create(effectName);
         m_skill = effect.GetComponent<ProjectileController>();
         m_skill.SetProjectileWithChild(gameObject.GetComponent<BossController>(), 1.5f);
@@ -75,7 +75,7 @@ public class BossController : MonsterController
     {
         m_skill1Pos.gameObject.SetActive(false);
         m_skill2Pos.gameObject.SetActive(false);
-        var effectName = TableEffect.Instance.m_tableData[7].Prefab[1];
+        var effectName = TableEffect.Instance.m_tableData[8].Prefab[1];
         var effect = EffectPool.Instance.Create(effectName);
         m_skill2 = effect.GetComponent<ProjectileController>();
         m_skill2.SetProjectile(gameObject.GetComponent<BossController>(), 0.1f);
@@ -190,8 +190,6 @@ public class BossController : MonsterController
                 break;
         }
     }
-
-
     protected override void Awake()
     {
         base.Awake();
@@ -202,17 +200,6 @@ public class BossController : MonsterController
         m_skill2Pos = Utill.GetChildObject(gameObject, "Circle");
         m_skill2Pos.gameObject.SetActive(false);
         RageCool = 15;
-        //  m_animCtr = GetComponent<MonsterAnimController>();
     }
-  ///  private void Start()
-  //  {
 
-   // }
-    /*
-    protected override void Update()
-    {
-        RageCool += Time.deltaTime;
-        if (m_state != MonsterState.Die)
-            BehaviourProcess();
-    }*/
 }

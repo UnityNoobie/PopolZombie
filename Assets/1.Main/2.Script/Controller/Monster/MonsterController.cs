@@ -137,9 +137,9 @@ public class MonsterController : MonoBehaviour
     {//체력 공속 공격력 방어력 이동속도 순서로
         Type = type;
     }
-    public void InitStatus(MonsterType type, string name, float hp, float atkSpeed, float dmg, float def, float speed, float attackDist, float StatScale, float knockBackRigist,float Score) //이 몬스터의 스탯을 적용.
+    public void InitStatus(MonsterType type, string name, float hp, float atkSpeed, float dmg, float def, float speed, float attackDist, float StatScale, float knockBackRigist,float Score,float coin,float exp) //이 몬스터의 스탯을 적용.
     {
-        m_status = new MonStatus(type, name, hp * StatScale, atkSpeed * StatScale, dmg * StatScale, def * StatScale, speed * StatScale, attackDist,knockBackRigist,Score*StatScale);
+        m_status = new MonStatus(type, name, hp * StatScale, atkSpeed * StatScale, dmg * StatScale, def * StatScale, speed * StatScale, attackDist,knockBackRigist,Score*StatScale,coin*StatScale,exp*StatScale);
         m_status.hp = m_status.hpMax; //최대체력 설정.
         m_navAgent.stoppingDistance = m_status.attackDist;
         timeafterAttack = m_status.atkSpeed;
@@ -149,7 +149,7 @@ public class MonsterController : MonoBehaviour
     public void SetStatus(MonsterType type, float StatScale) //몬스터의 타입과 라운드에 따른 StatScale을 받아 몬스터의 정보를 가져와 InitStatus로 보내주기
     {
         var monStat = m_monStat.SetMonStat(Type);
-        InitStatus(monStat.type, monStat.name, monStat.hp, monStat.atkSpeed, monStat.damage, monStat.defense, monStat.speed, monStat.attackDist, StatScale,monStat.knockbackRegist,monStat.Score);
+        InitStatus(monStat.type, monStat.name, monStat.hp, monStat.atkSpeed, monStat.damage, monStat.defense, monStat.speed, monStat.attackDist, StatScale,monStat.knockbackRegist,monStat.Score,monStat.coin,monStat.exp);
        
     }
     public void SetState(MonsterState state)
@@ -167,7 +167,8 @@ public class MonsterController : MonoBehaviour
         // Debug.Log(count+"번째 게임오브젝트 :"+gameObject + "의 SetDie실행!! 현재 상태 : " + m_state);
         StopAllCoroutines();
         UIManager.Instance.ScoreChange(Random.Range(m_status.score / 2, m_status.score / 0.7f));
-        UIManager.Instance.MoneyChange(Random.Range(m_status.score / 2, m_status.score / 0.7f));
+        UIManager.Instance.MoneyChange(Random.Range(m_status.coin / 2, m_status.coin / 0.7f));
+        m_player.IncreaseExperience(m_status.score);
         m_animctr.Play(MonsterAnimController.Motion.Die);
         SetState(MonsterState.Die); //상태를 죽은상태로
         gameObject.tag = "Die";//죽었을때 태그를 Die로 설정하여 시체가 뒤의 좀비 타격방지.
@@ -312,7 +313,10 @@ public class MonsterController : MonoBehaviour
            m_tweenmove.Play();
         }
         if (m_status.hp <= 0) //피해를 받은 후 피가 0 이하일때 사망처리
+        {
             SetDie();
+        }
+           
         StartCoroutine(Coroutine_SetDamagedColor());
     }
     /*

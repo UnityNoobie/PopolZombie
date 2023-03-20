@@ -31,10 +31,5 @@ public class EffectPoolUnit : MonoBehaviour
         m_inactiveTime = Time.time;
         EffectPool.Instance.AddPool(m_effectName, this);
     }
-    private void Start()
-    {
-
-    }
-
 }
 

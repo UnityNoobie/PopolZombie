@@ -94,7 +94,7 @@ public class PlayerGetItem : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            if(m_player.GetValue() >= 0.95)
+            if(m_player.GetHPValue() >= 0.95)
             {
                 UIManager.Instance.SystemMessageCantUse("HealPack");
                 return;

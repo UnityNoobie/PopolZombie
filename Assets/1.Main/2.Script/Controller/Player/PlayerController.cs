@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public ArmorManager m_armorManager { get; set; }
     public static float Money;
     public static float Score;
+    public int m_level;
     [SerializeField]
     HUDText m_hudText;
     [SerializeField] //플레이어의 스테이터스 체크
@@ -24,6 +25,8 @@ public class PlayerController : MonoBehaviour
     Inventory m_inven;
     [SerializeField]
     QuickSlot m_quickSlot;
+    [SerializeField]
+    UpdateManager m_updateManager;
     GunManager m_manager;
     Transform m_leftDir;
     Transform m_hitPos;
@@ -32,20 +35,22 @@ public class PlayerController : MonoBehaviour
     public TestSkillData m_SkillData;
     NavMeshAgent m_navAgent;
     PlayerAnimController m_animCtr;
+    
     bool isComboError;
     [SerializeField]
     GameObject m_area;
     [SerializeField]
     Vector3 m_dir;
 
-   
-
 
     int hp;
     int m_comboIndex;
+    float m_experience;
+    float m_levelexp;
     public float pDefence;
     public int ID;
     float timeAfterAttack;
+  
     #region ArmorData
     int armDefence;
     float armDamage;
@@ -95,8 +100,6 @@ public class PlayerController : MonoBehaviour
         }
     }
     #endregion
-
-
     #region Coroutine
     IEnumerator Coroutine_Invincible(float time)
     {
@@ -106,8 +109,6 @@ public class PlayerController : MonoBehaviour
         m_Pstate = PlayerState.alive;
     }
     #endregion
-
-
     #region AnimEvent
     void AnimEvent_Dead()
     {
@@ -184,6 +185,10 @@ public class PlayerController : MonoBehaviour
     #endregion
     #region PlayerInput
 
+    void SetPlayer()
+    {
+        m_updateManager.SetPlayerController(this);
+    }
     void MoveAnimCtr(Vector3 dir) //움직임 구현기능. 8방향 다리모양 다른식으로 세분화해보리기!
     {
         var fdot = Vector3.Dot(gameObject.transform.forward, dir.normalized);
@@ -230,8 +235,9 @@ public class PlayerController : MonoBehaviour
             transform.LookAt(new Vector3(pointTolook.x, transform.position.y, pointTolook.z));
         }
     }
-    void BehaviorProcess()
+    public void BehaviorProcess()
     {
+        if (m_Pstate.Equals(PlayerState.dead)) return;
         m_dir = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
         if(m_dir.x !=0 && m_dir.z !=0)
         {
@@ -242,11 +248,11 @@ public class PlayerController : MonoBehaviour
             m_navAgent.ResetPath();
         }
         MoveAnimCtr(m_dir);
+        PlayerLookAt();
         m_navAgent.Move(m_dir * m_status.speed/20 * Time.deltaTime);
     }
 
     #endregion
-
     #region AboutStatus
     
     private void ResetData()
@@ -272,7 +278,7 @@ public class PlayerController : MonoBehaviour
 
     void HPControl(int value)
     {
-        m_status.hp += value;
+        m_status.hp += value;   
         if(m_status.hp > m_status.hpMax) 
             m_status.hp = m_status.hpMax; 
         if(m_status.hp < 0)
@@ -280,24 +286,23 @@ public class PlayerController : MonoBehaviour
         hp = Mathf.CeilToInt(m_status.hp);
         UIManager.Instance.HPBar(m_status.hp,m_status.hpMax);
     }
-    void InitStatus(float skillhp, float itemhp, float S_CriPer, float I_Criper, float S_CriDam, float I_CriDam, float S_atkSpeed, float I_atkSpeed, float S_Atk, float I_Atk, float S_Def, float I_Def, float S_speed, float I_speed, int maxammo, float reloadtime,float knockbackPer, float knockbackDist,float atkDist, int shotgun) 
+    void InitStatus(float skillhp, float itemhp, float S_CriPer, float I_Criper, float S_CriDam, float I_CriDam, float S_atkSpeed, float I_atkSpeed, float S_Atk, float I_Atk, float S_Def, float I_Def, float S_speed, float I_speed, int maxammo, float reloadtime,float knockbackPer, float knockbackDist,float atkDist, int shotgun,int level) 
     {//SetStatus에서 스킬과 아이템의 추가값들을 받아옴.
      //스테이터스 입력값의 순서 : 최대체력 , 크리티컬 확률, 크리티컬 추가 데미지,공격속도, 공격력, 방어력, 이동속도
-        m_status = new Status(hp,200 * (1 + (skillhp + itemhp + hpPer)), 10f + S_CriPer + I_Criper + armCriRate, 50f + S_CriDam + I_CriDam, 0 + (S_atkSpeed + I_atkSpeed) * (1 + armAttackSpeed), (S_Atk + armDamage) * I_Atk, 0 + S_Def + I_Def + armDefence, 130 * (1 + S_speed + I_speed + armSpeed), maxammo, reloadtime ,knockbackPer,knockbackDist,atkDist,shotgun);
+        m_status = new Status(hp,200 * (1 + (skillhp + itemhp + hpPer)), 10f + S_CriPer + I_Criper + armCriRate, 50f + S_CriDam + I_CriDam, 0 + (S_atkSpeed + I_atkSpeed) * (1 + armAttackSpeed), (S_Atk + armDamage) * I_Atk, 0 + S_Def + I_Def + armDefence, 130 * (1 + S_speed + I_speed + armSpeed), maxammo, reloadtime ,knockbackPer,knockbackDist,atkDist,shotgun,level);
         // m_status.hpMax = Mathf.CeilToInt(m_status.hpMax); //최대체력 가져오기
         HPControl(0);
         m_animCtr.SetFloat("MeleeSpeed", m_status.atkSpeed);
         m_animCtr.SetFloat("MoveSpeed", m_status.speed / 100);
         m_inven.GetStatusInfo(this);
         pDefence = m_status.defense;  //방어력 가져오기
-        m_area.transform.localScale = new Vector3(m_status.AtkDist, 1f, m_status.AtkDist);
-        
+        m_area.transform.localScale = new Vector3(m_status.AtkDist, 1f, m_status.AtkDist);   
     }
     public void SetStatus(int ID)
     {
         SetWeaponID(ID);
         //스테이터스 입력값의 순서 : 스킬, 아이템 최대체력 ,스킬아이템 크리티컬 확률, 스킬, 아이템 크리티컬 추가 데미지,스킬 아이템 공격속도, 스킬아이템 공격력, 스킬 아이템 방어력 , 이동속도
-        InitStatus(m_SkillData.hp, m_weaponData.HP, m_SkillData.criPer, m_weaponData.CriRate, m_SkillData.criDam, m_weaponData.CriDamage, m_SkillData.atkSpeed, m_weaponData.AtkSpeed, m_SkillData.atk, m_weaponData.Damage, m_SkillData.def, m_weaponData.Defence, m_SkillData.Speed, m_weaponData.Speed, m_weaponData.Mag, m_weaponData.ReloadTime,m_weaponData.KnockBack,m_weaponData.KnockBackDist,m_weaponData.AttackDist,m_weaponData.Shotgun);
+        InitStatus(m_SkillData.hp, m_weaponData.HP, m_SkillData.criPer, m_weaponData.CriRate, m_SkillData.criDam, m_weaponData.CriDamage, m_SkillData.atkSpeed, m_weaponData.AtkSpeed, m_SkillData.atk, m_weaponData.Damage, m_SkillData.def, m_weaponData.Defence, m_SkillData.Speed, m_weaponData.Speed, m_weaponData.Mag, m_weaponData.ReloadTime,m_weaponData.KnockBack,m_weaponData.KnockBackDist,m_weaponData.AttackDist,m_weaponData.Shotgun,m_level);
      //   m_animCtr.SetFloat("MoveSpeed", m_status.speed / 150); //이동속도별 다리움직임 속도조절용.
     }   //넉백을 아직은 무기에서만 적용을 하여 추후 더 넣어줘야함!
     void SetWeaponID(int ID)
@@ -307,13 +312,13 @@ public class PlayerController : MonoBehaviour
         m_SkillData = m_SkillData.SkillData(m_weaponData.weaponType);
     }
 
+
     #endregion
     #region HUD && PlayerState
 
-    public float GetValue()
+    public float GetHPValue()
     {
         float value = m_status.hp / m_status.hpMax;
-
         return value;
     }
     public void GetDamage(float damage)
@@ -365,7 +370,6 @@ public class PlayerController : MonoBehaviour
     }
     public void Revive() //부활기능
     {
-        
         HPControl(Mathf.CeilToInt(m_status.hpMax));
         Debug.Log(m_status.atkSpeed);
         gameObject.SetActive(true);
@@ -378,22 +382,49 @@ public class PlayerController : MonoBehaviour
         effect.transform.localScale = new Vector3(2f, 2f, 2f);
         effect.SetActive(true);
         SetStatus(m_weaponData.ID); //스테이터스 재정비 합니다잉
-
+    }
+    void LevelUP()
+    {
+        m_status.level++;
+        m_levelexp = Levelexp();
+        HPControl(Mathf.CeilToInt(m_status.hpMax)); //풀피로 만들어줌
+        UIManager.Instance.LevelUPUI();
+        StartCoroutine(Coroutine_Invincible(2f)); //렙업시무적
+        var levelupEffect = TableEffect.Instance.m_tableData[6].Prefab[0];
+        var effect = EffectPool.Instance.Create(levelupEffect);
+        effect.transform.position = gameObject.transform.position;
+        effect.transform.localScale = new Vector3(2f, 2f, 2f);
+        effect.SetActive(true);
+    }
+    #endregion
+    #region Level,Exp
+    public void IncreaseExperience(float exp)
+    {
+        m_experience += exp;
+        if (m_experience >= m_levelexp)
+        {
+            m_experience -= m_levelexp;
+            LevelUP();
+        }
+    } 
+    float Levelexp()
+    {
+        return 100 + (20 * m_status.level);
     }
 
     #endregion
-
     private void Awake()
     {
         m_navAgent = GetComponent<NavMeshAgent>();
         m_SkillData = new TestSkillData();
-           //임시용으로 해둔것이기 떄문에 추후 수정필수 m_skilldata, m_ItemData 등등 무조건!!!! 해야함!!
         m_animCtr = GetComponent<PlayerAnimController>();
         m_leftDir = Utill.GetChildObject(gameObject, "LeftDir");
         m_weaponData = new WeaponData();
         m_armorManager= GetComponent<ArmorManager>();
         m_manager = GetComponent<GunManager>();
         isComboError = false;
+        m_level = 1;
+        m_levelexp = Levelexp();
     }
     
     private void Start()
@@ -402,20 +433,9 @@ public class PlayerController : MonoBehaviour
         m_status.hp = m_status.hpMax; //시작 시 hp 설정.
         HPControl(0);
         m_hitPos = Utill.GetChildObject(gameObject, "Dummy_Pos");
+        SetPlayer(); 
+       
     }
-    private void Update()
-    {
-        if(m_Pstate != PlayerState.dead) 
-        {
-            BehaviorProcess();
-            PlayerLookAt();
-        }
-        if(Input.GetKeyDown(KeyCode.F)) //이하 테스트기능
-        {
-            GetDamage(50); 
-        }
-    }
-
 
 }
 

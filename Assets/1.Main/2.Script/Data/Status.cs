@@ -31,8 +31,9 @@ public struct Status
     public float KnockBackDist;
     public float AtkDist;
     public int ShotGun;
+    public int level;
     
-    public Status(float hp,float hpMax,  float criRate, float criAttack,float atkSpeed, float damage, float defense, float speed, int maxammo, float reloadTime,float knockbackPer, float knockbackDist, float atkDist, int shotgun)
+    public Status(float hp,float hpMax,  float criRate, float criAttack,float atkSpeed, float damage, float defense, float speed, int maxammo, float reloadTime,float knockbackPer, float knockbackDist, float atkDist, int shotgun,int Level)
     {
         this.hp = hp;
         this.hpMax = hpMax; //이 객체의 최대체력과 현재 체력을 받아온 hp값으로 저장
@@ -48,6 +49,7 @@ public struct Status
         this.KnockBackPer= knockbackPer;
         this.AtkDist= atkDist;
         this.ShotGun = shotgun;
+        level = Level;
     }
 }
 [System.Serializable]
@@ -64,8 +66,10 @@ public struct MonStatus //몬스터용 스테이터스창.
     public float attackDist;
     public float KnockbackRigist;
     public float score;
+    public float coin;
+    public float exp;
    
-    public MonStatus(MonsterType type,string name, float hp, float atkSpeed, float damage, float defense, float speed, float attackDist,float knockbackrigist,float score) //체력 공속 공격력 방어력 이동속도 사정거리 순서로
+    public MonStatus(MonsterType type,string name, float hp, float atkSpeed, float damage, float defense, float speed, float attackDist,float knockbackrigist,float score,float coin,float exp) //체력 공속 공격력 방어력 이동속도 사정거리 순서로
     {
         this.type = type;
         this.name = name;
@@ -77,6 +81,8 @@ public struct MonStatus //몬스터용 스테이터스창.
         this.attackDist = attackDist;
         this.KnockbackRigist= knockbackrigist;
         this.score = score;
+        this.coin = coin;
+        this.exp = exp;
     }
 
 }

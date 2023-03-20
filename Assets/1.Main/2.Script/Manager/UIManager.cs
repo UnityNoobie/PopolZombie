@@ -30,6 +30,8 @@ public class UIManager : SingletonDontDestroy<UIManager>
     [SerializeField]
     TweenAlpha m_ReviveUI;
     [SerializeField]
+    TweenAlpha m_levelUpUI;
+    [SerializeField]
     UITexture m_weaponImage;
     [SerializeField]
     Inventory m_inven;
@@ -48,7 +50,6 @@ public class UIManager : SingletonDontDestroy<UIManager>
     {
         m_store.CloseAllTabs();
     }
-
     IEnumerator SystemMessage(string message)
     {
         m_systemMessage.text = message;
@@ -148,6 +149,19 @@ public class UIManager : SingletonDontDestroy<UIManager>
         m_healUI.ResetToBeginning();
         m_healUI.PlayForward();
         m_healUI.PlayReverse();
+    }
+    public void LevelUPUI()
+    {
+        if (!m_levelUpUI.gameObject.activeSelf)
+        {
+            m_levelUpUI.gameObject.SetActive(true);
+            m_levelUpUI.PlayForward();
+            m_levelUpUI.PlayReverse();
+        }
+        m_levelUpUI.ResetToBeginning();
+        m_levelUpUI.PlayForward();
+        m_levelUpUI.PlayReverse();
+
     }
     public void WeaponInfoUI(string Info)
     {   
