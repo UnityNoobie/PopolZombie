@@ -19,7 +19,6 @@ public class PanelItemInfo : MonoBehaviour
 
     void SetInfo(int m_id, ItemType m_type)
     {
-        Debug.Log(m_type.ToString());
         if (m_type.Equals(ItemType.Item))
         {
             Debug.Log("아이템 들어옴");
@@ -38,7 +37,6 @@ public class PanelItemInfo : MonoBehaviour
         }
         else if (m_type.Equals(ItemType.Weapon))
         {
-            Debug.Log("무기 들어옴");
             m_image.sprite = ImageLoader.Instance.GetImage(m_store.m_weapondata[m_id].Image);
             m_ItemName.text = m_store.m_weapondata[m_id].Image;
             m_ItemInfo.text = m_store.m_weapondata[m_id].Info;
@@ -61,7 +59,6 @@ public class PanelItemInfo : MonoBehaviour
         }
         else if (m_type.Equals(ItemType.Armor))
         {
-            Debug.Log("방어구 들어옴");
             m_image.sprite = ImageLoader.Instance.GetImage(m_store.m_armordata[m_id].Image);
             m_ItemName.text = m_store.m_armordata[m_id].Image;
             m_ItemInfo.text = m_store.m_armordata[m_id].Info;

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public class UpdateManager : SingletonDontDestroy<UpdateManager> 
@@ -12,6 +13,7 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
     public PlayerController[] m_players;
     public PlayerController[] m_playersSave;
     int m_playercount;
+    int testweapon;
     public void SetPlayerController(PlayerController player)
     {
         if(m_players != null) //플레이어리스트가 비어있지 않다면
@@ -26,7 +28,8 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
                 m_players[i] = m_playersSave[i];
             }
         }
-        m_players[m_playercount] = player; //새로 들어온 플레이어컨트롤러 넣어주고 플레이어 수 추가.
+        var obj = player.GetComponent<PlayerController>();
+        m_players[m_playercount] = obj; //새로 들어온 플레이어컨트롤러 넣어주고 플레이어 수 추가.
         m_playercount++;
     }
     // Update is called once per frame
@@ -50,6 +53,14 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
             }
             UIManager.Instance.CloseTabs();
         }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            UIManager.Instance.SystemMessageCantOpen("무기교체 기능 잠금되었습니다. GunManager스크립트와 UpdateManager 확인 바람.");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            UIManager.Instance.SystemMessageCantOpen("무기교체 기능 잠금되었습니다. GunManager스크립트와 UpdateManager 확인 바람.");
+        }
     }
     private void Awake()
     {
@@ -58,6 +69,7 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
     }
     private void Start()
     {
-          m_inven.gameObject.SetActive(m_isactive);
+        m_inven.gameObject.SetActive(m_isactive);
+     
     }
 }

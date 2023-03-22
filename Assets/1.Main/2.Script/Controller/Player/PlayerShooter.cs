@@ -51,8 +51,6 @@ public class PlayerShooter : MonoBehaviour
          m_player.SetGun(gun);
          gun.gameObject.SetActive(true); //총을 사용상태로 변경
     }
-
-
     private void Start()
     {
         m_anim = GetComponent<Animator>();

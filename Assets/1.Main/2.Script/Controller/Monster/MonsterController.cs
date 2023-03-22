@@ -66,6 +66,15 @@ public class MonsterController : MonoBehaviour
         SetIdle(0.1f);
         m_delayFrame = 0;
     }
+    protected IEnumerator Coroutine_SerchTargetPath(int frame)
+    {
+        while (m_state == MonsterState.Chase)
+        {
+            m_navAgent.SetDestination(m_player.transform.position);
+            for (int i = 0; i < frame; i++)
+                yield return null;
+        }
+    }
     #region AnimEvent
     protected virtual void AnimEvent_SetDie()
     {
@@ -104,15 +113,7 @@ public class MonsterController : MonoBehaviour
         if (m_status.hp > m_status.hpMax) { m_status.hp = m_status.hpMax; }
       //  hp = Mathf.CeilToInt(m_status.hp);
     }
-    protected IEnumerator Coroutine_SerchTargetPath(int frame)
-    {
-        while (m_state == MonsterState.Chase)
-        {
-            m_navAgent.SetDestination(m_player.transform.position);
-            for (int i = 0; i < frame; i++)
-                yield return null;
-        }
-    }
+ 
 
     // Start is called before the first frame update
     protected virtual void Awake()

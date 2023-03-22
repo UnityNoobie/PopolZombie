@@ -89,19 +89,7 @@ public class GunManager : MonoBehaviour
         }
         UIManager.Instance.WeaponImage(image);
     }
-        /*
-        public void SetReviveAnim()
-        {
-            if(striker.enabled)
-            {
-                m_animCtr.Play(PlayerAnimController.Motion.MeleeIdle);
 
-            }
-            else
-            {
-                m_animCtr.Play(PlayerAnimController.Motion.Idle);
-            }
-        }*/
         public void ChangeWeapon(int id)
         {
             StartCoroutine(ChangeWeaponRoutine(m_weapondata.GetWeaponStatus(id).Type, m_weapondata.GetWeaponStatus(id).weaponType, id, m_weapondata.GetWeaponStatus(id).Grade, m_weapondata.GetWeaponStatus(id).AtkType, m_weapondata.GetWeaponStatus(id).Image));
@@ -146,7 +134,7 @@ public class GunManager : MonoBehaviour
             m_getitem = GetComponent<PlayerGetItem>();
             m_getitem.BuyItem(testweapon, m_weapondata.GetWeaponStatus(testweapon).ItemType);
         }
-
+    /*
         private void Update()
         {
             if (!isChange)
@@ -154,12 +142,10 @@ public class GunManager : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.Alpha1))
                 {
-
                     testweapon++;
                     if (testweapon > 21) testweapon = 1;
                     m_getitem.BuyItem(testweapon, m_weapondata.GetWeaponStatus(testweapon).ItemType);
                 }
-
                 if (Input.GetKeyDown(KeyCode.Alpha2))
                 {
                     testweapon--;
@@ -167,5 +153,5 @@ public class GunManager : MonoBehaviour
                     m_getitem.BuyItem(testweapon, m_weapondata.GetWeaponStatus(testweapon).ItemType);
                 }
             }
-        }
-    }
+        }*/
+}
