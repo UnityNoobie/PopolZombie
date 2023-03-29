@@ -262,6 +262,8 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerSkillController.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Data\TableSkillStat.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

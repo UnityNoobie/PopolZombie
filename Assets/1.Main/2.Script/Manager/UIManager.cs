@@ -187,6 +187,7 @@ public class UIManager : SingletonDontDestroy<UIManager>
     private void Start()
     {
         ImageLoader.Instance.Load();
+        Skilldata.Instance.Load();
     }
 
     

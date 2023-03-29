@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     public int m_level;
     [SerializeField]
     HUDText m_hudText;
+    [SerializeField]
+    UILabel m_hudLabel;
     [SerializeField] //플레이어의 스테이터스 체크
     Status m_status;
     [SerializeField]
@@ -386,6 +388,7 @@ public class PlayerController : MonoBehaviour
     void LevelUP()
     {
         m_status.level++;
+        m_hudLabel.text = "[FFFF00]LV." + m_status.level + "[FFFFFF] Hunter";
         m_levelexp = Levelexp();
         HPControl(Mathf.CeilToInt(m_status.hpMax)); //풀피로 만들어줌
         UIManager.Instance.LevelUPUI();
@@ -433,8 +436,8 @@ public class PlayerController : MonoBehaviour
         m_status.hp = m_status.hpMax; //시작 시 hp 설정.
         HPControl(0);
         m_hitPos = Utill.GetChildObject(gameObject, "Dummy_Pos");
-        SetPlayer(); 
-       
+        SetPlayer();
+        m_hudLabel.text = "[FFFF00]LV." + m_status.level + "[FFFFFF] Hunter";
     }
 
 }

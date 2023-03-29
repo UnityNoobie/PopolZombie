@@ -134,24 +134,5 @@ public class GunManager : MonoBehaviour
             m_getitem = GetComponent<PlayerGetItem>();
             m_getitem.BuyItem(testweapon, m_weapondata.GetWeaponStatus(testweapon).ItemType);
         }
-    /*
-        private void Update()
-        {
-            if (!isChange)
-            {
 
-                if (Input.GetKeyDown(KeyCode.Alpha1))
-                {
-                    testweapon++;
-                    if (testweapon > 21) testweapon = 1;
-                    m_getitem.BuyItem(testweapon, m_weapondata.GetWeaponStatus(testweapon).ItemType);
-                }
-                if (Input.GetKeyDown(KeyCode.Alpha2))
-                {
-                    testweapon--;
-                    if (testweapon < 1) testweapon = 21;
-                    m_getitem.BuyItem(testweapon, m_weapondata.GetWeaponStatus(testweapon).ItemType);
-                }
-            }
-        }*/
 }

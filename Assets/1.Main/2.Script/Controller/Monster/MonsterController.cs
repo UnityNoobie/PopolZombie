@@ -79,6 +79,7 @@ public class MonsterController : MonoBehaviour
     protected virtual void AnimEvent_SetDie()
     {
        // Debug.Log(this.name + " 가 사망했습니다.");
+ 
         MonsterManager.Instance.ResetMonster(this, m_hudPanel);
     }
     protected virtual void AnimEvent_SetAttack()
@@ -98,23 +99,28 @@ public class MonsterController : MonoBehaviour
     }
     void AnimEvent_AttackFinished()
     {
+      
             SetIdle(0.1f);
     }
     void AnimEvent_HitFinished()
     {
-        m_motionDelaycoroutine = StartCoroutine(Coroutine_MotionDelay());
+          if(m_status.hp > 0)
+        {
+            m_motionDelaycoroutine = StartCoroutine(Coroutine_MotionDelay());
+        }
+        else
+        {
+            StopAllCoroutines();
+        }
+       
     }
-
     #endregion
-
     void HPControl(int value)
     {
         m_status.hp += value;
         if (m_status.hp > m_status.hpMax) { m_status.hp = m_status.hpMax; }
       //  hp = Mathf.CeilToInt(m_status.hp);
     }
- 
-
     // Start is called before the first frame update
     protected virtual void Awake()
     {
@@ -132,7 +138,6 @@ public class MonsterController : MonoBehaviour
         m_hudPanel = hud;
         SetState(MonsterState.Chase);
         StartCoroutine(Coroutine_SerchTargetPath(10));
-
     }
     public void InitMonster(MonsterType type) //몬스터의 타입을 받아옴
     {//체력 공속 공격력 방어력 이동속도 순서로

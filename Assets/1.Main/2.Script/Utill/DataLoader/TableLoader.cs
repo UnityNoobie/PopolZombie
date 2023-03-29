@@ -27,7 +27,7 @@ public class TableLoader : Singleton<TableLoader>
     }
     public int GetInteger(string key, int index)
     {
-
+        
         return int.Parse(GetString(key, index)); 
     }
     public float GetFloat(string key, int index)

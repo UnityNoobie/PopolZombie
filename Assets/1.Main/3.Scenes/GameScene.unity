@@ -1832,6 +1832,18 @@ MonoBehaviour:
   mDepth: 1
   mSortingOrder: 0
   mClipOffset: {x: 0, y: 0}
+--- !u!114 &348114216 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7106407280436640864, guid: 5443e4b4c90bc5a4eacfe2a363497d1a,
+    type: 3}
+  m_PrefabInstance: {fileID: 7106407281260348580}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &363744987 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 421907680249419333, guid: 9f728d44025ea7743960ce2fe4f34367,
@@ -36811,7 +36823,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2124279771
 RectTransform:
   m_ObjectHideFlags: 0
@@ -38492,6 +38504,7 @@ GameObject:
   - component: {fileID: 95808264624923303}
   - component: {fileID: 95808264624923305}
   - component: {fileID: 95808264624923306}
+  - component: {fileID: 95808264624923307}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -43837,6 +43850,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_level: 0
   m_hudText: {fileID: 758809664}
+  m_hudLabel: {fileID: 348114216}
   m_status:
     hp: 0
     hpMax: 0
@@ -43963,6 +43977,18 @@ MonoBehaviour:
   m_inven: {fileID: 1552403137}
   m_slot: {fileID: 72392543}
   m_storeUI: {fileID: 1073680397}
+--- !u!114 &95808264624923307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1564443519141528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cee18b99ea8c08b41ad4a85a50941ffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!137 &137247186619484432
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
