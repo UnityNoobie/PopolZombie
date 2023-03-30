@@ -36,7 +36,14 @@ public class Gun : MonoBehaviour
     public bool isReload = false;
     float lastFireTime;
     public WeaponData GetStatus { get; set; }
-    bool isfirst = true;
+    public bool isfirst = true; 
+    bool lastfire;
+    bool pierce;
+    bool burn;
+    bool armorpierce;
+    bool boom;
+    bool remove;
+    bool crush;
     IEnumerator ShootEffect(Vector3 hitPos)
     {     
         m_flashEffect.Play();  //화염이펙트
@@ -87,9 +94,49 @@ public class Gun : MonoBehaviour
             ammoCheck();
             gunstate = GunState.Ready;
         }
-      
     }
-
+    public void ResetBoolin() //무기 교체, 스킬 업 등의 상황에서 초기화
+    {
+        isfirst = false;
+        lastfire = false;
+        pierce = false;
+        burn = false;
+        armorpierce = false;
+        boom = false;
+        remove = false;
+        crush = false;
+    }
+    public void CheckBoolin()
+    {
+        if(m_player.GetStatus.LastFire != 0)
+        {
+            lastfire = true;
+        }
+        if(m_player.GetStatus.Pierce != 0)
+        {
+            pierce=true;
+        }
+        if(m_player.GetStatus.Burn != 0)
+        {
+            burn = true;
+        }
+        if(m_player.GetStatus.ArmorPierce != 0)
+        {
+            armorpierce=true;
+        }
+        if(m_player.GetStatus.Boom != 0)
+        {
+            boom = true;
+        }
+        if(m_player.GetStatus.Remove != 0)
+        {
+            remove = true;
+        }
+        if(m_player.GetStatus.Crush != 0)
+        {
+            crush = true;
+        }
+    }
     public void ammoCheck() //남은총알을 실시간으로 확인.
     {
         UIManager.Instance.WeaponInfoUI(m_type + ".LV" + grade + "\n" + ammoRemain + " / " + m_player.GetStatus.maxammo);
@@ -105,20 +152,18 @@ public class Gun : MonoBehaviour
   
     private void OnEnable() // 켜질경우 총알을 최대치로 하고 총의 정보를 불러옴
     {
-        /*
-        if (isfirst) //최초로 실행시에만 무기 변경 시 장탄량 최대로 해보자구?
-        {
-            ammoRemain = m_player.GetStatus.maxammo;
-            isfirst= false;
-        }*/
         ammoRemain = m_player.GetStatus.maxammo; //위처럼 시도를 하였었으나 어차피 무기는 한종류만 사용할것이고 교체하는 무기의 경우 상점구입, 바닥에서줍기 등 새로운 총 얻는 경우기 때문에
         gunstate = GunState.Ready; //그냥 기본대로 적용했음.
         ammoCheck();
         lastFireTime = 0;
     }
-
     public void Fire()
     {
+      //  if(isfirst) //최초 발사시에 
+      //  {
+         //   ResetBoolin();
+         //   CheckBoolin();
+     //   }
         if (gunstate == GunState.Ready && Time.time >= lastFireTime + 1/ m_player.GetStatus.atkSpeed) //총의 상태가 Ready이고 발사속도가 준비되었을 경우.
         { 
             lastFireTime= Time.time;
@@ -139,8 +184,86 @@ public class Gun : MonoBehaviour
                 shotFire = m_player.transform.forward;
                   float verti = Random.Range(-0.3f, 0.3f);
                   shotFire.x += verti;
-                
-                if (Physics.Raycast(m_firePos.position,shotFire, out hit, m_player.GetStatus.AtkDist)) //시작지점, 방향, 충돌정보, 사정거리 
+                if (pierce)
+                {
+                    RaycastHit[] hits = Physics.RaycastAll(m_firePos.position,shotFire, m_player.GetStatus.AtkDist);
+                    for(int j = 0; j < hits.Length; j++)
+                    {
+                        if(hits[j].collider.CompareTag("Zombie"))
+                        {
+                            var mon = hits[j].collider.GetComponent<MonsterController>();
+                            var type = GunManager.AttackProcess(mon, m_player.GetStatus.damage, m_player.GetStatus.criRate, m_player.GetStatus.criAttack, out damage);
+                            mon.SetDamage(type, damage, m_player);
+                            hitPos = hits[j].point;
+                            var hiteffect = TableEffect.Instance.m_tableData[4].Prefab[2];
+                            var effect = EffectPool.Instance.Create(hiteffect);
+                            effect.transform.position = hitPos;
+                            effect.SetActive(true);
+                        }
+                    }
+                }
+                else
+                {
+                    if (Physics.Raycast(m_firePos.position, shotFire, out hit, m_player.GetStatus.AtkDist)) //시작지점, 방향, 충돌정보, 사정거리 
+                    {
+
+                        if (hit.collider.CompareTag("Background"))
+                        {
+                            hitPos = hit.point;
+                        }
+                        else if (hit.collider.CompareTag("Zombie"))
+                        {
+                            var mon = hit.collider.GetComponent<MonsterController>();
+                            var type = GunManager.AttackProcess(mon, m_player.GetStatus.damage, m_player.GetStatus.criRate, m_player.GetStatus.criAttack, out damage);
+                            mon.SetDamage(type, damage, m_player);
+                            hitPos = hit.point;
+                            var hiteffect = TableEffect.Instance.m_tableData[4].Prefab[2];
+                            var effect = EffectPool.Instance.Create(hiteffect);
+                            effect.transform.position = hitPos;
+                            effect.SetActive(true);
+                        }
+                        else
+                        {
+                            hitPos = m_firePos.position + shotFire * m_player.GetStatus.AtkDist;
+                        }
+                    }
+                    if (hit.collider == null)
+                    {
+                        hitPos = m_firePos.position + shotFire * m_player.GetStatus.AtkDist;
+                    }
+                }
+               
+                Debug.DrawRay(m_firePos.position, shotFire * m_player.GetStatus.AtkDist, Color.yellow, 0.1f);
+            }
+            m_flashEffect.Play();  //화염이펙트
+            m_ShellEffect.Play(); //탄피 이펙트
+            m_gunAudio.PlayOneShot(m_shootSound); //총소리 
+        }
+        else //샷건외의 총은
+        {
+            
+            if (pierce)
+            {
+                RaycastHit[] hits = Physics.RaycastAll(m_firePos.position, shotFire, m_player.GetStatus.AtkDist);
+                for (int j = 0; j < hits.Length; j++)
+                {
+                    if (hits[j].collider.CompareTag("Zombie"))
+                    {
+                        var mon = hits[j].collider.GetComponent<MonsterController>();
+                        var type = GunManager.AttackProcess(mon, m_player.GetStatus.damage, m_player.GetStatus.criRate, m_player.GetStatus.criAttack, out damage);
+                        mon.SetDamage(type, damage, m_player);
+                        hitPos = hits[j].point;
+                        var hiteffect = TableEffect.Instance.m_tableData[4].Prefab[2];
+                        var effect = EffectPool.Instance.Create(hiteffect);
+                        effect.transform.position = hitPos;
+                        effect.SetActive(true);
+                    }
+                }
+                hitPos = m_firePos.position + shotFire * m_player.GetStatus.AtkDist;
+            }
+            else
+            {
+                if (Physics.Raycast(m_firePos.position, shotFire, out hit, m_player.GetStatus.AtkDist)) //시작지점, 방향, 충돌정보, 사정거리 
                 {
                     if (hit.collider.CompareTag("Background"))
                     {
@@ -149,8 +272,8 @@ public class Gun : MonoBehaviour
                     else if (hit.collider.CompareTag("Zombie"))
                     {
                         var mon = hit.collider.GetComponent<MonsterController>();
-                        var type = GunManager.AttackProcess(mon, m_player.GetStatus.damage,m_player.GetStatus.criRate,m_player.GetStatus.criAttack, out damage);
-                        mon.SetDamage(type, damage,m_player);
+                        var type = GunManager.AttackProcess(mon, m_player.GetStatus.damage, m_player.GetStatus.criRate, m_player.GetStatus.criAttack, out damage);
+                        mon.SetDamage(type, damage, m_player);
                         hitPos = hit.point;
                         var hiteffect = TableEffect.Instance.m_tableData[4].Prefab[2];
                         var effect = EffectPool.Instance.Create(hiteffect);
@@ -166,42 +289,8 @@ public class Gun : MonoBehaviour
                 {
                     hitPos = m_firePos.position + shotFire * m_player.GetStatus.AtkDist;
                 }
-               
-                Debug.DrawRay(m_firePos.position, shotFire * m_player.GetStatus.AtkDist, Color.yellow, 0.1f);
             }
-            m_flashEffect.Play();  //화염이펙트
-            m_ShellEffect.Play(); //탄피 이펙트
-            m_gunAudio.PlayOneShot(m_shootSound); //총소리 
-        }
-        else //샷건외의 총은
-        {
-           
-            if (Physics.Raycast(m_firePos.position, shotFire, out hit, m_player.GetStatus.AtkDist)) //시작지점, 방향, 충돌정보, 사정거리 
-            {
-                if (hit.collider.CompareTag("Background"))
-                {
-                    hitPos = hit.point;
-                }
-                else if (hit.collider.CompareTag("Zombie"))
-                {
-                    var mon = hit.collider.GetComponent<MonsterController>();                                                        
-                    var type = GunManager.AttackProcess(mon, m_player.GetStatus.damage, m_player.GetStatus.criRate, m_player.GetStatus.criAttack, out damage);
-                    mon.SetDamage(type, damage,m_player);
-                    hitPos = hit.point;
-                    var hiteffect = TableEffect.Instance.m_tableData[4].Prefab[2];
-                    var effect = EffectPool.Instance.Create(hiteffect);
-                    effect.transform.position = hitPos;
-                    effect.SetActive(true);
-                }
-                else
-                {
-                    hitPos = m_firePos.position + shotFire * m_player.GetStatus.AtkDist;
-                }
-            }
-            if (hit.collider == null)
-            {
-                hitPos = m_firePos.position + shotFire * m_player.GetStatus.AtkDist;
-            }
+            
             StartCoroutine(ShootEffect(hitPos));
         }
         ammoRemain--;

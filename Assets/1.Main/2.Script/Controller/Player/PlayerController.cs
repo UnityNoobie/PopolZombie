@@ -83,6 +83,7 @@ public class PlayerController : MonoBehaviour
     int skillDrain;
     int skillCrush;
     int skillBurn;
+
     #endregion
     public enum PlayerState //플레이어의 상태 알림
     {
@@ -133,6 +134,16 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(time);
         m_Pstate = PlayerState.alive;
     }
+
+    IEnumerator Coroutine_SustainedHeal() //스킬 찍었을 시 지속힐용
+    {
+        while (true)
+        {
+            SkillHeal(Mathf.CeilToInt(skillHeal * m_status.hpMax / 100));
+            yield return new WaitForSeconds(2);
+        }
+    }
+    Coroutine CheckCoroutine;
     #endregion
     #region AnimEvent
     void AnimEvent_Dead()
@@ -160,6 +171,12 @@ public class PlayerController : MonoBehaviour
                 var mon = areaList[i].GetComponent<MonsterController>();
                 var type = GunManager.AttackProcess(mon, m_status.damage, m_status.criRate, m_status.criAttack, out damage);
                 mon.SetDamage(type, damage, this);
+                if(m_status.Drain != 0)
+                {
+                    Debug.Log(Mathf.CeilToInt((damage * m_status.Drain) / 100) + " 회복!!");
+                    SkillHeal(Mathf.CeilToInt((damage * m_status.Drain) / 100));
+                }
+
             }
         }
 
@@ -319,7 +336,92 @@ public class PlayerController : MonoBehaviour
         skillDrain = Drain;
         skillCrush = Crush;
         skillBurn = Burn;
+        if (skillHeal > 0)// 스킬의 지속힐이 0 보다 크다면 힐 코루틴 시작.
+        {
+            if (CheckCoroutine != null) //기존에 실행중이라면 멈추고 다시실행
+            {
+                StopCoroutine(CheckCoroutine);
+            }
+            CheckCoroutine = StartCoroutine(Coroutine_SustainedHeal());
+        }
+        //CheckBoolin();
     }
+    /*
+    void CheckBoolin()  //특정 조건이 만족했는지 확인 
+    {
+        if (skillHeal > 0)// 스킬의 지속힐이 0 보다 크다면 힐 코루틴 시작.
+        {
+            if(CheckCoroutine!= null) //기존에 실행중이라면 멈추고 다시실행
+            {
+                StopCoroutine(Coroutine_SustainedHeal());
+            }
+            CheckCoroutine = StartCoroutine(Coroutine_SustainedHeal());
+        }  
+        if(skillLastFire > 0)
+        {
+            lastfire = true;
+        }
+        else
+        {
+            lastfire= false;
+        }
+        if(skillDrain > 0)
+        {
+            drain = true;
+        }
+        else
+        {
+            drain= false;
+        }
+        if(skillCrush > 0)
+        {
+            crush = true;
+        }
+        else
+        {
+            crush = false;
+        }
+        if(skillBurn > 0)
+        {
+            burn = true;
+        }
+        else
+        {
+            burn = false;
+        }
+        if(skillArmorPierce > 0)
+        {
+            armorpierce = true;
+        }
+        else
+        {
+            armorpierce = false;
+        }
+        if(skillPierce > 0)
+        {
+            pierce = true;
+        }
+        else
+        {
+            pierce = false;
+        }
+        if(skillBoom > 0)
+        {
+            boom = true;
+        }
+        else
+        {
+            boom = false;
+        }
+        if(skillRemove > 0)
+        {
+            removeslow = true;
+        }
+        else
+        {
+            removeslow = false;
+        }
+    }*/
     void HPControl(int value)
     {
         m_status.hp += value;   
@@ -334,7 +436,7 @@ public class PlayerController : MonoBehaviour
     {//SetStatus에서 스킬과 아이템의 추가값들을 받아옴.
      //(float skillhp, float itemhp, float S_CriPer, float I_Criper, float S_CriDam, float I_CriDam, float S_atkSpeed, float I_atkSpeed, float S_Atk, float I_Atk, float S_Def, float I_Def, float S_speed, float I_speed, int maxammo, float reloadtime,float knockbackPer, float knockbackDist,float atkDist, int shotgun,int level) 
      //스테이터스 입력값의 순서 : 최대체력 , 크리티컬 확률, 크리티컬 추가 데미지,공격속도, 공격력, 방어력, 이동속도
-        m_status = new Status(hp,200 * (1 + (skillHP + itemhp + hpPer)), 10f + skillCriRate+ I_Criper + armCriRate, 50f + (skillCriDamage + I_CriDam), 0 + (skillAtkSpeed + I_atkSpeed) * (1 + armAttackSpeed),(1+ (skillamage + armDamage)) * I_Atk, 0 + skillDefence + I_Def + armDefence, 130 * (1 + skillSpeed + I_speed + armSpeed), maxammo * Mathf.CeilToInt(1+skillMag), reloadtime - (reloadtime * skillReload) ,knockbackPer+skillKnockBackRate,knockbackDist,atkDist,shotgun,level,skillDamageRigist);
+        m_status = new Status(hp,200 * (1 + (skillHP + itemhp + hpPer)), 10f + skillCriRate+ I_Criper + armCriRate, 50f + (skillCriDamage + I_CriDam), 0 + (skillAtkSpeed + I_atkSpeed) * (1 + armAttackSpeed),(1+ (skillamage + armDamage)) * I_Atk, 0 + skillDefence + I_Def + armDefence, 130 * (1 + skillSpeed + I_speed + armSpeed), maxammo * Mathf.CeilToInt(1+skillMag), reloadtime - (reloadtime * skillReload) ,knockbackPer+skillKnockBackRate,knockbackDist,atkDist,shotgun,level,skillDamageRigist,skillLastFire,skillPierce,skillBoom,skillArmorPierce,skillRemove,skillDrain,skillCrush,skillBurn);
         // m_status.hpMax = Mathf.CeilToInt(m_status.hpMax); //최대체력 가져오기
         HPControl(0);
         m_animCtr.SetFloat("MeleeSpeed", m_status.atkSpeed);
@@ -389,14 +491,19 @@ public class PlayerController : MonoBehaviour
             Dead(); //hp가 0이하일때 사망처리
         }
     }
+    void SkillHeal(int healvalue)
+    {
+        HPControl(healvalue);
+        m_hudText.Add(healvalue, Color.green, 0f);
+    }
     public void GetHeal(float heal)
     {
         if (m_status.hp >= m_status.hpMax || m_Pstate == PlayerState.dead) return; //이미 풀피이거나 죽었을경우 실행 X
         float percentHeal = m_status.hpMax * (heal / 100);
-        Debug.Log(percentHeal);
+     //   Debug.Log(percentHeal);
         int healvalue = Mathf.CeilToInt(percentHeal);
         HPControl(healvalue);
-        m_hudText.Add(heal, Color.green, 0f);
+        m_hudText.Add(healvalue, Color.green, 0f);
         var healeffect = TableEffect.Instance.m_tableData[6].Prefab[1];
         var effect = EffectPool.Instance.Create(healeffect);
         effect.transform.position = gameObject.transform.position;

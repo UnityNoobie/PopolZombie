@@ -179,7 +179,7 @@ public class PlayerSkillController : MonoBehaviour
             if (isActiveType(m_skilldata.GetSkillData(m_skillList[i]).SkillWeaponType, m_weapontype)) //현재 무기 정보와 스킬이 요구하는 무기의 종류가 같다면 스탯 더해줌.
             {
                 Damage += m_skilldata.GetSkillData(m_skillList[i]).Damage;
-                AtkSpeed += m_skilldata.GetSkillData(m_skillList[i]).ArmorPierce;
+                AtkSpeed += m_skilldata.GetSkillData(m_skillList[i]).AtkSpeed;
                 Reload += m_skilldata.GetSkillData(m_skillList[i]).Reload;
                 Speed += m_skilldata.GetSkillData(m_skillList[i]).Speed;
                 CriRate += m_skilldata.GetSkillData(m_skillList[i]).CriRate;
@@ -241,6 +241,10 @@ public class PlayerSkillController : MonoBehaviour
             UIManager.Instance.SystemMessageCantOpen("스킬 코드" + testbodyid[bcount] + " 근접, 중화기 강화 트리입니다 잘 적용되는지 확인좀.");
             ActiveSkill(testbodyid[bcount]);
             bcount++;
+        }
+        if(Input.GetKeyDown(KeyCode.B))
+        {
+            Debug.Log("공격 속도 : " + m_player.GetStatus.atkSpeed + "방어구 관통 : " + m_player.GetStatus.ArmorPierce);
         }
     }
 }

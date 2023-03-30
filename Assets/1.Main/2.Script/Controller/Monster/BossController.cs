@@ -141,10 +141,10 @@ public class BossController : MonsterController
                 m_idleTime += Time.deltaTime;
                 if (m_idleTime >= m_idleDuration) //대기시간을 초과한다면
                 {
-                    if (m_state != MonsterState.Die && gameObject.tag == "Die") //간혹 살아있는놈의 태그가 Die일경우가 있어서 수정해봄
-                    {
-                        gameObject.tag = "Zombie";
-                    }
+                 //   if (m_state != MonsterState.Die && gameObject.tag == "Die") //간혹 살아있는놈의 태그가 Die일경우가 있어서 수정해봄
+                   // {
+                   //     gameObject.tag = "Zombie";
+                  //  }
                     m_idleTime = 0f; //대기시간 초기화
                     if (FindTarget(m_player.transform, 50)) //관측 가능한 거리에 플레이어가 있다면.
                     {

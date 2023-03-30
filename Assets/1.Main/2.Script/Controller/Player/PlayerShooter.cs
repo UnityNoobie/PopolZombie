@@ -49,6 +49,9 @@ public class PlayerShooter : MonoBehaviour
          gun.grade = grade;
          gun.m_type = type;
          m_player.SetGun(gun);
+         gun.isfirst = true;
+         gun.ResetBoolin();
+         gun.CheckBoolin();
          gun.gameObject.SetActive(true); //총을 사용상태로 변경
     }
     private void Start()

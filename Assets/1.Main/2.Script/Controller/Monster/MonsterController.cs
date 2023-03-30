@@ -37,10 +37,11 @@ public class MonsterController : MonoBehaviour
     public Transform DummyHud;
     [SerializeField]
     protected MonsterState m_state;
-
+    ProjectileController m_burn;
     protected float timeafterAttack;
     protected float m_idleDuration = 0.5f;
     protected float m_idleTime;
+    protected bool isburn;
     bool isChase;
     int m_delayFrame;
     //public float defence;
@@ -65,6 +66,14 @@ public class MonsterController : MonoBehaviour
         }
         SetIdle(0.1f);
         m_delayFrame = 0;
+    }
+    IEnumerator Couroutine_BurnDamage(int value)
+    {
+        for(int i = 0; i < 5; i++)
+        {
+            HPControl(Mathf.CeilToInt(- value/m_status.hpMax));
+            yield return new WaitForSeconds(2);
+        }
     }
     protected IEnumerator Coroutine_SerchTargetPath(int frame)
     {
@@ -111,7 +120,6 @@ public class MonsterController : MonoBehaviour
         {
             StopAllCoroutines();
         }
-       
     }
     #endregion
     void HPControl(int value)
@@ -150,6 +158,7 @@ public class MonsterController : MonoBehaviour
         timeafterAttack = m_status.atkSpeed;
         m_animFloat.SetFloat("Speed", m_status.speed / 5f);
         m_navAgent.speed = m_status.speed;
+        isburn = false;
     }
     public void SetStatus(MonsterType type, float StatScale) //몬스터의 타입과 라운드에 따른 StatScale을 받아 몬스터의 정보를 가져와 InitStatus로 보내주기
     {
@@ -283,6 +292,20 @@ public class MonsterController : MonoBehaviour
 
         }
 
+    }
+
+    public virtual void BurnDamage()
+    {
+        if (isburn)
+        {
+            StartCoroutine(Couroutine_BurnDamage(5));
+            var effectName = TableEffect.Instance.m_tableData[1].Prefab[2];
+            var effect = EffectPool.Instance.Create(effectName);
+            m_burn = effect.gameObject.GetComponent<ProjectileController>();
+            m_burn.SetFollowProjectile(gameObject.GetComponent<MonsterController>(), 0);
+            m_burn.transform.position = gameObject.transform.position;
+
+        }
     }
     public virtual void SetDamage(AttackType type, float damage, PlayerController player)
         {

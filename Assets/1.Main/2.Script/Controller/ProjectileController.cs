@@ -49,8 +49,4 @@ public class ProjectileController : MonoBehaviour
            // Debug.Log("투사체 명중!" + damage + "데미지!");
         }
     }
-    private void Update()
-    {
-        
-    }
 }
