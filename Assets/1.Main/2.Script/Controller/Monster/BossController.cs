@@ -135,8 +135,7 @@ public class BossController : MonsterController
         }
         switch (m_state)
         {
-            case MonsterState.Idle:
-               
+            case MonsterState.Idle:   
                 m_navAgent.ResetPath();
                 m_navAgent.isStopped = true;
                 m_idleTime += Time.deltaTime;

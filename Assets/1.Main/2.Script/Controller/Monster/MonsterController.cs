@@ -99,7 +99,6 @@ public class MonsterController : MonoBehaviour
     }
     void AnimEvent_AttackFinished()
     {
-      
             SetIdle(0.1f);
     }
     void AnimEvent_HitFinished()

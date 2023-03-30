@@ -32,8 +32,9 @@ public struct Status
     public float AtkDist;
     public int ShotGun;
     public int level;
+    public float DamageRigist;
     
-    public Status(float hp,float hpMax,  float criRate, float criAttack,float atkSpeed, float damage, float defense, float speed, int maxammo, float reloadTime,float knockbackPer, float knockbackDist, float atkDist, int shotgun,int Level)
+    public Status(float hp,float hpMax,  float criRate, float criAttack,float atkSpeed, float damage, float defense, float speed, int maxammo, float reloadTime,float knockbackPer, float knockbackDist, float atkDist, int shotgun,int Level,float damagerigist)
     {
         this.hp = hp;
         this.hpMax = hpMax; //이 객체의 최대체력과 현재 체력을 받아온 hp값으로 저장
@@ -49,7 +50,8 @@ public struct Status
         this.KnockBackPer= knockbackPer;
         this.AtkDist= atkDist;
         this.ShotGun = shotgun;
-        level = Level;
+        this.level = Level;
+        this.DamageRigist = damagerigist;
     }
 }
 [System.Serializable]

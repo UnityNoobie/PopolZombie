@@ -61,6 +61,11 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
         {
             UIManager.Instance.SystemMessageCantOpen("무기교체 기능 잠금되었습니다. GunManager스크립트와 UpdateManager 확인 바람.");
         }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            UIManager.Instance.MoneyChange(10000);
+            UIManager.Instance.SystemMessageCantOpen("돈치트 실행 돈 + 10000");
+        }
     }
     private void Awake()
     {

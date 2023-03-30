@@ -188,8 +188,6 @@ public class ArmorManager : MonoBehaviour
 
     private void Start()
     {
-        
-
         m_player = GetComponent<PlayerController>();
         armorData = new ArmorData();
         GetArmordata = new WearArmorData();

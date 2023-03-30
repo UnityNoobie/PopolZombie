@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
     public TestSkillData m_SkillData;
     NavMeshAgent m_navAgent;
     PlayerAnimController m_animCtr;
+    PlayerSkillController m_skill;
     
     bool isComboError;
     [SerializeField]
@@ -60,6 +61,28 @@ public class PlayerController : MonoBehaviour
     float armAttackSpeed;
     int armCriRate;
     float armSpeed;
+    #endregion
+    #region SkillData
+    float skillamage;
+    float skillAtkSpeed;
+    float skillReload;
+    float skillSpeed;
+    int skillCriRate;
+    float skillCriDamage;
+    float skillMag;
+    float skillDefence;
+    float skillDamageRigist;
+    float skillHP;
+    float skillKnockBackRate;
+    int skillHeal;
+    int skillLastFire;
+    int skillPierce;
+    int skillBoom;
+    float skillArmorPierce;
+    float skillRemove;
+    int skillDrain;
+    int skillCrush;
+    int skillBurn;
     #endregion
     public enum PlayerState //플레이어의 상태 알림
     {
@@ -131,9 +154,7 @@ public class PlayerController : MonoBehaviour
         var area = m_area.GetComponent<AttackAreaUnitFind>(); ;
         var areaList = area.m_unitList;
         for (int i = 0; i < areaList.Count; i++)
-        {
-           // Debug.Log(areaList[i].name + "몇번째? : "+i);
-          
+        {         
             if (areaList[i].CompareTag("Zombie"))
             {
                 var mon = areaList[i].GetComponent<MonsterController>();
@@ -256,7 +277,6 @@ public class PlayerController : MonoBehaviour
 
     #endregion
     #region AboutStatus
-    
     private void ResetData()
     {
         armDefence = 0;
@@ -277,7 +297,29 @@ public class PlayerController : MonoBehaviour
         armSpeed = speed;
         SetStatus(m_weaponData.ID);
     }
-
+    public void SetSkillData(float damage, float atkspeed, float reload, float speed, int crirate, float cridamage, float mag, float defence, float damagerigist, float hp, float knockbackrate, int heal, int lastfire, int pierce, int boom, float armorPierce, float Remove, int Drain, int Crush, int Burn)
+    {
+        skillamage = damage;
+        skillAtkSpeed = atkspeed;
+        skillReload = reload;
+        skillSpeed = speed;
+        skillCriRate = crirate;
+        skillCriDamage = cridamage;
+        skillMag = mag;
+        skillDefence = defence;
+        skillDamageRigist = damagerigist;
+        skillHP = hp;
+        skillKnockBackRate = knockbackrate;
+        skillHeal = heal;
+        skillLastFire = lastfire;
+        skillPierce = pierce;
+        skillBoom = boom;
+        skillArmorPierce = armorPierce;
+        skillRemove = Remove;
+        skillDrain = Drain;
+        skillCrush = Crush;
+        skillBurn = Burn;
+    }
     void HPControl(int value)
     {
         m_status.hp += value;   
@@ -288,30 +330,37 @@ public class PlayerController : MonoBehaviour
         hp = Mathf.CeilToInt(m_status.hp);
         UIManager.Instance.HPBar(m_status.hp,m_status.hpMax);
     }
-    void InitStatus(float skillhp, float itemhp, float S_CriPer, float I_Criper, float S_CriDam, float I_CriDam, float S_atkSpeed, float I_atkSpeed, float S_Atk, float I_Atk, float S_Def, float I_Def, float S_speed, float I_speed, int maxammo, float reloadtime,float knockbackPer, float knockbackDist,float atkDist, int shotgun,int level) 
+    void InitStatus( float itemhp, float I_Criper, float I_CriDam, float I_atkSpeed, float I_Atk, float I_Def, float I_speed, int maxammo, float reloadtime,float knockbackPer, float knockbackDist,float atkDist, int shotgun,int level) 
     {//SetStatus에서 스킬과 아이템의 추가값들을 받아옴.
+     //(float skillhp, float itemhp, float S_CriPer, float I_Criper, float S_CriDam, float I_CriDam, float S_atkSpeed, float I_atkSpeed, float S_Atk, float I_Atk, float S_Def, float I_Def, float S_speed, float I_speed, int maxammo, float reloadtime,float knockbackPer, float knockbackDist,float atkDist, int shotgun,int level) 
      //스테이터스 입력값의 순서 : 최대체력 , 크리티컬 확률, 크리티컬 추가 데미지,공격속도, 공격력, 방어력, 이동속도
-        m_status = new Status(hp,200 * (1 + (skillhp + itemhp + hpPer)), 10f + S_CriPer + I_Criper + armCriRate, 50f + S_CriDam + I_CriDam, 0 + (S_atkSpeed + I_atkSpeed) * (1 + armAttackSpeed), (S_Atk + armDamage) * I_Atk, 0 + S_Def + I_Def + armDefence, 130 * (1 + S_speed + I_speed + armSpeed), maxammo, reloadtime ,knockbackPer,knockbackDist,atkDist,shotgun,level);
+        m_status = new Status(hp,200 * (1 + (skillHP + itemhp + hpPer)), 10f + skillCriRate+ I_Criper + armCriRate, 50f + (skillCriDamage + I_CriDam), 0 + (skillAtkSpeed + I_atkSpeed) * (1 + armAttackSpeed),(1+ (skillamage + armDamage)) * I_Atk, 0 + skillDefence + I_Def + armDefence, 130 * (1 + skillSpeed + I_speed + armSpeed), maxammo * Mathf.CeilToInt(1+skillMag), reloadtime - (reloadtime * skillReload) ,knockbackPer+skillKnockBackRate,knockbackDist,atkDist,shotgun,level,skillDamageRigist);
         // m_status.hpMax = Mathf.CeilToInt(m_status.hpMax); //최대체력 가져오기
         HPControl(0);
         m_animCtr.SetFloat("MeleeSpeed", m_status.atkSpeed);
         m_animCtr.SetFloat("MoveSpeed", m_status.speed / 100);
         m_inven.GetStatusInfo(this);
         pDefence = m_status.defense;  //방어력 가져오기
-        m_area.transform.localScale = new Vector3(m_status.AtkDist, 1f, m_status.AtkDist);   
+        m_area.transform.localScale = new Vector3(m_status.AtkDist, 1f, m_status.AtkDist);
+    }
+    public void SkillUpInitstatus()
+    {
+        InitStatus(m_weaponData.HP, m_weaponData.CriRate, m_weaponData.CriDamage, m_weaponData.AtkSpeed, m_weaponData.Damage, m_weaponData.Defence, m_weaponData.Speed, m_weaponData.Mag, m_weaponData.ReloadTime, m_weaponData.KnockBack, m_weaponData.KnockBackDist, m_weaponData.AttackDist, m_weaponData.Shotgun, m_level);
     }
     public void SetStatus(int ID)
     {
         SetWeaponID(ID);
         //스테이터스 입력값의 순서 : 스킬, 아이템 최대체력 ,스킬아이템 크리티컬 확률, 스킬, 아이템 크리티컬 추가 데미지,스킬 아이템 공격속도, 스킬아이템 공격력, 스킬 아이템 방어력 , 이동속도
-        InitStatus(m_SkillData.hp, m_weaponData.HP, m_SkillData.criPer, m_weaponData.CriRate, m_SkillData.criDam, m_weaponData.CriDamage, m_SkillData.atkSpeed, m_weaponData.AtkSpeed, m_SkillData.atk, m_weaponData.Damage, m_SkillData.def, m_weaponData.Defence, m_SkillData.Speed, m_weaponData.Speed, m_weaponData.Mag, m_weaponData.ReloadTime,m_weaponData.KnockBack,m_weaponData.KnockBackDist,m_weaponData.AttackDist,m_weaponData.Shotgun,m_level);
+        InitStatus(m_weaponData.HP,  m_weaponData.CriRate, m_weaponData.CriDamage, m_weaponData.AtkSpeed,  m_weaponData.Damage, m_weaponData.Defence, m_weaponData.Speed, m_weaponData.Mag, m_weaponData.ReloadTime,m_weaponData.KnockBack,m_weaponData.KnockBackDist,m_weaponData.AttackDist,m_weaponData.Shotgun,m_level);
      //   m_animCtr.SetFloat("MoveSpeed", m_status.speed / 150); //이동속도별 다리움직임 속도조절용.
     }   //넉백을 아직은 무기에서만 적용을 하여 추후 더 넣어줘야함!
     void SetWeaponID(int ID)
     {
         //   m_gunData = m_gunData.GetWeaponStatus(ID);
         m_weaponData = m_weaponData.GetWeaponStatus(ID);
-        m_SkillData = m_SkillData.SkillData(m_weaponData.weaponType);
+     //   Debug.Log(m_weaponData.weaponType + " 무기타입 전달합니당");
+        m_skill.SetWeaponType(m_weaponData.weaponType); //무기타입 전송
+       // m_SkillData = m_SkillData.SkillData(m_weaponData.weaponType);
     }
 
 
@@ -327,7 +376,7 @@ public class PlayerController : MonoBehaviour
     {
         if (m_status.hp <= 0 || m_Pstate == PlayerState.dead || m_Pstate == PlayerState.Invincible) //피가 0이거나 죽었을땐 적용 X
             return;
-        int mondamage = Mathf.CeilToInt(damage);
+        int mondamage = Mathf.CeilToInt(damage - (damage*skillDamageRigist)); //피해 저항 적용
         HPControl(-mondamage);
         var hiteffect = TableEffect.Instance.m_tableData[6].Prefab[2];
         var effect = EffectPool.Instance.Create(hiteffect);
@@ -388,6 +437,7 @@ public class PlayerController : MonoBehaviour
     void LevelUP()
     {
         m_status.level++;
+        m_skill.LevelUP();
         m_hudLabel.text = "[FFFF00]LV." + m_status.level + "[FFFFFF] Hunter";
         m_levelexp = Levelexp();
         HPControl(Mathf.CeilToInt(m_status.hpMax)); //풀피로 만들어줌
@@ -428,6 +478,7 @@ public class PlayerController : MonoBehaviour
         isComboError = false;
         m_level = 1;
         m_levelexp = Levelexp();
+        m_skill = GetComponent<PlayerSkillController>();
     }
     
     private void Start()

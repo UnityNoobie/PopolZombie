@@ -21,7 +21,7 @@ public class PanelItemInfo : MonoBehaviour
     {
         if (m_type.Equals(ItemType.Item))
         {
-            Debug.Log("아이템 들어옴");
+           // Debug.Log("아이템 들어옴");
             m_ItemName.text = m_store.m_itemdata[m_id].type;
             m_ItemInfo.text = m_store.m_itemdata[m_id].ItemInfo;
             m_image.sprite = ImageLoader.Instance.GetImage(m_store.m_itemdata[m_id].type);

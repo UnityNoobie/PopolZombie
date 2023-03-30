@@ -35,6 +35,8 @@ public class Inventory : MonoBehaviour
     [SerializeField]
     UILabel m_KnockBackRate;
     [SerializeField]
+    UILabel m_damageRigist;
+    [SerializeField]
     UILabel m_mainWeapontype;
     [SerializeField]
     UILabel m_subWeaponType;
@@ -64,14 +66,11 @@ public class Inventory : MonoBehaviour
     public void SetPlayer(PlayerController player)
     {
         m_player = player;
-        //과연될까용
     }
     public void GetStatusInfo(PlayerController player)   //플레이어의 스탯정보를 장비변경 등의 효과 발생 시 불러와줌.
     {
-        m_Lv_Nick.text = ("LV30 Hunter");
+        m_Lv_Nick.text = ("LV."+player.GetStatus.level + " Hunter");
         m_hp.text = ("체력 : "+player.GetStatus.hp + " / " + player.GetStatus.hpMax);
-       //if (GunManager.currentWeapon !=null && GunManager.currentWeapon.GetComponent<Gun>().m_type.Equals(WeaponType.ShotGun)&& GunManager.isGun == true)
-          //  m_atk.text = ("Damage : " + player.GetStatus.damage + " * " + player.GetStatus.ShotGun);
         m_atk.text = ("공격력 : " + player.GetStatus.damage);
         m_def.text = ("방어력 : " + player.GetStatus.defense);
         m_criRate.text = ("크리확률 : " + player.GetStatus.criRate);
@@ -81,6 +80,7 @@ public class Inventory : MonoBehaviour
         m_atkDist.text = ("사거리 : " + player.GetStatus.AtkDist);
         m_KnockBackDist.text = ("넉백거리 : " + player.GetStatus.KnockBackDist);
         m_KnockBackRate.text = ("넉백확률 : " + player.GetStatus.KnockBackPer);
+        m_damageRigist.text = ("피해 감소 : " + player.GetStatus.DamageRigist * 100 +"%");
     }
     public void SetArmorImage(string Image,ArmorType type) //방어구 교체시 이미지 저장하는 기능.
     {

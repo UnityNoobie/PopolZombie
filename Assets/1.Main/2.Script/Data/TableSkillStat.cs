@@ -10,7 +10,7 @@ public enum SkillType
     Physical,
     Utility
 }
-public enum SkillWeaaponType
+public enum SkillWeaponType
 {
     Every,
     Personal,
@@ -30,7 +30,7 @@ public class TableSkillStat
     public string Image { get; set; }
     public SkillType SkillType { get; set; }
 
-    public SkillWeaaponType SkillWeaponType { get; set; }
+    public SkillWeaponType SkillWeaponType { get; set; }
  
     public string SkillInfo { get; set; }
     public float Damage { get; set; }
@@ -57,7 +57,7 @@ public class TableSkillStat
     public bool isActive { get; set; }
 
     public TableSkillStat() { }
-    public TableSkillStat(string skillName, int Id, string image, SkillType skilltype,SkillWeaaponType skillweapon, string skillInfo, float damage, float atkSpeed, float Reload, float speed, int criRate, float cridam, float mag, float defence, float damageRigist, float hp, float knockbackrate, int heal, int lastfire, int pierce, int boom, int skillpoint, float armorpierce, float remove, int drain, int crush, int burn, bool isactive)
+    public TableSkillStat(string skillName, int Id, string image, SkillType skilltype,SkillWeaponType skillweapon, string skillInfo, float damage, float atkSpeed, float Reload, float speed, int criRate, float cridam, float mag, float defence, float damageRigist, float hp, float knockbackrate, int heal, int lastfire, int pierce, int boom, int skillpoint, float armorpierce, float remove, int drain, int crush, int burn, bool isactive)
     {
         // int burn, bool isactive
         this.SkillName = skillName;
@@ -104,7 +104,7 @@ class Skilldata : Singleton<Skilldata>
     {
         TableLoader.Instance.LoadData(TableLoader.Instance.LoadTableData("Ability"));
         m_dic.Clear();
-        for (int i = 0; i < 94; i++)
+        for (int i = 0; i < 93; i++)
         {
             TableSkillStat data = new TableSkillStat();
             data.SkillName = TableLoader.Instance.GetString("Skill", i);
@@ -130,45 +130,44 @@ class Skilldata : Singleton<Skilldata>
             string skillweapon = TableLoader.Instance.GetString("WeaponType", i);
             if (skillweapon.Equals("Every"))
             {
-                data.SkillWeaponType = SkillWeaaponType.Every;
+                data.SkillWeaponType = SkillWeaponType.Every;
             }
             else if (skillweapon.Equals("Personal"))
             {
-                data.SkillWeaponType = SkillWeaaponType.Personal;
-            }
+                data.SkillWeaponType = SkillWeaponType.Personal;
+            }   
             else if (skillweapon.Equals("Heavy"))
             {
-                data.SkillWeaponType = SkillWeaaponType.Heavy;
+                data.SkillWeaponType = SkillWeaponType.Heavy;
             }
             else if (skillweapon.Equals("Pistol"))
             {
-                data.SkillWeaponType = SkillWeaaponType.Pistol;
-            }
+                data.SkillWeaponType = SkillWeaponType.Pistol;
+            }   
             else if (skillweapon.Equals("SMG"))
             {
-                data.SkillWeaponType = SkillWeaaponType.SMG;
+                data.SkillWeaponType = SkillWeaponType.SMG;
             }
             else if (skillweapon.Equals("Rifle"))
             {
-                data.SkillWeaponType = SkillWeaaponType.Rifle;
+                data.SkillWeaponType = SkillWeaponType.Rifle;
             }
             else if (skillweapon.Equals("ShotGun"))
             {
-                data.SkillWeaponType = SkillWeaaponType.ShotGun;
+                data.SkillWeaponType = SkillWeaponType.ShotGun;
             }
             else if (skillweapon.Equals("MachineGun"))
             {
-                data.SkillWeaponType = SkillWeaaponType.MachineGun;
+                data.SkillWeaponType = SkillWeaponType.MachineGun;
             }
             else if (skillweapon.Equals("Melee"))
             {
-                data.SkillWeaponType = SkillWeaaponType.Melee;
+                data.SkillWeaponType = SkillWeaponType.Melee;
             }
             else
             {
                 Debug.Log("대상 무기타입이 잘못됨.");
             }
-
             data.SkillInfo = TableLoader.Instance.GetString("Info", i);
             data.Damage = TableLoader.Instance.GetFloat("Damage", i);
             data.AtkSpeed = TableLoader.Instance.GetFloat("AtkSpeed", i);
@@ -191,11 +190,9 @@ class Skilldata : Singleton<Skilldata>
             data.Drain = TableLoader.Instance.GetInteger("Drain", i);
             data.Crush = TableLoader.Instance.GetInteger("Crush", i);
             data.isActive = false;
-
+            m_dic.Add(data.ID,data);
         }
+        TableLoader.Instance.Clear();
     }
-    
-    
-    
 }
 

@@ -97,9 +97,11 @@
     <Compile Include="Assets\1.Main\2.Script\TestMonster.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonScale.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\PanWithMouse.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerSkillController.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\EnvelopContent.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\SpinWithMouse.cs" />
     <Compile Include="Assets\External\HUD Text\Examples\Scripts\ChatManager.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Data\TableSkillStat.cs" />
     <Compile Include="Assets\1.Main\2.Script\Manager\UIManager.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIAtlas.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIForwardEvents.cs" />
@@ -262,8 +264,6 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerSkillController.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Data\TableSkillStat.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
