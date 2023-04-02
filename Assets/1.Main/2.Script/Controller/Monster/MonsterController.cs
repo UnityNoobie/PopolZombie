@@ -29,15 +29,16 @@ public class MonsterController : MonoBehaviour
     protected MonStatus m_status;
     [SerializeField, HideInInspector]
     MonStat m_monStat;
-    protected NavMeshAgent m_navAgent;
-    protected  MonsterAnimController m_animctr;
     HUDController m_hudPanel;
     TweenMove m_tweenmove;
+    ProjectileController m_burn;
+
+    protected NavMeshAgent m_navAgent;
+    protected  MonsterAnimController m_animctr;
     protected Animator m_animFloat;
     public Transform DummyHud;
     [SerializeField]
     protected MonsterState m_state;
-    ProjectileController m_burn;
     protected float timeafterAttack;
     protected float m_idleDuration = 0.5f;
     protected float m_idleTime;
@@ -47,6 +48,7 @@ public class MonsterController : MonoBehaviour
     //public float defence;
     Coroutine m_damagedCoroutine;
     Coroutine m_motionDelaycoroutine;
+    Coroutine m_burnCoroutine;
     int count = 1;
     public MonStat GetStat { get { return m_monStat; } set { m_monStat = value; } }
     public MonStatus GetStatus { get { return m_status; } set { m_status = value; } }
@@ -69,11 +71,18 @@ public class MonsterController : MonoBehaviour
     }
     IEnumerator Couroutine_BurnDamage(int value)
     {
-        for(int i = 0; i < 5; i++)
+        var effectName = TableEffect.Instance.m_tableData[1].Prefab[2];
+        var effect = EffectPool.Instance.Create(effectName);
+        m_burn = effect.gameObject.GetComponent<ProjectileController>();
+        m_burn.SetFollowProjectile(gameObject.GetComponent<MonsterController>(), 0);
+        m_burn.transform.position = gameObject.transform.position;
+        for (int i = 0; i < 5; i++)
         {
-            HPControl(Mathf.CeilToInt(- value/m_status.hpMax));
-            yield return new WaitForSeconds(2);
+            DamageProcess(Mathf.CeilToInt(((m_status.hpMax * value) / 100)), AttackType.Normal);
+            yield return new WaitForSeconds(1);
         }
+        m_burnCoroutine = null;
+      
     }
     protected IEnumerator Coroutine_SerchTargetPath(int frame)
     {
@@ -122,11 +131,12 @@ public class MonsterController : MonoBehaviour
         }
     }
     #endregion
-    void HPControl(int value)
+    void HPControl(int value, AttackType type)
     {
         m_status.hp += value;
         if (m_status.hp > m_status.hpMax) { m_status.hp = m_status.hpMax; }
-      //  hp = Mathf.CeilToInt(m_status.hp);
+        m_hudPanel.DisplayDamage(type, -value, m_status.hp / m_status.hpMax);
+      //  StartCoroutine(Coroutine_SetDamagedColor());
     }
     // Start is called before the first frame update
     protected virtual void Awake()
@@ -296,18 +306,21 @@ public class MonsterController : MonoBehaviour
 
     public virtual void BurnDamage()
     {
-        if (isburn)
+        
+        if(m_burnCoroutine == null)
         {
-            StartCoroutine(Couroutine_BurnDamage(5));
-            var effectName = TableEffect.Instance.m_tableData[1].Prefab[2];
-            var effect = EffectPool.Instance.Create(effectName);
-            m_burn = effect.gameObject.GetComponent<ProjectileController>();
-            m_burn.SetFollowProjectile(gameObject.GetComponent<MonsterController>(), 0);
-            m_burn.transform.position = gameObject.transform.position;
-
-        }
+            m_burnCoroutine = StartCoroutine(Couroutine_BurnDamage(5));
+        }  
+        
+       
+        
     }
-    public virtual void SetDamage(AttackType type, float damage, PlayerController player)
+    void DamageProcess(int damage,AttackType type) //화상데미지 확장용
+    {
+        HPControl(-damage,type);
+        m_damagedCoroutine = StartCoroutine("Coroutine_SetDamagedColor");
+    }
+    public virtual void SetDamage(AttackType type, float damage, PlayerController player, bool isburn)
         {
         if (m_status.hp <= 0) //hp가 0이하일때는 적용 x // 바로 리턴을 하였는데 죽어도 안죽는 현상 발생 다시 수정함.
         {
@@ -315,10 +328,12 @@ public class MonsterController : MonoBehaviour
             return;
         }   
         int dmg = Mathf.CeilToInt(damage); // 데미지를 인트로 바꾸어 받기
-        HPControl(-dmg);
-        m_damagedCoroutine = StartCoroutine("Coroutine_SetDamagedColor");
-        m_hudPanel.DisplayDamage(type, dmg, m_status.hp / m_status.hpMax);
-        if (player.GetStatus.KnockBackPer > m_status.KnockbackRigist) //넉백이 될때만 아래 적용 넉백없는 공격은 무시하고 돌진하도록!
+        DamageProcess(dmg, type);
+        if(isburn)
+        {
+            BurnDamage();
+        }
+        if (player.GetStatus.KnockBackPer > Random.Range(0,100 + m_status.KnockbackRigist)) //넉백이 될때만 아래 적용 넉백없는 공격은 무시하고 돌진하도록!
         {
            m_navAgent.ResetPath();
            SetState(MonsterState.Damaged);
@@ -343,14 +358,6 @@ public class MonsterController : MonoBehaviour
         if (m_status.hp <= 0) //피해를 받은 후 피가 0 이하일때 사망처리
         {
             SetDie();
-        }
-           
-        StartCoroutine(Coroutine_SetDamagedColor());
+        }      
     }
-    /*
-        protected virtual void Update()
-        {
-         if(m_status.hp > 0)
-            BehaviourProcess();
-        }*/
 }

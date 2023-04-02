@@ -187,6 +187,7 @@ class Skilldata : Singleton<Skilldata>
             data.SkillPoint = TableLoader.Instance.GetInteger("Point", i);
             data.ArmorPierce = TableLoader.Instance.GetFloat("ArmorPierce", i);
             data.Remove = TableLoader.Instance.GetFloat("Remove", i);
+            data.Burn = TableLoader.Instance.GetInteger("Burn", i);
             data.Drain = TableLoader.Instance.GetInteger("Drain", i);
             data.Crush = TableLoader.Instance.GetInteger("Crush", i);
             data.isActive = false;

@@ -61,15 +61,16 @@ public class PlayerSkillController : MonoBehaviour
         return false;
     }
     #endregion
+
     WeaponType m_weapontype;
     SkillWeaponType m_skillweapon;
     public TableSkillStat m_skilldata{get;set;}
     PlayerController m_player;
+    GunManager m_gunmanager;
+
+
     int m_skillPoint = 0;
     int SPCount = 0;
-    List<int> m_skillList = new List<int>();
-
-
     int count = 0; //이하 스킬찍는거 테스트용.
     int bcount = 0;
     int[] testskillid =
@@ -140,6 +141,15 @@ public class PlayerSkillController : MonoBehaviour
 23023,
 24111
     };
+
+    List<int> m_skillList = new List<int>(); //현재 활성화한 스킬 리스트 저장용
+
+
+    void PushSkillUpSignal()
+    {
+        m_player.SkillUpInitstatus(); //플레이어와 총에 스킬올라갔다는 정보 전달.
+        m_gunmanager.SkillUpSignal();
+    }
     void ResetDatas() //이전에 가지고 있던 정보 초기화.
     {
         Damage = 0;
@@ -211,7 +221,7 @@ public class PlayerSkillController : MonoBehaviour
             m_skillList.Add(id);
         }
         RefreshSKillData();
-        m_player.SkillUpInitstatus(); //스킬렙만 올리니 전달 안되는 현상발생. 추가로 스텟정보 바로 넘겨주기.
+        PushSkillUpSignal();
     }
     public void SetWeaponType(WeaponType type)  //무기 변경 시 마다 호출하여 현재 착용중인 무기와 스킬이 호환되는지 판단하기 위함.
     {
@@ -223,6 +233,7 @@ public class PlayerSkillController : MonoBehaviour
     {
         m_skilldata = new TableSkillStat();
         m_player = GetComponent<PlayerController>();
+        m_gunmanager = GetComponent<GunManager>();
     }
     private void Update()
     {

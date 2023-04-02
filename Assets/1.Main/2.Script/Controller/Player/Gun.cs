@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -150,23 +151,20 @@ public class Gun : MonoBehaviour
         m_firePos = Utill.GetChildObject(gameObject, "Dummy_Firepos");
     }
   
-    private void OnEnable() // 켜질경우 총알을 최대치로 하고 총의 정보를 불러옴
+    void OnEnable() // 켜질경우 총알을 최대치로 하고 총의 정보를 불러옴
     {
         ammoRemain = m_player.GetStatus.maxammo; //위처럼 시도를 하였었으나 어차피 무기는 한종류만 사용할것이고 교체하는 무기의 경우 상점구입, 바닥에서줍기 등 새로운 총 얻는 경우기 때문에
         gunstate = GunState.Ready; //그냥 기본대로 적용했음.
         ammoCheck();
         lastFireTime = 0;
     }
+    #region Gun_Fire_Sequance
+
     public void Fire()
     {
-      //  if(isfirst) //최초 발사시에 
-      //  {
-         //   ResetBoolin();
-         //   CheckBoolin();
-     //   }
-        if (gunstate == GunState.Ready && Time.time >= lastFireTime + 1/ m_player.GetStatus.atkSpeed) //총의 상태가 Ready이고 발사속도가 준비되었을 경우.
-        { 
-            lastFireTime= Time.time;
+        if (gunstate == GunState.Ready && Time.time >= lastFireTime + 1 / m_player.GetStatus.atkSpeed) //총의 상태가 Ready이고 발사속도가 준비되었을 경우.
+        {
+            lastFireTime = Time.time;
             Shot(); //쏴라!!!!
         }
     }
@@ -175,30 +173,22 @@ public class Gun : MonoBehaviour
         RaycastHit hit;
         Vector3 hitPos = Vector3.zero;
         Vector3 shotFire = Vector3.zero;
-        float damage = 0f;
         shotFire = m_player.transform.forward;
         if (m_type == WeaponType.ShotGun) //샷건의 경우 특수한 작동방식을 가지기 때문에 이렇게 합시다.
         {
             for (int i = 0; i < m_player.GetStatus.ShotGun; i++)
             {
                 shotFire = m_player.transform.forward;
-                  float verti = Random.Range(-0.3f, 0.3f);
-                  shotFire.x += verti;
+                float verti = Random.Range(-0.3f, 0.3f);
+                shotFire.x += verti;
                 if (pierce)
                 {
-                    RaycastHit[] hits = Physics.RaycastAll(m_firePos.position,shotFire, m_player.GetStatus.AtkDist);
-                    for(int j = 0; j < hits.Length; j++)
+                    RaycastHit[] hits = Physics.RaycastAll(m_firePos.position, shotFire, m_player.GetStatus.AtkDist);
+                    for (int j = 0; j < hits.Length; j++)
                     {
-                        if(hits[j].collider.CompareTag("Zombie"))
+                        if (hits[j].collider.CompareTag("Zombie"))
                         {
-                            var mon = hits[j].collider.GetComponent<MonsterController>();
-                            var type = GunManager.AttackProcess(mon, m_player.GetStatus.damage, m_player.GetStatus.criRate, m_player.GetStatus.criAttack, out damage);
-                            mon.SetDamage(type, damage, m_player);
-                            hitPos = hits[j].point;
-                            var hiteffect = TableEffect.Instance.m_tableData[4].Prefab[2];
-                            var effect = EffectPool.Instance.Create(hiteffect);
-                            effect.transform.position = hitPos;
-                            effect.SetActive(true);
+                            AttackProcess(hits[j]);
                         }
                     }
                 }
@@ -206,33 +196,14 @@ public class Gun : MonoBehaviour
                 {
                     if (Physics.Raycast(m_firePos.position, shotFire, out hit, m_player.GetStatus.AtkDist)) //시작지점, 방향, 충돌정보, 사정거리 
                     {
-
-                        if (hit.collider.CompareTag("Background"))
+                        if (hit.collider.CompareTag("Zombie"))
                         {
-                            hitPos = hit.point;
-                        }
-                        else if (hit.collider.CompareTag("Zombie"))
-                        {
-                            var mon = hit.collider.GetComponent<MonsterController>();
-                            var type = GunManager.AttackProcess(mon, m_player.GetStatus.damage, m_player.GetStatus.criRate, m_player.GetStatus.criAttack, out damage);
-                            mon.SetDamage(type, damage, m_player);
-                            hitPos = hit.point;
-                            var hiteffect = TableEffect.Instance.m_tableData[4].Prefab[2];
-                            var effect = EffectPool.Instance.Create(hiteffect);
-                            effect.transform.position = hitPos;
-                            effect.SetActive(true);
-                        }
-                        else
-                        {
-                            hitPos = m_firePos.position + shotFire * m_player.GetStatus.AtkDist;
+                            AttackProcess(hit);
                         }
                     }
-                    if (hit.collider == null)
-                    {
-                        hitPos = m_firePos.position + shotFire * m_player.GetStatus.AtkDist;
-                    }
+                   
                 }
-               
+
                 Debug.DrawRay(m_firePos.position, shotFire * m_player.GetStatus.AtkDist, Color.yellow, 0.1f);
             }
             m_flashEffect.Play();  //화염이펙트
@@ -241,7 +212,7 @@ public class Gun : MonoBehaviour
         }
         else //샷건외의 총은
         {
-            
+
             if (pierce)
             {
                 RaycastHit[] hits = Physics.RaycastAll(m_firePos.position, shotFire, m_player.GetStatus.AtkDist);
@@ -249,14 +220,7 @@ public class Gun : MonoBehaviour
                 {
                     if (hits[j].collider.CompareTag("Zombie"))
                     {
-                        var mon = hits[j].collider.GetComponent<MonsterController>();
-                        var type = GunManager.AttackProcess(mon, m_player.GetStatus.damage, m_player.GetStatus.criRate, m_player.GetStatus.criAttack, out damage);
-                        mon.SetDamage(type, damage, m_player);
-                        hitPos = hits[j].point;
-                        var hiteffect = TableEffect.Instance.m_tableData[4].Prefab[2];
-                        var effect = EffectPool.Instance.Create(hiteffect);
-                        effect.transform.position = hitPos;
-                        effect.SetActive(true);
+                        AttackProcess(hits[j]);
                     }
                 }
                 hitPos = m_firePos.position + shotFire * m_player.GetStatus.AtkDist;
@@ -271,14 +235,7 @@ public class Gun : MonoBehaviour
                     }
                     else if (hit.collider.CompareTag("Zombie"))
                     {
-                        var mon = hit.collider.GetComponent<MonsterController>();
-                        var type = GunManager.AttackProcess(mon, m_player.GetStatus.damage, m_player.GetStatus.criRate, m_player.GetStatus.criAttack, out damage);
-                        mon.SetDamage(type, damage, m_player);
-                        hitPos = hit.point;
-                        var hiteffect = TableEffect.Instance.m_tableData[4].Prefab[2];
-                        var effect = EffectPool.Instance.Create(hiteffect);
-                        effect.transform.position = hitPos;
-                        effect.SetActive(true);
+                        hitPos = AttackProcess(hit);
                     }
                     else
                     {
@@ -290,7 +247,6 @@ public class Gun : MonoBehaviour
                     hitPos = m_firePos.position + shotFire * m_player.GetStatus.AtkDist;
                 }
             }
-            
             StartCoroutine(ShootEffect(hitPos));
         }
         ammoRemain--;
@@ -310,7 +266,31 @@ public class Gun : MonoBehaviour
         StartCoroutine(ReloadRoutine());
         return true;
     }
+    Vector3 AttackProcess(RaycastHit hit) //공격 시 좀비와의 상호작용하기위한 프로세스 모음
+    {
+        float damage = 0f;
+        Vector3 hitPos = Vector3.zero;
+        var mon = hit.collider.GetComponent<MonsterController>();
+        var type = GunManager.AttackProcess(mon, m_player.GetStatus.damage, m_player.GetStatus.criRate, m_player.GetStatus.criAttack, out damage);
+      
+        if (burn)
+        {
+            mon.SetDamage(type, damage, m_player,true);
+        }
+        else
+        {
+            mon.SetDamage(type, damage, m_player, false);
+        }
+        hitPos = hit.point;
+        var hiteffect = TableEffect.Instance.m_tableData[4].Prefab[2];
+        var effect = EffectPool.Instance.Create(hiteffect);
+        effect.transform.position = hitPos;
+        effect.SetActive(true);
+        return hitPos;
+    }
 
-   
-  
+    #endregion
+
+
+
 }

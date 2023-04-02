@@ -15,11 +15,12 @@ public class GunManager : MonoBehaviour
     [SerializeField]
     GameObject[] Weapons;
     [SerializeField]
-    string m_weaponType;
-    //현재 장착중인 무기를 표시하기 위함.]]
+    string m_weaponType; //현재 장착중인 무기를 표시하기 위함.]]
     PlayerGetItem m_getitem;
-    public PlayerShooter shooter;
-    public PlayerStriker striker;
+    [SerializeField]
+    PlayerShooter shooter;  //현재 적용중인 무기타입 체크용.
+    [SerializeField]
+    PlayerStriker striker;
     PlayerController m_player;
     public TableGunstat m_gunStatus { get; set; }
     public bool isMelee;
@@ -35,6 +36,13 @@ public class GunManager : MonoBehaviour
     public static PlayerAnimController m_animCtr;
     public static bool isChange = false;
     public Inventory m_inven;
+    public void SkillUpSignal()
+    {
+        if (shooter.enabled)
+        {
+            shooter.CheckSkillSignal();
+        }
+    }
     public IEnumerator ChangeWeaponRoutine(string name, WeaponType type, int ID, int grade, string atkType, string image)
     {
         // Debug.Log(image);
@@ -93,7 +101,7 @@ public class GunManager : MonoBehaviour
         public void ChangeWeapon(int id)
         {
             StartCoroutine(ChangeWeaponRoutine(m_weapondata.GetWeaponStatus(id).Type, m_weapondata.GetWeaponStatus(id).weaponType, id, m_weapondata.GetWeaponStatus(id).Grade, m_weapondata.GetWeaponStatus(id).AtkType, m_weapondata.GetWeaponStatus(id).Image));
-        }
+        } //ID값 베이스로 무기 변경하는 메소드
         public static AttackType AttackProcess(MonsterController mon, float Pdamage, float criper, float cridam, out float damage) // 기본 공격과 치명타의 구분을 위한 메서드 damage를 넘겨줌
         {
             AttackType attackType = AttackType.Normal; //기본적으로는 치명타상태가 아닌 일반적인 공격으로 계산

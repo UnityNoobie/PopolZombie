@@ -15,7 +15,6 @@ public class PlayerStriker : MonoBehaviour
         Attack,
         Dead
     }
-
     public MeleeState meleeState { get; set; }
     public static bool isActive = true;
     float m_lastAttackTime;
@@ -36,23 +35,6 @@ public class PlayerStriker : MonoBehaviour
         m_player.SetStatus(ID);// 플레이어의 스테이터스를 재설정
 
     }
-    /*
-     private void OnDisable()
-     {
-
-         if (GunManager.currentWeapon != null)
-         GunManager.currentWeapon.gameObject.SetActive(false); //현재 무기 끄기
-     }
-
-     private void OnEnable()
-     {
-         GunManager.m_animCtr.SetFloat("MeleeSpeed", m_player.GetStatus.atkSpeed);
-         if (GunManager.currentWeapon != null)
-         {
-             GunManager.currentWeapon.gameObject.SetActive(true); //현재 무기 켜기
-         }
-
-     }*/
     private void Update()
     {
         if (isActive)

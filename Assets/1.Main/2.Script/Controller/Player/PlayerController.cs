@@ -170,7 +170,7 @@ public class PlayerController : MonoBehaviour
             {
                 var mon = areaList[i].GetComponent<MonsterController>();
                 var type = GunManager.AttackProcess(mon, m_status.damage, m_status.criRate, m_status.criAttack, out damage);
-                mon.SetDamage(type, damage, this);
+                mon.SetDamage(type, damage, this, false);
                 if(m_status.Drain != 0)
                 {
                     Debug.Log(Mathf.CeilToInt((damage * m_status.Drain) / 100) + " 회복!!");
@@ -346,82 +346,7 @@ public class PlayerController : MonoBehaviour
         }
         //CheckBoolin();
     }
-    /*
-    void CheckBoolin()  //특정 조건이 만족했는지 확인 
-    {
-        if (skillHeal > 0)// 스킬의 지속힐이 0 보다 크다면 힐 코루틴 시작.
-        {
-            if(CheckCoroutine!= null) //기존에 실행중이라면 멈추고 다시실행
-            {
-                StopCoroutine(Coroutine_SustainedHeal());
-            }
-            CheckCoroutine = StartCoroutine(Coroutine_SustainedHeal());
-        }  
-        if(skillLastFire > 0)
-        {
-            lastfire = true;
-        }
-        else
-        {
-            lastfire= false;
-        }
-        if(skillDrain > 0)
-        {
-            drain = true;
-        }
-        else
-        {
-            drain= false;
-        }
-        if(skillCrush > 0)
-        {
-            crush = true;
-        }
-        else
-        {
-            crush = false;
-        }
-        if(skillBurn > 0)
-        {
-            burn = true;
-        }
-        else
-        {
-            burn = false;
-        }
-        if(skillArmorPierce > 0)
-        {
-            armorpierce = true;
-        }
-        else
-        {
-            armorpierce = false;
-        }
-        if(skillPierce > 0)
-        {
-            pierce = true;
-        }
-        else
-        {
-            pierce = false;
-        }
-        if(skillBoom > 0)
-        {
-            boom = true;
-        }
-        else
-        {
-            boom = false;
-        }
-        if(skillRemove > 0)
-        {
-            removeslow = true;
-        }
-        else
-        {
-            removeslow = false;
-        }
-    }*/
+ 
     void HPControl(int value)
     {
         m_status.hp += value;   
@@ -464,7 +389,6 @@ public class PlayerController : MonoBehaviour
         m_skill.SetWeaponType(m_weaponData.weaponType); //무기타입 전송
        // m_SkillData = m_SkillData.SkillData(m_weaponData.weaponType);
     }
-
 
     #endregion
     #region HUD && PlayerState
