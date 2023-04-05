@@ -23,7 +23,7 @@ public class PlayerSkillController : MonoBehaviour
     float ArmorPierce;
     float Remove;
     int Drain;
-    int Crush;
+    float Crush;
     int Burn;
     #endregion
 

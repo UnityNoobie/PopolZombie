@@ -43,18 +43,17 @@ public class UIManager : SingletonDontDestroy<UIManager>
     QuickSlot m_quickSlot;
     [SerializeField]
     StoreUI m_store;
-   
-    
 
-    public void CloseTabs()
-    {
-        m_store.CloseAllTabs();
-    }
+
     IEnumerator SystemMessage(string message)
     {
         m_systemMessage.text = message;
         yield return new WaitForSeconds(1);
         m_systemMessage.text = null;
+    }
+    public void CloseTabs()
+    {
+        m_store.CloseAllTabs();
     }
     public void ScoreChange(float score)
     {

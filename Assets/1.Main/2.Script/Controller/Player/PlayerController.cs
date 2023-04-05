@@ -81,9 +81,9 @@ public class PlayerController : MonoBehaviour
     float skillArmorPierce;
     float skillRemove;
     int skillDrain;
-    int skillCrush;
+    float skillCrush;
     int skillBurn;
-
+    bool crush;
     #endregion
     public enum PlayerState //플레이어의 상태 알림
     {
@@ -169,11 +169,15 @@ public class PlayerController : MonoBehaviour
             if (areaList[i].CompareTag("Zombie"))
             {
                 var mon = areaList[i].GetComponent<MonsterController>();
-                var type = GunManager.AttackProcess(mon, m_status.damage, m_status.criRate, m_status.criAttack, out damage);
+                var type = GunManager.AttackProcess(mon, m_status.damage, m_status.criRate, m_status.criAttack, m_status.ArmorPierce, out damage);
+                if (crush)//분쇄스킬이 찍혀있으면..
+                {
+                    mon.Crush(skillCrush);
+                }
                 mon.SetDamage(type, damage, this, false);
                 if(m_status.Drain != 0)
                 {
-                    Debug.Log(Mathf.CeilToInt((damage * m_status.Drain) / 100) + " 회복!!");
+                    //Debug.Log(Mathf.CeilToInt((damage * m_status.Drain) / 100) + " 회복!!");
                     SkillHeal(Mathf.CeilToInt((damage * m_status.Drain) / 100));
                 }
 
@@ -277,11 +281,11 @@ public class PlayerController : MonoBehaviour
     }
     public void BehaviorProcess()
     {
-        if (m_Pstate.Equals(PlayerState.dead)) return;
+        if (m_Pstate.Equals(PlayerState.dead)) return; 
         m_dir = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
         if(m_dir.x !=0 && m_dir.z !=0)
         {
-            m_dir = m_dir / 1.5f; //일단 대각선이동은 이렇게 처리 추후 함수적용.
+            m_dir = m_dir / 1.5f; //대각선 이동 시 너무 빠른 움직이 발생하여 적용
         }
         if (m_dir != Vector3.zero)
         {
@@ -314,7 +318,7 @@ public class PlayerController : MonoBehaviour
         armSpeed = speed;
         SetStatus(m_weaponData.ID);
     }
-    public void SetSkillData(float damage, float atkspeed, float reload, float speed, int crirate, float cridamage, float mag, float defence, float damagerigist, float hp, float knockbackrate, int heal, int lastfire, int pierce, int boom, float armorPierce, float Remove, int Drain, int Crush, int Burn)
+    public void SetSkillData(float damage, float atkspeed, float reload, float speed, int crirate, float cridamage, float mag, float defence, float damagerigist, float hp, float knockbackrate, int heal, int lastfire, int pierce, int boom, float armorPierce, float Remove, int Drain, float Crush, int Burn)
     {
         skillamage = damage;
         skillAtkSpeed = atkspeed;
@@ -336,6 +340,14 @@ public class PlayerController : MonoBehaviour
         skillDrain = Drain;
         skillCrush = Crush;
         skillBurn = Burn;
+        if(skillCrush > 0)
+        {
+            crush = true;
+        }
+        else
+        {
+           crush = false;
+        }
         if (skillHeal > 0)// 스킬의 지속힐이 0 보다 크다면 힐 코루틴 시작.
         {
             if (CheckCoroutine != null) //기존에 실행중이라면 멈추고 다시실행
@@ -378,16 +390,18 @@ public class PlayerController : MonoBehaviour
     {
         SetWeaponID(ID);
         //스테이터스 입력값의 순서 : 스킬, 아이템 최대체력 ,스킬아이템 크리티컬 확률, 스킬, 아이템 크리티컬 추가 데미지,스킬 아이템 공격속도, 스킬아이템 공격력, 스킬 아이템 방어력 , 이동속도
-        InitStatus(m_weaponData.HP,  m_weaponData.CriRate, m_weaponData.CriDamage, m_weaponData.AtkSpeed,  m_weaponData.Damage, m_weaponData.Defence, m_weaponData.Speed, m_weaponData.Mag, m_weaponData.ReloadTime,m_weaponData.KnockBack,m_weaponData.KnockBackDist,m_weaponData.AttackDist,m_weaponData.Shotgun,m_level);
+        float penaltyRemove = m_weaponData.Speed;
+        if (skillRemove != 0 && m_weaponData.Speed < 0) //스킬 데이터로 이동속도 패널티감소가 있고 무기의 이속감소 효과가 있을 경우 이속올려줌
+        {
+            penaltyRemove = penaltyRemove - (penaltyRemove * skillRemove);
+        }
+        InitStatus(m_weaponData.HP,  m_weaponData.CriRate, m_weaponData.CriDamage, m_weaponData.AtkSpeed,  m_weaponData.Damage, m_weaponData.Defence, penaltyRemove/*패널티감소 스킬이 있기 때문에 따로 적용*/, m_weaponData.Mag, m_weaponData.ReloadTime,m_weaponData.KnockBack,m_weaponData.KnockBackDist,m_weaponData.AttackDist,m_weaponData.Shotgun,m_level);
      //   m_animCtr.SetFloat("MoveSpeed", m_status.speed / 150); //이동속도별 다리움직임 속도조절용.
     }   //넉백을 아직은 무기에서만 적용을 하여 추후 더 넣어줘야함!
     void SetWeaponID(int ID)
     {
-        //   m_gunData = m_gunData.GetWeaponStatus(ID);
         m_weaponData = m_weaponData.GetWeaponStatus(ID);
-     //   Debug.Log(m_weaponData.weaponType + " 무기타입 전달합니당");
         m_skill.SetWeaponType(m_weaponData.weaponType); //무기타입 전송
-       // m_SkillData = m_SkillData.SkillData(m_weaponData.weaponType);
     }
 
     #endregion

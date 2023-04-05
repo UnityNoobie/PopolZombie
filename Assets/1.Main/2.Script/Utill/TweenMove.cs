@@ -42,22 +42,4 @@ public class TweenMove : MonoBehaviour
         m_navMeshAgent = GetComponent<NavMeshAgent>();    
     }
 
-    // Update is called once per frame
-   /* void Update()
-    {        
-        if(Input.GetKeyDown(KeyCode.O))
-        {
-            m_from = transform.position;
-            m_to = m_from + Vector3.forward * 3f;
-            m_duration = 0.5f;
-            Play();
-        }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            m_from = transform.position;
-            m_to = m_from + Vector3.back * 3f;
-            m_duration = 0.5f;
-            Play();
-        }
-    }*/
 }

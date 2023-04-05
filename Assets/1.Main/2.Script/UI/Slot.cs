@@ -21,8 +21,6 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
     string itemType;
     ItemType m_type;
     string m_name;
-    
-   
     StoreUI m_store;
     public void SetStore(StoreUI store, BuyItems buyItem)
     {
@@ -48,7 +46,7 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
             }
         }
     }
-    public void OnPointerEnter(PointerEventData eventData)//마우스가 위에 올라왔을때 시도?
+    public void OnPointerEnter(PointerEventData eventData)//마우스가 위에 올라왔을때
     {
         if (m_image.sprite != null && eventData.pointerEnter.CompareTag("Slot")) //eventData.pointerEnter.CompareTag("Slot")
         {

@@ -94,7 +94,16 @@ public class BossController : MonsterController
         RageCool = 15f;
         base.AnimEvent_SetDie();
     }
-
+    protected override void SetDie()
+    {
+        StopSkill();
+        base.SetDie();
+    }
+    void StopSkill()
+    {
+        m_skill1Pos.gameObject.SetActive(false);
+        m_skill2Pos.gameObject.SetActive(false) ;
+    }
     #endregion
     void SetAttack()
     {
@@ -120,10 +129,51 @@ public class BossController : MonsterController
             m_animctr.Play(MonsterAnimController.Motion.Attack); }
        
     }
- 
+
+    public override void SetDamage(AttackType type, float damage, PlayerController player, bool isburn)
+    {
+        if (m_status.hp <= 0) //hp가 0이하일때는 적용 x // 바로 리턴을 하였는데 죽어도 안죽는 현상 발생 다시 수정함.
+        {
+            SetDie();
+            return;
+        }
+        int dmg = Mathf.CeilToInt(damage); // 데미지를 인트로 바꾸어 받기
+        DamageProcess(dmg, type);
+        if (isburn)
+        {
+            BurnDamage();
+        }
+        if (player.GetStatus.KnockBackPer > Random.Range(0, 100 + m_status.KnockbackRigist)) //넉백이 될때만 아래 적용 넉백없는 공격은 무시하고 돌진하도록!
+        {
+            m_navAgent.ResetPath();
+            SetState(MonsterState.Damaged);
+            if (m_motionDelaycoroutine != null)
+            {
+                StopCoroutine(m_motionDelaycoroutine);
+                m_motionDelaycoroutine = null;
+            }
+            if (m_damagedCoroutine != null)
+            {
+                StopCoroutine(m_damagedCoroutine);
+                m_damagedCoroutine = null;
+            }
+            m_animctr.Play(MonsterAnimController.Motion.KnockBack, false);
+            StopSkill();
+            var dir = (transform.position - player.transform.position);
+            dir.y = 0f;
+            m_tweenmove.m_from = transform.position;
+            m_tweenmove.m_to = m_tweenmove.m_from + dir.normalized * player.GetStatus.KnockBackDist;
+            m_tweenmove.m_duration = player.GetStatus.KnockBackDist;
+            m_tweenmove.Play();
+        }
+        if (m_status.hp <= 0) //피해를 받은 후 피가 0 이하일때 사망처리
+        {
+            SetDie();
+        }
+    }
     public override void BehaviourProcess()
     {
-        if (!gameObject.activeSelf) return;
+        if (!gameObject.activeSelf || m_state.Equals(MonsterState.Die)) return;
         RageCool += Time.deltaTime;
         timeafterAttack += Time.deltaTime;
         if(!isRage && (float)m_status.hp / m_status.hpMax < 0.5 && RageCool > 20 && m_state != MonsterState.Attack)
@@ -141,17 +191,12 @@ public class BossController : MonsterController
                 m_idleTime += Time.deltaTime;
                 if (m_idleTime >= m_idleDuration) //대기시간을 초과한다면
                 {
-                 //   if (m_state != MonsterState.Die && gameObject.tag == "Die") //간혹 살아있는놈의 태그가 Die일경우가 있어서 수정해봄
-                   // {
-                   //     gameObject.tag = "Zombie";
-                  //  }
                     m_idleTime = 0f; //대기시간 초기화
                     if (FindTarget(m_player.transform, 50)) //관측 가능한 거리에 플레이어가 있다면.
                     {
                         
                         if (CheckArea(m_player.transform.position, m_status.attackDist)) // 사정거리 내에 위치해 있으면
                         {
-
                             if (m_status.atkSpeed <= timeafterAttack)
                             {
                                 transform.forward = GetTargetDir(m_player.transform);//플레이어 방향 봐주기
@@ -179,9 +224,6 @@ public class BossController : MonsterController
                 }
                 break;
             case MonsterState.Chase:
-                //  dist = m_player.transform.position - transform.position;
-                //    dist.y = 0f;
-                //if (Mathf.Approximately(dist.sqrMagnitude, Mathf.Pow(m_navMeshAgent.stoppingDistance, 2f)) || dist.sqrMagnitude < Mathf.Pow(m_navMeshAgent.stoppingDistance, 2f))
                 if (CheckArea(m_player.transform.position, m_navAgent.stoppingDistance))
                 {
                     SetIdle(0.1f);

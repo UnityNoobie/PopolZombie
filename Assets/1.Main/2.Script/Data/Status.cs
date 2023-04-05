@@ -39,10 +39,10 @@ public struct Status
     public float ArmorPierce;
     public float Remove;
     public int Drain;
-    public int Crush;
+    public float Crush;
     public int Burn;
 
-    public Status(float hp,float hpMax,  float criRate, float criAttack,float atkSpeed, float damage, float defense, float speed, int maxammo, float reloadTime,float knockbackPer, float knockbackDist, float atkDist, int shotgun,int Level,float damagerigist,int lastfire, int pierce,int boom,float armorpierce,float remove,int drain,int crush,int burn)
+    public Status(float hp,float hpMax,  float criRate, float criAttack,float atkSpeed, float damage, float defense, float speed, int maxammo, float reloadTime,float knockbackPer, float knockbackDist, float atkDist, int shotgun,int Level,float damagerigist,int lastfire, int pierce,int boom,float armorpierce,float remove,int drain,float crush,int burn)
     {
         this.hp = hp;
         this.hpMax = hpMax; //이 객체의 최대체력과 현재 체력을 받아온 hp값으로 저장

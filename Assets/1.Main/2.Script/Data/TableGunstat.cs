@@ -73,11 +73,8 @@ public class WeaponData
     public WeaponData GetWeaponStatus(int ID)
     {
         //아이템 타입, 아이디, 등급, 데미지, 장탄량, 크리티컬확률, 크리티컬데미지, 방어력, 샷건발사수, 넉백확률,공격속도,재장전속도,이동속도,체력 순서
-        //엑셀은 Type	Id	Grade	Damage	AtkSpeed	ReloadTime	Mag	Speed	CriRate	CriDamage	HP	Defence	Shotgun	KnockBack 순서임.
         WeaponData status = null;
         status = TableGunstat.Instance.m_WeaponData[ID];
-        // GunData var = TableGunstat.Instance.m_GunData[ID];
-        // status = TableGunstat.Instance.m_GunData[ID];
         WeaponType type = new WeaponType();
         if (status.Type.Equals("Pistol"))
         {

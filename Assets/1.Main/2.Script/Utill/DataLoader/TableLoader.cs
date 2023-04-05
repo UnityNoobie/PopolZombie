@@ -17,9 +17,7 @@ public class TableLoader : Singleton<TableLoader>
     }
     public string GetString(string key, int index)
     {
-
         return m_table[index][key];
-
     }
     public byte GetByte(string key, int index)
     {
@@ -27,8 +25,7 @@ public class TableLoader : Singleton<TableLoader>
     }
     public int GetInteger(string key, int index)
     {
-        
-        return int.Parse(GetString(key, index)); 
+        return int.Parse(GetString(key, index));
     }
     public float GetFloat(string key, int index)
     {
@@ -83,7 +80,6 @@ public class TableLoader : Singleton<TableLoader>
         }
         br.Close();
         ms.Close();
-
     }
 
 }

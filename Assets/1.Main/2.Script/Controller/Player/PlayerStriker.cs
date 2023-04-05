@@ -8,7 +8,7 @@ public class PlayerStriker : MonoBehaviour
     PlayerController m_player;
 
     
-    public Melee melee;
+    Melee melee;
     public enum MeleeState
     {
         Ready,

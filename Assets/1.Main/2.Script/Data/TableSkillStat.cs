@@ -52,7 +52,7 @@ public class TableSkillStat
     public float ArmorPierce { get; set; }
     public float Remove { get; set; }
     public int Drain { get; set; }
-    public int Crush { get; set; }
+    public float Crush { get; set; }
     public int Burn { get; set; }
     public bool isActive { get; set; }
 
@@ -189,7 +189,7 @@ class Skilldata : Singleton<Skilldata>
             data.Remove = TableLoader.Instance.GetFloat("Remove", i);
             data.Burn = TableLoader.Instance.GetInteger("Burn", i);
             data.Drain = TableLoader.Instance.GetInteger("Drain", i);
-            data.Crush = TableLoader.Instance.GetInteger("Crush", i);
+            data.Crush = TableLoader.Instance.GetFloat("Crush", i);
             data.isActive = false;
             m_dic.Add(data.ID,data);
         }

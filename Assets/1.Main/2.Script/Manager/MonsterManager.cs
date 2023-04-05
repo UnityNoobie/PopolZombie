@@ -132,6 +132,7 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
 
     private void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.Space)) //테스트용 몬스터 생성
         {
             CreateMonster(); 

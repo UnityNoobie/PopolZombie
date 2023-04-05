@@ -80,10 +80,9 @@ public class GunManager : MonoBehaviour
                     striker.enabled = true; //스트라이커가 꺼져있으면 켜주기
                 }
                 if(m_animCtr.GetMotion.Equals(PlayerAnimController.Motion.Combo1) || m_animCtr.GetMotion.Equals(PlayerAnimController.Motion.Combo2))
-            {
+                {
                 m_player.AnimEvnet_MeleeFinished();
-            }
-            
+                }    
             PlayerStriker.isActive = false;
                 isChange = true;
                 m_animCtr.Play("MeleeArm");
@@ -102,11 +101,11 @@ public class GunManager : MonoBehaviour
         {
             StartCoroutine(ChangeWeaponRoutine(m_weapondata.GetWeaponStatus(id).Type, m_weapondata.GetWeaponStatus(id).weaponType, id, m_weapondata.GetWeaponStatus(id).Grade, m_weapondata.GetWeaponStatus(id).AtkType, m_weapondata.GetWeaponStatus(id).Image));
         } //ID값 베이스로 무기 변경하는 메소드
-        public static AttackType AttackProcess(MonsterController mon, float Pdamage, float criper, float cridam, out float damage) // 기본 공격과 치명타의 구분을 위한 메서드 damage를 넘겨줌
+        public static AttackType AttackProcess(MonsterController mon, float Pdamage, float criper, float cridam,float armorpierce, out float damage) // 기본 공격과 치명타의 구분을 위한 메서드 damage를 넘겨줌
         {
             AttackType attackType = AttackType.Normal; //기본적으로는 치명타상태가 아닌 일반적인 공격으로 계산
             damage = 0f;
-            damage = CalculationDamage.NormalDamage(Pdamage, mon.GetStatus.defense); //공격의 경우 총의 공격력과 총알에 맞은 콜라이더의 방어력 정보를 얻어와 적용.
+            damage = CalculationDamage.NormalDamage(Pdamage, mon.GetStatus.defense,armorpierce); //공격의 경우 총의 공격력과 총알에 맞은 콜라이더의 방어력 정보를 얻어와 적용.
             if (CalculationDamage.CriticalDecision(criper))   //크리티컬의 유무를 확인하기.
             {
                 attackType = AttackType.Critical; //공격의 타입을 크리티컬로 지정

@@ -11,8 +11,6 @@ public class QuickSlot_slot : MonoBehaviour
     PlayerController m_player;
     bool isNull;
     int count = 0;
-
-
     public void SetPlayer(PlayerController player)
     {
         m_player = player;

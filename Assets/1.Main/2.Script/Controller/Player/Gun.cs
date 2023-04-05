@@ -36,7 +36,7 @@ public class Gun : MonoBehaviour
     public int ammoRemain;
     public bool isReload = false;
     float lastFireTime;
-    public WeaponData GetStatus { get; set; }
+   // public WeaponData GetStatus { get; set; }
     public bool isfirst = true; 
     bool lastfire;
     bool pierce;
@@ -271,22 +271,41 @@ public class Gun : MonoBehaviour
         float damage = 0f;
         Vector3 hitPos = Vector3.zero;
         var mon = hit.collider.GetComponent<MonsterController>();
-        var type = GunManager.AttackProcess(mon, m_player.GetStatus.damage, m_player.GetStatus.criRate, m_player.GetStatus.criAttack, out damage);
-      
-        if (burn)
+        var type = GunManager.AttackProcess(mon, m_player.GetStatus.damage, m_player.GetStatus.criRate, m_player.GetStatus.criAttack,m_player.GetStatus.ArmorPierce, out damage);
+        if (burn) //화상 효과 활성화 되있다면. 화상딜 들어가는 신호를 추가로 줌.
         {
+           
             mon.SetDamage(type, damage, m_player,true);
+        }
+        if (lastfire && ammoRemain == 1) //마지막 한발특성이 활성화 되어있고 탄환이 한발일때 사격을 시도하면 5배의 데미지
+        {
+          //  Debug.Log("LastFire 실행!  데미지 : " + damage*5);
+            mon.SetDamage(type, damage * 5, m_player, false);
         }
         else
         {
+          //  Debug.Log("일반 사격 실행!  데미지 : " + damage);
             mon.SetDamage(type, damage, m_player, false);
         }
         hitPos = hit.point;
-        var hiteffect = TableEffect.Instance.m_tableData[4].Prefab[2];
-        var effect = EffectPool.Instance.Create(hiteffect);
-        effect.transform.position = hitPos;
-        effect.SetActive(true);
+        if(boom && ammoRemain % 5 == 0) //Boom이 활성화 되어있고 총알이 5의배수로 있으면(5번째 탄마다 실행)
+        {
+            var hiteffect = TableEffect.Instance.m_tableData[7].Prefab[2];
+            var effect = EffectPool.Instance.Create(hiteffect);
+            Vector3 effectPos = new Vector3(hitPos.x, hitPos.y+0.1f, hitPos.z - 1f);
+            effect.GetComponent<PlayerProjectileCtr>().SetPlayerProjectile(m_player);
+            effect.transform.position = effectPos;
+            effect.SetActive(true);  
+        }
+        else
+        {
+            var hiteffect = TableEffect.Instance.m_tableData[4].Prefab[2];
+            var effect = EffectPool.Instance.Create(hiteffect);
+            effect.transform.position = hitPos;
+            effect.SetActive(true);
+        }
         return hitPos;
+
     }
 
     #endregion

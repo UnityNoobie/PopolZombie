@@ -12,14 +12,6 @@ public enum MeleeType
 
 
 
-
-
-
-
-
-
-
-
 public class TableMeleeStat : Singleton<TableMeleeStat>
 {
     // type	Id	Grade	Damage	AtkSpeed	AtkRange	Speed	CriRate	CriDamage	HP	Defence	KnockBack	KnockBackDist	Break	AtkType

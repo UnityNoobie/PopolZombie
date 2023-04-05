@@ -18,7 +18,6 @@ public class BossAnimController : AnimationController
         Die,
         Max
     }
-
     public Motion GetMotion { get { return m_motion; } }
     StringBuilder m_sb = new StringBuilder();
     public void SetMotionState(Motion motion)
@@ -35,8 +34,7 @@ public class BossAnimController : AnimationController
     // Start is called before the first frame update
     protected override void Start()
     {
-        base.Start();
-        
+        base.Start();     
     }
 
 

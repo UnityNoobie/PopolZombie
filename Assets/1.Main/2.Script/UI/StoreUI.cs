@@ -159,50 +159,6 @@ public class StoreUI : MonoBehaviour
             }
         }
     }
-    /*   여기서 이벤트트리거를 조작하려했던 흔적들...ㅎ
-     
-          m_slots[i].AddComponent<EventTrigger>();
-                EventTrigger triger = m_slots[i].GetComponent<EventTrigger>();
-                EventTrigger.Entry entry = new EventTrigger.Entry();
-                entry.eventID = EventTriggerType.PointerEnter;
-                entry.callback.AddListener((eventData) => { m_info.ActiveUI(list[i], m_itemdata[list[i]].type); });
-                triger.triggers.Add(entry);
-
-                entry = new EventTrigger.Entry();
-                entry.eventID = EventTriggerType.PointerExit;
-                entry.callback.AddListener((eventData) => { m_info.DeActiveUI(); });
-                triger.triggers.Add(entry);
-
-       m_slots[i].AddComponent<EventTrigger>();
-                EventTrigger triger = m_slots[i].GetComponent<EventTrigger>();
-                EventTrigger.Entry entry = new EventTrigger.Entry();
-                entry.eventID = EventTriggerType.PointerEnter;
-                entry.callback.AddListener((eventData) => { m_info.ActiveUI(list[i], m_itemdata[list[i]].type); });
-                triger.triggers.Add(entry);
-
-                entry = new EventTrigger.Entry();
-                entry.eventID = EventTriggerType.PointerExit;
-                entry.callback.AddListener((eventData) => { m_info.DeActiveUI(); });
-                triger.triggers.Add(entry);
-     
-     
-      m_slots[i].AddComponent<EventTrigger>();
-                EventTrigger triger = m_slots[i].GetComponent<EventTrigger>();
-                EventTrigger.Entry entry = new EventTrigger.Entry();
-                entry.eventID = EventTriggerType.PointerEnter;
-                entry.callback.AddListener((eventData) => { m_info.ActiveUI(list[i], m_itemdata[list[i]].type); });
-                triger.triggers.Add(entry);
-
-                entry = new EventTrigger.Entry();
-                entry.eventID = EventTriggerType.PointerExit;
-                entry.callback.AddListener((eventData) => { m_info.DeActiveUI(); });
-                triger.triggers.Add(entry);
-     
-     
-     */
-
-   
-
     void Start()
     {
         m_slots = m_content.GetComponentsInChildren<Slot>();

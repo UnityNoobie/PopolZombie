@@ -69,7 +69,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIDragObject.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\ByteReader.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIStretch.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Controller\ProjectileController.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Controller\Monster\ProjectileController.cs" />
     <Compile Include="Assets\External\HUD Text\Examples\Scripts\ColliderDisplayText.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\LookAtTarget.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenFOV.cs" />
@@ -112,13 +112,13 @@
     <Compile Include="Assets\1.Main\2.Script\UI\QuickSlot_slot.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\BMFont.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIOrthoCamera.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Utill\Item\HealPack.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\QuickSlot.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\PropertyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIEventTrigger.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerMeleeAttack.cs" />
     <Compile Include="Assets\1.Main\2.Script\Data\TestMonStatus.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\Inventory.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerProjectileCtr.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIDragScrollView.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIMath.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIPlayAnimation.cs" />
@@ -152,7 +152,6 @@
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIInput.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIViewport.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\ShaderQuality.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Controller\Monster\BossSkillController.cs" />
     <Compile Include="Assets\External\HUD Text\Scripts\UIFollowTarget.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\System\InvBaseItem.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerController.cs" />

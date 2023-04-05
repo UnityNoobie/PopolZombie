@@ -25,8 +25,6 @@ public class GameObjectPool<T> where T : class
         m_createFunc = createFunc;
         Allocation();
     }
-    
-  
     void Allocation()
     {
         for(int i = 0; i < m_count; i++)
@@ -34,7 +32,6 @@ public class GameObjectPool<T> where T : class
             m_objPool.Enqueue(m_createFunc());
         }
     }
-    
     public T New()
     {
         return m_createFunc();

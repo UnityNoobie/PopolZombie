@@ -16,9 +16,7 @@ public class VFXAutoDestroy : MonoBehaviour
     void Start()
     {
        m_Particles = GetComponentsInChildren<ParticleSystem>();   
-    }
-
-    
+    }   
     // Update is called once per frame
     void Update()
     {
@@ -46,7 +44,5 @@ public class VFXAutoDestroy : MonoBehaviour
                 gameObject.SetActive(false);
             }
         }
-       
-
     }
 }
