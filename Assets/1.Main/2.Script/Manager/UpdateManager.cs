@@ -10,6 +10,7 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
     [SerializeField]
     Inventory m_inven;
     bool m_isactive = false;
+    bool m_skillactive = false;
     public PlayerController[] m_players;
     public PlayerController[] m_playersSave;
     int m_playercount;
@@ -52,6 +53,18 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
                 m_inven.gameObject.SetActive(m_isactive);   
             }
             UIManager.Instance.CloseTabs();
+        }
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            if (m_skillactive)
+            {
+                m_skillactive = false;
+            }
+            else
+            {
+                m_skillactive = true;
+            }
+            UIManager.Instance.SkillUIChange(m_skillactive);
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {

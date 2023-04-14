@@ -10,7 +10,7 @@ public class ImageLoader : Singleton<ImageLoader>
     public Sprite[] Tex;
     public Sprite GetImage(string path)
     {
-        return m_weaponImages[path];
+       return m_weaponImages[path];
     }
     public void Load()
     {
@@ -18,6 +18,7 @@ public class ImageLoader : Singleton<ImageLoader>
         for (int i = 0; i < Tex.Length; i++)
         {
             m_weaponImages.Add(Tex[i].name, Tex[i]);
+          //  Debug.Log(m_weaponImages[Tex[i].name]);
         }
 
     }

@@ -9,9 +9,7 @@ using UnityEngine.UI;
 
 public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] //
     Image m_image;
-    [SerializeField]
     TextMeshProUGUI m_text;
     PlayerController m_player;
     BuyItems m_buyItem;
@@ -61,7 +59,6 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
             m_store.m_info.DeActiveUI();
        }
     }
-
     public void SetStoreItem(int ID,string image,ItemType type,PlayerController player)
     {
         m_image.sprite = ImageLoader.Instance.GetImage(image);
@@ -93,6 +90,8 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
     }
     public void ResetSlot()
     {
+        m_image = Utill.GetChildObject(gameObject,"ItemImage").GetComponent<Image>(); //GetComponentsintChileren으로 찾으면 게임오브젝트의 Image가 잡히기 때문에 이런식으로 처리한
+        m_text = GetComponentInChildren<TextMeshProUGUI>();
         m_image.sprite = null;
         m_text.text = null;
     }

@@ -142,7 +142,7 @@ public class PlayerSkillController : MonoBehaviour
 24111
     };
 
-    List<int> m_skillList = new List<int>(); //현재 활성화한 스킬 리스트 저장용
+    public List<int> m_skillList = new List<int>(); //현재 활성화한 스킬 리스트 저장용
 
 
     void PushSkillUpSignal()
@@ -231,13 +231,14 @@ public class PlayerSkillController : MonoBehaviour
 
     private void Awake()
     {
+        
         m_skilldata = new TableSkillStat();
         m_player = GetComponent<PlayerController>();
         m_gunmanager = GetComponent<GunManager>();
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K)) //테스트용 입니당.
+        if (Input.GetKeyDown(KeyCode.L)) //테스트용 입니당.
         {
             m_skillPoint = 100;
           //  Debug.Log(testskillid[count]);
@@ -245,7 +246,7 @@ public class PlayerSkillController : MonoBehaviour
             ActiveSkill(testskillid[count]);
             count++;
         }
-        if (Input.GetKeyDown(KeyCode.L)) //테스트용 입니당2.
+        if (Input.GetKeyDown(KeyCode.P)) //테스트용 입니당2.
         {
             m_skillPoint = 100;
             //  Debug.Log(testskillid[count]);

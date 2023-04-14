@@ -43,6 +43,8 @@ public class UIManager : SingletonDontDestroy<UIManager>
     QuickSlot m_quickSlot;
     [SerializeField]
     StoreUI m_store;
+    [SerializeField]
+    SkillUI m_skillUI;
 
 
     IEnumerator SystemMessage(string message)
@@ -54,6 +56,18 @@ public class UIManager : SingletonDontDestroy<UIManager>
     public void CloseTabs()
     {
         m_store.CloseAllTabs();
+        m_skillUI.DeActiveSkill();
+    }
+    public void SkillUIChange(bool aa)
+    {
+        if(aa)
+        {
+            m_skillUI.ActiveSkill();
+        }
+        else
+        {
+            m_skillUI.DeActiveSkill();
+        }
     }
     public void ScoreChange(float score)
     {
@@ -183,10 +197,11 @@ public class UIManager : SingletonDontDestroy<UIManager>
     {
         StartCoroutine(SystemMessage(text));
     }
+
     private void Start()
     {
-        ImageLoader.Instance.Load();
         Skilldata.Instance.Load();
+        ImageLoader.Instance.Load();
     }
 
     

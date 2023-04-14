@@ -41,10 +41,9 @@ public class Gun : MonoBehaviour
     bool lastfire;
     bool pierce;
     bool burn;
-    bool armorpierce;
     bool boom;
-    bool remove;
-    bool crush;
+    //bool remove;
+
     IEnumerator ShootEffect(Vector3 hitPos)
     {     
         m_flashEffect.Play();  //화염이펙트
@@ -102,10 +101,10 @@ public class Gun : MonoBehaviour
         lastfire = false;
         pierce = false;
         burn = false;
-        armorpierce = false;
         boom = false;
-        remove = false;
-        crush = false;
+        //remove = false;
+        //crush = false;
+        //armorpierce = false;
     }
     public void CheckBoolin()
     {
@@ -121,22 +120,25 @@ public class Gun : MonoBehaviour
         {
             burn = true;
         }
-        if(m_player.GetStatus.ArmorPierce != 0)
-        {
-            armorpierce=true;
-        }
+       
         if(m_player.GetStatus.Boom != 0)
         {
             boom = true;
         }
+        /*
         if(m_player.GetStatus.Remove != 0)
         {
             remove = true;
         }
+        
         if(m_player.GetStatus.Crush != 0)
         {
-            crush = true;
+           // crush = true;
         }
+        if (m_player.GetStatus.ArmorPierce != 0)
+        {
+            // armorpierce=true;
+        }*/
     }
     public void ammoCheck() //남은총알을 실시간으로 확인.
     {

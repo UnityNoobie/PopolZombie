@@ -58,11 +58,14 @@
   <ItemGroup>
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIAnchor.cs" />
     <Compile Include="Assets\1.Main\2.Script\Manager\ImageLoader.cs" />
+    <Compile Include="Assets\Unity UI Samples\Scripts\ResizePanel.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\LagRotation.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIScrollView.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIToggle.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\StoreUI.cs" />
+    <Compile Include="Assets\SlimUI\Modern Menu 1\Scripts\Audio\CheckSFXVolume.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIScrollBar.cs" />
+    <Compile Include="Assets\Unity UI Samples\Scripts\DragPanel.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UISoundVolume.cs" />
     <Compile Include="Assets\External\HUD Text\Examples\Scripts\HUDRoot.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\ExampleDragDropSurface.cs" />
@@ -75,6 +78,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenFOV.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\LagPosition.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIDragDropContainer.cs" />
+    <Compile Include="Assets\Unity UI Samples\Scripts\ActiveStateToggler.cs" />
     <Compile Include="Assets\1.Main\Script\Manager\PopupManager.cs" />
     <Compile Include="Assets\External\Art\Effects\script\ScrollingUVs.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UITable.cs" />
@@ -90,6 +94,7 @@
     <Compile Include="Assets\1.Main\2.Script\Utill\Utill.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\DataLoader\TableLoader.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerStriker.cs" />
+    <Compile Include="Assets\SlimUI\Modern Menu 1\Scripts\ThemeEditor\ThemedUI.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\GameObjectPool.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenAlpha.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\Game\UIItemStorage.cs" />
@@ -101,6 +106,7 @@
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\EnvelopContent.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\SpinWithMouse.cs" />
     <Compile Include="Assets\External\HUD Text\Examples\Scripts\ChatManager.cs" />
+    <Compile Include="Assets\SlimUI\Modern Menu 1\Scripts\Misc\ExtraLinks.cs" />
     <Compile Include="Assets\1.Main\2.Script\Data\TableSkillStat.cs" />
     <Compile Include="Assets\1.Main\2.Script\Manager\UIManager.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIAtlas.cs" />
@@ -111,6 +117,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIGrid.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\QuickSlot_slot.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\BMFont.cs" />
+    <Compile Include="Assets\Unity UI Samples\Scripts\TiltWindow.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIOrthoCamera.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\QuickSlot.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\PropertyBinding.cs" />
@@ -133,11 +140,13 @@
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\WindowDragTilt.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\LoadLevelOnClick.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UITooltip.cs" />
+    <Compile Include="Assets\SlimUI\Modern Menu 1\Scripts\Managers\UIMenuManager.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\Store.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\BMSymbol.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonColor.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerAnimController.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\PanelItemInfo.cs" />
+    <Compile Include="Assets\Unity UI Samples\Scripts\ScrollDetailTexture.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIToggledComponents.cs" />
     <Compile Include="Assets\1.Main\2.Script\Data\Status.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\Slot.cs" />
@@ -148,6 +157,7 @@
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\System\InvEquipment.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\Melee.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\RealTime.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\SkillSlot.cs" />
     <Compile Include="Assets\1.Main\Script\UI\Popup\Popup_Ok.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIInput.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIViewport.cs" />
@@ -156,6 +166,8 @@
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\System\InvBaseItem.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerController.cs" />
     <Compile Include="Assets\External\HUD Text\Scripts\HUDText.cs" />
+    <Compile Include="Assets\SlimUI\Modern Menu 1\Scripts\Audio\CheckMusicVolume.cs" />
+    <Compile Include="Assets\Unity UI Samples\Scripts\ChangeColor.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UICenterOnChild.cs" />
     <Compile Include="Assets\1.Main\2.Script\Manager\ArmorManager.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\UITweener.cs" />
@@ -167,8 +179,10 @@
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenScale.cs" />
     <Compile Include="Assets\1.Main\2.Script\Manager\GameManager.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\System\InvDatabase.cs" />
+    <Compile Include="Assets\SlimUI\Modern Menu 1\Scripts\Managers\UISettingsManager.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\Game\UIStorageSlot.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UISavedOption.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\SkillUI.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UITextList.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\Game\UICursor.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIPlayTween.cs" />
@@ -178,7 +192,9 @@
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonRotation.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\EffectPoolUnit.cs" />
     <Compile Include="Assets\1.Main\2.Script\Data\TestDataTable.cs" />
+    <Compile Include="Assets\SlimUI\Modern Menu 1\Scripts\Misc\ResetDemo.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UICenterOnClick.cs" />
+    <Compile Include="Assets\Unity UI Samples\Scripts\PanelManager.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\BetterList.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UILocalize.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\BMGlyph.cs" />
@@ -187,14 +203,17 @@
     <Compile Include="Assets\1.Main\2.Script\Data\TableArmorStat.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\LanguageSelection.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\System\InvAttachmentPoint.cs" />
+    <Compile Include="Assets\Unity UI Samples\Scripts\DragMe.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\Gun.cs" />
     <Compile Include="Assets\1.Main\Script\UI\Popup\Popup_OkCancel.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\Game\EquipItems.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIProgressBar.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIDragDropItem.cs" />
+    <Compile Include="Assets\Unity UI Samples\Scripts\ShowSliderValue.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerShooter.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenOrthoSize.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\ActiveAnimation.cs" />
+    <Compile Include="Assets\Unity UI Samples\Scripts\DropMe.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\UIRect.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\SpiterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIWrapContent.cs" />
@@ -207,9 +226,11 @@
     <Compile Include="Assets\External\NGUI\Scripts\Internal\SpringPanel.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\BossController.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\HUDController.cs" />
+    <Compile Include="Assets\SlimUI\Modern Menu 1\Scripts\ThemeEditor\ThemedUIData.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UI2DSpriteAnimation.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonOffset.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIDragResize.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Manager\SkillManager.cs" />
     <Compile Include="Assets\1.Main\2.Script\Data\TableGunstat.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButton.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UISpriteData.cs" />
@@ -225,6 +246,7 @@
     <Compile Include="Assets\External\Fighter Animations\script\PlayManager.cs" />
     <Compile Include="Assets\1.Main\2.Script\Manager\SoundManager.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\EffectPool.cs" />
+    <Compile Include="Assets\Unity UI Samples\Scripts\ApplicationManager.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIText.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyNavigation.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\TableEffect.cs" />
@@ -234,6 +256,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIPopupList.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UITexture.cs" />
     <Compile Include="Assets\1.Main\Script\Manager\LoadSceneManager.cs" />
+    <Compile Include="Assets\SlimUI\Modern Menu 1\Scripts\ThemeEditor\ThemedUIElement.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIFont.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\AnimatedAlpha.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\Game\EquipRandomItem.cs" />
@@ -263,6 +286,8 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\LearnSkill.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\SkillInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -276,12 +301,14 @@
     <None Include="Assets\External\PolygonBattleRoyale\Materials\Shader\Particle VertexLit Blended_Backface.shader" />
     <None Include="Assets\External\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 1.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
+    <None Include="Assets\Unity UI Samples\Textures and Sprites\SF UI\Background\LICENSE.txt" />
     <None Include="Assets\External\NGUI\Resources\Shaders\Unlit - Transparent Packed.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\External\NGUI\Examples\Shaders\Unlit - Depth.shader" />
     <None Include="Assets\External\HUD Text\Examples\Atlases\Arimo20.txt" />
     <None Include="Assets\External\NGUI\Resources\Shaders\Unlit - Transparent Packed 2.shader" />
     <None Include="Assets\External\NGUI\ReadMe - 3.6.2.txt" />
+    <None Include="Assets\Unity UI Samples\Materials\UI-Default-No-Alpha.shader" />
     <None Include="Assets\External\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 2.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\External\NGUI\Resources\Shaders\Unlit - Transparent Colored 2.shader" />
@@ -307,6 +334,7 @@
     <None Include="Assets\External\NGUI\Examples\Shaders\Unlit - Masked Colored.shader" />
     <None Include="Assets\External\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
     <None Include="Assets\1.Main\1.Data\Bloody Screen\readme.txt" />
+    <None Include="Assets\Unity UI Samples\Fonts\Jupiter\LICENSE.txt" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\External\NGUI\Examples\Atlases\Wooden\Arimo14.txt" />
     <None Include="Assets\External\NGUI\Resources\Shaders\Unlit - Transparent Colored 3.shader" />

@@ -119,6 +119,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\Editor\NGUISelectionTools.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Editor\UIFontMaker.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Editor\TweenVolumeEditor.cs" />
+    <Compile Include="Assets\SlimUI\Editor\SlimUIWindow.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Editor\PropertyReferenceDrawer.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Editor\NGUIMenu.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Editor\UIRectEditor.cs" />
