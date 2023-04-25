@@ -55,8 +55,11 @@ public class TableSkillStat
 
     public int SkillPos { get; set; }
 
+    public int NextID { get; set; }
+    public int PrevID { get; set; }
+    public int SkillGrade { get; set; }
     public TableSkillStat() { }
-    public TableSkillStat(string skillName, int Id, string image, SkillType skilltype, SkillWeaponType skillweapon, string skillInfo, float damage, float atkSpeed, float Reload, float speed, int criRate, float cridam, float mag, float defence, float damageRigist, float hp, float knockbackrate, int heal, int lastfire, int pierce, int boom, int skillpoint, float armorpierce, float remove, int drain, float crush, int burn, bool isactive, int skillPos)
+    public TableSkillStat(string skillName, int Id, string image, SkillType skilltype, SkillWeaponType skillweapon, string skillInfo, float damage, float atkSpeed, float Reload, float speed, int criRate, float cridam, float mag, float defence, float damageRigist, float hp, float knockbackrate, int heal, int lastfire, int pierce, int boom, int skillpoint, float armorpierce, float remove, int drain, float crush, int burn, bool isactive, int skillPos, int nextID, int prevID, int skillGrade)
     {
         // int burn, bool isactive
         this.SkillName = skillName;
@@ -88,6 +91,9 @@ public class TableSkillStat
         this.Burn = burn;
         this.isActive = isactive;
         this.SkillPos = skillPos;
+        this.NextID = nextID;
+        this.PrevID = prevID;
+        this.SkillGrade = skillGrade;
     }
     public TableSkillStat GetSkillData(int id)
     {
@@ -95,7 +101,7 @@ public class TableSkillStat
         skilldata = Skilldata.Instance.m_dic[id];
         TableSkillStat stat = new TableSkillStat(skilldata.SkillName, skilldata.ID, skilldata.Image, skilldata.SkillType, skilldata.SkillWeaponType, skilldata.SkillInfo, skilldata.Damage, skilldata.AtkSpeed, skilldata.Reload, skilldata.Speed, skilldata.CriRate,
             skilldata.Mag, skilldata.CriDamage, skilldata.Defence, skilldata.DamageRigist, skilldata.HP, skilldata.KnockBackRate, skilldata.Heal, skilldata.LastFire, skilldata.Pierce, skilldata.Boom, skilldata.SkillPoint, skilldata.ArmorPierce
-            ,skilldata.Remove, skilldata.Drain,skilldata.Crush, skilldata.Burn, skilldata.isActive, skilldata.SkillPos);
+            ,skilldata.Remove, skilldata.Drain,skilldata.Crush, skilldata.Burn, skilldata.isActive, skilldata.SkillPos,skilldata.NextID,skilldata.PrevID,skilldata.SkillGrade);
         return skilldata;
     }
 
@@ -189,7 +195,6 @@ class Skilldata : Singleton<Skilldata>
    }*/
     public void Load()
     {
-        Debug.Log("로드 들어옴 숫자확인좀");
         TableLoader.Instance.LoadData(TableLoader.Instance.LoadTableData("Ability"));
         m_dic.Clear();
         for (int i = 0; i < 93; i++)
@@ -263,6 +268,9 @@ class Skilldata : Singleton<Skilldata>
             data.Crush = TableLoader.Instance.GetFloat("Crush", i);
             data.SkillPos = TableLoader.Instance.GetInteger("SkillPos", i);
             data.isActive = false;
+            data.NextID = TableLoader.Instance.GetInteger("NextSkill", i);
+            data.PrevID = TableLoader.Instance.GetInteger("PreSkill", i);
+            data.SkillGrade = TableLoader.Instance.GetInteger("SkillGrade", i);
             string skilltype = TableLoader.Instance.GetString("SkillType", i);
             if (skilltype.Equals("Shooter"))
             {

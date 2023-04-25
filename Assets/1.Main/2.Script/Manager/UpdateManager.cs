@@ -10,7 +10,7 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
     [SerializeField]
     Inventory m_inven;
     bool m_isactive = false;
-    bool m_skillactive = false;
+    
     public PlayerController[] m_players;
     public PlayerController[] m_playersSave;
     int m_playercount;
@@ -46,34 +46,12 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
             m_inven.gameObject.SetActive(m_isactive);
         }
         if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (m_isactive)
-            {
-                m_isactive = false;
-                m_inven.gameObject.SetActive(m_isactive);   
-            }
+        {  
+            m_isactive = false;  
+            m_inven.gameObject.SetActive(m_isactive);   
             UIManager.Instance.CloseTabs();
         }
-        if(Input.GetKeyDown(KeyCode.K))
-        {
-            if (m_skillactive)
-            {
-                m_skillactive = false;
-            }
-            else
-            {
-                m_skillactive = true;
-            }
-            UIManager.Instance.SkillUIChange(m_skillactive);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            UIManager.Instance.SystemMessageCantOpen("무기교체 기능 잠금되었습니다. GunManager스크립트와 UpdateManager 확인 바람.");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            UIManager.Instance.SystemMessageCantOpen("무기교체 기능 잠금되었습니다. GunManager스크립트와 UpdateManager 확인 바람.");
-        }
+
         if (Input.GetKeyDown(KeyCode.M))
         {
             UIManager.Instance.MoneyChange(10000);

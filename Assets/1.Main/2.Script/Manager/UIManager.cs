@@ -58,11 +58,11 @@ public class UIManager : SingletonDontDestroy<UIManager>
         m_store.CloseAllTabs();
         m_skillUI.DeActiveSkill();
     }
-    public void SkillUIChange(bool aa)
+    public void SkillUIChange(bool aa,PlayerSkillController skill)
     {
         if(aa)
         {
-            m_skillUI.ActiveSkill();
+            m_skillUI.ActiveSkill(skill);
         }
         else
         {

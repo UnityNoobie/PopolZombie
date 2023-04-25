@@ -2,8 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PlayerAbilityType
+{
+    None,
+    Pistol,
+    SMG,
+    Rifle,
+    MG,
+    ShotGun,
+    Melee
+}
 public class PlayerSkillController : MonoBehaviour
 {
+
     #region PlayerSkillDatas
     float Damage;
     float AtkSpeed;
@@ -27,7 +38,7 @@ public class PlayerSkillController : MonoBehaviour
     int Burn;
     #endregion
 
-    #region SkillTypeChecker
+    #region PublicReturnMethod
     public bool isActiveType(SkillWeaponType skillweapon, WeaponType weaponType)
     {
         switch (skillweapon)
@@ -59,92 +70,111 @@ public class PlayerSkillController : MonoBehaviour
                 else return false;
         }
         return false;
+    } //장착한 무기와 스킬의 특성화값이 일치하는지 확인용
+    public bool IsCanActive(int point,int skillgrade,SkillType skilltype) //스킬 습득 가능한지 확인해주는 메서드
+    {
+        if (m_skillPoint >= point)
+        {
+            CheckActivedSkillLV(skilltype); //현재 활성화되어있는 스킬리스트로 단계별 갯수 확인
+            if(skillgrade == 2 && m_lowLvCount < 8)
+            {
+                UIManager.Instance.SystemMessageCantOpen("1단계 스킬에 8개 이상 습득 후 습득 가능합니다.");
+                return false;
+            }
+            else if (skillgrade == 3 && m_midLvCount < 6)
+            {
+                UIManager.Instance.SystemMessageCantOpen("2단계 스킬에 6개 이상 습득 후 습득 가능합니다.");
+                return false;
+            }
+            else if (skillgrade == 4 && m_highLvCount < 3)
+            {
+                UIManager.Instance.SystemMessageCantOpen("특성스킬을 모두 마스터 후 습득 가능합니다.");
+                return false;
+            }
+            else
+            return true;
+        }
+        else
+        {
+            UIManager.Instance.SystemMessageCantOpen("스킬 포인트가 모자랍니다."); 
+            return false;
+        }
     }
+    public bool IsActived(int id) //리스트 등록 시 스킬이 액티브 상태인지 아닌지 확인해주는 메소드
+    {
+        if (m_skillList.Contains(id)) return true;
+        else return false;
+    }
+    public bool IsCanOpen(int grade,SkillType skilltype)
+    {
+        CheckActivedSkillLV(skilltype);
+        if (grade == 3 && m_midLvCount < 6)
+        {
+            UIManager.Instance.SystemMessageCantOpen("2단계 스킬에 6개 이상 습득 후 습득 가능합니다.");
+            return false;
+        }
+        else if (grade == 4 && m_highLvCount < 3)
+        {
+            UIManager.Instance.SystemMessageCantOpen("특성스킬을 모두 마스터 후 습득 가능합니다.");
+            return false;
+        }
+        else return true;
+    }
+    public PlayerAbilityType GetPlayerAbilityState() //플레이어의 특성화한 어빌리티 타입을 보내줌
+    {
+        return m_abilityType;
+    }
+    
+
     #endregion
 
     WeaponType m_weapontype;
     SkillWeaponType m_skillweapon;
+    PlayerAbilityType m_abilityType;
     public TableSkillStat m_skilldata{get;set;}
     PlayerController m_player;
     GunManager m_gunmanager;
 
-
     int m_skillPoint = 0;
     int SPCount = 0;
-    int count = 0; //이하 스킬찍는거 테스트용.
-    int bcount = 0;
-    int[] testskillid =
-    {
-        11001,
-        11002,
-        11003,
-        11004,
-        11011,
-        11012,
-        11013,
-        11014,
-        11021,
-        11022,
-        11023,
-        11024,
-        12001,
-        12002,
-        12003,
-        12011,
-        12012,
-        12013,
-        12021,
-        12022,
-        12023,
-        13001,
-        13002,
-        13003,
-        13011,
-        13012,
-        13013,
-        13021,
-        13022,
-        13023,
-        14111
-    };
-    int[] testbodyid =
-    {
-        21001,
-21002,
-21003,
-21004,
-21011,
-21012,
-21013,
-21014,
-21021,
-21022,
-21023,
-21024,
-22001,
-22002,
-22003,
-22011,
-22012,
-22013,
-22021,
-22022,
-22023,
-23001,
-23002,
-23003,
-23011,
-23012,
-23013,
-23021,
-23022,
-23023,
-24111
-    };
+    int m_lowLvCount = 0; //현재 플레이어가 습득하고있는 스킬의 등급별 갯수 체크용
+    int m_midLvCount = 0;
+    int m_highLvCount = 0;
+
 
     public List<int> m_skillList = new List<int>(); //현재 활성화한 스킬 리스트 저장용
 
-
+    public void SetAblityType(PlayerAbilityType type)
+    {
+        UIManager.Instance.SystemMessageCantOpen("특성이 활성화 되었습니다.");
+        m_abilityType = type;
+        Debug.Log(m_abilityType + "플레이어 어빌리티 타입");
+    }
+    void CheckActivedSkillLV(SkillType type)
+    {
+        m_lowLvCount = 0;
+        m_midLvCount = 0;
+        m_highLvCount = 0;
+        for (int i = 0; i <  m_skillList.Count; i++) //현재 활성화된 스킬리스트만큼 반복하여 각 ID의 레벨별 습득 스킬을 찾아옴
+        {
+            if (m_skilldata.GetSkillData(m_skillList[i]).SkillType.Equals(type))
+            {
+                if (m_skilldata.GetSkillData(m_skillList[i]).SkillGrade == 1)
+                {
+                    m_lowLvCount++;
+                }
+                else if (m_skilldata.GetSkillData(m_skillList[i]).SkillGrade == 2)
+                {
+                    m_midLvCount++;
+                }
+                else if (m_skilldata.GetSkillData(m_skillList[i]).SkillGrade == 3)
+                {
+                    m_highLvCount++;
+                }
+            }
+        }
+    }
+    #region privateMethod
     void PushSkillUpSignal()
     {
         m_player.SkillUpInitstatus(); //플레이어와 총에 스킬올라갔다는 정보 전달.
@@ -173,18 +203,10 @@ public class PlayerSkillController : MonoBehaviour
         Crush = 0;
         Burn = 0;
     }
-    public void LevelUP() //레벨업 시 스킬포인트 증가 기능 최대 30까지 가능 하도록.
-    {
-        if(SPCount < 30)
-        {
-            m_skillPoint++;
-            SPCount++;
-        }
-    }
     void RefreshSKillData() //스킬데이터 가져올 때마다 수행할 작업.
     {
         ResetDatas(); //데이터를 리셋해주고
-        for(int i = 0; i < m_skillList.Count; i++) //리스트 길이만큼 실행
+        for (int i = 0; i < m_skillList.Count; i++) //리스트 길이만큼 실행
         {
             if (isActiveType(m_skilldata.GetSkillData(m_skillList[i]).SkillWeaponType, m_weapontype)) //현재 무기 정보와 스킬이 요구하는 무기의 종류가 같다면 스탯 더해줌.
             {
@@ -210,16 +232,23 @@ public class PlayerSkillController : MonoBehaviour
                 Burn += m_skilldata.GetSkillData(m_skillList[i]).Burn;
             }
         }
-        m_player.SetSkillData(Damage,AtkSpeed,Reload,Speed,CriRate,CriDamage,Mag,Defence,DamageRigist,HP,KnockBackRate,Heal,LastFire,Pierce,Boom, ArmorPierce,Remove,Drain, Crush, Burn); 
+        m_player.SetSkillData(Damage, AtkSpeed, Reload, Speed, CriRate, CriDamage, Mag, Defence, DamageRigist, HP, KnockBackRate, Heal, LastFire, Pierce, Boom, ArmorPierce, Remove, Drain, Crush, Burn);
     } //플레이어에게 데이터 전송
-    public void ActiveSkill(int id) //스킬 찍기를 시도한다면 그 스킬의 필요 포인트 확인하여 충분하면 찍는 방식.
+
+    #endregion
+    public void LevelUP() //레벨업 시 스킬포인트 증가 기능 최대 30까지 가능 하도록.
     {
-        //Debug.Log(m_skilldata.GetSkillData(id).SkillName);
-        if(m_skillPoint >= m_skilldata.GetSkillData(id).SkillPoint)
+        if(SPCount < 30)
         {
-            m_skillPoint -= m_skilldata.GetSkillData(id).SkillPoint;
-            m_skillList.Add(id);
+            m_skillPoint++;
+            SPCount++;
         }
+    }
+
+    public void ActiveSkill(int id) //스킬 찍기를 시도한다면 그 스킬의 필요 포인트 확인하여 충분하면 찍는 방식. + 스킬UI에서 스킬포인트를 확인하기 때문에 여기서 삭제
+    {
+        m_skillPoint -= m_skilldata.GetSkillData(id).SkillPoint;
+        m_skillList.Add(id);
         RefreshSKillData();
         PushSkillUpSignal();
     }
@@ -230,33 +259,12 @@ public class PlayerSkillController : MonoBehaviour
     }
 
     private void Awake()
-    {
-        
+    { 
         m_skilldata = new TableSkillStat();
         m_player = GetComponent<PlayerController>();
         m_gunmanager = GetComponent<GunManager>();
+        m_skillPoint = 100; //테스트용 스킬포인트
+        m_abilityType = PlayerAbilityType.None;
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L)) //테스트용 입니당.
-        {
-            m_skillPoint = 100;
-          //  Debug.Log(testskillid[count]);
-            UIManager.Instance.SystemMessageCantOpen("스킬 코드" + testskillid[count] + " 권총, 개인화기 강화 트리입니다 잘 적용되는지 확인좀.");
-            ActiveSkill(testskillid[count]);
-            count++;
-        }
-        if (Input.GetKeyDown(KeyCode.P)) //테스트용 입니당2.
-        {
-            m_skillPoint = 100;
-            //  Debug.Log(testskillid[count]);
-            UIManager.Instance.SystemMessageCantOpen("스킬 코드" + testbodyid[bcount] + " 근접, 중화기 강화 트리입니다 잘 적용되는지 확인좀.");
-            ActiveSkill(testbodyid[bcount]);
-            bcount++;
-        }
-        if(Input.GetKeyDown(KeyCode.B))
-        {
-            Debug.Log("공격 속도 : " + m_player.GetStatus.atkSpeed + "방어구 관통 : " + m_player.GetStatus.ArmorPierce);
-        }
-    }
+
 }

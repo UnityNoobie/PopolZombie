@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public static float Money;
     public static float Score;
     public int m_level;
+    bool m_skillactive = false;
     [SerializeField]
     HUDText m_hudText;
     [SerializeField]
@@ -281,6 +282,18 @@ public class PlayerController : MonoBehaviour
     }
     public void BehaviorProcess()
     {
+        if (Input.GetKeyDown(KeyCode.K)) //플레이어별 스킬창을 관리하기 위함
+        {
+            if (m_skillactive)
+            {
+                m_skillactive = false;
+            }
+            else
+            {
+                m_skillactive = true;
+            }
+            UIManager.Instance.SkillUIChange(m_skillactive,m_skill);
+        }
         if (m_Pstate.Equals(PlayerState.dead)) return; 
         m_dir = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
         if(m_dir.x !=0 && m_dir.z !=0)
