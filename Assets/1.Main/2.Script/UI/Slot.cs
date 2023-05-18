@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
-using UnityEditor.U2D;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -27,14 +26,13 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
     }
     public void BuyItem()
     {
-        UIManager.Instance.MoneyChange(-price);
-        m_player.GetComponent<PlayerGetItem>().BuyItem(itemID, itemType);
+        m_player.GetComponent<PlayerGetItem>().BuyItem(itemID, itemType,-price);
     }
     public void OnPointerUp(PointerEventData eventData)
     {
         if(!isEmpty)
         {
-            if (price <= Mathf.CeilToInt(PlayerController.Money))
+            if (m_player.GetComponent<PlayerGetItem>().HaveEnoughMoney(price))
             {
                 m_buyItem.ActiveUI(this, price, m_name);
             }

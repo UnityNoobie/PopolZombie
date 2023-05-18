@@ -43,7 +43,7 @@ public class GunManager : MonoBehaviour
             shooter.CheckSkillSignal();
         }
     }
-    public IEnumerator ChangeWeaponRoutine(string name, WeaponType type, int ID, int grade, string atkType, string image)
+    public IEnumerator ChangeWeaponRoutine(string name, WeaponType type, int ID, int grade, string atkType, string image,StatusUI statusui)
     {
         // Debug.Log(image);
         if (atkType.Equals("Gun")) //무기의 공격타입이 총기라면 
@@ -63,6 +63,7 @@ public class GunManager : MonoBehaviour
             yield return new WaitForSeconds(weaponChangeTime);
             m_animCtr.Play("GrabWeapon");
             GunChange(name, type, ID, grade);
+            statusui.SetSlot(ID, image, ArmorType.Max,ItemType.Weapon);
             yield return new WaitForSeconds(weaponChangeTime);
             isChange = false;
             PlayerShooter.isActive = true; // 재장전 다 끝난뒤에 실행되도록
@@ -97,9 +98,9 @@ public class GunManager : MonoBehaviour
         UIManager.Instance.WeaponImage(image);
     }
 
-        public void ChangeWeapon(int id)
+        public void ChangeWeapon(int id,StatusUI statusui)
         {
-            StartCoroutine(ChangeWeaponRoutine(m_weapondata.GetWeaponStatus(id).Type, m_weapondata.GetWeaponStatus(id).weaponType, id, m_weapondata.GetWeaponStatus(id).Grade, m_weapondata.GetWeaponStatus(id).AtkType, m_weapondata.GetWeaponStatus(id).Image));
+            StartCoroutine(ChangeWeaponRoutine(m_weapondata.GetWeaponStatus(id).Type, m_weapondata.GetWeaponStatus(id).weaponType, id, m_weapondata.GetWeaponStatus(id).Grade, m_weapondata.GetWeaponStatus(id).AtkType, m_weapondata.GetWeaponStatus(id).Image,statusui));
         } //ID값 베이스로 무기 변경하는 메소드
         public static AttackType AttackProcess(MonsterController mon, float Pdamage, float criper, float cridam,float armorpierce, out float damage) // 기본 공격과 치명타의 구분을 위한 메서드 damage를 넘겨줌
         {
@@ -139,7 +140,7 @@ public class GunManager : MonoBehaviour
                 weaponDic.Add(Weapons[i].name, Weapons[i]);
             }
             m_getitem = GetComponent<PlayerGetItem>();
-            m_getitem.BuyItem(testweapon, m_weapondata.GetWeaponStatus(testweapon).ItemType);
+            m_getitem.BuyItem(testweapon, m_weapondata.GetWeaponStatus(testweapon).ItemType,0);
         }
 
 }

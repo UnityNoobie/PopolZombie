@@ -16,8 +16,7 @@ public class ArmorManager : MonoBehaviour
     GameObject[] m_pants;
     [SerializeField]
     GameObject[] m_boots;
-    [SerializeField]
-    Inventory m_inven;
+
     ArmorData armorData { get; set; }
     Dictionary<string, ArmorData> wearArmor = new Dictionary<string, ArmorData>();
     WearArmorData GetArmordata { get; set; }
@@ -38,7 +37,7 @@ public class ArmorManager : MonoBehaviour
         CriRate = 0;
         Speed = 0;
     }
-    public void SetArmorData() // 방어구의 정보를 저장해주기.
+    void SetArmorData() // 방어구의 정보를 저장해주기.
     {
         ResetStatus();//일단 TableArmor에 새롭게 저장을 해야하기 때문에 값을 다 초기화해줌.
 
@@ -91,17 +90,16 @@ public class ArmorManager : MonoBehaviour
             Speed += wearArmor["Boots"].Speed;
         }
 
-
-        //int defence, float damage, float reloadTime, float attackSpeed,int criRate, float speed
-        //(Defence, Damage, ReloadTime, AttackSpeed, CriRate, Speed);
         WearArmorData aarmorData = new WearArmorData();
         aarmorData.SetWearArmorData(Defence, Damage, ReloadTime, AttackSpeed, CriRate, Speed);
         m_player.SetArmData(Defence, Damage, ReloadTime, AttackSpeed, CriRate, Speed);
     }
     
-    public void ChangeArmor(int Id) // 방어구 획득시 대상 방어구의 아이디를 받아와 교체 실시.
+    public void ChangeArmor(int Id,StatusUI statusui) // 방어구 획득시 대상 방어구의 아이디를 받아와 교체 실시.
     {
         ArmorData m_armorData =  armorData.GetArmorData(Id);//방어궁의 정보를 가져옴
+        statusui.SetSlot(Id, m_armorData.Image, m_armorData.armorType, ItemType.Armor);
+        /*
         if (m_armorData.armorType.Equals(ArmorType.Helmet))
         {
             SetHelmet(Id, m_armorData.Grade - 1);
@@ -127,7 +125,7 @@ public class ArmorManager : MonoBehaviour
             SetBoots(Id, m_armorData.Grade - 1);
             m_inven.SetArmorImage(m_armorData.Image, ArmorType.Boots);
         }
-        else { Debug.Log("방어구의 타입이 이상합니다. 확인바람"); }
+        else { Debug.Log("방어구의 타입이 이상합니다. 확인바람"); }*/
         SetArmorData(); //방어구의 교체가 일어났으니 스탯 재정비.
     }
     public void SetHelmet(int id, int grade) //헬멧 장착을 위한 메서드

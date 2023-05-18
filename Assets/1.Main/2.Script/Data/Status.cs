@@ -17,6 +17,7 @@ public enum AttackCCType
 [System.Serializable]
 public struct Status
 {
+
     public float hp; //현재 체력
     public float hpMax; //최대 체력
     public float criRate; //크리티컬확률
@@ -41,8 +42,11 @@ public struct Status
     public int Drain;
     public float Crush;
     public int Burn;
+    public int SkillHeal;
+    public string KnickName;
+    public string Title;
 
-    public Status(float hp,float hpMax,  float criRate, float criAttack,float atkSpeed, float damage, float defense, float speed, int maxammo, float reloadTime,float knockbackPer, float knockbackDist, float atkDist, int shotgun,int Level,float damagerigist,int lastfire, int pierce,int boom,float armorpierce,float remove,int drain,float crush,int burn)
+    public Status(float hp,float hpMax,  float criRate, float criAttack,float atkSpeed, float damage, float defense, float speed, int maxammo, float reloadTime,float knockbackPer, float knockbackDist, float atkDist, int shotgun,int Level,float damagerigist,int lastfire, int pierce,int boom,float armorpierce,float remove,int drain,float crush,int burn,int heal,string knickName,string title)
     {
         this.hp = hp;
         this.hpMax = hpMax; //이 객체의 최대체력과 현재 체력을 받아온 hp값으로 저장
@@ -68,6 +72,9 @@ public struct Status
         this.Drain= drain;
         this.Crush= crush;
         this.Burn= burn;
+        this.SkillHeal = heal;
+        this.KnickName = knickName;
+        this.Title = title;
     }
 }
 [System.Serializable]

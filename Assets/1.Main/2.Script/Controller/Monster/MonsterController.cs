@@ -45,14 +45,12 @@ public class MonsterController : MonoBehaviour
     protected float m_idleDuration = 0.5f;
     protected float m_idleTime;
     protected bool isburn;
-    bool isChase;
     int m_delayFrame;
     //public float defence;
     protected Coroutine m_damagedCoroutine;
     protected Coroutine m_motionDelaycoroutine;
     protected Coroutine m_burnCoroutine;
     protected Coroutine m_crushCoroutine;
-    int count = 1;
     float defence = 0;
     public MonStat GetStat { get { return m_monStat; } set { m_monStat = value; } }
     public MonStatus GetStatus { get { return m_status; } set { m_status = value; } }
@@ -210,9 +208,12 @@ public class MonsterController : MonoBehaviour
     {
         // Debug.Log(count+"번째 게임오브젝트 :"+gameObject + "의 SetDie실행!! 현재 상태 : " + m_state);
         StopAllCoroutines();
-        UIManager.Instance.ScoreChange(Random.Range(m_status.score / 2, m_status.score / 0.7f));
-        UIManager.Instance.MoneyChange(Random.Range(m_status.coin / 2, m_status.coin / 0.7f));
-        m_player.IncreaseExperience(m_status.score);
+        int money = Mathf.CeilToInt(Random.Range(m_status.coin / 2, m_status.coin / 0.7f));
+        int score = Mathf.CeilToInt(Random.Range(m_status.score / 2, m_status.score / 0.7f));
+        int exp = Mathf.CeilToInt(m_status.score);
+        m_player.GetComponent<PlayerGetItem>().GetMoney(money);
+        m_player.IncreaseExperience(exp);
+        m_player.AddScore(score);
         m_animctr.Play(MonsterAnimController.Motion.Die);
         SetState(MonsterState.Die); //상태를 죽은상태로
         gameObject.tag = "Die";//죽었을때 태그를 Die로 설정하여 시체가 뒤의 좀비 타격방지.

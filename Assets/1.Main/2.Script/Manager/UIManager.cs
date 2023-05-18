@@ -18,6 +18,8 @@ public class UIManager : SingletonDontDestroy<UIManager>
     [SerializeField]
     UISlider m_hpUI;
     [SerializeField]
+    UISlider m_EXPBar;
+    [SerializeField]
     UILabel m_hplable;
     [SerializeField]
     UILabel m_enemyReamain;
@@ -40,23 +42,30 @@ public class UIManager : SingletonDontDestroy<UIManager>
     [SerializeField] 
     UILabel m_Money;
     [SerializeField]
+    UILabel m_EXP;
+    [SerializeField]
+    UILabel m_screenLV;
+    [SerializeField]
     QuickSlot m_quickSlot;
     [SerializeField]
     StoreUI m_store;
     [SerializeField]
     SkillUI m_skillUI;
+    [SerializeField]
+    StatusUI m_statusUI;
 
 
     IEnumerator SystemMessage(string message)
     {
         m_systemMessage.text = message;
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1.5f);
         m_systemMessage.text = null;
     }
     public void CloseTabs()
     {
         m_store.CloseAllTabs();
         m_skillUI.DeActiveSkill();
+        m_statusUI.SetActive(false);
     }
     public void SkillUIChange(bool aa,PlayerSkillController skill)
     {
@@ -71,13 +80,11 @@ public class UIManager : SingletonDontDestroy<UIManager>
     }
     public void ScoreChange(float score)
     {
-        PlayerController.Score += score;
-        m_Score.text = "Score : " +Mathf.CeilToInt(PlayerController.Score).ToString();
+       m_Score.text = "Score : " +score;
     }
-    public void MoneyChange(float money)
+    public void MoneyUI(int money)
     {
-        PlayerController.Money +=  money;
-        m_Money.text = Mathf.CeilToInt(PlayerController.Money).ToString();
+        m_Money.text = money.ToString();
     }
     public void RoundInfo(int thisRound) //라운드 정보 UI
     {
@@ -95,6 +102,12 @@ public class UIManager : SingletonDontDestroy<UIManager>
         m_hplable.text = (hp + " / " + max);
         m_hpUI.value = hp / max;
     }
+    public void EXPUI(float exp,float max)
+    {
+        m_EXP.text = (exp+" / "+max);
+        m_EXPBar.value = exp / max;
+    }
+
     public void DamagedUI()
     {
         if (!m_damagedUI.gameObject.activeSelf)
@@ -163,7 +176,7 @@ public class UIManager : SingletonDontDestroy<UIManager>
         m_healUI.PlayForward();
         m_healUI.PlayReverse();
     }
-    public void LevelUPUI()
+    public void LevelUPUI(int level)
     {
         if (!m_levelUpUI.gameObject.activeSelf)
         {
@@ -174,7 +187,7 @@ public class UIManager : SingletonDontDestroy<UIManager>
         m_levelUpUI.ResetToBeginning();
         m_levelUpUI.PlayForward();
         m_levelUpUI.PlayReverse();
-
+        m_screenLV.text = "LV" + level;
     }
     public void WeaponInfoUI(string Info)
     {   

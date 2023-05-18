@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public class UpdateManager : SingletonDontDestroy<UpdateManager> 
@@ -9,9 +8,12 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
     GunManager gunManager;
     [SerializeField]
     Inventory m_inven;
+    [SerializeField]
+    StatusUI m_statusUI;
     bool m_isactive = false;
     
     public PlayerController[] m_players;
+    public PlayerGetItem[] m_playerItem;
     public PlayerController[] m_playersSave;
     int m_playercount;
     int testweapon;
@@ -31,6 +33,11 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
         }
         var obj = player.GetComponent<PlayerController>();
         m_players[m_playercount] = obj; //새로 들어온 플레이어컨트롤러 넣어주고 플레이어 수 추가.
+        m_playerItem = new PlayerGetItem[m_players.Length];
+        for(int i = 0; i < m_players.Length ; i++)
+        {
+            m_playerItem[i] = m_players[i].GetComponent<PlayerGetItem>();
+        }
         m_playercount++;
     }
     // Update is called once per frame
@@ -43,18 +50,19 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
         if (Input.GetKeyDown(KeyCode.I))
         {
             m_isactive = !m_isactive; //불값으로 액티브 변경. 
-            m_inven.gameObject.SetActive(m_isactive);
+            m_statusUI.SetActive(m_isactive);
         }
         if(Input.GetKeyDown(KeyCode.Escape))
         {  
-            m_isactive = false;  
-            m_inven.gameObject.SetActive(m_isactive);   
             UIManager.Instance.CloseTabs();
         }
 
         if (Input.GetKeyDown(KeyCode.M))
         {
-            UIManager.Instance.MoneyChange(10000);
+            for (int i = 0; i < m_playerItem.Length; i++)
+            {
+                m_playerItem[i].GetMoney(10000);
+            }
             UIManager.Instance.SystemMessageCantOpen("돈치트 실행 돈 + 10000");
         }
     }

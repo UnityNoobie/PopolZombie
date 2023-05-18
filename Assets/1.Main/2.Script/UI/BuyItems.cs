@@ -53,11 +53,14 @@ public class BuyItems : MonoBehaviour
         m_price = price;
         m_name = name;
         m_text.text = (m_name + " 를 구입하시겠습니까?\n가격 : " + price);
-        Init();
         if (!gameObject.activeSelf)
         {
             gameObject.SetActive(true);
         }
        
+    }
+    private void Start()
+    {
+        Init();
     }
 }

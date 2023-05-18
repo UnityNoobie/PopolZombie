@@ -234,9 +234,9 @@ public class UIInput : MonoBehaviour
  #if UNITY_4_0 || UNITY_4_2 || UNITY_4_3
 			if (Application.platform == RuntimePlatform.BB10Player)
  #else
-			if (Application.platform == RuntimePlatform.BlackBerryPlayer)
+			//if (Application.platform == RuntimePlatform.BlackBerryPlayer)
  #endif
-				value = value.Replace("\\b", "\b");
+				//value = value.Replace("\\b", "\b");
 
 			// Validate all input
 			value = Validate(value);

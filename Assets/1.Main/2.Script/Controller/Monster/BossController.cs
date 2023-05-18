@@ -19,7 +19,7 @@ public class BossController : MonsterController
     //   MonsterAnimController m_animCtr;
 
     float RageCool;
-    int detectDist = 20;
+
     public enum SkillType
     {
         Normal,

@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SkillUI : MonoBehaviour
 {
-    PlayerSkillController m_PlayerSkills;
     TableSkillStat m_stat = new TableSkillStat();
     PlayerSkillController m_player;
     public Button m_skillOpen;
@@ -36,13 +36,14 @@ public class SkillUI : MonoBehaviour
     Transform m_high;
     [SerializeField]
     Transform m_master;
+    [SerializeField]
+    TextMeshProUGUI m_skillPoints;
 
 
     SkillType m_Type;
 
     
     int m_count;
-    List<int> m_ActiveSkillList = new List<int>();
     List<int> m_SkillList = new List<int>();
     
     void SetPos() //레벨별로 정리되어있는 스킬슬롯 부모 위치 받아오기 는 OutOfIndex 계속 나와서 삭제
@@ -57,6 +58,7 @@ public class SkillUI : MonoBehaviour
         m_Agility = Utill.GetChildObject(gameObject, "Button_Agility").GetComponent<Button>();
         m_Strength = Utill.GetChildObject(gameObject, "Button_Strength").GetComponent<Button>();
         m_Utility = Utill.GetChildObject(gameObject, "Button_Utility").GetComponent<Button>();
+        m_skillPoints = Utill.GetChildObject(gameObject,"SkillPoint").GetComponent<TextMeshProUGUI>();
     }
     void FindSlots() //위치에서 자식오브젝트의 슬롯목록 가져오기
     {
@@ -112,11 +114,15 @@ public class SkillUI : MonoBehaviour
             }
         }
     }
+    public void RefreshSP(PlayerSkillController player)
+    {
+       // if (!gameObject.activeSelf) return;
+        m_player = player;
+        m_skillPoints.text =  "보유스킬포인트 : " + m_player.GetPlayerSP();
+    }
     public void ChoiceFinished()
     {
-        Debug.Log("플레이어 어빌리티 타입은 : " + m_player.GetPlayerAbilityState());
         SetSlotList(m_Type);
-        Debug.Log("조옷버근가 1회차");
     }
     void TryOpenMaster()
     {
@@ -128,13 +134,11 @@ public class SkillUI : MonoBehaviour
     }
     void SetAgilitySlot()
     {
-        Debug.Log("클릭들어옴1");
         m_Type = SkillType.Shooter;
         SetSlotList(m_Type);
     }
     void SetStrengthSlot()
     {
-        Debug.Log("클릭들어옴2");
         m_Type = SkillType.Physical;
         SetSlotList(m_Type);
     }
@@ -147,7 +151,6 @@ public class SkillUI : MonoBehaviour
         ResetList();
         m_Type = type;
         m_count = 0;
-     //   bools = null;
         if(m_Type.Equals(SkillType.Shooter))
         {
             m_SkillList = Skilldata.AgilityList;
@@ -160,7 +163,6 @@ public class SkillUI : MonoBehaviour
         {
             m_SkillList = Skilldata.UtilityList;
         }
-        Debug.Log("스킬리스트 길이" + m_SkillList.Count);
         for (int i = 0; i < m_SkillList.Count; i++)
         {
             if (m_stat.GetSkillData(m_SkillList[i]).SkillGrade == 1)
@@ -245,11 +247,11 @@ public class SkillUI : MonoBehaviour
                 if (!m_player.IsCanOpen(4, m_stat.GetSkillData(m_SkillList[i]).SkillType))
                 {
                     CloseSlots(4); 
-                    
                 }
                 else
                 {
                     OpenSlots(4);
+                    m_player.GetComponent<PlayerController>().SetTitle(m_stat.GetSkillData(m_SkillList[i]).SkillName);
                     m_masterSlot.SetSkillSlot(m_SkillList[i], m_player, m_player.IsActived(m_SkillList[i]), m_active, m_skillInfo);
                 }
             }
@@ -264,7 +266,9 @@ public class SkillUI : MonoBehaviour
     public void ActiveSkill(PlayerSkillController skill) //스킬창 열때 플레이어 정보도 호출함
     {
         m_player = skill;
+        m_player.SetStore(this);
         gameObject.SetActive(true);
+        RefreshSP(skill);
     }
     public void DeActiveSkill()
     {
@@ -274,12 +278,7 @@ public class SkillUI : MonoBehaviour
     {
         parent.GetComponentsInChildren<SkillSlot>();
     }
-    public void ActiveSkillUI(PlayerController player) //켜질때 실행
-    {
-        m_PlayerSkills = player.GetComponent<PlayerSkillController>();
-        m_ActiveSkillList.Clear();
-        m_ActiveSkillList = m_PlayerSkills.m_skillList;
-    }
+
 
 
     private void Start()
@@ -291,6 +290,6 @@ public class SkillUI : MonoBehaviour
         m_Agility.onClick.AddListener(SetAgilitySlot);
         m_Strength.onClick.AddListener(SetStrengthSlot);
         m_Utility.onClick.AddListener(SetUtilitySlot);
-        SetAgilitySlot();
+        SetAgilitySlot();   
     }
 }

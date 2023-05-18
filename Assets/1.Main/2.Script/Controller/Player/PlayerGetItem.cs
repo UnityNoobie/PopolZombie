@@ -11,13 +11,37 @@ public class PlayerGetItem : MonoBehaviour
     QuickSlot m_slot;
     [SerializeField]
     StoreUI m_storeUI;
+    [SerializeField]
+    StatusUI m_statusUI;
     GunManager m_weaponmanager;
     ArmorManager m_armormanager;
     PlayerController m_player;
     CapsuleCollider m_collider;
+    
+    int m_playerMoney = 0;
+
     public WeaponData m_weapondata { get; set; }
 
-    public void BuyItem(int Id, string itemtype)
+    #region public return Method
+    public bool HaveEnoughMoney(int price)
+    {
+        if(price <= m_playerMoney)
+        {
+            return true;
+        }
+        return false;
+    }
+    #endregion
+    void MoneyChange(int money)
+    {
+        m_playerMoney += money;
+        UIManager.Instance.MoneyUI(m_playerMoney);
+    }
+    public void GetMoney(int money)
+    {
+        MoneyChange(money);
+    }
+    public void BuyItem(int Id, string itemtype,int price)
     {
         if(itemtype.Equals("Gun") || itemtype.Equals("Melee"))
         {
@@ -39,6 +63,7 @@ public class PlayerGetItem : MonoBehaviour
         {
             AddTurret(Id);
         }   
+        MoneyChange(price);
     }
     void AddHealPack(int Id)
     {
@@ -54,11 +79,11 @@ public class PlayerGetItem : MonoBehaviour
     }
     void ChangeArmor(int id)
     {
-        m_armormanager.ChangeArmor(id);
+        m_armormanager.ChangeArmor(id,m_statusUI);
     }
     void ChangeWeapon(int Id)
     {
-        m_weaponmanager.ChangeWeapon(Id);
+        m_weaponmanager.ChangeWeapon(Id,m_statusUI);
     }
 
     void SetPlayer(PlayerController player) // ÇÃ·¹ÀÌ¾î ÁöÁ¤
@@ -86,15 +111,15 @@ public class PlayerGetItem : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            BuyItem(37, "HealPack");
+            BuyItem(37, "HealPack", 0);
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            BuyItem(40, "Barricade");
+            BuyItem(40, "Barricade", 0);
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            if(m_player.GetHPValue() >= 0.95)
+            if (m_player.GetHPValue() >= 0.95)
             {
                 UIManager.Instance.SystemMessageCantUse("HealPack");
                 return;
@@ -105,27 +130,7 @@ public class PlayerGetItem : MonoBehaviour
         {
             m_slot.UseQuickSlotITem(2, "Barricade");
         }
-        if (Input.GetKeyDown(KeyCode.Alpha7))
-        {
-            Debug.Log("3·¾¹æ¾î±¸ ÀåÂø");
-            BuyItem(24, "Armor");
-            BuyItem(30, "Armor");
-            BuyItem(33, "Armor");
-            BuyItem(36, "Armor");
-            BuyItem(27, "Armor");
-
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-        {
-            Debug.Log("1·¾¹æ¾î±¸ ÀåÂø");
-            BuyItem(22, "Armor");
-            BuyItem(28, "Armor");
-            BuyItem(31, "Armor");
-            BuyItem(34, "Armor");
-            BuyItem(25, "Armor");
-        }
     }
-
     void Awake()    
     {
         TableItemData.Instance.Load();

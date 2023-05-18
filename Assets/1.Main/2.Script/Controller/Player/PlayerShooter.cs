@@ -43,9 +43,10 @@ public class PlayerShooter : MonoBehaviour
         {
             m_leftMount = m_SMGLeftPos;
         }
-        gun = newWeapon.GetComponent<Gun>(); //총을 받아온 총 오브젝트로 변경
+         gun = newWeapon.GetComponent<Gun>(); //총을 받아온 총 오브젝트로 변경
          GunManager.currentWeapon = gun.GetComponent<Transform>();
          m_player.SetStatus(ID);// 플레이어의 스테이터스를 재설정
+
          gun.grade = grade;
          gun.m_type = type;
          m_player.SetGun(gun);

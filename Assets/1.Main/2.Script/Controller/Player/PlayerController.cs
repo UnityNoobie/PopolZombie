@@ -12,10 +12,7 @@ using static PlayerStriker;
 public class PlayerController : MonoBehaviour
 {
     public ArmorManager m_armorManager { get; set; }
-    public static float Money;
-    public static float Score;
-    public int m_level;
-    bool m_skillactive = false;
+   
     [SerializeField]
     HUDText m_hudText;
     [SerializeField]
@@ -26,6 +23,8 @@ public class PlayerController : MonoBehaviour
     GameObject m_PlayerHuD;
     [SerializeField]
     Inventory m_inven;
+    [SerializeField]
+    StatusUI m_statusUI;
     [SerializeField]
     QuickSlot m_quickSlot;
     [SerializeField]
@@ -39,8 +38,6 @@ public class PlayerController : MonoBehaviour
     NavMeshAgent m_navAgent;
     PlayerAnimController m_animCtr;
     PlayerSkillController m_skill;
-    
-    bool isComboError;
     [SerializeField]
     GameObject m_area;
     [SerializeField]
@@ -49,11 +46,16 @@ public class PlayerController : MonoBehaviour
 
     int hp;
     int m_comboIndex;
-    float m_experience;
-    float m_levelexp;
+    int m_experience;
+    int m_levelexp;
+    int m_score;
+    int m_level;
+    string m_knickName;
+    string m_title = "";
+    bool m_hastitle = false;
+    bool m_skillactive = false;
     public float pDefence;
     public int ID;
-    float timeAfterAttack;
   
     #region ArmorData
     int armDefence;
@@ -95,10 +97,20 @@ public class PlayerController : MonoBehaviour
     public Status GetStatus{get { return m_status; } set { m_status = value; } }
     public MeleeState meleeState { get; set; }
     public PlayerState m_Pstate { get; set; }
+    public bool HasTitle()
+    {
+        return m_hastitle;
+    }
+    public void SetTitle(string title)
+    {
+        m_title = title;
+        m_hastitle = true;
+    }
     public PlayerAnimController.Motion GetMotion { get { return m_animCtr.GetMotion; } }
     List<PlayerAnimController.Motion> m_comboList = new List<PlayerAnimController.Motion>() { PlayerAnimController.Motion.Combo1, PlayerAnimController.Motion.Combo2 };
-    Queue<KeyCode> m_keyBuffer = new Queue<KeyCode>(); // 콤보를 위한 키코드
+    Queue<KeyCode> m_keyBuffer = new Queue<KeyCode>(); // 콤보시스템 구현을 위한 큐
     #region MeleeAttackProcess
+    /*
     public bool IsAttack
     {
         get
@@ -108,7 +120,7 @@ public class PlayerController : MonoBehaviour
                 return true;
             return false;
         }
-    }
+    }*/
     public void SetAttack()
     {
        if(m_Pstate != PlayerState.dead &&  GetMotion.Equals(PlayerAnimController.Motion.MeleeIdle) || m_Pstate != PlayerState.dead && GetMotion.Equals(PlayerAnimController.Motion.Idle))
@@ -371,7 +383,15 @@ public class PlayerController : MonoBehaviour
         }
         //CheckBoolin();
     }
- 
+    public int GetLVInfo()
+    {
+        return m_level;
+    }
+    public void AddScore(int score)
+    {
+        m_score += score;
+        UIManager.Instance.ScoreChange(m_score);
+    }
     void HPControl(int value)
     {
         m_status.hp += value;   
@@ -382,16 +402,17 @@ public class PlayerController : MonoBehaviour
         hp = Mathf.CeilToInt(m_status.hp);
         UIManager.Instance.HPBar(m_status.hp,m_status.hpMax);
     }
-    void InitStatus( float itemhp, float I_Criper, float I_CriDam, float I_atkSpeed, float I_Atk, float I_Def, float I_speed, int maxammo, float reloadtime,float knockbackPer, float knockbackDist,float atkDist, int shotgun,int level) 
+    void InitStatus(float itemhp, float I_Criper, float I_CriDam, float I_atkSpeed, float I_Atk, float I_Def, float I_speed, int maxammo, float reloadtime,float knockbackPer, float knockbackDist,float atkDist, int shotgun,int level) 
     {//SetStatus에서 스킬과 아이템의 추가값들을 받아옴.
      //(float skillhp, float itemhp, float S_CriPer, float I_Criper, float S_CriDam, float I_CriDam, float S_atkSpeed, float I_atkSpeed, float S_Atk, float I_Atk, float S_Def, float I_Def, float S_speed, float I_speed, int maxammo, float reloadtime,float knockbackPer, float knockbackDist,float atkDist, int shotgun,int level) 
      //스테이터스 입력값의 순서 : 최대체력 , 크리티컬 확률, 크리티컬 추가 데미지,공격속도, 공격력, 방어력, 이동속도
-        m_status = new Status(hp,200 * (1 + (skillHP + itemhp + hpPer)), 10f + skillCriRate+ I_Criper + armCriRate, 50f + (skillCriDamage + I_CriDam), 0 + (skillAtkSpeed + I_atkSpeed) * (1 + armAttackSpeed),(1+ (skillamage + armDamage)) * I_Atk, 0 + skillDefence + I_Def + armDefence, 130 * (1 + skillSpeed + I_speed + armSpeed), maxammo * Mathf.CeilToInt(1+skillMag), reloadtime - (reloadtime * skillReload) ,knockbackPer+skillKnockBackRate,knockbackDist,atkDist,shotgun,level,skillDamageRigist,skillLastFire,skillPierce,skillBoom,skillArmorPierce,skillRemove,skillDrain,skillCrush,skillBurn);
+        m_status = new Status(hp,200 * (1 + (skillHP + itemhp + hpPer)), 10f + skillCriRate+ I_Criper + armCriRate, 50f + (skillCriDamage + I_CriDam), 0 + (skillAtkSpeed + I_atkSpeed) * (1 + armAttackSpeed),(1+ (skillamage + armDamage)) * I_Atk, 0 + skillDefence + I_Def + armDefence, 130 * (1 + skillSpeed + I_speed + armSpeed), maxammo * Mathf.CeilToInt(1+skillMag), reloadtime - (reloadtime * skillReload) ,knockbackPer+skillKnockBackRate,knockbackDist,atkDist,shotgun,level,skillDamageRigist,skillLastFire,skillPierce,skillBoom,skillArmorPierce,skillRemove,skillDrain,skillCrush,skillBurn,skillHeal,m_knickName,m_title);
         // m_status.hpMax = Mathf.CeilToInt(m_status.hpMax); //최대체력 가져오기
         HPControl(0);
         m_animCtr.SetFloat("MeleeSpeed", m_status.atkSpeed);
         m_animCtr.SetFloat("MoveSpeed", m_status.speed / 100);
-        m_inven.GetStatusInfo(this);
+      //  m_inven.GetStatusInfo(this); 구 인벤토리
+        m_statusUI.SetStatus(); // 신 인벤토리
         pDefence = m_status.defense;  //방어력 가져오기
         m_area.transform.localScale = new Vector3(m_status.AtkDist, 1f, m_status.AtkDist);
     }
@@ -420,6 +441,10 @@ public class PlayerController : MonoBehaviour
     #endregion
     #region HUD && PlayerState
 
+    public void SetPlayerKnickName(string nick)
+    {
+        m_knickName = nick;
+    }
     public float GetHPValue()
     {
         float value = m_status.hp / m_status.hpMax;
@@ -495,11 +520,11 @@ public class PlayerController : MonoBehaviour
     void LevelUP()
     {
         m_status.level++;
-        m_skill.LevelUP();
-        m_hudLabel.text = "[FFFF00]LV." + m_status.level + "[FFFFFF] Hunter";
+        m_hudLabel.text = "[FFFF00]LV." + m_status.level + "[FFFFFF]"+m_knickName;
         m_levelexp = Levelexp();
         HPControl(Mathf.CeilToInt(m_status.hpMax)); //풀피로 만들어줌
-        UIManager.Instance.LevelUPUI();
+        UIManager.Instance.LevelUPUI(m_status.level);
+        m_skill.LevelUP();
         StartCoroutine(Coroutine_Invincible(2f)); //렙업시무적
         var levelupEffect = TableEffect.Instance.m_tableData[6].Prefab[0];
         var effect = EffectPool.Instance.Create(levelupEffect);
@@ -509,7 +534,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
     #region Level,Exp
-    public void IncreaseExperience(float exp)
+    public void IncreaseExperience(int exp)
     {
         m_experience += exp;
         if (m_experience >= m_levelexp)
@@ -517,15 +542,18 @@ public class PlayerController : MonoBehaviour
             m_experience -= m_levelexp;
             LevelUP();
         }
+        UIManager.Instance.EXPUI(m_experience, m_levelexp);
     } 
-    float Levelexp()
+    int Levelexp()
     {
-        return 100 + (20 * m_status.level);
+        int lvupexp = 100 + (50 * m_status.level);
+        return lvupexp;
     }
 
     #endregion
     private void Awake()
     {
+        m_skill = GetComponent<PlayerSkillController>();
         m_navAgent = GetComponent<NavMeshAgent>();
         m_SkillData = new TestSkillData();
         m_animCtr = GetComponent<PlayerAnimController>();
@@ -533,20 +561,21 @@ public class PlayerController : MonoBehaviour
         m_weaponData = new WeaponData();
         m_armorManager= GetComponent<ArmorManager>();
         m_manager = GetComponent<GunManager>();
-        isComboError = false;
         m_level = 1;
         m_levelexp = Levelexp();
-        m_skill = GetComponent<PlayerSkillController>();
+        m_statusUI.SetPlayer(this);
+        m_knickName = "Hunter";
     }
     
     private void Start()
     {
-        SetStatus(8); // 시작시 기본 라이플로 작동
+        SetStatus(1); // 시작시 기본 권총으로
         m_status.hp = m_status.hpMax; //시작 시 hp 설정.
+        m_status.level = 1;
         HPControl(0);
         m_hitPos = Utill.GetChildObject(gameObject, "Dummy_Pos");
         SetPlayer();
-        m_hudLabel.text = "[FFFF00]LV." + m_status.level + "[FFFFFF] Hunter";
+        m_hudLabel.text = "[FFFF00]LV." + m_status.level+ "[FFFFFF]" + m_knickName;
     }
 
 }

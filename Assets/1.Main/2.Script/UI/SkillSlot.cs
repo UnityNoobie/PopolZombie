@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
-using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -49,10 +48,7 @@ public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,
         m_image.sprite = ImageLoader.Instance.GetImage(m_skill.GetSkillData(m_currentSkillID).Image);
         m_isActive = isActive;
         m_isChoice = false;
-        if (isActive) //스킬을 배우고 있다면 알파값 변경
-        {
-            ActiveSkillAlpha();
-        }
+        ActiveSkillAlpha();
     }
     void RefreshSkillInfo()
     {
@@ -118,10 +114,17 @@ public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,
         m_skillInfo = info;
     }*/ //큐를 이용한 시도했으나 더 복잡해질것 같아 폐기
 
-    void ActiveSkillAlpha() //익힌 스킬의 알파값을 변경해줌
+    void ActiveSkillAlpha() // 스킬 액티브 여부에 따라 알파값을 변경해줌
     {
         Color color = m_image.color;
-        color.a = 1f;
+        if(m_isActive)
+        {
+            color.a = 1f;
+        }
+        else
+        {
+            color.a = 0.5f;
+        }
         m_image.color = color;
     }
   
@@ -136,6 +139,7 @@ public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,
         else
         {
             m_isActive = true;
+            ActiveSkillAlpha();
         }
     }
     public void OnPointerUp(PointerEventData eventData) //클릭 시
@@ -158,7 +162,6 @@ public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,
             m_skillUI.ChoiceFinished();
             
         }
-      
     }
     public void OnPointerEnter(PointerEventData eventData) //올라왔을 때 정보창 불러움
     {

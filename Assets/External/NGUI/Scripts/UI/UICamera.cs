@@ -966,11 +966,11 @@ public class UICamera : MonoBehaviour
 		if (Application.platform == RuntimePlatform.Android ||
 			Application.platform == RuntimePlatform.IPhonePlayer
 #if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1
-			|| Application.platform == RuntimePlatform.WP8Player
+			//|| Application.platform == RuntimePlatform.WP8Player
 #if UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3
 			|| Application.platform == RuntimePlatform.BB10Player
 #else
-			|| Application.platform == RuntimePlatform.BlackBerryPlayer
+			//|| Application.platform == RuntimePlatform.BlackBerryPlayer
 #endif
 #endif
 			)
@@ -984,8 +984,8 @@ public class UICamera : MonoBehaviour
 				useController = false;
 			}
 		}
-		else if (Application.platform == RuntimePlatform.PS3 ||
-				 Application.platform == RuntimePlatform.XBOX360)
+		else if (Application.platform == RuntimePlatform.PS5 ||
+				 Application.platform == RuntimePlatform.GameCoreXboxSeries)
 		{
 			useMouse = false;
 			useTouch = false;

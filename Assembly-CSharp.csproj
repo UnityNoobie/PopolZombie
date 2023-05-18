@@ -242,6 +242,7 @@
     <Compile Include="Assets\External\HUD Text\Examples\Scripts\ChatParticipant.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\UIWidget.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\BuyItems.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\StatusUI.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UISpriteAnimation.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UILabel.cs" />
     <Compile Include="Assets\External\Fighter Animations\script\PlayManager.cs" />
@@ -265,6 +266,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIRoot.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\CalculationDamage.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIDragDropRoot.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\SlotStatus.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenColor.cs" />
     <Compile Include="Assets\External\HUD Text\Examples\Scripts\LightFlicker.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenVolume.cs" />

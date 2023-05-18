@@ -88,7 +88,8 @@ public class PlayerSkillController : MonoBehaviour
             }
             else if (skillgrade == 4 && m_highLvCount < 3)
             {
-                UIManager.Instance.SystemMessageCantOpen("특성스킬을 모두 마스터 후 습득 가능합니다.");
+                UIManager.Instance.SystemMessageCantOpen("하와왕");
+                Debug.Log("ㅎ");
                 return false;
             }
             else
@@ -124,7 +125,10 @@ public class PlayerSkillController : MonoBehaviour
     {
         return m_abilityType;
     }
-    
+    public int GetPlayerSP()
+    {
+        return m_skillPoint;
+    }
 
     #endregion
 
@@ -134,7 +138,7 @@ public class PlayerSkillController : MonoBehaviour
     public TableSkillStat m_skilldata{get;set;}
     PlayerController m_player;
     GunManager m_gunmanager;
-
+    SkillUI m_skillUI;
     int m_skillPoint = 0;
     int SPCount = 0;
     int m_lowLvCount = 0; //현재 플레이어가 습득하고있는 스킬의 등급별 갯수 체크용
@@ -143,12 +147,17 @@ public class PlayerSkillController : MonoBehaviour
 
 
     public List<int> m_skillList = new List<int>(); //현재 활성화한 스킬 리스트 저장용
-
+    public void SetStore(SkillUI ui)
+    {
+        m_skillUI = ui;
+    }
     public void SetAblityType(PlayerAbilityType type)
     {
-        UIManager.Instance.SystemMessageCantOpen("특성이 활성화 되었습니다.");
         m_abilityType = type;
-        Debug.Log(m_abilityType + "플레이어 어빌리티 타입");
+    }
+    void RefreshSP()
+    {
+        m_skillUI.RefreshSP(this);
     }
     void CheckActivedSkillLV(SkillType type)
     {
@@ -177,6 +186,7 @@ public class PlayerSkillController : MonoBehaviour
     #region privateMethod
     void PushSkillUpSignal()
     {
+        RefreshSP();
         m_player.SkillUpInitstatus(); //플레이어와 총에 스킬올라갔다는 정보 전달.
         m_gunmanager.SkillUpSignal();
     }
@@ -242,6 +252,11 @@ public class PlayerSkillController : MonoBehaviour
         {
             m_skillPoint++;
             SPCount++;
+            //RefreshSP();
+        }
+        else if(SPCount == 30)
+        {
+            UIManager.Instance.SystemMessageCantOpen("최대 스킬 포인트에 도달했습니다.");
         }
     }
 
@@ -259,7 +274,8 @@ public class PlayerSkillController : MonoBehaviour
     }
 
     private void Awake()
-    { 
+    {
+
         m_skilldata = new TableSkillStat();
         m_player = GetComponent<PlayerController>();
         m_gunmanager = GetComponent<GunManager>();
