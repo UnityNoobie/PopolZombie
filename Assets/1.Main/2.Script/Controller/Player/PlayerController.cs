@@ -21,8 +21,7 @@ public class PlayerController : MonoBehaviour
     Status m_status;
     [SerializeField]
     GameObject m_PlayerHuD;
-    [SerializeField]
-    Inventory m_inven;
+
     [SerializeField]
     StatusUI m_statusUI;
     [SerializeField]

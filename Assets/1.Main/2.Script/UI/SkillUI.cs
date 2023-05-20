@@ -14,29 +14,16 @@ public class SkillUI : MonoBehaviour
     public Button m_Agility;
     public Button m_Strength;
     public Button m_Utility;
-    [SerializeField]
-    SkillSlot[] m_SkillSlot;
-    [SerializeField]
     ActiveSkill m_active;
-    [SerializeField]
     SkillInfo m_skillInfo;
-    [SerializeField]
     SkillSlot m_masterSlot;
-    [SerializeField]
     SkillSlot[] m_midSlots;
-    [SerializeField]
     SkillSlot[] m_lowSlots;
-    [SerializeField]
     SkillSlot[] m_highSlots;
-    [SerializeField]
     Transform m_low;
-    [SerializeField]
     Transform m_mid;
-    [SerializeField]
     Transform m_high;
-    [SerializeField]
     Transform m_master;
-    [SerializeField]
     TextMeshProUGUI m_skillPoints;
 
 
@@ -53,6 +40,8 @@ public class SkillUI : MonoBehaviour
         m_mid = Utill.GetChildObject(gameObject, "Lv2");
         m_high = Utill.GetChildObject(gameObject, "Lv3");
         m_master = Utill.GetChildObject(gameObject, "Master");
+        m_active = Utill.GetChildObject(gameObject,"ActiveSkill").GetComponent<ActiveSkill>();
+        m_skillInfo = Utill.GetChildObject(gameObject,"SkillInfo").GetComponent<SkillInfo>();
         m_skillOpen = Utill.GetChildObject(gameObject, "Lv3_Active").GetComponent<Button>();
         m_masterOpen = Utill.GetChildObject(gameObject, "Lv4_Active").GetComponent<Button>();
         m_Agility = Utill.GetChildObject(gameObject, "Button_Agility").GetComponent<Button>();
@@ -116,9 +105,9 @@ public class SkillUI : MonoBehaviour
     }
     public void RefreshSP(PlayerSkillController player)
     {
-       // if (!gameObject.activeSelf) return;
-        m_player = player;
-        m_skillPoints.text =  "보유스킬포인트 : " + m_player.GetPlayerSP();
+         m_player = player;
+        int point = m_player.GetPlayerSP();
+        m_skillPoints.text =  "보유스킬포인트 : " + point;
     }
     public void ChoiceFinished()
     {

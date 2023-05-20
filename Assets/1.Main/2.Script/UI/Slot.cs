@@ -19,10 +19,12 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
     ItemType m_type;
     string m_name;
     StoreUI m_store;
-    public void SetStore(StoreUI store, BuyItems buyItem)
+    PanelItemInfo m_info;
+    public void SetStore(StoreUI store, BuyItems buyItem,PanelItemInfo info)
     {
         m_store = store;
         m_buyItem = buyItem;
+        m_info = info;
     }
     public void BuyItem()
     {
@@ -46,7 +48,7 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
     {
         if (m_image.sprite != null && eventData.pointerEnter.CompareTag("Slot")) //eventData.pointerEnter.CompareTag("Slot")
         {
-            m_store.m_info.ActiveUI(itemID, m_type);
+            m_info.ActiveUI(itemID, m_type);
         }
     }
     
@@ -54,7 +56,7 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
     {
         if (eventData.pointerEnter.CompareTag("Slot"))
         {
-            m_store.m_info.DeActiveUI();
+            m_info.DeActiveUI();
        }
     }
     public void SetStoreItem(int ID,string image,ItemType type,PlayerController player)

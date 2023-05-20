@@ -127,9 +127,6 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
         
     }
 
-
-
-
     private void Update()
     {
 

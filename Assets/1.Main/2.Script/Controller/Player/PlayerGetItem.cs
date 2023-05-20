@@ -5,8 +5,7 @@ using static ItemData;
 
 public class PlayerGetItem : MonoBehaviour
 {
-    [SerializeField]
-    Inventory m_inven;
+ 
     [SerializeField]
     QuickSlot m_slot;
     [SerializeField]
@@ -88,7 +87,6 @@ public class PlayerGetItem : MonoBehaviour
 
     void SetPlayer(PlayerController player) // 플레이어 지정
     {
-        m_inven.SetPlayer(player);
         m_slot.SetPlayer(player);
     }
 

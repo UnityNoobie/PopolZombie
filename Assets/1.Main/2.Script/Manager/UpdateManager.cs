@@ -7,8 +7,6 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
 
     GunManager gunManager;
     [SerializeField]
-    Inventory m_inven;
-    [SerializeField]
     StatusUI m_statusUI;
     bool m_isactive = false;
     
@@ -70,10 +68,5 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
     {
         m_playercount = 0;
         m_players = new PlayerController[m_players.Length];
-    }
-    private void Start()
-    {
-        m_inven.gameObject.SetActive(m_isactive);
-     
     }
 }

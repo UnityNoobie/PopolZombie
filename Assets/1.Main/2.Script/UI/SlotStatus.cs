@@ -25,10 +25,11 @@ public class SlotStatus : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         m_type = type;
         m_id = id;
         m_infoUI = infoui;
+
     }
     public void OnPointerEnter(PointerEventData pointer)
     {
-        m_infoUI.ActiveUI(m_id,m_type);
+            m_infoUI.ActiveUI(m_id,m_type);
     }
     public void OnPointerExit(PointerEventData pointer)
     {

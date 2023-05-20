@@ -35,8 +35,7 @@ public class UIManager : SingletonDontDestroy<UIManager>
     TweenAlpha m_levelUpUI;
     [SerializeField]
     UITexture m_weaponImage;
-    [SerializeField]
-    Inventory m_inven;
+
     [SerializeField]
     UILabel m_Score;
     [SerializeField] 
@@ -95,7 +94,6 @@ public class UIManager : SingletonDontDestroy<UIManager>
         Texture wptex = ImageLoader.Instance.GetImage(name).texture;
         m_weaponImage.mainTexture = wptex;
         m_quickSlot.SetItem(0,name);
-        m_inven.WeaponImage(name);
     }
     public void HPBar(float hp, float max)
     {
@@ -192,7 +190,6 @@ public class UIManager : SingletonDontDestroy<UIManager>
     public void WeaponInfoUI(string Info)
     {   
         m_weaponInfoUI.text = Info;
-        m_inven.SetWeaponInfo(Info);
     }
     public void EnemyLeft(int remain)
     {

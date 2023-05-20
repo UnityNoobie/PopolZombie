@@ -35,7 +35,6 @@ public class GunManager : MonoBehaviour
     public static bool isGun;
     public static PlayerAnimController m_animCtr;
     public static bool isChange = false;
-    public Inventory m_inven;
     public void SkillUpSignal()
     {
         if (shooter.enabled)

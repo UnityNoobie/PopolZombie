@@ -15,24 +15,14 @@ public enum ItemType
 }
 public class StoreUI : MonoBehaviour
 {
-    [SerializeField]
     GameObject m_storePannel;
-    [SerializeField]
     Slot[] m_slots;
-    [SerializeField]
     Transform m_content;
-    [SerializeField]
-    GameObject Store;
-    [SerializeField]
-    Button closebutton;
-    [SerializeField]
-    GameObject[] Shopareas;
-    [SerializeField]
+    Button m_closebutton;
     TextMeshProUGUI m_StoreName;
-    [SerializeField]
     BuyItems m_buyItem;
-    [SerializeField]
-    public PanelItemInfo m_info;
+    PanelItemInfo m_info;
+    StatusUI m_status;
   
 
     PlayerController m_player;
@@ -43,17 +33,13 @@ public class StoreUI : MonoBehaviour
     List<int> m_armorList = new List<int>();
     List<int> m_weaponList = new List<int>();
     List<int> m_itemList = new List<int>();
-    bool m_isActive;
     
 
     public void CloseAllTabs()
     {
-        //if(m_buyItem.gameObject.activeSelf)
         m_buyItem.DeActiveUI();
-        //if (m_info.gameObject.activeSelf)
-            m_info.DeActiveUI();
-      //  if (Store.gameObject.activeSelf)
-            CloseStore();
+        m_info.DeActiveUI();
+        CloseStore();
     }
     public void ActiveStoreUI(string StoreType,PlayerController player) //켜주기
     {
@@ -72,11 +58,11 @@ public class StoreUI : MonoBehaviour
             SetSlotItem(m_weaponList, ItemType.Weapon);
         }
         m_StoreName.text = StoreType + "Store";
-        Store.SetActive(true);
+        m_storePannel.SetActive(true);
     }
     public void CloseStore() //꺼주기
     {
-        Store.SetActive(false);
+        m_storePannel.SetActive(false);
     }
     void SetItemsInfos() //상점에서 사용해줄 정보를 복사해서 가져와줌.
     {
@@ -96,7 +82,6 @@ public class StoreUI : MonoBehaviour
     }
     public void SetItemListTable()
     {
-       
         if (MonsterManager.thisRound >= 30) //라운드가 30이상일 때 상점에 상위 아이템 추가
         {
             for (int i = 0; i < TableArmorStat.Instance.m_highArmor.Count; i++)
@@ -159,16 +144,28 @@ public class StoreUI : MonoBehaviour
             }
         }
     }
+    void SetStore()
+    {
+        m_storePannel = Utill.GetChildObject(gameObject, "StoreUI").gameObject;
+        m_content = Utill.GetChildObject(m_storePannel, "Content");
+        m_slots = m_content.GetComponentsInChildren<Slot>(true);
+        m_status = Utill.GetChildObject(gameObject, "StatusUI").GetComponent<StatusUI>();
+        m_info = Utill.GetChildObject(m_storePannel, "ItemInfo").GetComponent<PanelItemInfo>();
+        m_buyItem = Utill.GetChildObject(m_storePannel, "BuyItem").GetComponent<BuyItems>();
+        m_StoreName = Utill.GetChildObject(m_storePannel,"StoreName").GetComponent<TextMeshProUGUI>();
+        m_closebutton = Utill.GetChildObject(m_storePannel,"CloseButton").GetComponent<Button>();
+    }
     void Start()
     {
-        m_slots = m_content.GetComponentsInChildren<Slot>();
+        SetStore();
         SetItemsInfos();
         SetItemListTable();
         for(int i = 0; i < m_slots.Length; i++)
         {
-            m_slots[i].SetStore(this, m_buyItem);
+            m_slots[i].SetStore(this, m_buyItem,m_info);
         }
-        closebutton.onClick.AddListener(CloseStore);
+        m_closebutton.onClick.AddListener(CloseStore);
         m_info.SetStoreUI(this);
+        m_status.SetStore(this);
     }
 }

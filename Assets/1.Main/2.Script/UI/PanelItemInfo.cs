@@ -83,9 +83,6 @@ public class PanelItemInfo : MonoBehaviour
             {
                 m_infoText[1].text = "공격력보너스 : " + m_store.m_armordata[m_id].Damage;
             }
-            
-           
-      
         }
     }
     private void ResetData()

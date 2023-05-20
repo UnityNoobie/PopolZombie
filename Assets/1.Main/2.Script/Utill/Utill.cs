@@ -6,11 +6,10 @@ public class Utill
 {
    public static Transform GetChildObject(GameObject parent, string childName)
     {
-        var childObjects = parent.GetComponentsInChildren<Transform>();
+        var childObjects = parent.GetComponentsInChildren<Transform>(true);
         for(int i = 0; i < childObjects.Length; i++) 
         {
-            // if (childObjects[i].name == "name") 이런식으로 비교할경우 박싱이 일어나기 때문에 하면안됨!
-            if (childObjects[i].name.Equals(childName))  //equals로 해줄것.
+            if (childObjects[i].name.Equals(childName))  
             {
                 return childObjects[i];
             }

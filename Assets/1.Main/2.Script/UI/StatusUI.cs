@@ -15,10 +15,15 @@ public class StatusUI : MonoBehaviour
     SlotStatus[] m_itemSlots;
     Transform m_slotPos;
     Transform m_StatusPos;
+    StoreUI m_store;
     public void SetActive(bool active)
     {
         gameObject.SetActive(active);
         SetStatus();
+    }
+    public void SetStore(StoreUI store)
+    {
+        m_panelItemInfo.SetStoreUI(store);
     }
     public void SetPlayer(PlayerController player)
     {
@@ -28,6 +33,7 @@ public class StatusUI : MonoBehaviour
     }
     public void FindNSetSlots()
     {
+        m_panelItemInfo = Utill.GetChildObject(gameObject, "ItemInfo").GetComponent<PanelItemInfo>();
         m_slotPos = Utill.GetChildObject(gameObject, "Panel_ItemSlot");
         m_StatusPos = Utill.GetChildObject(gameObject, "Panel_Info");
         m_name = Utill.GetChildObject(gameObject, "PlayerName").GetComponent<TextMeshProUGUI>();
