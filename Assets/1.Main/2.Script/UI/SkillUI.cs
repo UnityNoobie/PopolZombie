@@ -33,7 +33,7 @@ public class SkillUI : MonoBehaviour
     int m_count;
     List<int> m_SkillList = new List<int>();
     
-    void SetPos() //레벨별로 정리되어있는 스킬슬롯 부모 위치 받아오기 는 OutOfIndex 계속 나와서 삭제
+    void SetPos() 
     {
        // m_contents = Utill.GetChildObject(gameObject, "Content");
         m_low = Utill.GetChildObject(gameObject, "Lv1");
@@ -273,7 +273,7 @@ public class SkillUI : MonoBehaviour
     private void Start()
     {
         SetPos();
-        FindSlots(); //현재 테스트중임 주석처리한거 빼면 정상실행
+        FindSlots(); 
         m_skillOpen.onClick.AddListener(TryOpenSkill);
         m_masterOpen.onClick.AddListener(TryOpenMaster);
         m_Agility.onClick.AddListener(SetAgilitySlot);

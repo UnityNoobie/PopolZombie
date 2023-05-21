@@ -7,11 +7,8 @@ using UnityEngine.UI;
 
 public class SkillInfo : MonoBehaviour
 {
-    [SerializeField]
     Image m_skillImage;
-    [SerializeField]
     TextMeshProUGUI m_skillName;
-    [SerializeField]
     TextMeshProUGUI m_skillInfo;
     TableSkillStat m_skill = new TableSkillStat();
     int m_id = 0;

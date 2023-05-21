@@ -28,11 +28,6 @@ public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,
     Queue<int> m_activedId = new Queue<int>(); // 적용된 스킬 아이디를 넣어볼거임
     Queue<bool> m_isActived = new Queue<bool>();*/ //큐를 이용한 도전을 시도하였으나 더욱 복잡하고 가독성 떨어질것 같아 폐기
 
-
-
-
-
-
     string m_skillname;
     public TableSkillStat m_skill = new TableSkillStat();
     public void SetSkillSlot(int id, PlayerSkillController player, bool isActive,ActiveSkill activeskill,SkillInfo info)

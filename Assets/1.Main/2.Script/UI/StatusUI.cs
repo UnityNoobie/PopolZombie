@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class StatusUI : MonoBehaviour
 {
-    [SerializeField]
     PanelItemInfo m_panelItemInfo;
     PlayerController m_player;
     PlayerGetItem m_playeritem;
@@ -15,7 +14,6 @@ public class StatusUI : MonoBehaviour
     SlotStatus[] m_itemSlots;
     Transform m_slotPos;
     Transform m_StatusPos;
-    StoreUI m_store;
     public void SetActive(bool active)
     {
         gameObject.SetActive(active);

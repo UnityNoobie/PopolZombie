@@ -292,6 +292,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
+    <None Include="Assets\Onyak_Aria\ReadMe.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\External\NGUI\Examples\Atlases\Wooden\Arimo20.txt" />
     <None Include="Assets\External\NGUI\Examples\Models\Orc\Orc Skin.shader" />

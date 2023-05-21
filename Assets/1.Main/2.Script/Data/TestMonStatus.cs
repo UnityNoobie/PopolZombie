@@ -30,7 +30,6 @@ public class MonStat
     public float knockbackRegist { get; set; }
     public float Score { get; set; }
     public float coin { get;set; }
-
     public float exp { get; set; }
     public MonStat()
     {

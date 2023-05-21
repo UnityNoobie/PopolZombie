@@ -3,70 +3,90 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
 public class SoundManager : SingletonDontDestroy<SoundManager>
 {
-    #region PlayerSound
+    public enum AudioType
+    {
+        BGM,
+        SFX,
+        MAX
+    }
 
-    public AudioClip m_handGunSound;
-    public AudioClip m_SMGSound;
-    public AudioClip m_RifleSound;
-    public AudioClip m_ShotGunSound;
-    public AudioClip m_MGSound;
-    public AudioClip m_SwingSound;
-    public AudioClip m_fireSound;
-    public AudioClip m_reroadSound;
-    public AudioClip m_playerWalk;
-    public AudioClip m_playerDeath;
-    public AudioClip m_playerRevive;
-    public AudioClip m_playerHeal;
-    public AudioClip m_playerDamaged;
-    public AudioClip m_playerMeleeAtk;
+    AudioSource[] m_audio;
+    AudioSource m_bgm;
+    [SerializeField]
+    AudioClip[] m_bgmClips;
+    [SerializeField]
+    AudioClip[] m_sfxClips;
+    const int MaxVolumLevel = 10;
+    const int MaxSfxPlayCount = 5;
+    public Dictionary<string, AudioClip> m_audioClips = new Dictionary<string, AudioClip>();
+    Dictionary<AudioClip,int> m_sfxPlayList = new Dictionary<AudioClip,int>();
 
-    #endregion
-    #region ZombieSound
-    public AudioClip m_zombieAtk;
-    public AudioClip m_zombieDmg;
-    public AudioClip m_zombieChace;
-    public AudioClip m_zombieDeath;
-
-    public AudioClip m_bossSkill1;
-    public AudioClip m_bossSkill2;
-    public AudioClip m_bossAtk;
-    public AudioClip m_bossDeath;
-    public AudioClip m_bossChase;
-    public AudioClip m_bossRage;
-
-
-    #endregion
-    #region SystemSound
-    public AudioClip m_bgm_nightStart1;
-    public AudioClip m_bgm_nightStart2;
-    public AudioClip m_bgm_dayStart1;
-    public AudioClip m_bgm_dayStart2;
-    public AudioClip m_bgm_lobby1;
-    public AudioClip m_bgm_lobby2;
-    public AudioClip m_bgm_lobby3;
-    public AudioClip m_bgm_day1;
-    public AudioClip m_bgm_day2;
-    public AudioClip m_bgm_day3;
-    public AudioClip m_bgm_night;
-    public AudioClip m_bgm_night2;
-    public AudioClip m_bgm_night3;
-    public AudioClip m_bgm_nightBoss;
-    #endregion
-
-
-
-
-
-    public AudioClip m_volumeMuteSound;
-
-    public AudioClip m_dd;
-    public AudioClip m_da;
-    public AudioClip m_ds;
-    public AudioClip m_df;
-    public AudioClip m_dg;
-    public AudioClip m_dh;
-
-
+    IEnumerator Couroutine_CheckPlayEnded(AudioClip sfx, float length)
+    {
+        yield return new WaitForSeconds(length);
+        m_sfxPlayList[sfx]--;
+        if (m_sfxPlayList[sfx] <= 0)
+        {
+            m_sfxPlayList.Remove(sfx);
+        }
+    }
+    protected override void OnStart()
+    {
+        m_bgmClips = Resources.LoadAll<AudioClip>("Audio/BGM");
+        m_sfxClips = Resources.LoadAll<AudioClip>("Audio/SFX");
+        m_bgm = Utill.GetChildObject(gameObject,"BGM").GetComponent<AudioSource>();
+        m_bgm.loop = true;
+        m_bgm.rolloffMode = AudioRolloffMode.Linear;
+        m_bgm.playOnAwake = false;
+    }
+    public void PlayBGM(string bgm) //BGM플레이
+    {
+        m_bgm.clip = m_audioClips[bgm];
+        m_bgm.Play();
+    }
+    public void PlaySFX(string name, AudioSource source) // SFX 플레이
+    {
+        int count = 0;
+        AudioClip sfx = m_audioClips[name];
+        if (m_sfxPlayList.TryGetValue(sfx, out count))
+        {
+            if (count >= MaxSfxPlayCount)
+            {
+                return;
+            }
+            else
+            {
+                m_sfxPlayList[sfx]++;
+                count++;
+            }
+        }
+        else
+        {
+            m_sfxPlayList.Add(sfx, 1);
+        }
+        source.PlayOneShot(sfx);
+        StartCoroutine(Couroutine_CheckPlayEnded(sfx, sfx.length));
+    }
+    public void SetBgmVolume(int level)
+    {
+        if (level > MaxVolumLevel)
+        {
+            level = MaxVolumLevel;
+            m_bgm.volume = (float)level / MaxVolumLevel;
+        }
+        else
+        {
+            m_bgm.volume = (float)level / MaxVolumLevel;
+        }
+    }
+    public void SetMute(bool isActive)
+    {
+        for (int i = 0; i < (int)m_audio.Length; i++)
+        {
+            m_audio[i].mute = isActive;
+        }
+    }
 }

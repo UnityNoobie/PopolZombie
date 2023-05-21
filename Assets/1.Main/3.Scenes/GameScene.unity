@@ -13540,44 +13540,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 548aacf1884c85348a95068ed4885620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_handGunSound: {fileID: 8300000, guid: 6739c01659ad96d47987f4ddee226b36, type: 3}
-  m_SMGSound: {fileID: 8300000, guid: 1b766da7cc2d648aa84e36cb5fe8abcb, type: 3}
-  m_RifleSound: {fileID: 8300000, guid: 65201ddabb4144f6a8fb9480120b7656, type: 3}
-  m_ShotGunSound: {fileID: 8300000, guid: 53a1a8c18087346d18a02d8a4e0c59ca, type: 3}
-  m_MGSound: {fileID: 8300000, guid: 5f65f7a864d7742fda4f10edfde922d2, type: 3}
-  m_SwingSound: {fileID: 8300000, guid: a37f44cbf8c2a7443a3c361efa2f233a, type: 3}
-  m_fireSound: {fileID: 8300000, guid: 5a7265df145ebf14cb22a06d63a2131a, type: 3}
-  m_reroadSound: {fileID: 8300000, guid: 3fb6d6ef6efd71e48a4f03b024421c16, type: 3}
-  m_playerWalk: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
+  m_handGunSound: {fileID: 0}
+  m_SMGSound: {fileID: 0}
+  m_RifleSound: {fileID: 0}
+  m_ShotGunSound: {fileID: 0}
+  m_MGSound: {fileID: 0}
+  m_SwingSound: {fileID: 0}
+  m_fireSound: {fileID: 0}
+  m_reroadSound: {fileID: 0}
+  m_playerWalk: {fileID: 0}
   m_playerDeath: {fileID: 0}
   m_playerRevive: {fileID: 0}
   m_playerHeal: {fileID: 0}
-  m_playerDamaged: {fileID: 8300000, guid: adf77b0dbe69a7844b73a9fe3ddb7c3b, type: 3}
+  m_playerDamaged: {fileID: 0}
   m_playerMeleeAtk: {fileID: 0}
-  m_zombieAtk: {fileID: 8300000, guid: 1225b0f997026d64fa600c3fd93f1a74, type: 3}
-  m_zombieDmg: {fileID: 8300000, guid: a4366158371c9514cae30cfff454dcb2, type: 3}
-  m_zombieChace: {fileID: 8300000, guid: 4de4f2cf2612645f2b6de973e405984d, type: 3}
-  m_zombieDeath: {fileID: 8300000, guid: 0547b940dba4d964e9e447af1dc0759a, type: 3}
-  m_bossSkill1: {fileID: 8300000, guid: 1fd31868d68903d4f9e2c4a3b7ef98f3, type: 3}
-  m_bossSkill2: {fileID: 8300000, guid: 7ff3494e5254748538d75169821087d8, type: 3}
+  m_zombieAtk: {fileID: 0}
+  m_zombieDmg: {fileID: 0}
+  m_zombieChace: {fileID: 0}
+  m_zombieDeath: {fileID: 0}
+  m_bossSkill1: {fileID: 0}
+  m_bossSkill2: {fileID: 0}
   m_bossAtk: {fileID: 0}
   m_bossDeath: {fileID: 0}
-  m_bossChase: {fileID: 8300000, guid: 7e2c3e5b9bae8490e86d17bac4da033d, type: 3}
-  m_bossRage: {fileID: 8300000, guid: efc7bb9783bdf8a4797f4caae38bea34, type: 3}
-  m_bgm_nightStart1: {fileID: 8300000, guid: 92f5a006317d04a84b6cc2e3d9150458, type: 3}
-  m_bgm_nightStart2: {fileID: 8300000, guid: 0534ee07c80c546f8962163f590c8c29, type: 3}
-  m_bgm_dayStart1: {fileID: 8300000, guid: 3c7a8fb9f8b104a49b4a0592e23ed646, type: 3}
-  m_bgm_dayStart2: {fileID: 8300000, guid: 7dc82ef7301214c10a968dc7691f18ba, type: 3}
-  m_bgm_lobby1: {fileID: 8300000, guid: 4d99e73e07d9ef048b52abe18c832cab, type: 3}
-  m_bgm_lobby2: {fileID: 8300000, guid: 4d3004ec8f8c42f4a8aa22e1081f772d, type: 3}
-  m_bgm_lobby3: {fileID: 8300000, guid: c62a48a9d413c914e8fd64910d2b41ce, type: 3}
-  m_bgm_day1: {fileID: 8300000, guid: d93a4c6a812648448bdd0a53e001be6b, type: 3}
-  m_bgm_day2: {fileID: 8300000, guid: bc7005e01ba1e06408909b8e0dac7bce, type: 3}
-  m_bgm_day3: {fileID: 8300000, guid: 4d3004ec8f8c42f4a8aa22e1081f772d, type: 3}
-  m_bgm_night: {fileID: 8300000, guid: dcb924906cd304145aaa7eeeeba986f2, type: 3}
-  m_bgm_night2: {fileID: 8300000, guid: 4d99e73e07d9ef048b52abe18c832cab, type: 3}
-  m_bgm_night3: {fileID: 8300000, guid: c62a48a9d413c914e8fd64910d2b41ce, type: 3}
-  m_bgm_nightBoss: {fileID: 8300000, guid: dcb924906cd304145aaa7eeeeba986f2, type: 3}
+  m_bossChase: {fileID: 0}
+  m_bossRage: {fileID: 0}
+  m_bgm_nightStart1: {fileID: 0}
+  m_bgm_nightStart2: {fileID: 0}
+  m_bgm_dayStart1: {fileID: 0}
+  m_bgm_dayStart2: {fileID: 0}
+  m_bgm_lobby1: {fileID: 0}
+  m_bgm_lobby2: {fileID: 0}
+  m_bgm_lobby3: {fileID: 0}
+  m_bgm_day1: {fileID: 0}
+  m_bgm_day2: {fileID: 0}
+  m_bgm_day3: {fileID: 0}
+  m_bgm_night: {fileID: 0}
+  m_bgm_night2: {fileID: 0}
+  m_bgm_night3: {fileID: 0}
+  m_bgm_nightBoss: {fileID: 0}
   m_volumeMuteSound: {fileID: 0}
   m_dd: {fileID: 0}
   m_da: {fileID: 0}
