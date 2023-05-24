@@ -21,6 +21,12 @@ public class MonsterController : MonoBehaviour
         Damaged,
         Max
     }
+    ProjectileController m_burn;
+    ProjectileController m_crush;
+    AudioSource m_source;
+    HUDController m_hudPanel;
+    [SerializeField, HideInInspector]
+    MonStat m_monStat;
     [SerializeField]
     Renderer[] m_Renderers;
     [SerializeField]
@@ -28,13 +34,11 @@ public class MonsterController : MonoBehaviour
     [Header("몬스터 능력치")]
     [SerializeField]
     protected MonStatus m_status;
-    [SerializeField, HideInInspector]
-    MonStat m_monStat;
-    HUDController m_hudPanel;
     protected TweenMove m_tweenmove;
-    ProjectileController m_burn;
-    ProjectileController m_crush;
+ 
+    public MonStatus GetStatus { get { return m_status; } set { m_status = value; } }
 
+    public MonsterType Type { get; set; }
     protected NavMeshAgent m_navAgent;
     protected  MonsterAnimController m_animctr;
     protected Animator m_animFloat;
@@ -46,17 +50,16 @@ public class MonsterController : MonoBehaviour
     protected float m_idleTime;
     protected bool isburn;
     int m_delayFrame;
-    //public float defence;
+
+   
+    float defence = 0;
+
+    #region coroutine\
     protected Coroutine m_damagedCoroutine;
     protected Coroutine m_motionDelaycoroutine;
     protected Coroutine m_burnCoroutine;
     protected Coroutine m_crushCoroutine;
-    float defence = 0;
-    public MonStat GetStat { get { return m_monStat; } set { m_monStat = value; } }
-    public MonStatus GetStatus { get { return m_status; } set { m_status = value; } }
-
-    public MonsterType Type { get; set; }
-    IEnumerator Coroutine_SetDamagedColor()
+    IEnumerator Coroutine_SetDamagedColor() //피해 입을 시 표시용도
     {
         SetRimLight(Color.red);
         yield return new WaitForSeconds(1f);
@@ -71,7 +74,7 @@ public class MonsterController : MonoBehaviour
         SetIdle(0.1f);
         m_delayFrame = 0;
     }
-    IEnumerator Couroutine_BurnDamage(int value)
+    IEnumerator Couroutine_BurnDamage(int value) // 상태이상 화상 지속딜
     {
         var effectName = TableEffect.Instance.m_tableData[1].Prefab[2];
         var effect = EffectPool.Instance.Create(effectName);
@@ -85,18 +88,16 @@ public class MonsterController : MonoBehaviour
         }
         m_burnCoroutine = null;
     }
-    IEnumerator Coroutine_Crush(float value)
+    IEnumerator Coroutine_Crush(float value) //상태이상 적용용도 (슬로우, 방어력 감소)
     {
         var effectName = TableEffect.Instance.m_tableData[7].Prefab[1];
         var effect = EffectPool.Instance.Create(effectName);
         m_crush = effect.gameObject.GetComponent<ProjectileController>();
         m_crush.SetFollowProjectile(gameObject.GetComponent<MonsterController>(),0);
         m_crush.transform.position= gameObject.transform.position;
-       // Debug.Log("적용 전 방어력과 : " + m_status.defense + "이속" + m_navAgent.speed);
         float speed = m_status.speed - m_status.speed * value; //이동속도 감소효과
         m_status.defense = m_status.defense - m_status.defense * value;
         m_navAgent.speed = speed;
-       // Debug.Log("적용 후 방어력과 : " + m_status.defense + "이속" + m_navAgent.speed);
         yield return new WaitForSeconds(5);
         m_status.defense = defence;
         m_navAgent.speed = m_status.speed;
@@ -111,17 +112,15 @@ public class MonsterController : MonoBehaviour
                 yield return null;
         }
     }
+    #endregion
     #region AnimEvent
     protected virtual void AnimEvent_SetDie()
     {
-       // Debug.Log(this.name + " 가 사망했습니다.");
- 
         MonsterManager.Instance.ResetMonster(this, m_hudPanel);
     }
     protected virtual void AnimEvent_SetAttack()
     {
         float damage =  CalculationDamage.NormalDamage(m_status.damage, m_player.GetStatus.defense,0f);
-      //  Debug.Log("데미지 : " + damage + " 몬스터 공격력 : " + m_status.damage + " 플레이어 방어력 : " + m_player.GetStatus.defense);
         var dir = m_player.transform.position - transform.position;
         float sqrAttackDist = Mathf.Pow(m_status.attackDist, 2f);
         if (Mathf.Approximately(dir.sqrMagnitude, sqrAttackDist) || dir.sqrMagnitude < sqrAttackDist)
@@ -156,21 +155,15 @@ public class MonsterController : MonoBehaviour
         m_hudPanel.DisplayDamage(type, -value, m_status.hp / m_status.hpMax);
     }
     // Start is called before the first frame update
-    protected virtual void Awake()
+    public void PlayHitSound(string sound) //피격시 소리 재생
     {
-        m_animFloat = GetComponent<Animator>();
-        m_navAgent = GetComponent<NavMeshAgent>();
-        m_animctr = GetComponent<MonsterAnimController>();
-        DummyHud = Utill.GetChildObject(gameObject, "Dummy");
-        m_Renderers = GetComponentsInChildren<Renderer>();
-        m_tweenmove = GetComponent<TweenMove>();
-        SetRimLight(Color.black);
+        SoundManager.Instance.PlaySFX(sound, m_source);
     }
     public void SetMonster(PlayerController player, HUDController hud)
     {
         m_player = player;
         m_hudPanel = hud;
-        SetState(MonsterState.Chase);
+        SetState(MonsterState.Idle);
         StartCoroutine(Coroutine_SerchTargetPath(10));
     }
     public void InitMonster(MonsterType type) //몬스터의 타입을 받아옴
@@ -189,16 +182,15 @@ public class MonsterController : MonoBehaviour
     }
     public void SetStatus(MonsterType type, float StatScale) //몬스터의 타입과 라운드에 따른 StatScale을 받아 몬스터의 정보를 가져와 InitStatus로 보내주기
     {
-        var monStat = m_monStat.SetMonStat(Type);
+        var monStat = m_monStat.GetMonStat(type);
         defence = monStat.defense;
         InitStatus(monStat.type, monStat.name, monStat.hp, monStat.atkSpeed, monStat.damage, monStat.defense, monStat.speed, monStat.attackDist, StatScale,monStat.knockbackRegist,monStat.Score,monStat.coin,monStat.exp);
-       
     }
     public void SetState(MonsterState state)
     {
         m_state = state;
     }
-    protected void SetRimLight(Color color)
+    protected void SetRimLight(Color color) //피격시 좀비 색 변경하여 표시
     {
         for (int i = 0; i < m_Renderers.Length; i++)
             m_Renderers[i].material.SetColor("_FresnelColor", color);
@@ -206,7 +198,6 @@ public class MonsterController : MonoBehaviour
 
     protected virtual void SetDie()
     {
-        // Debug.Log(count+"번째 게임오브젝트 :"+gameObject + "의 SetDie실행!! 현재 상태 : " + m_state);
         StopAllCoroutines();
         int money = Mathf.CeilToInt(Random.Range(m_status.coin / 2, m_status.coin / 0.7f));
         int score = Mathf.CeilToInt(Random.Range(m_status.score / 2, m_status.score / 0.7f));
@@ -218,8 +209,6 @@ public class MonsterController : MonoBehaviour
         SetState(MonsterState.Die); //상태를 죽은상태로
         gameObject.tag = "Die";//죽었을때 태그를 Die로 설정하여 시체가 뒤의 좀비 타격방지.
         m_navAgent.ResetPath(); //더 추적금지!! 
-                                //   Debug.Log(count + "번째 게임오브젝트 :" + gameObject + "SetDie종료!! 현재 상태 : " + m_state + "태그는? :" +gameObject.tag);
-                                //    count++;
     }
     protected virtual void SetIdle(float duration)
     {
@@ -278,6 +267,17 @@ public class MonsterController : MonoBehaviour
         }
         return false;
     }
+    protected virtual void Awake()
+    {
+        m_animFloat = GetComponent<Animator>();
+        m_navAgent = GetComponent<NavMeshAgent>();
+        m_animctr = GetComponent<MonsterAnimController>();
+        DummyHud = Utill.GetChildObject(gameObject, "Dummy");
+        m_Renderers = GetComponentsInChildren<Renderer>();
+        m_tweenmove = GetComponent<TweenMove>();
+        m_source = GetComponent<AudioSource>();
+        SetRimLight(Color.black);
+    }
     public virtual void BehaviourProcess()
     {
         if (!gameObject.activeSelf || m_state.Equals(MonsterState.Die)) return;
@@ -334,7 +334,7 @@ public class MonsterController : MonoBehaviour
         }
 
     }
-
+  
     public virtual void BurnDamage()
     {   
         if(m_burnCoroutine == null)

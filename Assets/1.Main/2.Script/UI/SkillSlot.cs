@@ -23,18 +23,13 @@ public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,
     PlayerAbilityType m_type;
 
 
-    /*
-    Queue<int> m_ids = new Queue<int>(); //큐를 사용한 도전 해보기
-    Queue<int> m_activedId = new Queue<int>(); // 적용된 스킬 아이디를 넣어볼거임
-    Queue<bool> m_isActived = new Queue<bool>();*/ //큐를 이용한 도전을 시도하였으나 더욱 복잡하고 가독성 떨어질것 같아 폐기
-
     string m_skillname;
     public TableSkillStat m_skill = new TableSkillStat();
-    public void SetSkillSlot(int id, PlayerSkillController player, bool isActive,ActiveSkill activeskill,SkillInfo info)
-    {
+    public void SetSkillSlot(int id, PlayerSkillController player, bool isActive,ActiveSkill activeskill,SkillInfo info) //스킬 슬롯 지정
+    { 
         m_skillPoint = m_skill.GetSkillData(id).SkillPoint;
-        m_image = Utill.GetChildObject(gameObject, "ItemImage").GetComponent<Image>(); //Start에서 활성화시 
-        m_text = GetComponentInChildren<TextMeshProUGUI>();                            //오류발생하여 슬롯지정해줄때 호출
+        m_image = Utill.GetChildObject(gameObject, "ItemImage").GetComponent<Image>();
+        m_text = GetComponentInChildren<TextMeshProUGUI>();                           
         m_active = activeskill;
         m_currentSkillID = id;
         RefreshSkillInfo();
@@ -45,7 +40,7 @@ public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,
         m_isChoice = false;
         ActiveSkillAlpha();
     }
-    void RefreshSkillInfo()
+    void RefreshSkillInfo() //스킬 정보 다시 가져옴ㅁ
     {
         m_skillname = m_skill.GetSkillData(m_currentSkillID).SkillName;
         m_text.text = m_skillname;
@@ -61,53 +56,6 @@ public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,
         m_image.sprite = ImageLoader.Instance.GetImage(image);
         m_text.text = info;
     }
-    /*
-    public void ResetQueue() //큐 초기화
-    {
-        m_ids.Clear();
-        m_isActived.Clear();
-    }
-    public void EnQueues(int id, bool isactive) //큐 넣기
-    {
-        m_ids.Enqueue(id);
-        m_isActived.Enqueue(isactive);
-    }
-    void DequeueSkills()
-    {
-        m_currentSkillID = m_ids.Dequeue();
-        m_isActived.Dequeue();
-        if(m_ids != null)
-        {
-            m_currentSkillID = m_ids.Peek();
-        }
-        
-    }
-    void CheckActiveSkills() // 스킬들이 
-    {
-        if (m_ids == null) return;
-        for(int i = 0; i < m_ids.Count; i++)
-        {
-            if (m_isActived.Peek()) //다음 스킬이 액티브 상태라면 디큐해주기
-            {
-                DequeueSkills();
-            }
-            else
-            {
-                break;
-            }
-        }
-        
-    }
-    public void SetSkillSlots(List<int> id, PlayerSkillController player, List<bool> isActive, string image, ActiveSkill activeskill, SkillInfo info)
-    {
-        m_image = Utill.GetChildObject(gameObject, "ItemImage").GetComponent<Image>(); //Start에서 활성화시 
-        m_text = GetComponentInChildren<TextMeshProUGUI>();
-        m_ids = id;
-        m_isActived = isActive;
-        m_player = player;
-        m_active = activeskill;
-        m_skillInfo = info;
-    }*/ //큐를 이용한 시도했으나 더 복잡해질것 같아 폐기
 
     void ActiveSkillAlpha() // 스킬 액티브 여부에 따라 알파값을 변경해줌
     {
@@ -123,7 +71,7 @@ public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,
         m_image.color = color;
     }
   
-    void LoadNextSkill()
+    void LoadNextSkill() //스킬 습득 시 다음 스킬이 존재하면 가져옴
     {
         if (m_skill.GetSkillData(m_currentSkillID).NextID != 0 )
         {
@@ -154,8 +102,7 @@ public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,
         else // 슬롯이 특성 선택 모드일때
         {
             m_player.SetAblityType(m_type);
-            m_skillUI.ChoiceFinished();
-            
+            m_skillUI.ChoiceFinished(); 
         }
     }
     public void OnPointerEnter(PointerEventData eventData) //올라왔을 때 정보창 불러움
@@ -169,7 +116,7 @@ public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,
             if (eventData.pointerEnter.CompareTag("Slot")) //태그가 슬롯인것에만 적용
                 m_skillInfo.DeActiveUI();
     }
-    public void ActiveSkill()
+    public void ActiveSkill() // 스킬 활성화
     {
         if (!m_isActive)
         {

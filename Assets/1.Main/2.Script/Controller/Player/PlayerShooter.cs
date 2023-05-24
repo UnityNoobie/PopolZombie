@@ -46,9 +46,7 @@ public class PlayerShooter : MonoBehaviour
          gun = newWeapon.GetComponent<Gun>(); //총을 받아온 총 오브젝트로 변경
          GunManager.currentWeapon = gun.GetComponent<Transform>();
          m_player.SetStatus(ID);// 플레이어의 스테이터스를 재설정
-
-         gun.grade = grade;
-         gun.m_type = type;
+         gun.SetGun(ID,grade,type);
          m_player.SetGun(gun);
          CheckSkillSignal();   
          gun.gameObject.SetActive(true); //총을 사용상태로 변경

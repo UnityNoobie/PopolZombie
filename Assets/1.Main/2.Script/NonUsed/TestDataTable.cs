@@ -7,7 +7,7 @@ using UnityEngine;
 
 
 
-
+/*
 public class TestSkillData
 {
     public float hp{get;set;}
@@ -64,60 +64,7 @@ public class TestSkillData
 
     }
 }
-
-/*
-public class TestItemData
-{
-    public float hp { get; set; }
-    public float criPer { get; set; }
-    public float criDam { get; set; }
-    public float atkSpeed { get; set; }
-    public float atk { get; set; }
-    public float def { get; set; }
-    public float Speed { get; set; }
-    public int Maxammo { get; set; }
-    public float reloadTime { get; set; }
-    public TestItemData() { }
-    public TestItemData(float hp, float criPer, float criDam, float atkSpeed, float atk, float def,float speed, int MaxAmmo, float reloadTime)
-    {
-        this.hp = hp;
-        this.criPer = criPer;
-        this.criDam = criDam;
-        this.atkSpeed = atkSpeed;
-        this.atk = atk;
-        this.def = def;
-        this.Speed = speed;
-        this.Maxammo = MaxAmmo;
-        this.reloadTime = reloadTime;
-    }
-
-
-     public TestItemData ItemData(WeaponType weapon)
-    {
-        TestItemData skill = null; //체력 , 치명타확률, 치명타 데미지, 공격속도, 공격력, 방어력, 이동속도, 장탄량, 장전속도
-        switch (weapon)
-        {
-            case WeaponType.Pistol:
-                skill = new TestItemData(0f, 50f, 150f, 2f, 40f, 0f, 0.5f, 7,1f);
-                break;
-            case WeaponType.SubMGun:
-                skill = new TestItemData(0f, 10f, 20f, 4f, 25f, 0f, 0.1f,40,1.5f);
-                break;
-            case WeaponType.Rifle:
-                skill = new TestItemData(0f, 20f, 30f, 3f, 50f, 0f, 0.1f,30,2f);
-                break;
-            case WeaponType.MachineGun:
-                skill = new TestItemData(0.2f, 0f, 10f, 4f, 30f, 10f, 0f,100,3f);
-                break;
-            case WeaponType.ShotGun:
-                skill = new TestItemData(0.5f, 0f, 20f, 0.5f, 50f, 30f, 0f,8,1f);
-                break;
-           
-        }
-        return skill;
-    }
-
-}
 */
+
 
 

@@ -9,11 +9,6 @@ public enum AttackType
     Normal,
     Critical
 }
-public enum AttackCCType
-{
-    Break,
-    Pierce
-}
 [System.Serializable]
 public struct Status
 {

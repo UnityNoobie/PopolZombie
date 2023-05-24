@@ -94,6 +94,7 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
     protected override void OnStart()
     {
         thisRound = 0;
+        TableMonsterStat.Instance.Load();
         m_mainCam = Camera.main;
         m_uiCam = GameObject.FindGameObjectWithTag("UICamera").GetComponent<Camera>();
         m_monPrefabs = Resources.LoadAll<GameObject>("Prefabs/Zombie"); //몬스터의 프리펩을 가져와

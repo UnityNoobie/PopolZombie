@@ -21,7 +21,6 @@ public class PlayerController : MonoBehaviour
     Status m_status;
     [SerializeField]
     GameObject m_PlayerHuD;
-
     [SerializeField]
     StatusUI m_statusUI;
     [SerializeField]
@@ -33,7 +32,6 @@ public class PlayerController : MonoBehaviour
     Transform m_hitPos;
     Gun m_gun;
     WeaponData m_weaponData { get; set; }
-    public TestSkillData m_SkillData;
     NavMeshAgent m_navAgent;
     PlayerAnimController m_animCtr;
     PlayerSkillController m_skill;
@@ -54,8 +52,7 @@ public class PlayerController : MonoBehaviour
     bool m_hastitle = false;
     bool m_skillactive = false;
     public float pDefence;
-    public int ID;
-  
+    //방어구 정보 임시저장
     #region ArmorData
     int armDefence;
     float armDamage;
@@ -64,6 +61,7 @@ public class PlayerController : MonoBehaviour
     int armCriRate;
     float armSpeed;
     #endregion
+    //스킬 정보 임시 저장
     #region SkillData
     float skillamage;
     float skillAtkSpeed;
@@ -86,7 +84,7 @@ public class PlayerController : MonoBehaviour
     float skillCrush;
     int skillBurn;
     bool crush;
-    #endregion
+    #endregion 
     public enum PlayerState //플레이어의 상태 알림
     {
         alive,
@@ -107,7 +105,7 @@ public class PlayerController : MonoBehaviour
     }
     public PlayerAnimController.Motion GetMotion { get { return m_animCtr.GetMotion; } }
     List<PlayerAnimController.Motion> m_comboList = new List<PlayerAnimController.Motion>() { PlayerAnimController.Motion.Combo1, PlayerAnimController.Motion.Combo2 };
-    Queue<KeyCode> m_keyBuffer = new Queue<KeyCode>(); // 콤보시스템 구현을 위한 큐
+    Queue<KeyCode> m_keyBuffer = new Queue<KeyCode>(); // 근접 공격 콤보시스템 구현을 위한 큐
     #region MeleeAttackProcess
     /*
     public bool IsAttack
@@ -158,19 +156,23 @@ public class PlayerController : MonoBehaviour
     Coroutine CheckCoroutine;
     #endregion
     #region AnimEvent
+    // 사망 이벤트
     void AnimEvent_Dead()
     {
         gameObject.SetActive(false);
         m_PlayerHuD.SetActive(false);
     }
+    //근접 공격 시작 이벤트
     void AnimEvent_AttackStart()
     {
         m_area.SetActive(true);
     }
+    //무기 변경 이벤트
     void AnimEvent_GrabWeapon()
     {
         m_gun.gunstate = GunState.Ready;
     }
+    //근접 공격 프로세스 실행하는 이벤트
     void AnimEvent_MeleeAttack()
     {  
         float damage = 0;
@@ -195,10 +197,8 @@ public class PlayerController : MonoBehaviour
 
             }
         }
-
-        // areaList.Clear(); //공격 후 초기화하는 방식?
-        //        m_area.transform.localScale = new Vector3(m_player.GetStatus.AtkDist, 1f, m_player.GetStatus.AtkDist);
     }
+    //근접 공격 종료 후 실행되는 코드
     public void AnimEvnet_MeleeFinished()
     {
         m_area.SetActive(false);
@@ -230,16 +230,19 @@ public class PlayerController : MonoBehaviour
             m_animCtr.Play(PlayerAnimController.Motion.MeleeIdle);
         }
     }
+    //콤보 공격을 위한 키버퍼 초기화
     void ReleaseKeyBuffer()
     {
         m_keyBuffer.Clear();
     }
+    //현재 장착중인 총 세팅
     public void SetGun(Gun gun)
     {
         m_gun = gun.GetComponent<Gun>();
     }
     #endregion
-    #region PlayerInput
+
+    #region PlayerInput  //플레이어의 움직임 관련 메소드
 
     void SetPlayer()
     {
@@ -321,7 +324,7 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
-    #region AboutStatus
+    #region AboutStatus  //플레이어 스테이터스 관련 메소드
     private void ResetData()
     {
         armDefence = 0;
@@ -438,7 +441,7 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
-    #region HUD && PlayerState
+    #region HUD && PlayerState  //플레이어의 HUD와 State 관련 메소드
 
     public void SetPlayerKnickName(string nick)
     {
@@ -532,7 +535,7 @@ public class PlayerController : MonoBehaviour
         effect.SetActive(true);
     }
     #endregion
-    #region Level,Exp
+    #region Level,Exp  //경험치, 레벨업 관련 메소드
     public void IncreaseExperience(int exp)
     {
         m_experience += exp;
@@ -554,7 +557,7 @@ public class PlayerController : MonoBehaviour
     {
         m_skill = GetComponent<PlayerSkillController>();
         m_navAgent = GetComponent<NavMeshAgent>();
-        m_SkillData = new TestSkillData();
+ 
         m_animCtr = GetComponent<PlayerAnimController>();
         m_leftDir = Utill.GetChildObject(gameObject, "LeftDir");
         m_weaponData = new WeaponData();

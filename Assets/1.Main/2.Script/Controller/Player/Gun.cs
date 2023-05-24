@@ -30,13 +30,18 @@ public class Gun : MonoBehaviour
     AudioClip m_reloadSound;
     [SerializeField]
     PlayerController m_player;
+   // SoundManager m_soundManager { get; set; }
     Transform m_firePos;
-    public int grade;
+    public int m_grade;
+    public int m_id;
+    string m_shot;
+    string m_hit;
+    string m_reload;
     public WeaponType m_type { get; set; }
-    public int ammoRemain;
+    int ammoRemain;
     public bool isReload = false;
     float lastFireTime;
-   // public WeaponData GetStatus { get; set; }
+    public WeaponData GetStatus = new WeaponData();
     public bool isfirst = true; 
     bool lastfire;
     bool pierce;
@@ -48,7 +53,6 @@ public class Gun : MonoBehaviour
     {     
         m_flashEffect.Play();  //화염이펙트
         m_ShellEffect.Play(); //탄피 이펙트
-        m_gunAudio.PlayOneShot(m_shootSound); //총소리
         m_bulletRender.SetPosition(0, m_firePos.position);  //레이 시작점
         m_bulletRender.SetPosition(1, hitPos); //레이 도착점
         m_bulletRender.enabled = true;
@@ -95,6 +99,15 @@ public class Gun : MonoBehaviour
             gunstate = GunState.Ready;
         }
     }
+    public void SetGun(int id,int grade,WeaponType type)
+    {
+        m_id = id;
+        m_grade = grade;
+        m_type = type;
+        m_shot = GetStatus.GetWeaponStatus(m_id).ShotSound;
+        m_reload = GetStatus.GetWeaponStatus(m_id).ReloadSound;
+        m_hit = GetStatus.GetWeaponStatus(m_id).AtkSound;
+    }
     public void ResetBoolin() //무기 교체, 스킬 업 등의 상황에서 초기화
     {
         isfirst = false;
@@ -102,9 +115,6 @@ public class Gun : MonoBehaviour
         pierce = false;
         burn = false;
         boom = false;
-        //remove = false;
-        //crush = false;
-        //armorpierce = false;
     }
     public void CheckBoolin()
     {
@@ -125,24 +135,10 @@ public class Gun : MonoBehaviour
         {
             boom = true;
         }
-        /*
-        if(m_player.GetStatus.Remove != 0)
-        {
-            remove = true;
-        }
-        
-        if(m_player.GetStatus.Crush != 0)
-        {
-           // crush = true;
-        }
-        if (m_player.GetStatus.ArmorPierce != 0)
-        {
-            // armorpierce=true;
-        }*/
     }
     public void ammoCheck() //남은총알을 실시간으로 확인.
     {
-        UIManager.Instance.WeaponInfoUI(m_type + ".LV" + grade + "\n" + ammoRemain + " / " + m_player.GetStatus.maxammo);
+        UIManager.Instance.WeaponInfoUI(m_type + ".LV" + m_grade + "\n" + ammoRemain + " / " + m_player.GetStatus.maxammo);
     }
     void Start()
     {
@@ -210,7 +206,8 @@ public class Gun : MonoBehaviour
             }
             m_flashEffect.Play();  //화염이펙트
             m_ShellEffect.Play(); //탄피 이펙트
-            m_gunAudio.PlayOneShot(m_shootSound); //총소리 
+            //m_gunAudio.PlayOneShot(m_shootSound); //총소리 
+            SoundManager.Instance.PlaySFX(m_shot, m_gunAudio);
         }
         else //샷건외의 총은
         {
@@ -250,6 +247,7 @@ public class Gun : MonoBehaviour
                 }
             }
             StartCoroutine(ShootEffect(hitPos));
+            SoundManager.Instance.PlaySFX(m_shot, m_gunAudio);
         }
         ammoRemain--;
         ammoCheck();
@@ -274,6 +272,7 @@ public class Gun : MonoBehaviour
         Vector3 hitPos = Vector3.zero;
         var mon = hit.collider.GetComponent<MonsterController>();
         var type = GunManager.AttackProcess(mon, m_player.GetStatus.damage, m_player.GetStatus.criRate, m_player.GetStatus.criAttack,m_player.GetStatus.ArmorPierce, out damage);
+        mon.PlayHitSound(m_hit); //피해사실 전달하며 소리재생유도 시도
         if (burn) //화상 효과 활성화 되있다면. 화상딜 들어가는 신호를 추가로 줌.
         {
            

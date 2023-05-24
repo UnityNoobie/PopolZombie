@@ -39,10 +39,13 @@ public class WeaponData
     public string ItemType { get; set; }
     public int Price { get; set; }
     public WeaponType weaponType { get; set; }
+    public string ShotSound { get; set; }
+    public string ReloadSound { get; set; }
+    public string AtkSound { get; set; }
 
 
     public WeaponData() { }
-    public WeaponData(string Type, int Id, int Grade, int Damage, int Mag, int CriRate, int CriDamage, int Defence, int Shotgunmag, int knockbackPer, float atkSpeed, float reloadTime, float speed, float HP,float knockBackDist,float atkDist,string atkType, WeaponType type, string image, string Info, string itemtype, int price)
+    public WeaponData(string Type, int Id, int Grade, int Damage, int Mag, int CriRate, int CriDamage, int Defence, int Shotgunmag, int knockbackPer, float atkSpeed, float reloadTime, float speed, float HP,float knockBackDist,float atkDist,string atkType, WeaponType type, string image, string Info, string itemtype, int price,string shot,string reload, string hit)
     {
         this.Type = Type;
         this.weaponType = type;
@@ -67,6 +70,9 @@ public class WeaponData
         this.Info = Info;
         this.ItemType = itemtype;
         this.Image = image;
+        this.ShotSound = shot;
+        this.ReloadSound = reload;
+        this.AtkSound = hit;
 
     }
 
@@ -108,7 +114,7 @@ public class WeaponData
         {
             Debug.Log("무기의 타입이 뭔가 이상합니다 선생님");
         }
-        WeaponData gunstat = new WeaponData(status.Type, status.ID, status.Grade, status.Damage, status.Mag, status.CriRate, status.CriDamage, status.Defence, status.Shotgun, status.KnockBack, status.AtkSpeed, status.ReloadTime, status.Speed, status.HP, status.KnockBackDist,status.AttackDist, status.AtkType, type, status.Image, status.Info, status.ItemType, status.Price);
+        WeaponData gunstat = new WeaponData(status.Type, status.ID, status.Grade, status.Damage, status.Mag, status.CriRate, status.CriDamage, status.Defence, status.Shotgun, status.KnockBack, status.AtkSpeed, status.ReloadTime, status.Speed, status.HP, status.KnockBackDist,status.AttackDist, status.AtkType, type, status.Image, status.Info, status.ItemType, status.Price,status.ShotSound,status.ReloadSound,status.AtkSound);
         return gunstat;
     }
 }
@@ -151,6 +157,9 @@ public class TableGunstat : Singleton<TableGunstat>
             data.Image = TableLoader.Instance.GetString("Image", i);
             data.Info = TableLoader.Instance.GetString("Info", i);
             data.ItemType = TableLoader.Instance.GetString("ItemType", i);
+            data.ShotSound = TableLoader.Instance.GetString("Sound", i);
+            data.ReloadSound = TableLoader.Instance.GetString("Sound2", i);
+            data.AtkSound = TableLoader.Instance.GetString("Sound3", i);
             if (data.Grade == 1) m_lowWeapon.Add(data.ID);
             else if (data.Grade == 2) m_midWeapon.Add(data.ID);
             else if (data.Grade == 3) m_highWeapon.Add(data.ID);

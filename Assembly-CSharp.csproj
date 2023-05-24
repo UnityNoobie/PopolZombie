@@ -122,7 +122,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\Internal\PropertyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIEventTrigger.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerMeleeAttack.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Data\TestMonStatus.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Data\TableMonStatus.cs" />
     <Compile Include="Assets\1.Main\2.Script\NonUsed\Inventory.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerProjectileCtr.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIDragScrollView.cs" />
@@ -191,7 +191,7 @@
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\PlayIdleAnimations.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonRotation.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\EffectPoolUnit.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Data\TestDataTable.cs" />
+    <Compile Include="Assets\1.Main\2.Script\NonUsed\TestDataTable.cs" />
     <Compile Include="Assets\SlimUI\Modern Menu 1\Scripts\Misc\ResetDemo.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UICenterOnClick.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\PanelManager.cs" />
@@ -289,6 +289,7 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Data\TableSound.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

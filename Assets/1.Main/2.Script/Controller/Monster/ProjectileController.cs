@@ -11,7 +11,7 @@ public class ProjectileController : MonoBehaviour
     [SerializeField]
     ProjectileController[] m_child;
     float damageValue;
-    IEnumerator Coroutine_FollowTarget(GameObject target)
+    IEnumerator Coroutine_FollowTarget(GameObject target) //대상의 위치를 추적하여 계속해서 위치 이동해서 실행하는 코루틴
     {
         while(target.activeSelf)
         {
@@ -20,12 +20,12 @@ public class ProjectileController : MonoBehaviour
         }
         gameObject.SetActive(false); 
     }
-    public void SetProjectile(MonsterController mon, float value)
+    public void SetProjectile(MonsterController mon, float value)  // 투사체를 생성하며 공격자, 데미지의 벨류(스킬별 다단히트수가 다르기 때문에) 지정
     {
         m_atkMon = mon;
         damageValue = value;
     }
-    public void SetProjectileWithChild(MonsterController mon, float value) //스킬패턴때문에 추가
+    public void SetProjectileWithChild(MonsterController mon, float value) //스킬패턴때문에 추가 ㅇ여러개의 파티클시스템을 자식오브젝트 형태로 가져와 사용
     {
         m_atkMon = mon;
         damageValue= value;
@@ -34,20 +34,19 @@ public class ProjectileController : MonoBehaviour
             m_child[i].gameObject.GetComponent<ProjectileController>().SetProjectile(mon,value);
         }
     }
-    public void SetFollowProjectile(MonsterController mon, float value)
+    public void SetFollowProjectile(MonsterController mon, float value) //보스몬스터 패턴용 메소드 코루틴으로 대상의 위치를 따라가면서 실행
     {
         m_atkMon = mon;
         damageValue = value;
         StartCoroutine(Coroutine_FollowTarget(m_atkMon.gameObject));
     }
-    private void OnParticleCollision(GameObject other)
+    private void OnParticleCollision(GameObject other) //투사체가 명중했을 시 실행
     {
         if (other.CompareTag("Player"))
         {
             m_hitPlayer = other.GetComponent<PlayerController>();
-            float damage = CalculationDamage.NormalDamage(m_atkMon.GetStatus.damage * damageValue, m_hitPlayer.pDefence, 0f); //성공적★
+            float damage = CalculationDamage.NormalDamage(m_atkMon.GetStatus.damage * damageValue, m_hitPlayer.pDefence, 0f); 
             m_hitPlayer.GetDamage(damage);
-           // Debug.Log("투사체 명중!" + damage + "데미지!");
         }
     }
 }
