@@ -8,6 +8,8 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
     GunManager gunManager;
     [SerializeField]
     StatusUI m_statusUI;
+    [SerializeField]
+    SoundManager m_soundManager;
     bool m_isactive = false;
     
     public PlayerController[] m_players;

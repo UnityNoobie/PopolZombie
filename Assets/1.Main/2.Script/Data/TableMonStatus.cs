@@ -73,7 +73,7 @@ public class TableMonsterStat : Singleton<TableMonsterStat>
     public void Load()
     {
         TableLoader.Instance.LoadData(TableLoader.Instance.LoadTableData("MonStatus"));
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 6; i++)
         {
             MonStat data = new MonStat();
             string str = TableLoader.Instance.GetString("Type", i);

@@ -27,9 +27,11 @@ public class PlayerController : MonoBehaviour
     QuickSlot m_quickSlot;
     [SerializeField]
     UpdateManager m_updateManager;
+    AudioSource m_audio;
     GunManager m_manager;
     Transform m_leftDir;
     Transform m_hitPos;
+    MeleeType m_meleetype;
     Gun m_gun;
     WeaponData m_weaponData { get; set; }
     NavMeshAgent m_navAgent;
@@ -166,6 +168,7 @@ public class PlayerController : MonoBehaviour
     void AnimEvent_AttackStart()
     {
         m_area.SetActive(true);
+        PlaySwingSound();
     }
     //무기 변경 이벤트
     void AnimEvent_GrabWeapon()
@@ -174,9 +177,10 @@ public class PlayerController : MonoBehaviour
     }
     //근접 공격 프로세스 실행하는 이벤트
     void AnimEvent_MeleeAttack()
-    {  
+    {
+
         float damage = 0;
-        var area = m_area.GetComponent<AttackAreaUnitFind>(); ;
+        var area = m_area.GetComponent<AttackAreaUnitFind>();
         var areaList = area.m_unitList;
         for (int i = 0; i < areaList.Count; i++)
         {         
@@ -189,7 +193,11 @@ public class PlayerController : MonoBehaviour
                     mon.Crush(skillCrush);
                 }
                 mon.SetDamage(type, damage, this, false);
-                if(m_status.Drain != 0)
+                if (m_meleetype.Equals(MeleeType.Axe))
+                    mon.PlayHitSound("SFX_AxeHit");
+                else
+                    mon.PlayHitSound("SFX_BatHit");
+                if (m_status.Drain != 0)
                 {
                     //Debug.Log(Mathf.CeilToInt((damage * m_status.Drain) / 100) + " 회복!!");
                     SkillHeal(Mathf.CeilToInt((damage * m_status.Drain) / 100));
@@ -243,7 +251,31 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region PlayerInput  //플레이어의 움직임 관련 메소드
-
+    void PlayDamagedSound()
+    {
+        SoundManager.Instance.PlaySFX("SFX_PlayerDamaged", m_audio);
+    }
+    void PlaySwingSound()
+    {
+        SoundManager.Instance.PlaySFX("SFX_MeleeSwing", m_audio);
+        SoundManager.Instance.PlaySFX("SFX_MeleeAttack", m_audio);
+    }
+    void PlayHealSound()
+    {
+        SoundManager.Instance.PlaySFX("SFX_PlayerHeal", m_audio);
+    }
+    void PlayDieSound()
+    {
+        SoundManager.Instance.PlaySFX("SFX_PlayerDeath", m_audio);
+    }
+    void PlayReviveSound()
+    {
+        SoundManager.Instance.PlaySFX("SFX_PlayerRevive", m_audio);
+    }
+    void PlayLvUpSound()
+    {
+        SoundManager.Instance.PlaySFX("SFX_PlayerLevelUp", m_audio);
+    }
     void SetPlayer()
     {
         m_updateManager.SetPlayerController(this);
@@ -437,6 +469,18 @@ public class PlayerController : MonoBehaviour
     void SetWeaponID(int ID)
     {
         m_weaponData = m_weaponData.GetWeaponStatus(ID);
+        if (m_weaponData.weaponType.Equals(WeaponType.Axe))
+        {
+            m_meleetype = MeleeType.Axe;
+        }
+        else if(m_weaponData.weaponType.Equals(WeaponType.Bat))
+        {
+            m_meleetype = MeleeType.Bat;
+        }
+        else
+        {
+            m_meleetype = MeleeType.Max;
+        }
         m_skill.SetWeaponType(m_weaponData.weaponType); //무기타입 전송
     }
 
@@ -456,6 +500,7 @@ public class PlayerController : MonoBehaviour
     {
         if (m_status.hp <= 0 || m_Pstate == PlayerState.dead || m_Pstate == PlayerState.Invincible) //피가 0이거나 죽었을땐 적용 X
             return;
+        PlayDamagedSound();
         int mondamage = Mathf.CeilToInt(damage - (damage*skillDamageRigist)); //피해 저항 적용
         HPControl(-mondamage);
         var hiteffect = TableEffect.Instance.m_tableData[6].Prefab[2];
@@ -478,7 +523,7 @@ public class PlayerController : MonoBehaviour
     {
         if (m_status.hp >= m_status.hpMax || m_Pstate == PlayerState.dead) return; //이미 풀피이거나 죽었을경우 실행 X
         float percentHeal = m_status.hpMax * (heal / 100);
-     //   Debug.Log(percentHeal);
+        PlayHealSound();
         int healvalue = Mathf.CeilToInt(percentHeal);
         HPControl(healvalue);
         m_hudText.Add(healvalue, Color.green, 0f);
@@ -495,6 +540,7 @@ public class PlayerController : MonoBehaviour
     void Dead() //죽었을경우 플레이어 액티브 종료
     {
         ReleaseKeyBuffer();
+        PlayDieSound();
         if (GetMotion.Equals(PlayerAnimController.Motion.Combo1))
         {
             AnimEvnet_MeleeFinished();
@@ -506,6 +552,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Revive() //부활기능
     {
+        PlayReviveSound();
         HPControl(Mathf.CeilToInt(m_status.hpMax));
         Debug.Log(m_status.atkSpeed);
         gameObject.SetActive(true);
@@ -521,6 +568,7 @@ public class PlayerController : MonoBehaviour
     }
     void LevelUP()
     {
+        PlayLvUpSound();
         m_status.level++;
         m_hudLabel.text = "[FFFF00]LV." + m_status.level + "[FFFFFF]"+m_knickName;
         m_levelexp = Levelexp();
@@ -557,7 +605,7 @@ public class PlayerController : MonoBehaviour
     {
         m_skill = GetComponent<PlayerSkillController>();
         m_navAgent = GetComponent<NavMeshAgent>();
- 
+        m_audio = GetComponent<AudioSource>();
         m_animCtr = GetComponent<PlayerAnimController>();
         m_leftDir = Utill.GetChildObject(gameObject, "LeftDir");
         m_weaponData = new WeaponData();

@@ -4,6 +4,7 @@ using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
+using static SoundManager;
 
 public class Gun : MonoBehaviour
 {
@@ -73,7 +74,7 @@ public class Gun : MonoBehaviour
             }
             GunManager.m_animCtr.Play("ShotReload"); //샷건장전 애니메이션 실행
             yield return new WaitForSeconds(m_player.GetStatus.reloadTime); //샷건 장전시간동안 대기
-            m_gunAudio.PlayOneShot(m_reloadSound);
+            SoundManager.Instance.PlaySFX(m_reload, m_gunAudio);
             ammoRemain++;
             ammoCheck();
         }
@@ -89,7 +90,7 @@ public class Gun : MonoBehaviour
         }
         else
         {
-            m_gunAudio.PlayOneShot(m_reloadSound);   //총의 상태를 Reload로 바꾸어 발사를 막고 시간이 지난 후 총알을 체워주고 준비상태로 변경
+            SoundManager.Instance.PlaySFX(m_reload, m_gunAudio);
             float speed = 2 / reloadTime;
             GunManager.m_animCtr.SetFloat("ReloadTime", speed);
             GunManager.m_animCtr.Play("Reload");
@@ -201,7 +202,6 @@ public class Gun : MonoBehaviour
                     }
                    
                 }
-
                 Debug.DrawRay(m_firePos.position, shotFire * m_player.GetStatus.AtkDist, Color.yellow, 0.1f);
             }
             m_flashEffect.Play();  //화염이펙트
@@ -280,12 +280,10 @@ public class Gun : MonoBehaviour
         }
         if (lastfire && ammoRemain == 1) //마지막 한발특성이 활성화 되어있고 탄환이 한발일때 사격을 시도하면 5배의 데미지
         {
-          //  Debug.Log("LastFire 실행!  데미지 : " + damage*5);
             mon.SetDamage(type, damage * 5, m_player, false);
         }
         else
         {
-          //  Debug.Log("일반 사격 실행!  데미지 : " + damage);
             mon.SetDamage(type, damage, m_player, false);
         }
         hitPos = hit.point;

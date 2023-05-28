@@ -13,7 +13,7 @@ public class SingletonDontDestroy<T> : MonoBehaviour where T : SingletonDontDest
         if (Instance == null)
         {
             Instance = (T)this;
-            OnAwake();
+            OnAwake();;
             DontDestroyOnLoad(gameObject);
         }
         else

@@ -23,24 +23,24 @@ public class MonsterController : MonoBehaviour
     }
     ProjectileController m_burn;
     ProjectileController m_crush;
-    AudioSource m_source;
+    protected AudioSource m_source;
     HUDController m_hudPanel;
     [SerializeField, HideInInspector]
     MonStat m_monStat;
     [SerializeField]
     Renderer[] m_Renderers;
     [SerializeField]
-    protected  PlayerController m_player; //타겟을 지정하기 위함
+    protected PlayerController m_player; //타겟을 지정하기 위함
     [Header("몬스터 능력치")]
     [SerializeField]
     protected MonStatus m_status;
     protected TweenMove m_tweenmove;
- 
+
     public MonStatus GetStatus { get { return m_status; } set { m_status = value; } }
 
     public MonsterType Type { get; set; }
     protected NavMeshAgent m_navAgent;
-    protected  MonsterAnimController m_animctr;
+    protected MonsterAnimController m_animctr;
     protected Animator m_animFloat;
     public Transform DummyHud;
     [SerializeField]
@@ -51,7 +51,7 @@ public class MonsterController : MonoBehaviour
     protected bool isburn;
     int m_delayFrame;
 
-   
+
     float defence = 0;
 
     #region coroutine\
@@ -93,8 +93,8 @@ public class MonsterController : MonoBehaviour
         var effectName = TableEffect.Instance.m_tableData[7].Prefab[1];
         var effect = EffectPool.Instance.Create(effectName);
         m_crush = effect.gameObject.GetComponent<ProjectileController>();
-        m_crush.SetFollowProjectile(gameObject.GetComponent<MonsterController>(),0);
-        m_crush.transform.position= gameObject.transform.position;
+        m_crush.SetFollowProjectile(gameObject.GetComponent<MonsterController>(), 0);
+        m_crush.transform.position = gameObject.transform.position;
         float speed = m_status.speed - m_status.speed * value; //이동속도 감소효과
         m_status.defense = m_status.defense - m_status.defense * value;
         m_navAgent.speed = speed;
@@ -120,25 +120,26 @@ public class MonsterController : MonoBehaviour
     }
     protected virtual void AnimEvent_SetAttack()
     {
-        float damage =  CalculationDamage.NormalDamage(m_status.damage, m_player.GetStatus.defense,0f);
+        PlayAtkSound();
+        float damage = CalculationDamage.NormalDamage(m_status.damage, m_player.GetStatus.defense, 0f);
         var dir = m_player.transform.position - transform.position;
         float sqrAttackDist = Mathf.Pow(m_status.attackDist, 2f);
         if (Mathf.Approximately(dir.sqrMagnitude, sqrAttackDist) || dir.sqrMagnitude < sqrAttackDist)
-        {      
+        {
             var dot = Vector3.Dot(transform.forward, dir.normalized);
             if (dot >= 0.5f) //공격시 지정한 범위 안쪽을 향한 공간일때만 데미지를 가하는 식으로.
             {
-                m_player.GetDamage(damage);               
+                m_player.GetDamage(damage);
             }
         }
     }
     void AnimEvent_AttackFinished()
     {
-            SetIdle(0.1f);
+        SetIdle(0.1f);
     }
     void AnimEvent_HitFinished()
     {
-          if(m_status.hp > 0)
+        if (m_status.hp > 0)
         {
             m_motionDelaycoroutine = StartCoroutine(Coroutine_MotionDelay());
         }
@@ -155,10 +156,22 @@ public class MonsterController : MonoBehaviour
         m_hudPanel.DisplayDamage(type, -value, m_status.hp / m_status.hpMax);
     }
     // Start is called before the first frame update
-    public void PlayHitSound(string sound) //피격시 소리 재생
+    #region SFX
+
+    public virtual void PlayHitSound(string sound) //피격시 소리 재생
     {
         SoundManager.Instance.PlaySFX(sound, m_source);
+        SoundManager.Instance.PlaySFX("SFX_ZombieDamaged", m_source);
     }
+    void PlayDieSound()
+    {
+        SoundManager.Instance.PlaySFX("SFX_ZombieDeath", m_source);
+    }
+    protected virtual void PlayAtkSound()
+    {
+        SoundManager.Instance.PlaySFX("SFX_ZombieAtk", m_source);
+    }
+    #endregion
     public void SetMonster(PlayerController player, HUDController hud)
     {
         m_player = player;
@@ -198,6 +211,7 @@ public class MonsterController : MonoBehaviour
 
     protected virtual void SetDie()
     {
+        PlayDieSound();
         StopAllCoroutines();
         int money = Mathf.CeilToInt(Random.Range(m_status.coin / 2, m_status.coin / 0.7f));
         int score = Mathf.CeilToInt(Random.Range(m_status.score / 2, m_status.score / 0.7f));

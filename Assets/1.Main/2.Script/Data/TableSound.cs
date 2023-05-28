@@ -1,8 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static SoundManager;
-
+//using static SoundManager;
+public enum SoundType
+{
+    BGM,
+    SFX,
+    MAX
+}
 public class TableSound
 {
     public string Sound { get; set; }
@@ -24,8 +29,7 @@ public class TableSoundInfo : Singleton<TableSoundInfo>
     {
         m_soundDic.Clear();
         TableLoader.Instance.LoadData(TableLoader.Instance.LoadTableData("SoundFX"));
-
-        for(int i = 0; i < 32;  i++)
+        for(int i = 0; i < 34;  i++)
         {
             TableSound data = new TableSound();
             string str = TableLoader.Instance.GetString("Type", i);

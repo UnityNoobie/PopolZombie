@@ -30,11 +30,13 @@ public class BossController : MonsterController
     bool isSkill()
     {
         int skillRate = Random.Range(0, 100);
-        if (skillRate <= 10) return false;
+        if (skillRate <= 70) return false;
         else return true;
     }
+    #region Coroutine
     IEnumerator Coroutine_Rage()
     {
+        PlayRage();
         isRage = true;
         m_state = MonsterState.Rage;
         var effectName = TableEffect.Instance.m_tableData[8].Prefab[2];
@@ -53,6 +55,7 @@ public class BossController : MonsterController
      //   m_fire.gameObject.SetActive(false);
         isRage= false;
     }
+    #endregion
     #region AnimEvent
     void AnimEvent_CancleSkill()
     {
@@ -61,6 +64,7 @@ public class BossController : MonsterController
     }
     void AnimEvent_Skill1()    
     {
+        PlaySkill1();
         m_skill2Pos.gameObject.SetActive(false);
         m_skill1Pos.gameObject.SetActive(false);
         var effectName = TableEffect.Instance.m_tableData[8].Prefab[0];
@@ -73,6 +77,7 @@ public class BossController : MonsterController
     } 
     void AnimEvent_Skill2()
     {
+        PlaySkill2();
         m_skill1Pos.gameObject.SetActive(false);
         m_skill2Pos.gameObject.SetActive(false);
         var effectName = TableEffect.Instance.m_tableData[8].Prefab[1];
@@ -105,13 +110,45 @@ public class BossController : MonsterController
         m_skill2Pos.gameObject.SetActive(false) ;
     }
     #endregion
+    #region SFX
+    public override void PlayHitSound(string sound) //피격시 소리 재생
+    {
+        SoundManager.Instance.PlaySFX(sound, m_source);
+        SoundManager.Instance.PlaySFX("SFX_BossHit", m_source);
+    }
+    protected override void PlayAtkSound()
+    {
+        SoundManager.Instance.PlaySFX("SFX_BossAtk", m_source);
+    }
+    void PlaySwingSound()
+    {
+        SoundManager.Instance.PlaySFX("SFX_ZombieAtk", m_source);
+    }
+    void PlayStepSound()
+    {
+        SoundManager.Instance.PlaySFX("SFX_BossChase", m_source);
+    }
+    void PlaySkill1()
+    {
+        SoundManager.Instance.PlaySFX("SFX_BossSkill", m_source);
+    }
+    void PlaySkill2()
+    {
+        SoundManager.Instance.PlaySFX("SFX_BossSkill2", m_source);
+    }
+    void PlayRage()
+    {
+        SoundManager.Instance.PlaySFX("SFX_BossRage", m_source);
+    }
+    #endregion
     void SetAttack()
     {
         SetState(MonsterState.Attack); //공격 상태로 변경
         if(isSkill())  //30퍼센트 확률로 스킬 실행하도록.
         {
-            if(Random.Range(0,5) <= 2)
+            if(Random.Range(0,5) <= 1)
             {
+                
                 m_skill1Pos.gameObject.SetActive(true);
                // m_navAgent.ResetPath();
                 m_animctr.Play(MonsterAnimController.Motion.Skill1);
@@ -126,7 +163,8 @@ public class BossController : MonsterController
         }
         else {
           //  m_navAgent.ResetPath();
-            m_animctr.Play(MonsterAnimController.Motion.Attack); }
+             PlaySwingSound();
+             m_animctr.Play(MonsterAnimController.Motion.Attack); }
        
     }
 

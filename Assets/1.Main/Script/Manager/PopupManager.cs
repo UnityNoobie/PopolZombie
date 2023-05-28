@@ -58,9 +58,9 @@ public class PopupManager : SingletonDontDestroy<PopupManager>
         if(Input.GetKeyDown(KeyCode.Space))
         {
             if (UnityEngine.Random.Range(1, 101) % 2 == 0)
-                PopupOpen_OkCancel("공지사항", "안녕하세요 SBS게임아카데미입니다.\r\n현재 팝업테스트 중입니다.", null, null, "확인", "취소");
+                PopupOpen_OkCancel("공지사항", "안녕하십니까.\r\n현재 팝업테스트 중입니다.", null, null, "확인", "취소");
             else
-                PopupOpen_Ok("종강안내", "현재 불금이라 수업을 진행하기 어렵습니다.", null, "결정");
+                PopupOpen_Ok("서비스종료", "데이터 유실로 인해 서비스를 종료합니다. .", null, "결정");
         }
     }
 }

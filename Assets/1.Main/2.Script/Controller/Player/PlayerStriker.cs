@@ -18,9 +18,6 @@ public class PlayerStriker : MonoBehaviour
     public MeleeState meleeState { get; set; }
     public static bool isActive = true;
     float m_lastAttackTime;
-  
-   
-
     public void ChangeMelee(GameObject newWeapon, WeaponType type, int ID, int grade)  //테스트용
     {
         if (GunManager.currentWeapon != null) //무기가 비어있는 상태가 아니라면!

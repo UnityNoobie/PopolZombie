@@ -31,7 +31,6 @@ public class GunManager : MonoBehaviour
     public WeaponData m_weapondata{ get; set; }
    
     public static Transform currentWeapon;
-    public static Transform subWeapon; //인벤토리 시스템에서 주무기, 보조무기 적용하여하기위해              아직은 할당 X
     public static bool isGun;
     public static PlayerAnimController m_animCtr;
     public static bool isChange = false;
@@ -83,7 +82,7 @@ public class GunManager : MonoBehaviour
                 {
                 m_player.AnimEvnet_MeleeFinished();
                 }    
-            PlayerStriker.isActive = false;
+                PlayerStriker.isActive = false;
                 isChange = true;
                 m_animCtr.Play("MeleeArm");
                 yield return new WaitForSeconds(weaponChangeTime);
