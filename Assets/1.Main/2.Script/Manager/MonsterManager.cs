@@ -38,7 +38,7 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
         for (int i = 0; i < 4; i++)
         {
             CreateMonster();
-            yield return new WaitForSeconds(7);
+            yield return new WaitForSeconds(5);
         }
         isSpawning=false;
         StartCoroutine(CorouTine_CheckRoundEnd());
@@ -62,7 +62,7 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
     }
     float StatScale()
     {
-        float StatScale = 1 + (GameManager.Instance.GetRoundInfo() * 0.05f);
+        float StatScale = 1 + (GameManager.Instance.GetRoundInfo() * 0.1f);
         return StatScale;
     }
     

@@ -41,7 +41,7 @@ public class TableSkillStat
     public float DamageRigist { get; set; }
     public float HP { get; set; }
     public float KnockBackRate { get; set; }
-    public int Heal { get; set; }
+    public float Heal { get; set; }
     public int LastFire { get; set; }
     public int Pierce { get; set; }
     public int Boom { get; set; }
@@ -59,7 +59,7 @@ public class TableSkillStat
     public int PrevID { get; set; }
     public int SkillGrade { get; set; }
     public TableSkillStat() { }
-    public TableSkillStat(string skillName, int Id, string image, SkillType skilltype, SkillWeaponType skillweapon, string skillInfo, float damage, float atkSpeed, float Reload, float speed, int criRate, float cridam, float mag, float defence, float damageRigist, float hp, float knockbackrate, int heal, int lastfire, int pierce, int boom, int skillpoint, float armorpierce, float remove, int drain, float crush, int burn, bool isactive, int skillPos, int nextID, int prevID, int skillGrade)
+    public TableSkillStat(string skillName, int Id, string image, SkillType skilltype, SkillWeaponType skillweapon, string skillInfo, float damage, float atkSpeed, float Reload, float speed, int criRate, float cridam, float mag, float defence, float damageRigist, float hp, float knockbackrate, float heal, int lastfire, int pierce, int boom, int skillpoint, float armorpierce, float remove, int drain, float crush, int burn, bool isactive, int skillPos, int nextID, int prevID, int skillGrade)
     {
         // int burn, bool isactive
         this.SkillName = skillName;
@@ -256,7 +256,7 @@ class Skilldata : Singleton<Skilldata>
             data.DamageRigist = TableLoader.Instance.GetFloat("DamageRigist", i);
             data.KnockBackRate = TableLoader.Instance.GetFloat("KnockBackRate", i);
             data.HP = TableLoader.Instance.GetFloat("HP", i);
-            data.Heal = TableLoader.Instance.GetInteger("Heal", i);
+            data.Heal = TableLoader.Instance.GetFloat("Heal", i);
             data.LastFire = TableLoader.Instance.GetInteger("LastFire", i);
             data.Pierce = TableLoader.Instance.GetInteger("Pierce", i);
             data.Boom = TableLoader.Instance.GetInteger("Boom", i);

@@ -107,33 +107,27 @@ public class ArmorManager : MonoBehaviour
     {
         ArmorData m_armorData =  armorData.GetArmorData(Id);//방어궁의 정보를 가져옴
         statusui.SetSlot(Id, m_armorData.Image, m_armorData.armorType, ItemType.Armor);
-        /*
+        
         if (m_armorData.armorType.Equals(ArmorType.Helmet))
         {
             SetHelmet(Id, m_armorData.Grade - 1);
-            m_inven.SetArmorImage(m_armorData.Image, ArmorType.Helmet);
         }
         else if (m_armorData.armorType.Equals(ArmorType.Glove)) 
         {
             SetGloves(Id, m_armorData.Grade - 1);
-            m_inven.SetArmorImage(m_armorData.Image, ArmorType.Glove);
         }
         else if (m_armorData.armorType.Equals(ArmorType.Armor))
         {
             SetArmors(Id, m_armorData.Grade - 1);
-            m_inven.SetArmorImage(m_armorData.Image, ArmorType.Armor);
         }
         else if (m_armorData.armorType.Equals(ArmorType.Pants))
         {
             SetPants(Id, m_armorData.Grade - 1);
-            m_inven.SetArmorImage(m_armorData.Image, ArmorType.Pants);
         }
         else if (m_armorData.armorType.Equals(ArmorType.Boots))
         {
             SetBoots(Id, m_armorData.Grade - 1);
-            m_inven.SetArmorImage(m_armorData.Image, ArmorType.Boots);
         }
-        else { Debug.Log("방어구의 타입이 이상합니다. 확인바람"); }*/
         SetArmorData(); //방어구의 교체가 일어났으니 스탯 재정비.
     }
     public void SetHelmet(int id, int grade) //헬멧 장착을 위한 메서드

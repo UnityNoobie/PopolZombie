@@ -27,7 +27,7 @@ public class PlayerSkillController : MonoBehaviour
     float DamageRigist;
     float HP;
     float KnockBackRate;
-    int Heal;
+    float Heal;
     int LastFire;
     int Pierce;
     int Boom;

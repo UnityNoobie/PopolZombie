@@ -117,7 +117,6 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
         {
             m_audioClips.Add(m_bgmClips[i].name, m_bgmClips[i]);
         }
-        NightStart(); //테스트용 플레이
     }
     #endregion
 }

@@ -163,7 +163,6 @@ public class TableGunstat : Singleton<TableGunstat>
             if (data.Grade == 1) m_lowWeapon.Add(data.ID);
             else if (data.Grade == 2) m_midWeapon.Add(data.ID);
             else if (data.Grade == 3) m_highWeapon.Add(data.ID);
-            // Debug.Log(i + "번째" + data.Type + "타입" + "ID" + data.ID + "Grade" + data.Grade + "Damage :" + data.Damage + "AtkSpeed" + data.AtkSpeed + "공격방식 : " + data.AtkType);
             m_WeaponData.Add(data.ID, data);
         }
         TableLoader.Instance.Clear();

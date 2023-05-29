@@ -1579,9 +1579,6 @@ MonoBehaviour:
   m_shootSound: {fileID: 8300000, guid: 5a7265df145ebf14cb22a06d63a2131a, type: 3}
   m_reloadSound: {fileID: 8300000, guid: 3fb6d6ef6efd71e48a4f03b024421c16, type: 3}
   m_player: {fileID: 95808264624923301}
-  m_grade: 0
-  m_id: 0
-  isReload: 0
   isfirst: 1
 --- !u!114 &135239024
 MonoBehaviour:
@@ -1600,9 +1597,6 @@ MonoBehaviour:
   m_shootSound: {fileID: 8300000, guid: 5a7265df145ebf14cb22a06d63a2131a, type: 3}
   m_reloadSound: {fileID: 8300000, guid: 3fb6d6ef6efd71e48a4f03b024421c16, type: 3}
   m_player: {fileID: 95808264624923301}
-  m_grade: 0
-  m_id: 0
-  isReload: 0
   isfirst: 1
 --- !u!114 &135239025
 MonoBehaviour:
@@ -1621,9 +1615,6 @@ MonoBehaviour:
   m_shootSound: {fileID: 8300000, guid: 5a7265df145ebf14cb22a06d63a2131a, type: 3}
   m_reloadSound: {fileID: 8300000, guid: 3fb6d6ef6efd71e48a4f03b024421c16, type: 3}
   m_player: {fileID: 95808264624923301}
-  m_grade: 0
-  m_id: 0
-  isReload: 0
   isfirst: 1
 --- !u!114 &135239026
 MonoBehaviour:
@@ -1642,9 +1633,6 @@ MonoBehaviour:
   m_shootSound: {fileID: 8300000, guid: 5a7265df145ebf14cb22a06d63a2131a, type: 3}
   m_reloadSound: {fileID: 8300000, guid: 3fb6d6ef6efd71e48a4f03b024421c16, type: 3}
   m_player: {fileID: 95808264624923301}
-  m_grade: 0
-  m_id: 0
-  isReload: 0
   isfirst: 1
 --- !u!114 &135239037
 MonoBehaviour:
@@ -18373,9 +18361,6 @@ MonoBehaviour:
   m_shootSound: {fileID: 8300000, guid: 5a7265df145ebf14cb22a06d63a2131a, type: 3}
   m_reloadSound: {fileID: 8300000, guid: 3fb6d6ef6efd71e48a4f03b024421c16, type: 3}
   m_player: {fileID: 95808264624923301}
-  m_grade: 0
-  m_id: 0
-  isReload: 0
   isfirst: 1
 --- !u!114 &1399666919 stripped
 MonoBehaviour:

@@ -14,7 +14,7 @@ public class LightIntensityTween : MonoBehaviour
     {
         directionalLight.DOIntensity(0.05f, 7);
     }
-    void Start()
+    void Awake()
     {
         directionalLight = GetComponent<Light>();
     }

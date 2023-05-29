@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour
     float skillDamageRigist;
     float skillHP;
     float skillKnockBackRate;
-    int skillHeal;
+    float skillHeal;
     int skillLastFire;
     int skillPierce;
     int skillBoom;
@@ -391,7 +391,7 @@ public class PlayerController : MonoBehaviour
         armSpeed = speed;
         SetStatus(m_weaponData.ID);
     }
-    public void SetSkillData(float damage, float atkspeed, float reload, float speed, int crirate, float cridamage, float mag, float defence, float damagerigist, float hp, float knockbackrate, int heal, int lastfire, int pierce, int boom, float armorPierce, float Remove, int Drain, float Crush, int Burn)
+    public void SetSkillData(float damage, float atkspeed, float reload, float speed, int crirate, float cridamage, float mag, float defence, float damagerigist, float hp, float knockbackrate, float heal, int lastfire, int pierce, int boom, float armorPierce, float Remove, int Drain, float Crush, int Burn)
     {
         skillamage = damage;
         skillAtkSpeed = atkspeed;
@@ -430,6 +430,11 @@ public class PlayerController : MonoBehaviour
             CheckCoroutine = StartCoroutine(Coroutine_SustainedHeal());
         }
         //CheckBoolin();
+    }
+    public void LevelUp()
+    {
+        m_level++;
+        m_status.level = m_level;
     }
     public int GetLVInfo()
     {
@@ -582,10 +587,14 @@ public class PlayerController : MonoBehaviour
         effect.SetActive(true);
         SetStatus(m_weaponData.ID); //스테이터스 재정비 합니다잉
     }
+    void LevelUPSend()
+    {
+
+    }
     void LevelUP()
     {
         PlayLvUpSound();
-        m_status.level++;
+        LevelUp();
         m_levelexp = Levelexp();
         HPControl(Mathf.CeilToInt(m_status.hpMax)); //풀피로 만들어줌
         UIManager.Instance.LevelUPUI(m_status.level);

@@ -37,8 +37,8 @@ public class GameManager : SingletonDontDestroy<GameManager>
         SetNextRound();
         SoundManager.Instance.DayStart();
         UGUIManager.Instance.StartRound();
-        Light.StartDay();
         MonsterManager.Instance.ResetBossCount();
+        Light.StartDay();
     }
     public void StartNight()
     {

@@ -60,6 +60,7 @@
     <Compile Include="Assets\1.Main\2.Script\Manager\ImageLoader.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\ResizePanel.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\LagRotation.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Utill\LightIntensityTween.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIScrollView.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIToggle.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\StoreUI.cs" />
@@ -140,12 +141,14 @@
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\LoadLevelOnClick.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UITooltip.cs" />
     <Compile Include="Assets\SlimUI\Modern Menu 1\Scripts\Managers\UIMenuManager.cs" />
+    <Compile Include="Assets\UITween\Prefabs\Click Effect Pref\ClickedWaveAnimation.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\Store.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\BMSymbol.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonColor.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerAnimController.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\PanelItemInfo.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\ScrollDetailTexture.cs" />
+    <Compile Include="Assets\UITween\Scripts\UITween.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIToggledComponents.cs" />
     <Compile Include="Assets\1.Main\2.Script\Data\Status.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\Slot.cs" />
@@ -175,6 +178,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\UI\UISprite.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\TypewriterEffect.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenRotation.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\RoundUI.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenScale.cs" />
     <Compile Include="Assets\1.Main\2.Script\Manager\GameManager.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\System\InvDatabase.cs" />
@@ -210,11 +214,15 @@
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIProgressBar.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIDragDropItem.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\ShowSliderValue.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Manager\UGUIManager.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerShooter.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenOrthoSize.cs" />
+    <Compile Include="Assets\UITween\ScenesExamplesScripts\ActivateOnEnable.cs" />
+    <Compile Include="Assets\UITween\Scripts\ReferencedFrom.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\ActiveAnimation.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\DropMe.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\UIRect.cs" />
+    <Compile Include="Assets\UITween\Scripts\EasyTween.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\SpiterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIWrapContent.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\AnimationOrTween.cs" />
@@ -239,6 +247,7 @@
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\System\InvGameItem.cs" />
     <Compile Include="Assets\External\HUD Text\Examples\Scripts\ChatParticipant.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\UIWidget.cs" />
+    <Compile Include="Assets\UITween\ScenesExamplesScripts\CreateAnimImage.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\BuyItems.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\StatusUI.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UISpriteAnimation.cs" />
@@ -255,10 +264,12 @@
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\ChatInput.cs" />
     <Compile Include="Assets\External\HUD Text\Examples\Scripts\Rotate.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIPopupList.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Utill\SpawnPos.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UITexture.cs" />
     <Compile Include="Assets\1.Main\Script\Manager\LoadSceneManager.cs" />
     <Compile Include="Assets\SlimUI\Modern Menu 1\Scripts\ThemeEditor\ThemedUIElement.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIFont.cs" />
+    <Compile Include="Assets\UITween\ScenesExamplesScripts\FollowClick.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\AnimatedAlpha.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\Game\EquipRandomItem.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\ActiveSkill.cs" />
@@ -289,17 +300,6 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Manager\UGUIManager.cs" />
-    <Compile Include="Assets\1.Main\2.Script\UI\RoundUI.cs" />
-    <Compile Include="Assets\UITween\ScenesExamplesScripts\CreateAnimImage.cs" />
-    <Compile Include="Assets\UITween\ScenesExamplesScripts\ActivateOnEnable.cs" />
-    <Compile Include="Assets\UITween\Scripts\UITween.cs" />
-    <Compile Include="Assets\UITween\Scripts\ReferencedFrom.cs" />
-    <Compile Include="Assets\UITween\ScenesExamplesScripts\FollowClick.cs" />
-    <Compile Include="Assets\UITween\Scripts\EasyTween.cs" />
-    <Compile Include="Assets\UITween\Prefabs\Click Effect Pref\ClickedWaveAnimation.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Utill\LightIntensityTween.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Utill\SpawnPos.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -629,14 +629,14 @@
     <Reference Include="Unity.Burst.Cecil.Rocks">
       <HintPath>Library\PackageCache\com.unity.burst@1.6.5\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
     </Reference>
+    <Reference Include="DOTween">
+      <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.8\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.0.2\Runtime\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="DOTween">
-      <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.4f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
