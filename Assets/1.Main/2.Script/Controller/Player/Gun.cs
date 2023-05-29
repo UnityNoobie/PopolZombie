@@ -9,6 +9,7 @@ using static SoundManager;
 public class Gun : MonoBehaviour
 {
 
+    #region Constants and Fields
     public enum GunState
     {
         Ready,
@@ -17,7 +18,7 @@ public class Gun : MonoBehaviour
         Dead,
         Idle
     }
-    public GunState gunstate { get; set; }
+  
     
     [SerializeField]
     ParticleSystem m_flashEffect;
@@ -31,25 +32,29 @@ public class Gun : MonoBehaviour
     AudioClip m_reloadSound;
     [SerializeField]
     PlayerController m_player;
-   // SoundManager m_soundManager { get; set; }
     Transform m_firePos;
-    public int m_grade;
-    public int m_id;
+    public WeaponData GetStatus = new WeaponData();
+    int m_grade;
+    int m_id;
     string m_shot;
     string m_hit;
     string m_reload;
-    public WeaponType m_type { get; set; }
     int ammoRemain;
-    public bool isReload = false;
     float lastFireTime;
-    public WeaponData GetStatus = new WeaponData();
-    public bool isfirst = true; 
+    public bool isfirst = true;
+    bool isReload = false;
     bool lastfire;
     bool pierce;
     bool burn;
     bool boom;
-    //bool remove;
+    #endregion
 
+    #region Property
+    public WeaponType m_type { get; set; }
+    public GunState gunstate { get; set; }
+    #endregion
+
+    #region Coroutine
     IEnumerator ShootEffect(Vector3 hitPos)
     {     
         m_flashEffect.Play();  //화염이펙트
@@ -100,6 +105,9 @@ public class Gun : MonoBehaviour
             gunstate = GunState.Ready;
         }
     }
+    #endregion
+
+    #region Methods
     public void SetGun(int id,int grade,WeaponType type)
     {
         m_id = id;
@@ -157,8 +165,6 @@ public class Gun : MonoBehaviour
         ammoCheck();
         lastFireTime = 0;
     }
-    #region Gun_Fire_Sequance
-
     public void Fire()
     {
         if (gunstate == GunState.Ready && Time.time >= lastFireTime + 1 / m_player.GetStatus.atkSpeed) //총의 상태가 Ready이고 발사속도가 준비되었을 경우.
@@ -308,7 +314,4 @@ public class Gun : MonoBehaviour
     }
 
     #endregion
-
-
-
 }

@@ -6,22 +6,25 @@ using UnityEngine.UI;
 
 public class ActiveSkill : MonoBehaviour
 {
+    #region Constants and Fields
     TextMeshProUGUI m_text;
     Button m_truebutton;
     Button m_falsebutton;
     SkillSlot m_slot;
     int m_point;
     string m_name;
-    
+    #endregion
+
+    #region Methods
     public void OnclickedTrue()
     {
         m_slot.ActiveSkill(); //스킬업 적용
-        UIManager.Instance.SystemMessageCantOpen(m_name + " 습득에 성공하였습니다.");
+        UGUIManager.Instance.SystemMessageSendMessage(m_name + " 습득에 성공하였습니다.");
         DeActiveUI();
     }
     public void OnclickedFalse()
     {
-        UIManager.Instance.SystemMessageCantOpen("스킬 습득을 취소하였습니다.");
+        UGUIManager.Instance.SystemMessageSendMessage("스킬 습득을 취소하였습니다.");
         DeActiveUI();
     }
     public void DeActiveUI()
@@ -42,7 +45,7 @@ public class ActiveSkill : MonoBehaviour
     {
         if (gameObject.activeSelf)
         {
-            UIManager.Instance.SystemMessageCantOpen("스킬 습득창이 이미 열려있습니다. 기존 작업을 마무리 후 작업해주세요."); //이미 열려있을 시 메세지 호출 후 리턴
+            UGUIManager.Instance.SystemMessageSendMessage("스킬 습득창이 이미 열려있습니다. 기존 작업을 마무리 후 작업해주세요."); //이미 열려있을 시 메세지 호출 후 리턴
             return;
         }
         m_name = name;
@@ -59,5 +62,5 @@ public class ActiveSkill : MonoBehaviour
         m_truebutton.onClick.AddListener(OnclickedTrue);
         m_falsebutton.onClick.AddListener(OnclickedFalse);
     }
-   
+    #endregion
 }

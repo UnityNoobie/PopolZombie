@@ -8,14 +8,15 @@ using UnityEngine.UI;
 
 public class SlotStatus : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    #region Constants and Fields
     PanelItemInfo m_infoUI;
     TextMeshProUGUI m_itemName;
     Image m_itemImage;
     ItemType m_type;
     int m_id;
+    #endregion
 
-
-
+    #region Methods
     public void SetSlotItem(int id, string image, ItemType type,PanelItemInfo infoui)
     {
         m_itemImage = Utill.GetChildObject(gameObject, "ItemImage").GetComponent<Image>();
@@ -36,5 +37,6 @@ public class SlotStatus : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if(pointer.pointerEnter.CompareTag("Slot"))
         m_infoUI.DeActiveUI();
     }
-    
+    #endregion
+
 }

@@ -9,10 +9,9 @@ using static GunManager;
 
 public class UIManager : SingletonDontDestroy<UIManager>
 {
+    #region Constants and Fields
     [SerializeField]
     public UILabel m_weaponInfoUI;
-    [SerializeField]
-    TextMeshProUGUI m_systemMessage;
     [SerializeField]
     UILabel waveUI;
     [SerializeField]
@@ -35,7 +34,6 @@ public class UIManager : SingletonDontDestroy<UIManager>
     TweenAlpha m_levelUpUI;
     [SerializeField]
     UITexture m_weaponImage;
-
     [SerializeField]
     UILabel m_Score;
     [SerializeField] 
@@ -46,37 +44,9 @@ public class UIManager : SingletonDontDestroy<UIManager>
     UILabel m_screenLV;
     [SerializeField]
     QuickSlot m_quickSlot;
-    [SerializeField]
-    StoreUI m_store;
-    [SerializeField]
-    SkillUI m_skillUI;
-    [SerializeField]
-    StatusUI m_statusUI;
+    #endregion
 
-
-    IEnumerator SystemMessage(string message)
-    {
-        m_systemMessage.text = message;
-        yield return new WaitForSeconds(1.5f);
-        m_systemMessage.text = null;
-    }
-    public void CloseTabs()
-    {
-        m_store.CloseAllTabs();
-        m_skillUI.DeActiveSkill();
-        m_statusUI.SetActive(false);
-    }
-    public void SkillUIChange(bool aa,PlayerSkillController skill)
-    {
-        if(aa)
-        {
-            m_skillUI.ActiveSkill(skill);
-        }
-        else
-        {
-            m_skillUI.DeActiveSkill();
-        }
-    }
+    #region ScreenUI
     public void ScoreChange(float score)
     {
        m_Score.text = "Score : " +score;
@@ -105,7 +75,6 @@ public class UIManager : SingletonDontDestroy<UIManager>
         m_EXP.text = (exp+" / "+max);
         m_EXPBar.value = exp / max;
     }
-
     public void DamagedUI()
     {
         if (!m_damagedUI.gameObject.activeSelf)
@@ -193,27 +162,18 @@ public class UIManager : SingletonDontDestroy<UIManager>
     }
     public void EnemyLeft(int remain)
     {
-        m_enemyReamain.text = remain.ToString();
+        m_enemyReamain.text = "남은적 : "+remain;
     }
-    public void SystemMessageItem(string name)
+    public void TimeLeft(int remain)
     {
-        StartCoroutine(SystemMessage(name + " 의 수량이 부족합니다."));
+        m_enemyReamain.text = "밤까지 : " + remain;
     }
-    public void SystemMessageCantUse(string name)
-    {
-        StartCoroutine(SystemMessage(name + " 을 사용할 수 없습니다. "));
-    }
-    public void SystemMessageCantOpen(string text)
-    {
-        StartCoroutine(SystemMessage(text));
-    }
-
+    #endregion
     private void Start()
     {
         Skilldata.Instance.Load();
         ImageLoader.Instance.Load();
     }
 
-    
 }
 

@@ -9,6 +9,7 @@ using static InvBaseItem;
 
 public class BuyItems : MonoBehaviour
 {
+    #region Constants and Fields
     [SerializeField]
     TextMeshProUGUI m_text;
     [SerializeField]
@@ -18,16 +19,20 @@ public class BuyItems : MonoBehaviour
     Slot m_slot;
     int m_price;
     string m_name;
+    #endregion
 
+    #region Methods
     public void OnclickedTrue()
     {
+        SoundManager.Instance.PlaySFX("SFX_ClickUI", Camera.main.GetComponent<AudioSource>());
         m_slot.BuyItem();
-        UIManager.Instance.SystemMessageCantOpen(m_name + " 구매에 성공하였습니다.");
+        UGUIManager.Instance.SystemMessageSendMessage(m_name + " 구매에 성공하였습니다.");
         DeActiveUI();
     }
     public void OnclickedFalse()
     {
-        UIManager.Instance.SystemMessageCantOpen("아이템 구입을 취소하였습니다.");
+        SoundManager.Instance.PlaySFX("SFX_ClickUI", Camera.main.GetComponent<AudioSource>());
+        UGUIManager.Instance.SystemMessageSendMessage("아이템 구입을 취소하였습니다.");
         DeActiveUI();
     }
     public void DeActiveUI()
@@ -46,7 +51,7 @@ public class BuyItems : MonoBehaviour
     {
         if(gameObject.activeSelf)
         {
-            UIManager.Instance.SystemMessageCantOpen("구매창이 이미 열려있습니다. 기존 작업을 마무리 후 작업해주세요."); //이미 열려있을 시 메세지 호출 후 리턴
+            UGUIManager.Instance.SystemMessageSendMessage("구매창이 이미 열려있습니다. 기존 작업을 마무리 후 작업해주세요."); //이미 열려있을 시 메세지 호출 후 리턴
             return;
         }
         m_slot = slot;
@@ -63,4 +68,5 @@ public class BuyItems : MonoBehaviour
     {
         Init();
     }
+    #endregion
 }

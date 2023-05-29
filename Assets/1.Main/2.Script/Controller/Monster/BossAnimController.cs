@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BossAnimController : AnimationController
 {
+    #region Constants and Fields
     [SerializeField]
     Motion m_motion;
    public enum Motion
@@ -18,8 +19,15 @@ public class BossAnimController : AnimationController
         Die,
         Max
     }
-    public Motion GetMotion { get { return m_motion; } }
+
     StringBuilder m_sb = new StringBuilder();
+    #endregion
+
+    #region property
+    public Motion GetMotion { get { return m_motion; } }
+    #endregion
+
+    #region Methods
     public void SetMotionState(Motion motion)
     {
         m_motion = motion;
@@ -36,9 +44,6 @@ public class BossAnimController : AnimationController
     {
         base.Start();     
     }
-
-
-
-
+    #endregion
 
 }

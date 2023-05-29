@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class EffectPool : SingletonMonoBehaviour<EffectPool> 
 {
+    #region Constants and Fields
     [SerializeField]
     int m_presetSize = 1;
     List<string> m_listEffectNames = new List<string>(); //이펙트의 이름으로 리스트작성
     Dictionary<string, GameObjectPool<EffectPoolUnit>> m_effectPool = new Dictionary<string, GameObjectPool<EffectPoolUnit>>(); //EffectPoolUnit을 상속받는 게임오브젝트풀을 딕셔너리로 만듬
     Dictionary<string, GameObject> m_dicPrefabList = new Dictionary<string, GameObject>(); //딕셔너리 이용하여 프리펩리스트 저장
+    #endregion
+
+    #region Methods
     IEnumerator CorouTine_SetActive(GameObject obj, bool isActive) //모종의 이유로 코드가 작동하지않아 임시로 사용하였으나 수정후 사용X 
     {
         yield return new WaitForEndOfFrame(); //한프레임동안 null해서 다음프레임에 다음코드 실행하기위함.
@@ -108,5 +112,5 @@ public class EffectPool : SingletonMonoBehaviour<EffectPool>
     {
         LoadEffect();
     }
-
+    #endregion
 }

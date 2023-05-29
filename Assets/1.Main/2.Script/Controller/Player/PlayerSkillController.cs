@@ -78,17 +78,17 @@ public class PlayerSkillController : MonoBehaviour
             CheckActivedSkillLV(skilltype); //현재 활성화되어있는 스킬리스트로 단계별 갯수 확인
             if(skillgrade == 2 && m_lowLvCount < 8)
             {
-                UIManager.Instance.SystemMessageCantOpen("1단계 스킬에 8개 이상 습득 후 습득 가능합니다.");
+                UGUIManager.Instance.SystemMessageSendMessage("1단계 스킬에 8개 이상 습득 후 습득 가능합니다.");
                 return false;
             }
             else if (skillgrade == 3 && m_midLvCount < 6)
             {
-                UIManager.Instance.SystemMessageCantOpen("2단계 스킬에 6개 이상 습득 후 습득 가능합니다.");
+                UGUIManager.Instance.SystemMessageSendMessage("2단계 스킬에 6개 이상 습득 후 습득 가능합니다.");
                 return false;
             }
             else if (skillgrade == 4 && m_highLvCount < 3)
             {
-                UIManager.Instance.SystemMessageCantOpen("하와왕");
+                UGUIManager.Instance.SystemMessageSendMessage("하와왕");
                 Debug.Log("ㅎ");
                 return false;
             }
@@ -97,7 +97,7 @@ public class PlayerSkillController : MonoBehaviour
         }
         else
         {
-            UIManager.Instance.SystemMessageCantOpen("스킬 포인트가 모자랍니다."); 
+            UGUIManager.Instance.SystemMessageSendMessage("스킬 포인트가 모자랍니다."); 
             return false;
         }
     }
@@ -111,12 +111,12 @@ public class PlayerSkillController : MonoBehaviour
         CheckActivedSkillLV(skilltype);
         if (grade == 3 && m_midLvCount < 6)
         {
-            UIManager.Instance.SystemMessageCantOpen("2단계 스킬에 6개 이상 습득 후 습득 가능합니다.");
+            UGUIManager.Instance.SystemMessageSendMessage("2단계 스킬에 6개 이상 습득 후 습득 가능합니다.");
             return false;
         }
         else if (grade == 4 && m_highLvCount < 3)
         {
-            UIManager.Instance.SystemMessageCantOpen("특성스킬을 모두 마스터 후 습득 가능합니다.");
+            UGUIManager.Instance.SystemMessageSendMessage("특성스킬을 모두 마스터 후 습득 가능합니다.");
             return false;
         }
         else return true;
@@ -132,10 +132,15 @@ public class PlayerSkillController : MonoBehaviour
 
     #endregion
 
+    #region Property
+  
+    public TableSkillStat m_skilldata{get;set;}
+    #endregion
+
+    #region Constants and Fields
     WeaponType m_weapontype;
     SkillWeaponType m_skillweapon;
     PlayerAbilityType m_abilityType;
-    public TableSkillStat m_skilldata{get;set;}
     PlayerController m_player;
     GunManager m_gunmanager;
     SkillUI m_skillUI;
@@ -147,6 +152,22 @@ public class PlayerSkillController : MonoBehaviour
 
 
     public List<int> m_skillList = new List<int>(); //현재 활성화한 스킬 리스트 저장용
+    #endregion
+
+    #region publicMethod
+    public void ActiveSkill(int id) //스킬 찍기를 시도한다면 그 스킬의 필요 포인트 확인하여 충분하면 찍는 방식. + 스킬UI에서 스킬포인트를 확인하기 때문에 여기서 삭제
+    {
+        m_skillPoint -= m_skilldata.GetSkillData(id).SkillPoint;
+        m_skillList.Add(id);
+        RefreshSKillData();
+        PushSkillUpSignal();
+    }
+    public void SetWeaponType(WeaponType type)  //무기 변경 시 마다 호출하여 현재 착용중인 무기와 스킬이 호환되는지 판단하기 위함.
+    {
+        m_weapontype = type;
+        RefreshSKillData();
+    }
+
     public void SetStore(SkillUI ui)
     {
         m_skillUI = ui;
@@ -155,6 +176,21 @@ public class PlayerSkillController : MonoBehaviour
     {
         m_abilityType = type;
     }
+    public void LevelUP() //레벨업 시 스킬포인트 증가 기능 최대 30까지 가능 하도록.
+    {
+        if (SPCount < 30)
+        {
+            m_skillPoint++;
+            SPCount++;
+        }
+        else if (SPCount == 30)
+        {
+            UGUIManager.Instance.SystemMessageSendMessage("최대 스킬 포인트에 도달했습니다.");
+        }
+    }
+    #endregion
+
+    #region privateMethod
     void RefreshSP()
     {
         m_skillUI.RefreshSP(this);
@@ -183,7 +219,7 @@ public class PlayerSkillController : MonoBehaviour
             }
         }
     }
-    #region privateMethod
+   
     void PushSkillUpSignal()
     {
         RefreshSP();
@@ -244,43 +280,13 @@ public class PlayerSkillController : MonoBehaviour
         }
         m_player.SetSkillData(Damage, AtkSpeed, Reload, Speed, CriRate, CriDamage, Mag, Defence, DamageRigist, HP, KnockBackRate, Heal, LastFire, Pierce, Boom, ArmorPierce, Remove, Drain, Crush, Burn);
     } //플레이어에게 데이터 전송
-
-    #endregion
-    public void LevelUP() //레벨업 시 스킬포인트 증가 기능 최대 30까지 가능 하도록.
-    {
-        if(SPCount < 30)
-        {
-            m_skillPoint++;
-            SPCount++;
-            //RefreshSP();
-        }
-        else if(SPCount == 30)
-        {
-            UIManager.Instance.SystemMessageCantOpen("최대 스킬 포인트에 도달했습니다.");
-        }
-    }
-
-    public void ActiveSkill(int id) //스킬 찍기를 시도한다면 그 스킬의 필요 포인트 확인하여 충분하면 찍는 방식. + 스킬UI에서 스킬포인트를 확인하기 때문에 여기서 삭제
-    {
-        m_skillPoint -= m_skilldata.GetSkillData(id).SkillPoint;
-        m_skillList.Add(id);
-        RefreshSKillData();
-        PushSkillUpSignal();
-    }
-    public void SetWeaponType(WeaponType type)  //무기 변경 시 마다 호출하여 현재 착용중인 무기와 스킬이 호환되는지 판단하기 위함.
-    {
-        m_weapontype = type;
-        RefreshSKillData();
-    }
-
     private void Awake()
     {
 
         m_skilldata = new TableSkillStat();
         m_player = GetComponent<PlayerController>();
         m_gunmanager = GetComponent<GunManager>();
-        m_skillPoint = 100; //테스트용 스킬포인트
         m_abilityType = PlayerAbilityType.None;
     }
-
+    #endregion
 }

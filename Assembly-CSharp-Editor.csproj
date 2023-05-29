@@ -140,6 +140,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\Editor\UIAtlasInspector.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Editor\UIFontInspector.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Editor\EventDelegateDrawer.cs" />
+    <Compile Include="Assets\UITween\Editor\EditorUITween.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\External\NGUI\Editor\FreeType.dll" />
@@ -447,6 +448,12 @@
     </Reference>
     <Reference Include="unityplastic">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.17\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTweenEditor">
+      <HintPath>Assets\Plugins\Demigiant\DOTween\Editor\DOTweenEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween">
+      <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>Library\PackageCache\com.unity.ext.nunit@1.0.6\net35\unity-custom\nunit.framework.dll</HintPath>
@@ -969,6 +976,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{02BD1DAE-834B-F4C0-CFAF-6739A20F607C}</Project>
+      <Name>Assembly-CSharp-firstpass</Name>
+    </ProjectReference>
     <ProjectReference Include="Assembly-CSharp.csproj">
       <Project>{6687B25B-9291-F8D9-75E4-BE4803C574E0}</Project>
       <Name>Assembly-CSharp</Name>

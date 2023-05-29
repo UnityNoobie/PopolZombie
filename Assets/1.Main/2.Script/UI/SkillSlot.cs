@@ -8,7 +8,8 @@ using UnityEngine.UI;
 
 public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,IPointerExitHandler
 {
-    
+
+    #region Constants and Fields
     TextMeshProUGUI m_text;
     PlayerSkillController m_player;
     ActiveSkill m_active;
@@ -25,6 +26,9 @@ public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,
 
     string m_skillname;
     public TableSkillStat m_skill = new TableSkillStat();
+    #endregion
+
+    #region Methods
     public void SetSkillSlot(int id, PlayerSkillController player, bool isActive,ActiveSkill activeskill,SkillInfo info) //스킬 슬롯 지정
     { 
         m_skillPoint = m_skill.GetSkillData(id).SkillPoint;
@@ -87,11 +91,12 @@ public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,
     }
     public void OnPointerUp(PointerEventData eventData) //클릭 시
     {
+        SoundManager.Instance.PlaySFX("SFX_ClickUI", Camera.main.GetComponent<AudioSource>());
         if (!m_isChoice) //평상시 상황에서
         {
             if (m_isActive)//습득한 스킬일 경우 경고 메세지 호출 후 무반응 하도록
             {
-                UIManager.Instance.SystemMessageCantOpen("이미 습득한 스킬입니다.");
+                UGUIManager.Instance.SystemMessageSendMessage("이미 습득한 스킬입니다.");
                 return;
             }
             if (m_player.IsCanActive(m_skillPoint, m_skill.GetSkillData(m_currentSkillID).SkillGrade, m_skill.GetSkillData(m_currentSkillID).SkillType)) //습득 가능한 포인트가 있다면 스킬 습득 UI를 불러와 처리
@@ -124,5 +129,6 @@ public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,
             LoadNextSkill();
         }
     }
+    #endregion
 
 }

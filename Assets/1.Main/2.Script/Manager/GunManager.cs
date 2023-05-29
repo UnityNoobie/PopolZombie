@@ -7,6 +7,7 @@ using static Gun;
 
 public class GunManager : MonoBehaviour
 {
+    #region Constants and Fields
     public enum CurrentSlot
     {
         Main,
@@ -22,26 +23,23 @@ public class GunManager : MonoBehaviour
     [SerializeField]
     PlayerStriker striker;
     PlayerController m_player;
-    public TableGunstat m_gunStatus { get; set; }
     public bool isMelee;
     float weaponChangeTime = 0.3f;
     int testweapon = 1;
-    Dictionary<string, GameObject> weaponDic = new Dictionary<string, GameObject>(); //총의 정보를 Dictionary에서 관리.
-                                                                                     // Dictionary<string, GameObject> meleeDic = new Dictionary<string, GameObject>(); //근접무기정보 관리
-    public WeaponData m_weapondata{ get; set; }
-   
     public static Transform currentWeapon;
     public static bool isGun;
     public static PlayerAnimController m_animCtr;
     public static bool isChange = false;
-    public void SkillUpSignal()
-    {
-        if (shooter.enabled)
-        {
-            shooter.CheckSkillSignal();
-        }
-    }
-    public IEnumerator ChangeWeaponRoutine(string name, WeaponType type, int ID, int grade, string atkType, string image,StatusUI statusui)
+    Dictionary<string, GameObject> weaponDic = new Dictionary<string, GameObject>(); //무기의 정보를 Dictionary에서 관리.      
+    #endregion
+
+    #region property
+    public TableGunstat m_gunStatus { get; set; }                                                                          
+    public WeaponData m_weapondata { get; set; }
+    #endregion
+
+    #region Coroutine
+    public IEnumerator ChangeWeaponRoutine(string name, WeaponType type, int ID, int grade, string atkType, string image, StatusUI statusui)
     {
         // Debug.Log(image);
         if (atkType.Equals("Gun")) //무기의 공격타입이 총기라면 
@@ -61,40 +59,51 @@ public class GunManager : MonoBehaviour
             yield return new WaitForSeconds(weaponChangeTime);
             m_animCtr.Play("GrabWeapon");
             GunChange(name, type, ID, grade);
-            statusui.SetSlot(ID, image, ArmorType.Max,ItemType.Weapon);
+            statusui.SetSlot(ID, image, ArmorType.Max, ItemType.Weapon);
             yield return new WaitForSeconds(weaponChangeTime);
             isChange = false;
             PlayerShooter.isActive = true; // 재장전 다 끝난뒤에 실행되도록
         }
         else if (atkType.Equals("Melee"))
         {
-            
-                isGun = false;
-                if (shooter.enabled) //슈터가 켜져있으면 꺼주기
-                {
-                    shooter.enabled = false;
-                }
-                if (!striker.enabled)
-                {
-                    striker.enabled = true; //스트라이커가 꺼져있으면 켜주기
-                }
-                if(m_animCtr.GetMotion.Equals(PlayerAnimController.Motion.Combo1) || m_animCtr.GetMotion.Equals(PlayerAnimController.Motion.Combo2))
-                {
+
+            isGun = false;
+            if (shooter.enabled) //슈터가 켜져있으면 꺼주기
+            {
+                shooter.enabled = false;
+            }
+            if (!striker.enabled)
+            {
+                striker.enabled = true; //스트라이커가 꺼져있으면 켜주기
+            }
+            if (m_animCtr.GetMotion.Equals(PlayerAnimController.Motion.Combo1) || m_animCtr.GetMotion.Equals(PlayerAnimController.Motion.Combo2))
+            {
                 m_player.AnimEvnet_MeleeFinished();
-                }    
-                PlayerStriker.isActive = false;
-                isChange = true;
-                m_animCtr.Play("MeleeArm");
-                yield return new WaitForSeconds(weaponChangeTime);
-                MeleeChange(name, type, ID, grade);
-                yield return new WaitForSeconds(weaponChangeTime);
-                m_animCtr.Play("MeleeIdle");
-                isChange = false;
-                PlayerStriker.isActive = true;
-                m_player.SetStatus(ID);          
+            }
+            PlayerStriker.isActive = false;
+            isChange = true;
+            m_animCtr.Play("MeleeArm");
+            yield return new WaitForSeconds(weaponChangeTime);
+            MeleeChange(name, type, ID, grade);
+            yield return new WaitForSeconds(weaponChangeTime);
+            m_animCtr.Play("MeleeIdle");
+            isChange = false;
+            PlayerStriker.isActive = true;
+            m_player.SetStatus(ID);
         }
         UIManager.Instance.WeaponImage(image);
     }
+    #endregion
+
+    #region Methods
+    public void SkillUpSignal()
+    {
+        if (shooter.enabled)
+        {
+            shooter.CheckSkillSignal();
+        }
+    }
+    
 
         public void ChangeWeapon(int id,StatusUI statusui)
         {
@@ -140,5 +149,5 @@ public class GunManager : MonoBehaviour
             m_getitem = GetComponent<PlayerGetItem>();
             m_getitem.BuyItem(testweapon, m_weapondata.GetWeaponStatus(testweapon).ItemType,0);
         }
-
+    #endregion
 }

@@ -10,6 +10,7 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class MonsterController : MonoBehaviour
 {
+    #region Constants and Fields
     public enum MonsterState
     {
         Chase,
@@ -35,10 +36,6 @@ public class MonsterController : MonoBehaviour
     [SerializeField]
     protected MonStatus m_status;
     protected TweenMove m_tweenmove;
-
-    public MonStatus GetStatus { get { return m_status; } set { m_status = value; } }
-
-    public MonsterType Type { get; set; }
     protected NavMeshAgent m_navAgent;
     protected MonsterAnimController m_animctr;
     protected Animator m_animFloat;
@@ -50,11 +47,16 @@ public class MonsterController : MonoBehaviour
     protected float m_idleTime;
     protected bool isburn;
     int m_delayFrame;
-
-
     float defence = 0;
+    #endregion
 
-    #region coroutine\
+    #region Property
+    public MonStatus GetStatus { get { return m_status; } set { m_status = value; } }
+
+    public MonsterType Type { get; set; }
+    #endregion
+
+    #region coroutine
     protected Coroutine m_damagedCoroutine;
     protected Coroutine m_motionDelaycoroutine;
     protected Coroutine m_burnCoroutine;
@@ -113,6 +115,7 @@ public class MonsterController : MonoBehaviour
         }
     }
     #endregion
+
     #region AnimEvent
     protected virtual void AnimEvent_SetDie()
     {
@@ -149,6 +152,8 @@ public class MonsterController : MonoBehaviour
         }
     }
     #endregion
+
+    #region Methods
     void HPControl(int value, AttackType type)
     {
         m_status.hp += value;
@@ -408,4 +413,5 @@ public class MonsterController : MonoBehaviour
             SetDie();
         }      
     }
+    #endregion
 }

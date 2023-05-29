@@ -15,7 +15,7 @@ public enum ItemType
 }
 public class StoreUI : MonoBehaviour
 {
-    GameObject m_storePannel;
+    #region Constants and Fields
     Slot[] m_slots;
     Transform m_content;
     Button m_closebutton;
@@ -23,24 +23,17 @@ public class StoreUI : MonoBehaviour
     BuyItems m_buyItem;
     PanelItemInfo m_info;
     StatusUI m_status;
-  
-
     PlayerController m_player;
-    bool isOPen;
+    bool isloaded = false;
     public Dictionary<int, ArmorData> m_armordata = new Dictionary<int, ArmorData>();
     public Dictionary<int, WeaponData> m_weapondata = new Dictionary<int, WeaponData>();
     public Dictionary<int, ItemData> m_itemdata = new Dictionary<int, ItemData>();
     List<int> m_armorList = new List<int>();
     List<int> m_weaponList = new List<int>();
     List<int> m_itemList = new List<int>();
-    
+    #endregion
 
-    public void CloseAllTabs()
-    {
-        m_buyItem.DeActiveUI();
-        m_info.DeActiveUI();
-        CloseStore();
-    }
+    #region Methods
     public void ActiveStoreUI(string StoreType,PlayerController player) //켜주기
     {
         ResetSlot();
@@ -58,11 +51,11 @@ public class StoreUI : MonoBehaviour
             SetSlotItem(m_weaponList, ItemType.Weapon);
         }
         m_StoreName.text = StoreType + "Store";
-        m_storePannel.SetActive(true);
+        gameObject.SetActive(true);
     }
     public void CloseStore() //꺼주기
     {
-        m_storePannel.SetActive(false);
+        gameObject.SetActive(false);
     }
     void SetItemsInfos() //상점에서 사용해줄 정보를 복사해서 가져와줌.
     {
@@ -75,14 +68,18 @@ public class StoreUI : MonoBehaviour
     }
     void ResetSlot()
     {
-        for(int i = 0; i < m_slots.Length; i++)
+        if (!isloaded)
+        {
+            LoadUIInfo();
+        }
+        for (int i = 0; i < m_slots.Length; i++)
         {
             m_slots[i].ResetSlot();
         }
     }
     public void SetItemListTable()
     {
-        if (MonsterManager.thisRound >= 30) //라운드가 30이상일 때 상점에 상위 아이템 추가
+        if (GameManager.Instance.GetRoundInfo() >= 30) //라운드가 30이상일 때 상점에 상위 아이템 추가
         {
             for (int i = 0; i < TableArmorStat.Instance.m_highArmor.Count; i++)
             {
@@ -97,7 +94,7 @@ public class StoreUI : MonoBehaviour
                 m_itemList.Add(TableItemData.Instance.m_highItem[i]);
             }
         }
-        else if (MonsterManager.thisRound >= 15) //라운드가 15이상일 때 상점에 중간아이템 추가
+        else if (GameManager.Instance.GetRoundInfo() >= 15) //라운드가 15이상일 때 상점에 중간아이템 추가
         {
             for (int i = 0; i < TableArmorStat.Instance.m_midArmor.Count; i++)
             {
@@ -146,26 +143,34 @@ public class StoreUI : MonoBehaviour
     }
     void SetStore()
     {
-        m_storePannel = Utill.GetChildObject(gameObject, "StoreUI").gameObject;
-        m_content = Utill.GetChildObject(m_storePannel, "Content");
+        m_content = Utill.GetChildObject(gameObject, "Content");
         m_slots = m_content.GetComponentsInChildren<Slot>(true);
-        m_status = Utill.GetChildObject(gameObject, "StatusUI").GetComponent<StatusUI>();
-        m_info = Utill.GetChildObject(m_storePannel, "ItemInfo").GetComponent<PanelItemInfo>();
-        m_buyItem = Utill.GetChildObject(m_storePannel, "BuyItem").GetComponent<BuyItems>();
-        m_StoreName = Utill.GetChildObject(m_storePannel,"StoreName").GetComponent<TextMeshProUGUI>();
-        m_closebutton = Utill.GetChildObject(m_storePannel,"CloseButton").GetComponent<Button>();
+        m_status = UGUIManager.Instance.GetStatusUI();
+        m_info = Utill.GetChildObject(gameObject, "ItemInfo").GetComponent<PanelItemInfo>();
+        m_buyItem = Utill.GetChildObject(gameObject, "BuyItem").GetComponent<BuyItems>();
+        m_StoreName = Utill.GetChildObject(gameObject,"StoreName").GetComponent<TextMeshProUGUI>();
+        m_closebutton = Utill.GetChildObject(gameObject,"CloseButton").GetComponent<Button>();
     }
-    void Start()
+    void LoadUIInfo()
     {
         SetStore();
         SetItemsInfos();
         SetItemListTable();
-        for(int i = 0; i < m_slots.Length; i++)
+        for (int i = 0; i < m_slots.Length; i++)
         {
-            m_slots[i].SetStore(this, m_buyItem,m_info);
+            m_slots[i].SetStore(this, m_buyItem, m_info);
         }
         m_closebutton.onClick.AddListener(CloseStore);
         m_info.SetStoreUI(this);
         m_status.SetStore(this);
+        isloaded = true;
     }
+    void Awake()
+    {
+        if(!isloaded)
+        {
+            LoadUIInfo();
+        }
+    }
+    #endregion
 }

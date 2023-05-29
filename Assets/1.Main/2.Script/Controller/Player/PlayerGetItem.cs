@@ -5,12 +5,11 @@ using static ItemData;
 
 public class PlayerGetItem : MonoBehaviour
 {
- 
+
+    #region Constants and Fields
     [SerializeField]
     QuickSlot m_slot;
-    [SerializeField]
     StoreUI m_storeUI;
-    [SerializeField]
     StatusUI m_statusUI;
     GunManager m_weaponmanager;
     ArmorManager m_armormanager;
@@ -18,8 +17,11 @@ public class PlayerGetItem : MonoBehaviour
     CapsuleCollider m_collider;
     
     int m_playerMoney = 0;
+    #endregion
 
+    #region Property
     public WeaponData m_weapondata { get; set; }
+    #endregion
 
     #region public return Method
     public bool HaveEnoughMoney(int price)
@@ -31,6 +33,8 @@ public class PlayerGetItem : MonoBehaviour
         return false;
     }
     #endregion
+
+    #region Methods
     void MoneyChange(int money)
     {
         m_playerMoney += money;
@@ -82,6 +86,7 @@ public class PlayerGetItem : MonoBehaviour
     }
     void ChangeWeapon(int Id)
     {
+
         m_weaponmanager.ChangeWeapon(Id,m_statusUI);
     }
 
@@ -107,27 +112,25 @@ public class PlayerGetItem : MonoBehaviour
 
     private void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            BuyItem(37, "HealPack", 0);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            BuyItem(40, "Barricade", 0);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             if (m_player.GetHPValue() >= 0.95)
             {
-                UIManager.Instance.SystemMessageCantUse("HealPack");
+                UGUIManager.Instance.SystemMessageItem("HealPack");
                 return;
             }
             m_slot.UseQuickSlotITem(1, "HealPack");
         }
-        if (Input.GetKeyDown(KeyCode.Alpha6))
+        if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             m_slot.UseQuickSlotITem(2, "Barricade");
         }
+    }
+    void GetUIPos()
+    {
+        m_statusUI = UGUIManager.Instance.GetStatusUI();
+        m_storeUI = UGUIManager.Instance.GetStoreUI();
     }
     void Awake()    
     {
@@ -135,8 +138,9 @@ public class PlayerGetItem : MonoBehaviour
         m_player = GetComponent<PlayerController>();
         m_weaponmanager = GetComponent<GunManager>();
         m_armormanager = GetComponent<ArmorManager>();
-        SetPlayer(m_player);
         m_collider = GetComponent<CapsuleCollider>();
-       
+        GetUIPos();
+        SetPlayer(m_player);
     }
+    #endregion
 }

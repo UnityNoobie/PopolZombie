@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class SoundManager : SingletonDontDestroy<SoundManager>
 {
+    #region Constants and Fields
     TableSound m_info = new TableSound();
     AudioSource[] m_audio;
     AudioSource m_bgm;
@@ -16,6 +17,9 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
     const int MaxVolumLevel = 10;
     public Dictionary<string, AudioClip> m_audioClips = new Dictionary<string, AudioClip>();
     Dictionary<AudioClip,int> m_sfxPlayList = new Dictionary<AudioClip,int>();
+    #endregion
+
+    #region Coroutine
     IEnumerator Couroutine_CheckPlayEnded(AudioClip sfx, float length)
     {
         yield return new WaitForSeconds(length);
@@ -25,6 +29,9 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
             m_sfxPlayList.Remove(sfx);
         }
     }
+    #endregion
+
+    #region Methods
     public void DayStart()
     {
         PlayBGM("BGM_Day");
@@ -112,4 +119,5 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
         }
         NightStart(); //테스트용 플레이
     }
+    #endregion
 }

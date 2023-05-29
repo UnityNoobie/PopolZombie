@@ -4,22 +4,21 @@ using UnityEngine;
 
 public class UpdateManager : SingletonDontDestroy<UpdateManager> 
 {
-
-    GunManager gunManager;
-    [SerializeField]
-    StatusUI m_statusUI;
-    [SerializeField]
-    SoundManager m_soundManager;
+    #region Constant and Field
     bool m_isactive = false;
-    
+    bool m_isopen = false;
     public PlayerController[] m_players;
     public PlayerGetItem[] m_playerItem;
     public PlayerController[] m_playersSave;
     int m_playercount;
-    int testweapon;
+
+    #endregion
+
+    #region Method
     public void SetPlayerController(PlayerController player)
     {
-        if(m_players != null) //플레이어리스트가 비어있지 않다면
+       
+        if (m_players != null) //플레이어리스트가 비어있지 않다면
         {
             m_playersSave = m_players; //기존 플레이어리스트를 받아와줌.
         }
@@ -43,27 +42,17 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
     // Update is called once per frame
     void Update()
     {
-        for(int i = 0; i < m_players.Length; i++)
+        for (int i = 0; i < m_players.Length; i++)
         {
             m_players[i].BehaviorProcess();
         }
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            m_isactive = !m_isactive; //불값으로 액티브 변경. 
-            m_statusUI.SetActive(m_isactive);
-        }
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {  
-            UIManager.Instance.CloseTabs();
+            UGUIManager.Instance.CloseAllTabs();
         }
-
-        if (Input.GetKeyDown(KeyCode.M))
+        for (int i = 0; i < MonsterManager.Instance.m_monsterList.Count; i++)
         {
-            for (int i = 0; i < m_playerItem.Length; i++)
-            {
-                m_playerItem[i].GetMoney(10000);
-            }
-            UIManager.Instance.SystemMessageCantOpen("돈치트 실행 돈 + 10000");
+            MonsterManager.Instance.m_monsterList[i].BehaviourProcess(); //각각 호출하는거보다 하나의 업데이트에서 사용하면 더 효율적임.
         }
     }
     private void Awake()
@@ -71,4 +60,5 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
         m_playercount = 0;
         m_players = new PlayerController[m_players.Length];
     }
+    #endregion
 }

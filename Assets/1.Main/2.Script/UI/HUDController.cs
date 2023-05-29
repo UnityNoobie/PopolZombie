@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HUDController : MonoBehaviour
 {
+    #region Constants and Fields
     [SerializeField]
     UIFollowTarget m_uiFollow;
     [SerializeField]
@@ -12,7 +13,9 @@ public class HUDController : MonoBehaviour
     HUDText[] m_hudText; 
     [SerializeField]
     UIProgressBar m_hpBar;
-    
+    #endregion
+
+    #region Methods
     public void SetHUD(Transform target, string name)
     {
         m_uiFollow.target = target;
@@ -55,4 +58,5 @@ public class HUDController : MonoBehaviour
     {
         Hide();
     }
+    #endregion
 }

@@ -11,8 +11,10 @@ using static PlayerStriker;
 
 public class PlayerController : MonoBehaviour
 {
+
+    #region Constant and Fields
+
     public ArmorManager m_armorManager { get; set; }
-   
     [SerializeField]
     HUDText m_hudText;
     [SerializeField]
@@ -21,7 +23,6 @@ public class PlayerController : MonoBehaviour
     Status m_status;
     [SerializeField]
     GameObject m_PlayerHuD;
-    [SerializeField]
     StatusUI m_statusUI;
     [SerializeField]
     QuickSlot m_quickSlot;
@@ -41,8 +42,6 @@ public class PlayerController : MonoBehaviour
     GameObject m_area;
     [SerializeField]
     Vector3 m_dir;
-
-
     int hp;
     int m_comboIndex;
     int m_experience;
@@ -53,7 +52,9 @@ public class PlayerController : MonoBehaviour
     string m_title = "";
     bool m_hastitle = false;
     bool m_skillactive = false;
+    bool m_isactive = false;
     public float pDefence;
+    #endregion
     //방어구 정보 임시저장
     #region ArmorData
     int armDefence;
@@ -86,7 +87,9 @@ public class PlayerController : MonoBehaviour
     float skillCrush;
     int skillBurn;
     bool crush;
-    #endregion 
+    #endregion
+
+    #region Property
     public enum PlayerState //플레이어의 상태 알림
     {
         alive,
@@ -96,6 +99,10 @@ public class PlayerController : MonoBehaviour
     public Status GetStatus{get { return m_status; } set { m_status = value; } }
     public MeleeState meleeState { get; set; }
     public PlayerState m_Pstate { get; set; }
+    public PlayerAnimController.Motion GetMotion { get { return m_animCtr.GetMotion; } }
+    #endregion
+
+    #region PlayerTitle
     public bool HasTitle()
     {
         return m_hastitle;
@@ -105,10 +112,11 @@ public class PlayerController : MonoBehaviour
         m_title = title;
         m_hastitle = true;
     }
-    public PlayerAnimController.Motion GetMotion { get { return m_animCtr.GetMotion; } }
+    #endregion
+
+    #region MeleeAttackProcess //근접공격
     List<PlayerAnimController.Motion> m_comboList = new List<PlayerAnimController.Motion>() { PlayerAnimController.Motion.Combo1, PlayerAnimController.Motion.Combo2 };
     Queue<KeyCode> m_keyBuffer = new Queue<KeyCode>(); // 근접 공격 콤보시스템 구현을 위한 큐
-    #region MeleeAttackProcess
     /*
     public bool IsAttack
     {
@@ -138,7 +146,8 @@ public class PlayerController : MonoBehaviour
         }
     }
     #endregion
-    #region Coroutine
+
+    #region Coroutine  //코루틴
     IEnumerator Coroutine_Invincible(float time)
     {
         m_Pstate = PlayerState.Invincible;
@@ -157,7 +166,8 @@ public class PlayerController : MonoBehaviour
     }
     Coroutine CheckCoroutine;
     #endregion
-    #region AnimEvent
+
+    #region AnimEvent // 애니메이션 이벤트
     // 사망 이벤트
     void AnimEvent_Dead()
     {
@@ -250,7 +260,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region PlayerInput  //플레이어의 움직임 관련 메소드
+    #region SFXPlay // SFX재생 메소드
     void PlayDamagedSound()
     {
         SoundManager.Instance.PlaySFX("SFX_PlayerDamaged", m_audio);
@@ -276,8 +286,13 @@ public class PlayerController : MonoBehaviour
     {
         SoundManager.Instance.PlaySFX("SFX_PlayerLevelUp", m_audio);
     }
+    #endregion 
+
+    #region PlayerInput  //플레이어의 움직임 관련 메소드
+
     void SetPlayer()
     {
+        UGUIManager.Instance.SetPlayer(this);
         m_updateManager.SetPlayerController(this);
     }
     void MoveAnimCtr(Vector3 dir) //움직임 구현기능. 8방향 다리모양 다른식으로 세분화해보리기!
@@ -328,19 +343,17 @@ public class PlayerController : MonoBehaviour
     }
     public void BehaviorProcess()
     {
+        if (m_Pstate.Equals(PlayerState.dead)) return; // 사망시 작동 x
         if (Input.GetKeyDown(KeyCode.K)) //플레이어별 스킬창을 관리하기 위함
-        {
-            if (m_skillactive)
-            {
-                m_skillactive = false;
-            }
-            else
-            {
-                m_skillactive = true;
-            }
-            UIManager.Instance.SkillUIChange(m_skillactive,m_skill);
+        {    
+            m_skillactive = !m_skillactive;
+            UGUIManager.Instance.SkillUIChange(m_skillactive,m_skill);
         }
-        if (m_Pstate.Equals(PlayerState.dead)) return; 
+        if (Input.GetKeyDown(KeyCode.I)) //인벤토리 온오프
+        {
+            m_isactive = !m_isactive; //불값으로 액티브 변경. 
+            UGUIManager.Instance.GetStatusUI().SetActive(m_isactive);
+        }
         m_dir = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
         if(m_dir.x !=0 && m_dir.z !=0)
         {
@@ -350,12 +363,13 @@ public class PlayerController : MonoBehaviour
         {
             m_navAgent.ResetPath();
         }
-        MoveAnimCtr(m_dir);
-        PlayerLookAt();
+        MoveAnimCtr(m_dir); //방향, 속도별 애니메이션 조절
+        PlayerLookAt();     //플레이어 마우스방향 주시기능
         m_navAgent.Move(m_dir * m_status.speed/20 * Time.deltaTime);
     }
 
     #endregion
+
     #region AboutStatus  //플레이어 스테이터스 관련 메소드
     private void ResetData()
     {
@@ -453,6 +467,7 @@ public class PlayerController : MonoBehaviour
     public void SkillUpInitstatus()
     {
         InitStatus(m_weaponData.HP, m_weaponData.CriRate, m_weaponData.CriDamage, m_weaponData.AtkSpeed, m_weaponData.Damage, m_weaponData.Defence, m_weaponData.Speed, m_weaponData.Mag, m_weaponData.ReloadTime, m_weaponData.KnockBack, m_weaponData.KnockBackDist, m_weaponData.AttackDist, m_weaponData.Shotgun, m_level);
+        SetHudText();
     }
     public void SetStatus(int ID)
     {
@@ -485,6 +500,7 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
+
     #region HUD && PlayerState  //플레이어의 HUD와 State 관련 메소드
 
     public void SetPlayerKnickName(string nick)
@@ -570,10 +586,10 @@ public class PlayerController : MonoBehaviour
     {
         PlayLvUpSound();
         m_status.level++;
-        m_hudLabel.text = "[FFFF00]LV." + m_status.level + "[FFFFFF]"+m_knickName;
         m_levelexp = Levelexp();
         HPControl(Mathf.CeilToInt(m_status.hpMax)); //풀피로 만들어줌
         UIManager.Instance.LevelUPUI(m_status.level);
+        SetHudText();
         m_skill.LevelUP();
         StartCoroutine(Coroutine_Invincible(2f)); //렙업시무적
         var levelupEffect = TableEffect.Instance.m_tableData[6].Prefab[0];
@@ -581,8 +597,25 @@ public class PlayerController : MonoBehaviour
         effect.transform.position = gameObject.transform.position;
         effect.transform.localScale = new Vector3(2f, 2f, 2f);
         effect.SetActive(true);
+    }   
+    public void SetHudText()
+    {
+        if (HasTitle())
+        {
+            m_hudLabel.text = "[00FFFF][" + m_status.Title + "]\n[FFFF00]LV" + m_status.level + "[FFFFFF]" + m_status.KnickName;
+        }
+        else
+        {
+            m_hudLabel.text = "[FFFF00]LV." + m_status.level + "[FFFFFF]" + m_knickName;
+        }
     }
+    void SetUIInfo()
+    {
+        m_statusUI = UGUIManager.Instance.GetStatusUI();
+    }
+
     #endregion
+
     #region Level,Exp  //경험치, 레벨업 관련 메소드
     public void IncreaseExperience(int exp)
     {
@@ -596,11 +629,15 @@ public class PlayerController : MonoBehaviour
     } 
     int Levelexp()
     {
-        int lvupexp = 100 + (50 * m_status.level);
+        int lvupexp = 100 + (80 * m_status.level);
         return lvupexp;
     }
 
     #endregion
+
+    #region UnityMethods
+
+    
     private void Awake()
     {
         m_skill = GetComponent<PlayerSkillController>();
@@ -611,22 +648,21 @@ public class PlayerController : MonoBehaviour
         m_weaponData = new WeaponData();
         m_armorManager= GetComponent<ArmorManager>();
         m_manager = GetComponent<GunManager>();
+        m_hitPos = Utill.GetChildObject(gameObject, "Dummy_Pos");
         m_level = 1;
         m_levelexp = Levelexp();
-        m_statusUI.SetPlayer(this);
-        m_knickName = "Hunter";
+        SetPlayerKnickName("Hunter");
     }
-    
     private void Start()
     {
+        SetPlayer();
+        SetUIInfo();
         SetStatus(1); // 시작시 기본 권총으로
         m_status.hp = m_status.hpMax; //시작 시 hp 설정.
         m_status.level = 1;
         HPControl(0);
-        m_hitPos = Utill.GetChildObject(gameObject, "Dummy_Pos");
-        SetPlayer();
-        m_hudLabel.text = "[FFFF00]LV." + m_status.level+ "[FFFFFF]" + m_knickName;
+        SetHudText();
     }
-
+    #endregion
 }
 

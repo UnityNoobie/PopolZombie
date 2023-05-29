@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class StatusUI : MonoBehaviour
 {
+    #region Constants and Fields
     PanelItemInfo m_panelItemInfo;
     PlayerController m_player;
     PlayerGetItem m_playeritem;
@@ -14,10 +15,14 @@ public class StatusUI : MonoBehaviour
     SlotStatus[] m_itemSlots;
     Transform m_slotPos;
     Transform m_StatusPos;
+    #endregion
+
+    #region Methods
     public void SetActive(bool active)
     {
         gameObject.SetActive(active);
-        SetStatus();
+        if(active)
+          SetStatus();
     }
     public void SetStore(StoreUI store)
     {
@@ -96,5 +101,6 @@ public class StatusUI : MonoBehaviour
         {
             m_itemSlots[5].SetSlotItem(id, imagename, itemtype, m_panelItemInfo);
         }  
-    } 
+    }
+    #endregion
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ArmorManager : MonoBehaviour
 {
+    #region Constants and Fields
     [SerializeField]
     GameObject[] m_wearArmors = new GameObject[5];
     [SerializeField]
@@ -17,17 +18,24 @@ public class ArmorManager : MonoBehaviour
     [SerializeField]
     GameObject[] m_boots;
 
-    ArmorData armorData { get; set; }
-    Dictionary<string, ArmorData> wearArmor = new Dictionary<string, ArmorData>();
-    WearArmorData GetArmordata { get; set; }
-    public PlayerController m_player{get;set;}
     int Defence;
     float Damage;
     float ReloadTime;
     float AttackSpeed;
     int CriRate;
     float Speed;
-    //int i = 1;
+
+    #endregion
+
+    #region Property
+    ArmorData armorData { get; set; }
+    Dictionary<string, ArmorData> wearArmor = new Dictionary<string, ArmorData>();
+    WearArmorData GetArmordata { get; set; }
+    public PlayerController m_player{get;set;}
+
+    #endregion
+
+    #region Methods
     void ResetStatus() 
     { 
         Defence = 0;
@@ -179,16 +187,16 @@ public class ArmorManager : MonoBehaviour
         m_wearArmors[4] = m_boots[grade];
         m_wearArmors[4].SetActive(true); //헬멧을 장착아머0번에 넣어주고 액티브 켜주기.
     }
-    private void Awake()
+    void Awake()
     {
         TableArmorStat.Instance.Load(); //Start에서 로드하여 딕셔너리에 아이템 정보값 저장해두기.
     }
 
-    private void Start()
+    void Start()
     {
         m_player = GetComponent<PlayerController>();
         armorData = new ArmorData();
         GetArmordata = new WearArmorData();
     }
-
+    #endregion
 }

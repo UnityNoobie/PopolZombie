@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class MonsterManager : SingletonMonoBehaviour<MonsterManager> 
 {
-    [SerializeField]
-    GameObject m_spawnPoint; //몬스터 생성위치 추후결정
+    #region Constants and Fields
+    SpawnPos[] m_spawnPoint; //몬스터 생성위치 추후결정
     [SerializeField]
     PlayerController m_player; //플레이어 받아옴
     [SerializeField]
@@ -17,31 +17,55 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
     [SerializeField]
     GameObject m_hudPrefab;
     [SerializeField]
-    public static int thisRound = 0;
-    [SerializeField]
     GameObject m_hudmanager;
     [SerializeField]
     StoreUI m_storeUI;
     Camera m_mainCam;
     Camera m_uiCam;
     MonsterController m_monctr;
-    void SetNextRound()
+    int currentBossCound = 0;
+    Dictionary<MonsterType, GameObjectPool<MonsterController>> m_monsterPools = new Dictionary<MonsterType, GameObjectPool<MonsterController>>(); //몬스터풀 저장이요
+    public List<MonsterController> m_monsterList = new List<MonsterController>();
+    GameObjectPool<HUDController> m_hudPool = new GameObjectPool<HUDController>();
+    bool isSpawning = false;
+    #endregion
+
+    #region Coroutine
+    IEnumerator Coroutine_SpawnMonsters() //라운드 시작 시 체크
     {
-        thisRound++;
-        UIManager.Instance.RoundInfo(thisRound);
-        if(thisRound == 15 || thisRound == 30 )
+        isSpawning = true;
+        yield return new WaitForSeconds(5);
+        for (int i = 0; i < 4; i++)
         {
-            m_storeUI.SetItemListTable();
+            CreateMonster();
+            yield return new WaitForSeconds(7);
         }
+        isSpawning=false;
+        StartCoroutine(CorouTine_CheckRoundEnd());
     }
-    float StatScale(int ThisRound)
+    IEnumerator CorouTine_CheckRoundEnd() //몬스터가 모두 사망했는지 확인하는 메서드
     {
-        float StatScale = 1 + (ThisRound * 0.05f);
+        while (true)
+        {
+            yield return new WaitForSeconds(3);
+            if(m_monsterList.Count <= 0)
+            {
+                break;
+            }
+        }
+        GameManager.Instance.StartDay();
+    }
+    #endregion
+    int MaxBossCount()
+    {
+        return 1 + GameManager.Instance.GetRoundInfo() / 10;
+    }
+    float StatScale()
+    {
+        float StatScale = 1 + (GameManager.Instance.GetRoundInfo() * 0.05f);
         return StatScale;
     }
-    Dictionary<MonsterType, GameObjectPool<MonsterController>> m_monsterPools = new Dictionary<MonsterType, GameObjectPool<MonsterController>>(); //몬스터풀 저장이요
-    List<MonsterController> m_monsterList = new List<MonsterController>();
-    GameObjectPool<HUDController> m_hudPool = new GameObjectPool<HUDController>();
+    
     public void ResetMonster(MonsterController mon, HUDController hud)
     {
         mon.gameObject.SetActive(false); // 몬스터를 비활성화해주기
@@ -51,49 +75,57 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
         m_hudPool.Set(hud); // 풀에 넣어주기
         UIManager.Instance.EnemyLeft(m_monsterList.Count);
     }
+    public void StartNight()
+    {
+        StartCoroutine(Coroutine_SpawnMonsters());
+    }
     public void CreateMonster() //몬스터를 랜덤확률로 소환하는기능
     {
-        int Count = 7 + (thisRound / 2);
+        int a = GameManager.Instance.GetRoundInfo();
+        int Count = 7 + (a / 2);
         if(Count>=30)
             Count= 30;
-        if(thisRound % 10 != 0) //10라운드가 아닌 일반 라운드의 경우
+        for (int i = 0; i < Count; i++)
         {
-            for (int i = 0; i < Count; i++)
-            {
                 var mon = m_monsterPools[(MonsterType)Random.Range(0, (int)MonsterType.Boss)].Get();
                 var hud = m_hudPool.Get();
                 MonsterType type = mon.Type;
-                mon.transform.position = transform.position;
+                mon.transform.position = m_spawnPoint[Random.Range(0, m_spawnPoint.Length)].transform.position;
                 mon.gameObject.SetActive(true);
-                mon.SetStatus(type, StatScale(thisRound));
+                mon.SetStatus(type, StatScale());
                 hud.SetHUD(mon.DummyHud.transform, mon.GetStatus.name);
                 mon.SetMonster(m_player,hud);
                 mon.tag = "Zombie"; //다시 태그를 좀비로 설정하여 맞을 수 있게끔.
                // mon.GetComponent<MonsterAnimController>().SetFloat("Speed",StatScale(thisRound));
                 hud.gameObject.SetActive(true); //어차피 데미지르 ㄹ줄때 hudcontroller에서 Show()로 키니까 꺼봄  작동이 잘 안됨..
                 m_monsterList.Add(mon);
-            }
         }
-        else //10라운드마다 나오는 보스 스테이지
+        if(GameManager.Instance.GetRoundInfo() % 10 == 0) //10라운드마다 나오는 보스 스테이지
         {
-            var hud = m_hudPool.Get();
-            var mon = m_monsterPools[MonsterType.Boss].Get();
-            mon.tag = "Zombie";
-            MonsterType type = mon.Type;
-            mon.transform.position = transform.position;
-            mon.gameObject.SetActive(true);
-            mon.SetStatus(type, StatScale(thisRound));
-            hud.SetHUD(mon.DummyHud.transform, mon.GetStatus.name);
-         //   mon.GetComponent<MonsterAnimController>().SetFloat("Speed", StatScale(thisRound));
-            mon.SetMonster(m_player, hud);
-            m_monsterList.Add(mon);
+            if(currentBossCound < MaxBossCount())
+            {
+                var hud = m_hudPool.Get();
+                var mon = m_monsterPools[MonsterType.Boss].Get();
+                mon.tag = "Zombie";
+                MonsterType type = mon.Type;
+                mon.transform.position = m_spawnPoint[Random.Range(0, m_spawnPoint.Length)].transform.position;
+                mon.gameObject.SetActive(true);
+                mon.SetStatus(type, StatScale());
+                hud.SetHUD(mon.DummyHud.transform, mon.GetStatus.name);
+                mon.SetMonster(m_player, hud);
+                m_monsterList.Add(mon);
+                currentBossCound++;
+            }
+            
         }
         UIManager.Instance.EnemyLeft(m_monsterList.Count);
-
+    }
+    public void ResetBossCount()
+    {
+        currentBossCound = 0;
     }
     protected override void OnStart()
     {
-        thisRound = 0;
         TableMonsterStat.Instance.Load();
         m_mainCam = Camera.main;
         m_uiCam = GameObject.FindGameObjectWithTag("UICamera").GetComponent<Camera>();
@@ -125,29 +157,6 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
             hud.gameObject.SetActive(false);
             return hud;
         });
-        
+        m_spawnPoint = GetComponentsInChildren<SpawnPos>();
     }
-
-    private void Update()
-    {
-
-        if (Input.GetKeyDown(KeyCode.Space)) //테스트용 몬스터 생성
-        {
-            CreateMonster(); 
-        }
-        if (Input.GetKeyDown(KeyCode.V)) //테스트용 라운드넘기기
-        {
-            SetNextRound();
-        }
-        if (Input.GetKeyDown(KeyCode.H)) //테스트용 부활기능.
-        {
-            if (m_player.gameObject.activeSelf) return;
-            m_player.Revive();
-        }
-        for (int i = 0; i < m_monsterList.Count; i++)
-        {
-            m_monsterList[i].BehaviourProcess(); //각각 호출하는거보다 하나의 업데이트에서 사용하면 더 효율적임.
-        }
-    }
-
 }

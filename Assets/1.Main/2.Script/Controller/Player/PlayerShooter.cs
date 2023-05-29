@@ -6,6 +6,7 @@ using static Gun;
 
 public class PlayerShooter : MonoBehaviour
 {
+    #region Constants and Fields
     public Gun gun;
     public Transform m_gunpos;
     public Transform leftMount;
@@ -26,9 +27,14 @@ public class PlayerShooter : MonoBehaviour
   
 
 
-    public static bool isActive = true;   
+    public static bool isActive = true;
+    #endregion
+
+    #region Property
     public WeaponType m_type { get; set; }
- 
+    #endregion
+
+    #region Methods
     public void ChangeGun(GameObject newWeapon,  WeaponType type,int ID, int grade)  //테스트용
     {
         if (GunManager.currentWeapon != null) //무기가 비어있는 상태가 아니라면!
@@ -105,4 +111,5 @@ public class PlayerShooter : MonoBehaviour
         }
        
     }
+    #endregion
 }

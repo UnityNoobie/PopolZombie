@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class SkillUI : MonoBehaviour
 {
+    #region Constants and Fields
     TableSkillStat m_stat = new TableSkillStat();
     PlayerSkillController m_player;
     public Button m_skillOpen;
@@ -32,7 +33,10 @@ public class SkillUI : MonoBehaviour
     
     int m_count;
     List<int> m_SkillList = new List<int>();
-    
+
+    #endregion
+
+    #region Methods
     void SetPos() 
     {
        // m_contents = Utill.GetChildObject(gameObject, "Content");
@@ -133,7 +137,7 @@ public class SkillUI : MonoBehaviour
     }
     void SetUtilitySlot()
     {
-        UIManager.Instance.SystemMessageCantOpen("유틸리티 스틸은 아직 미구현입니다.");
+        UGUIManager.Instance.SystemMessageSendMessage("유틸리티 스틸은 아직 미구현 되었습니다 다음 패치 후 이용해 주세요.");
     }
     void SetSlotList(SkillType type)
     {
@@ -281,4 +285,5 @@ public class SkillUI : MonoBehaviour
         m_Utility.onClick.AddListener(SetUtilitySlot);
         SetAgilitySlot();   
     }
+    #endregion
 }

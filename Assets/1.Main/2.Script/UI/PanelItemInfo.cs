@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class PanelItemInfo : MonoBehaviour
 {
+
+    #region Constants and Fields
     public TextMeshProUGUI[] m_infoText;
     public TextMeshProUGUI m_ItemInfo;
     public TextMeshProUGUI m_ItemName;
@@ -15,8 +17,9 @@ public class PanelItemInfo : MonoBehaviour
     Image m_image;
     StoreUI m_store;
     int id;
+    #endregion
 
-
+    #region Methods
     void SetInfo(int m_id, ItemType m_type)
     {
         if (m_type.Equals(ItemType.Item))
@@ -127,5 +130,5 @@ public class PanelItemInfo : MonoBehaviour
     {
          gameObject.SetActive(false);
     }
-
+    #endregion
 }

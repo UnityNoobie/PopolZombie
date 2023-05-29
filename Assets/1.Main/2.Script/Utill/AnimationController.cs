@@ -20,7 +20,6 @@ public class AnimationController : MonoBehaviour
         }
         if(isBlend)
         {
-            //Debug.Log(animName);
             try
             {
                 m_animator.SetTrigger(animName);
@@ -29,8 +28,6 @@ public class AnimationController : MonoBehaviour
             catch (NullReferenceException)
             {
                 Debug.Log(animName + "실행 중 에러발생.");
-                //이유를 알 수없고 에러가 났지만 적들은 매우 정상적으로 작동함. 애니메이션, 네비메쉬, 피격, 공격 모든거 정상 이유가모지...ㅠㅠㅠㅠ 
-                // 코드한줄 안바꿨는데 갑자기 에러가 났음. Start Awake 순서문제인거로 추정되나 현 기능상 문제는 없으니 일단은 진행. 추후 픽스
             }
         }
         else

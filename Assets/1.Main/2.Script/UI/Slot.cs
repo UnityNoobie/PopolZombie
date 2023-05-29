@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPointerExitHandler
 {
+    #region Constants and Fields
     Image m_image;
     TextMeshProUGUI m_text;
     PlayerController m_player;
@@ -20,6 +21,9 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
     string m_name;
     StoreUI m_store;
     PanelItemInfo m_info;
+    #endregion
+
+    #region Methods
     public void SetStore(StoreUI store, BuyItems buyItem,PanelItemInfo info)
     {
         m_store = store;
@@ -32,7 +36,8 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
     }
     public void OnPointerUp(PointerEventData eventData)
     {
-        if(!isEmpty)
+        SoundManager.Instance.PlaySFX("SFX_ClickUI", Camera.main.GetComponent<AudioSource>());
+        if (!isEmpty)
         {
             if (m_player.GetComponent<PlayerGetItem>().HaveEnoughMoney(price))
             {
@@ -40,7 +45,7 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
             }
             else
             {
-                UIManager.Instance.SystemMessageCantOpen("돈이 부족합니다.");
+                UGUIManager.Instance.SystemMessageSendMessage("돈이 부족합니다.");
             }
         }
     }
@@ -95,5 +100,6 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
         m_image.sprite = null;
         m_text.text = null;
     }
+    #endregion
 
 }

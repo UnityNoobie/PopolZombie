@@ -6,7 +6,7 @@ using static PlayerStriker;
 
 public class BossController : MonsterController
 {
-    
+    #region Constant and Fields
     public Transform m_skill1Pos;
     Transform m_skill2Pos;
     ProjectileController m_skill;
@@ -16,10 +16,7 @@ public class BossController : MonsterController
     [SerializeField]
     ProjectileController m_fire;
     bool isRage;
-    //   MonsterAnimController m_animCtr;
-
     float RageCool;
-
     public enum SkillType
     {
         Normal,
@@ -27,12 +24,14 @@ public class BossController : MonsterController
         Skill2,
         Max
     }
-    bool isSkill()
+    bool isSkill()//스킬 체커
     {
         int skillRate = Random.Range(0, 100);
         if (skillRate <= 70) return false;
         else return true;
     }
+    #endregion
+
     #region Coroutine
     IEnumerator Coroutine_Rage()
     {
@@ -56,6 +55,7 @@ public class BossController : MonsterController
         isRage= false;
     }
     #endregion
+
     #region AnimEvent
     void AnimEvent_CancleSkill()
     {
@@ -110,7 +110,8 @@ public class BossController : MonsterController
         m_skill2Pos.gameObject.SetActive(false) ;
     }
     #endregion
-    #region SFX
+
+    #region SFXPlay
     public override void PlayHitSound(string sound) //피격시 소리 재생
     {
         SoundManager.Instance.PlaySFX(sound, m_source);
@@ -141,6 +142,8 @@ public class BossController : MonsterController
         SoundManager.Instance.PlaySFX("SFX_BossRage", m_source);
     }
     #endregion
+
+    #region Methods
     void SetAttack()
     {
         SetState(MonsterState.Attack); //공격 상태로 변경
@@ -280,5 +283,5 @@ public class BossController : MonsterController
         m_skill2Pos.gameObject.SetActive(false);
         RageCool = 15;
     }
-
+    #endregion
 }

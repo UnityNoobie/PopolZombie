@@ -37,7 +37,7 @@ public class QuickSlot_slot : MonoBehaviour
     {
         if (count <= 0)
         {
-            UIManager.Instance.SystemMessageItem(item);
+            UGUIManager.Instance.SystemMessageItem(item);
             return;
         }
         if (item.Equals("HealPack")) Setheal(30);

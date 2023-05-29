@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerAnimController : AnimationController
 {
+    #region Constants and Fields
     public enum Motion  //플레이어의 모션종류.
     {
         Idle,
@@ -24,8 +25,13 @@ public class PlayerAnimController : AnimationController
     StringBuilder m_sb = new StringBuilder(); //ToString이용시 GC작동하여 렉발생 가능하므로 using System.Text; 추가하여 스트링빌더로 저장하여 사용! 
     [SerializeField]
     Motion m_motion; //현재 모션을 인스펙터창에 노출.
-    public Motion GetMotion { get { return m_motion; } }    
+    #endregion
 
+    #region Property
+    public Motion GetMotion { get { return m_motion; } }
+    #endregion
+
+    #region Methods
     public void SetMotionState(Motion motion) //현재 모션의 상태를 정의.
     {
         m_motion = motion;
@@ -41,5 +47,6 @@ public class PlayerAnimController : AnimationController
     protected override void Start() //AnimController의 Start를 실행해주기위함.
     {
         base.Start();
-    }    
+    }
+    #endregion
 }
