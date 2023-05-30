@@ -139,7 +139,6 @@
     <Compile Include="Assets\External\NGUI\Scripts\Editor\BMFontReader.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Editor\UIAtlasInspector.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Editor\UIFontInspector.cs" />
-    <Compile Include="Assets\UITween\Editor\EditorUITween.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Editor\EventDelegateDrawer.cs" />
   </ItemGroup>
   <ItemGroup>

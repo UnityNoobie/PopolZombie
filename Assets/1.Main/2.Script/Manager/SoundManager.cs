@@ -47,6 +47,10 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
         PlayBGM("BGM_Boss");
         PlaySFX("SFX_BossStart", m_sfx);
     }
+    public void LobbyStart()
+    {
+        PlayBGM("BGM_Lobby");
+    }
     public void PlayBGM(string bgm) //BGM«√∑π¿Ã
     {
         TableSound sound = m_info.GetSound(bgm);

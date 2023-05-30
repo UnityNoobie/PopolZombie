@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class UGUIManager : SingletonDontDestroy<UGUIManager> 
+public class UGUIManager : SingletonMonoBehaviour<UGUIManager> 
 {
     #region Constants and Fields
     TextMeshProUGUI m_systemMessage;
@@ -88,6 +88,9 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
         m_storeUI = Utill.GetChildObject(gameObject, "StoreUI").GetComponent<StoreUI>();
         m_roundUI = Utill.GetChildObject(gameObject, "RoundUI").GetComponent<RoundUI>();
     }
+    protected override void OnStart()
+    {
+        GameManager.Instance.StartDay();
+    }
     #endregion
-
 }

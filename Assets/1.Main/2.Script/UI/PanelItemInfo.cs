@@ -10,13 +10,13 @@ public class PanelItemInfo : MonoBehaviour
 {
 
     #region Constants and Fields
-    public TextMeshProUGUI[] m_infoText;
-    public TextMeshProUGUI m_ItemInfo;
-    public TextMeshProUGUI m_ItemName;
-    [SerializeField]
+    TextMeshProUGUI[] m_infoText;
+    TextMeshProUGUI m_ItemInfo;
+    TextMeshProUGUI m_ItemName;
     Image m_image;
     StoreUI m_store;
     int id;
+    bool isfirst = true;
     #endregion
 
     #region Methods
@@ -24,7 +24,6 @@ public class PanelItemInfo : MonoBehaviour
     {
         if (m_type.Equals(ItemType.Item))
         {
-           // Debug.Log("아이템 들어옴");
             m_ItemName.text = m_store.m_itemdata[m_id].type;
             m_ItemInfo.text = m_store.m_itemdata[m_id].ItemInfo;
             m_image.sprite = ImageLoader.Instance.GetImage(m_store.m_itemdata[m_id].type);
@@ -88,6 +87,18 @@ public class PanelItemInfo : MonoBehaviour
             }
         }
     }
+    void LoadData()
+    {
+        isfirst = false;
+        if(m_store == null)
+           m_store = UGUIManager.Instance.GetStoreUI();
+        if(!m_store.isLoaded())
+             m_store.LoadInfo();
+        m_infoText = Utill.GetChildObject(gameObject, "TextInfos").GetComponentsInChildren<TextMeshProUGUI>();
+        m_ItemInfo = Utill.GetChildObject(gameObject, "Text_Info").GetComponent<TextMeshProUGUI>();
+        m_ItemName = Utill.GetChildObject(gameObject, "ItemName").GetComponent<TextMeshProUGUI>();
+        m_image = Utill.GetChildObject(gameObject, "ItemImage").GetComponent<Image>();
+    }
     private void ResetData()
     {
         for(int i = 0; i < m_infoText.Length; i++)
@@ -111,12 +122,12 @@ public class PanelItemInfo : MonoBehaviour
             m_image.sprite = null;
         }
     }
-    public void SetStoreUI(StoreUI store)
-    {
-        m_store = store;
-    }
     public void ActiveUI(int ID, ItemType type)
     {
+        if (isfirst)
+        {
+            LoadData();
+        }
         gameObject.SetActive(true);
         if (id.Equals(ID)) //계속해서 호출되는 경우가 계속 있어서 메모리 낭비 방지를 위해 같은 ID일땐 기존 데이터 게속사용.
         {

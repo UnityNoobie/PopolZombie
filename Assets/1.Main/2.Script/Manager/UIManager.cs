@@ -7,9 +7,11 @@ using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 using static GunManager;
 
-public class UIManager : SingletonDontDestroy<UIManager>
+public class UIManager : SingletonMonoBehaviour<UIManager>
 {
     #region Constants and Fields
+    [SerializeField]
+    Light m_dirLight;
     [SerializeField]
     public UILabel m_weaponInfoUI;
     [SerializeField]
@@ -169,6 +171,10 @@ public class UIManager : SingletonDontDestroy<UIManager>
         m_enemyReamain.text = "¹ã±îÁö : " + remain;
     }
     #endregion
+    public Light GetLight()
+    {
+        return m_dirLight;
+    }
     private void Start()
     {
         Skilldata.Instance.Load();

@@ -161,13 +161,22 @@ public class StoreUI : MonoBehaviour
             m_slots[i].SetStore(this, m_buyItem, m_info);
         }
         m_closebutton.onClick.AddListener(CloseStore);
-        m_info.SetStoreUI(this);
-        m_status.SetStore(this);
         isloaded = true;
+    }
+    public void LoadInfo()
+    {
+        if(!isloaded)
+        {
+            LoadUIInfo();
+        }
+    }
+    public bool isLoaded()
+    {
+        return isloaded;
     }
     void Awake()
     {
-        if(!isloaded)
+        if (!isloaded)
         {
             LoadUIInfo();
         }

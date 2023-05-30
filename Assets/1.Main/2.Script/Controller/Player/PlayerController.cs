@@ -348,11 +348,13 @@ public class PlayerController : MonoBehaviour
         {    
             m_skillactive = !m_skillactive;
             UGUIManager.Instance.SkillUIChange(m_skillactive,m_skill);
+            SoundManager.Instance.PlaySFX("SFX_ClickUI", Camera.main.GetComponent<AudioSource>());
         }
         if (Input.GetKeyDown(KeyCode.I)) //인벤토리 온오프
         {
             m_isactive = !m_isactive; //불값으로 액티브 변경. 
             UGUIManager.Instance.GetStatusUI().SetActive(m_isactive);
+            SoundManager.Instance.PlaySFX("SFX_ClickUI", Camera.main.GetComponent<AudioSource>());
         }
         m_dir = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
         if(m_dir.x !=0 && m_dir.z !=0)
@@ -587,10 +589,7 @@ public class PlayerController : MonoBehaviour
         effect.SetActive(true);
         SetStatus(m_weaponData.ID); //스테이터스 재정비 합니다잉
     }
-    void LevelUPSend()
-    {
 
-    }
     void LevelUP()
     {
         PlayLvUpSound();

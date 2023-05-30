@@ -29,7 +29,7 @@ public class TableSoundInfo : Singleton<TableSoundInfo>
     {
         m_soundDic.Clear();
         TableLoader.Instance.LoadData(TableLoader.Instance.LoadTableData("SoundFX"));
-        for(int i = 0; i < 34;  i++)
+        for(int i = 0; i < 37;  i++)
         {
             TableSound data = new TableSound();
             string str = TableLoader.Instance.GetString("Type", i);

@@ -24,10 +24,7 @@ public class StatusUI : MonoBehaviour
         if(active)
           SetStatus();
     }
-    public void SetStore(StoreUI store)
-    {
-        m_panelItemInfo.SetStoreUI(store);
-    }
+
     public void SetPlayer(PlayerController player)
     {
         m_player = player;
