@@ -36,7 +36,7 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
     }
     public void OnPointerUp(PointerEventData eventData)
     {
-        SoundManager.Instance.PlaySFX("SFX_ClickUI", Camera.main.GetComponent<AudioSource>());
+        UGUIManager.Instance.PlayClickSFX();
         if (!isEmpty)
         {
             if (m_player.GetComponent<PlayerGetItem>().HaveEnoughMoney(price))
@@ -75,7 +75,7 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
         {
             price = m_store.m_itemdata[ID].Price;
             itemType = m_store.m_itemdata[ID].type;
-            m_name = m_store.m_itemdata[ID].Type + ".LV"+ m_store.m_itemdata[ID].Grade;
+            m_name = itemType + ".LV"+ m_store.m_itemdata[ID].Grade;
             m_text.text =  (m_name + "\n АЁАн : " +price) ;
         }
         else if (type.Equals(ItemType.Armor))

@@ -49,6 +49,7 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
         if (Input.GetKeyDown(KeyCode.Escape))
         {  
             UGUIManager.Instance.CloseAllTabs();
+            UGUIManager.Instance.OpenExitMenu();
         }
         for (int i = 0; i < MonsterManager.Instance.m_monsterList.Count; i++)
         {

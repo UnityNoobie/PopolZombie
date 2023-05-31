@@ -91,7 +91,7 @@ public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,
     }
     public void OnPointerUp(PointerEventData eventData) //클릭 시
     {
-        SoundManager.Instance.PlaySFX("SFX_ClickUI", Camera.main.GetComponent<AudioSource>());
+        UGUIManager.Instance.PlayClickSFX();
         if (!m_isChoice) //평상시 상황에서
         {
             if (m_isActive)//습득한 스킬일 경우 경고 메세지 호출 후 무반응 하도록

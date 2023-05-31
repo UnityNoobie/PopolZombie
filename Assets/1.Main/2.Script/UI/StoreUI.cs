@@ -119,7 +119,7 @@ public class StoreUI : MonoBehaviour
     }
     void SetSlotItem(List<int> list,ItemType type)
     {
-        if (type.Equals(ItemType.Item))
+      if (type.Equals(ItemType.Item))
         {
             for (int i = 0; i < list.Count; i++)
             {

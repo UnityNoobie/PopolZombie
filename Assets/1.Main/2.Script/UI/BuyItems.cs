@@ -24,14 +24,14 @@ public class BuyItems : MonoBehaviour
     #region Methods
     public void OnclickedTrue()
     {
-        SoundManager.Instance.PlaySFX("SFX_ClickUI", Camera.main.GetComponent<AudioSource>());
+        UGUIManager.Instance.PlayClickSFX();
         m_slot.BuyItem();
         UGUIManager.Instance.SystemMessageSendMessage(m_name + " 구매에 성공하였습니다.");
         DeActiveUI();
     }
     public void OnclickedFalse()
     {
-        SoundManager.Instance.PlaySFX("SFX_ClickUI", Camera.main.GetComponent<AudioSource>());
+        UGUIManager.Instance.PlayClickSFX();
         UGUIManager.Instance.SystemMessageSendMessage("아이템 구입을 취소하였습니다.");
         DeActiveUI();
     }

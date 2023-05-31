@@ -35,9 +35,18 @@ public class GameManager : SingletonDontDestroy<GameManager>
         }
         StartNight();
     }
+    IEnumerator Coroutine_GameStart()
+    {
+        yield return new WaitForSeconds(1);
+        StartDay();
+    }
     #endregion
 
     #region Methods
+    void ResetRound()
+    {
+        m_round = 0;
+    }
     public void StartDay()
     {
         if (m_light == null)
@@ -62,6 +71,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     }
     public void StartLobby()
     {
+        ResetRound();
         SceneManager.LoadScene("LobbyScene");
         SoundManager.Instance.LobbyStart();
     }
@@ -74,22 +84,18 @@ public class GameManager : SingletonDontDestroy<GameManager>
             UGUIManager.Instance.GetStoreUI().SetItemListTable();
         }
     }
-    void LoadScene(Scene sin)
+    public void LoadScene(Scene sin)
     {
         m_scene = sin;
         SceneManager.LoadScene(sin.ToString());
-        if (m_scene.Equals(Scene.GameScene))
-        {
-           // StartDay();
-        }
-        else if (m_scene.Equals(Scene.LobbyScene))
+        if (m_scene.Equals(Scene.LobbyScene))
         {
             StartLobby();
         }
     }
     public void GameStart()
     {
-        LoadScene(Scene.GameScene);
+        StartCoroutine(Coroutine_GameStart());
     }
     public int GetRoundInfo()
     {
@@ -98,6 +104,19 @@ public class GameManager : SingletonDontDestroy<GameManager>
     public DaynNight GetDayInfo()
     {
         return roundTime;
+    }
+    public void LoadLobbyScene()
+    {
+        UGUIManager.Instance.LoadLobbyScene();
+        LoadScene(Scene.LobbyScene);
+    }
+    public void ExitGame() //게임 종료 기능
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit(); // 어플리케이션 종료
+#endif
     }
     protected override void OnStart()
     {
@@ -111,19 +130,6 @@ public class GameManager : SingletonDontDestroy<GameManager>
             StartLobby();
         }
     }
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.V))
-        {
-            if(m_scene == Scene.LobbyScene)
-            {
-                LoadScene(Scene.GameScene);
-            }
-            else
-            {
-                LoadScene(Scene.LobbyScene);
-            }
-        }
-    }
+
     #endregion
 }

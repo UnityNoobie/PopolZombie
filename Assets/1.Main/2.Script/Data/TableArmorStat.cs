@@ -133,6 +133,9 @@ public class TableArmorStat : Singleton<TableArmorStat>
 
         TableLoader.Instance.LoadData(TableLoader.Instance.LoadTableData("ArmorStat"));
         m_armorData.Clear();
+        m_lowArmor.Clear();
+        m_midArmor.Clear();
+        m_highArmor.Clear();
         for (int i = 0; i < 15; i++)
         {
             ArmorData data = new ArmorData();

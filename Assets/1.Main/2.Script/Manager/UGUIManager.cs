@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class UGUIManager : SingletonMonoBehaviour<UGUIManager> 
+public class UGUIManager : SingletonDontDestroy<UGUIManager> 
 {
     #region Constants and Fields
     TextMeshProUGUI m_systemMessage;
@@ -11,6 +11,10 @@ public class UGUIManager : SingletonMonoBehaviour<UGUIManager>
     StatusUI m_statusUI;
     SkillUI m_skillUI;
     RoundUI m_roundUI;
+    LoadingScene m_loadingScene;
+    AudioSource m_source;
+    ExitMenu m_exit;
+    Canvas m_canvas;
     #endregion
 
     #region Coroutine
@@ -58,6 +62,10 @@ public class UGUIManager : SingletonMonoBehaviour<UGUIManager>
     {
         return m_roundUI;
     }
+    public void PlayClickSFX()
+    {
+        SoundManager.Instance.PlaySFX("SFX_LobbyMouseEnter", m_source);
+    }
     public void CloseAllTabs()
     {
         m_systemMessage.text = null;
@@ -80,17 +88,41 @@ public class UGUIManager : SingletonMonoBehaviour<UGUIManager>
     {
         m_roundUI.ChangeRound();
     }
+    public void LoadGameScene()
+    {
+        m_loadingScene.StartGameScene();
+    }
+    public void LoadLobbyScene()
+    {
+        m_loadingScene.gameObject.SetActive(true);
+        m_loadingScene.LoadLobbyScene();
+    }
+    public void LayerChanger(int layer)
+    {
+        m_canvas.sortingOrder = layer;
+    }
+    public void OpenExitMenu()
+    {
+        if (m_exit.gameObject.activeSelf)
+        {
+            m_exit.DeActiveUi();
+        }
+        else
+        {
+            m_exit.ActiveUI();
+        } 
+    }
     protected override void OnAwake()
     {
+        m_canvas = GetComponent<Canvas>();
+        m_source = GetComponentInChildren<AudioSource>();
+        m_exit = Utill.GetChildObject(gameObject, "ExitCheck").GetComponent<ExitMenu>();
         m_systemMessage = Utill.GetChildObject(gameObject, "SystemMessage").GetComponent<TextMeshProUGUI>();
         m_statusUI = Utill.GetChildObject(gameObject, "StatusUI").GetComponent<StatusUI>();
         m_skillUI = Utill.GetChildObject(gameObject, "SkillUI").GetComponent<SkillUI>();
         m_storeUI = Utill.GetChildObject(gameObject, "StoreUI").GetComponent<StoreUI>();
         m_roundUI = Utill.GetChildObject(gameObject, "RoundUI").GetComponent<RoundUI>();
-    }
-    protected override void OnStart()
-    {
-        GameManager.Instance.StartDay();
+        m_loadingScene = GetComponentInChildren<LoadingScene>(true);
     }
     #endregion
 }

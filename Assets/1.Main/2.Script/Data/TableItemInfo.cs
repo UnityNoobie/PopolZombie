@@ -72,7 +72,10 @@ public class ItemData
      {
          TableLoader.Instance.LoadData(TableLoader.Instance.LoadTableData("ItemInfo"));
          itemData.Clear();
-         for(int i = 0; i < 6; i++)
+        m_lowItem.Clear();
+        m_midItem.Clear();
+        m_highItem.Clear();
+         for (int i = 0; i < 6; i++)
          {
              ItemData data = new ItemData();
              data.type = TableLoader.Instance.GetString("Type", i);
@@ -84,9 +87,9 @@ public class ItemData
              data.Defence = TableLoader.Instance.GetInteger("Defence", i);
              data.ItemInfo = TableLoader.Instance.GetString("Info", i);
              itemData.Add(data.ID, data);
-            if (data.Grade == 1) m_lowItem.Add(data.ID);
-            else if (data.Grade == 2) m_midItem.Add(data.ID);
-            else if (data.Grade == 3) m_highItem.Add(data.ID);
+             if (data.Grade == 1) m_lowItem.Add(data.ID);
+             else if (data.Grade == 2) m_midItem.Add(data.ID);
+             else if (data.Grade == 3) m_highItem.Add(data.ID);
         }
      }
 

@@ -132,6 +132,9 @@ public class TableGunstat : Singleton<TableGunstat>
 
         TableLoader.Instance.LoadData(TableLoader.Instance.LoadTableData("WeaponStat"));
         m_WeaponData.Clear();
+        m_lowWeapon.Clear();
+        m_midWeapon.Clear();
+        m_highWeapon.Clear();
         for (int i = 0; i < 21; i++)
         {
             WeaponData data = new WeaponData();
