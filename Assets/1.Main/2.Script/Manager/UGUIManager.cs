@@ -15,6 +15,8 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     AudioSource m_source;
     ExitMenu m_exit;
     Canvas m_canvas;
+    VolumeController m_volumeUI;
+    GameMenuUI m_menuUI;
     #endregion
 
     #region Coroutine
@@ -72,6 +74,11 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
         m_storeUI.CloseStore();
         m_statusUI.SetActive(false);
         m_skillUI.DeActiveSkill();
+        m_volumeUI.CancleMenu();
+    }
+    public void OpenMenu()
+    {
+        m_menuUI.ActiveUI();
     }
     public void SkillUIChange(bool aa, PlayerSkillController skill)
     {
@@ -112,7 +119,13 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
             m_exit.ActiveUI();
         } 
     }
-    protected override void OnAwake()
+
+    public void ActiveVolumeControll()
+    {
+        m_volumeUI.ActiveUI();
+        LayerChanger(1);
+    }
+    void SetTransform()
     {
         m_canvas = GetComponent<Canvas>();
         m_source = GetComponentInChildren<AudioSource>();
@@ -122,7 +135,15 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
         m_skillUI = Utill.GetChildObject(gameObject, "SkillUI").GetComponent<SkillUI>();
         m_storeUI = Utill.GetChildObject(gameObject, "StoreUI").GetComponent<StoreUI>();
         m_roundUI = Utill.GetChildObject(gameObject, "RoundUI").GetComponent<RoundUI>();
+        m_volumeUI = Utill.GetChildObject(gameObject, "VolumeControl").GetComponent<VolumeController>();
+        m_menuUI = Utill.GetChildObject(gameObject, "InGameMenu").GetComponent<GameMenuUI>();
+        m_volumeUI.SetTransform();
+        m_menuUI.SetTransform();
         m_loadingScene = GetComponentInChildren<LoadingScene>(true);
+    }
+    protected override void OnAwake()
+    {
+        SetTransform();
     }
     #endregion
 }

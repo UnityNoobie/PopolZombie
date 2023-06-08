@@ -130,6 +130,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIPlayAnimation.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\UISliderColors.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\UISnapshotPoint.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\ExitMenu.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenHeight.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonMessage.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\SetColorOnSelection.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\Internal\AnimationOrTween.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UISlider.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\UIBasicSprite.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\LoadingScene.cs" />
     <Compile Include="Assets\1.Main\2.Script\Manager\GunManager.cs" />
     <Compile Include="Assets\1.Main\2.Script\Manager\MonsterManager.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\UIDrawCall.cs" />
@@ -289,8 +291,8 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
-    <Compile Include="Assets\1.Main\2.Script\UI\LoadingScene.cs" />
-    <Compile Include="Assets\1.Main\2.Script\UI\ExitMenu.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\VolumeController.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\GameMenuUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

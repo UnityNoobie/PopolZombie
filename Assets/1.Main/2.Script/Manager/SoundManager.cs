@@ -7,16 +7,22 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
 {
     #region Constants and Fields
     TableSound m_info = new TableSound();
-    AudioSource[] m_audio;
     AudioSource m_bgm;
     AudioSource m_sfx;
     [SerializeField]
     AudioClip[] m_bgmClips;
     [SerializeField]
     AudioClip[] m_sfxClips;
-    const int MaxVolumLevel = 10;
     public Dictionary<string, AudioClip> m_audioClips = new Dictionary<string, AudioClip>();
     Dictionary<AudioClip,int> m_sfxPlayList = new Dictionary<AudioClip,int>();
+
+    const float MaxVolumLevel = 10;
+    const float MinVolumLevel = 0;
+    bool ismute = false;
+    float totalVolume = 5;
+    float bgmVolume = 10;
+    float sfxVolume = 10;
+
     #endregion
 
     #region Coroutine
@@ -51,10 +57,32 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
     {
         PlayBGM("BGM_Lobby");
     }
+    public float GetTotalVolume()
+    {
+        return totalVolume;
+    }
+    public float GetBGMVolume()
+    {
+        return bgmVolume;
+    }
+    public float GetSFXVolume()
+    {
+        return sfxVolume;
+    }
+    public bool IsMute()
+    {
+        return ismute;
+    }
     public void PlayBGM(string bgm) //BGM플레이
     {
         TableSound sound = m_info.GetSound(bgm);
         AudioClip sfx = m_audioClips[sound.GetSound(bgm).soundList[Random.Range(0, sound.soundList.Length)]];
+        if(ismute) //음소거 기능이 활성화 되어있을 경우
+            m_bgm.volume = 0;
+        else //음소거상태가 아니라면
+        {
+            m_bgm.volume = (totalVolume * bgmVolume) / 100;
+        }
         m_bgm.clip = sfx;
         m_bgm.Play();
     }
@@ -81,26 +109,65 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
         {
             m_sfxPlayList.Add(sfx, 1);
         }
+        if (ismute) //음소거 기능이 활성화 되어있을 경우
+            source.volume = 0;
+        else //음소거상태가 아니라면
+        {
+            source.volume = (totalVolume * sfxVolume) / 100;
+        }
         source.PlayOneShot(sfx);
         StartCoroutine(Couroutine_CheckPlayEnded(sfx, sfx.length));
     }
-    public void SetBgmVolume(int level)
+    public void SetBgmVolume(float level) //볼륨 설정 기능 UI로 슬라이드 만들어 적용 예정
     {
-        if (level > MaxVolumLevel)
+        if(level >= MaxVolumLevel)  //볼륨이 최대치보다 클 경우
         {
-            level = MaxVolumLevel;
-            m_bgm.volume = (float)level / MaxVolumLevel;
+            bgmVolume = MaxVolumLevel;
+            return;
         }
-        else
+        else if (level <= MinVolumLevel)
         {
-            m_bgm.volume = (float)level / MaxVolumLevel;
+            bgmVolume = MinVolumLevel;
         }
+        bgmVolume = level;
+        m_bgm.volume = m_bgm.volume = (totalVolume * bgmVolume) / 100;
+    }
+    public void SetSfxVolume(float level)
+    {
+        if (level >= MaxVolumLevel)  //볼륨이 최대치보다 클 경우
+        {
+            sfxVolume = MaxVolumLevel;
+            return;
+        }
+        else if (level <= MinVolumLevel)
+        {
+            sfxVolume = MinVolumLevel;
+        }
+        sfxVolume = level;
+    }
+    public void SetVolumeLevel(float level)
+    {
+        if (level >= MaxVolumLevel)  //볼륨이 최대치보다 클 경우
+        {
+            totalVolume = MaxVolumLevel;
+            return;
+        }
+        else if (level <= MinVolumLevel)
+        {
+            totalVolume = MinVolumLevel;
+        }
+        totalVolume = level;
     }
     public void SetMute(bool isActive)
     {
-        for (int i = 0; i < (int)m_audio.Length; i++)
+        ismute = isActive;
+        if(ismute)
         {
-            m_audio[i].mute = isActive;
+            m_bgm.volume = 0;
+        }
+        else
+        {
+            m_bgm.volume = (totalVolume * bgmVolume) / 100;
         }
     }
     protected override void OnStart()

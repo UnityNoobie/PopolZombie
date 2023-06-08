@@ -47,6 +47,10 @@ public class GameManager : SingletonDontDestroy<GameManager>
     {
         m_round = 0;
     }
+    public void SetTimeScale(float time)
+    {
+        Time.timeScale = time;
+    }
     public void StartDay()
     {
         if (m_light == null)

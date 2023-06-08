@@ -59,6 +59,7 @@ public class Lobby_UI : MonoBehaviour, IPointerClickHandler
     {
         m_startButton.onClick.AddListener(StartButton);
         m_exitButton.onClick.AddListener(ExitButton);
+        m_settingButton.onClick.AddListener(UGUIManager.Instance.ActiveVolumeControll);
         m_startButton.onClick.AddListener(OnClick);
         m_settingButton.onClick.AddListener(OnClick);
         m_recordButton.onClick.AddListener(OnClick);
