@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static Unity.VisualScripting.Member;
 
-public class Lobby_UI : MonoBehaviour, IPointerClickHandler
+public class Lobby_UI : MonoBehaviour
 {
     #region Constants and Fields
     GameObject m_panelButton;
@@ -16,61 +16,42 @@ public class Lobby_UI : MonoBehaviour, IPointerClickHandler
     Button m_recordButton;
     Button m_creditButton;
     Button m_exitButton;
-    AudioSource m_source;
     #endregion
 
-    IEnumerator Coroutine_StartLoad()
-    {
-        
-        yield return new WaitForSeconds(0.1f);
-        
-    }
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        UGUIManager.Instance.PlayClickSFX();
-    }
+    #region Methods
     void StartButton()
     {
-        
         UGUIManager.Instance.LoadGameScene();
         gameObject.SetActive(false);
-        GameManager.Instance.LoadScene(Scene.GameScene);
-        //StartCoroutine(Coroutine_StartLoad());     
-    }
-    void ExitButton()
-    {
-        GameManager.Instance.ExitGame();
-    }
-    void OnClick()
-    {
-        OnPointerClick(null);
-    }
-    void FindTransform()
-    {
-        m_panelButton = Utill.GetChildObject(gameObject, "Panel_Button").gameObject;
-        m_startButton = Utill.GetChildObject(gameObject,"Button_GameStart").GetComponent<Button>();
-        m_settingButton = Utill.GetChildObject(gameObject, "Button_Setting").GetComponent<Button>();
-        m_recordButton = Utill.GetChildObject(gameObject, "Button_GameRecord").GetComponent<Button>();
-        m_creditButton = Utill.GetChildObject(gameObject, "Button_GameMaker").GetComponent<Button>();
-        m_exitButton = Utill.GetChildObject(gameObject, "Button_GameExit").GetComponent<Button>();
-        SetListoner();
+        GameManager.Instance.LoadScene(Scene.GameScene);  
     }
     void SetListoner()
     {
         m_startButton.onClick.AddListener(StartButton);
-        m_exitButton.onClick.AddListener(ExitButton);
+        m_exitButton.onClick.AddListener(GameManager.Instance.ExitGame);
         m_settingButton.onClick.AddListener(UGUIManager.Instance.ActiveVolumeControll);
-        m_startButton.onClick.AddListener(OnClick);
-        m_settingButton.onClick.AddListener(OnClick);
-        m_recordButton.onClick.AddListener(OnClick);
-        m_creditButton.onClick.AddListener(OnClick);
-        m_exitButton.onClick.AddListener(OnClick);
+        m_startButton.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
+        m_settingButton.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
+        m_recordButton.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
+        m_creditButton.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
+        m_exitButton.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
     }
-    private void Start()
+    public void SetTransform()
     {
-        m_source = Utill.GetChildObject(gameObject,"Camera").GetComponent<AudioSource>();
-        FindTransform();
+        m_panelButton = Utill.GetChildObject(gameObject, "Panel_Button").gameObject;
+        m_startButton = Utill.GetChildObject(m_panelButton, "Button_GameStart").GetComponent<Button>();
+        m_settingButton = Utill.GetChildObject(m_panelButton, "Button_Setting").GetComponent<Button>();
+        m_recordButton = Utill.GetChildObject(m_panelButton, "Button_GameRecord").GetComponent<Button>();
+        m_creditButton = Utill.GetChildObject(m_panelButton, "Button_GameMaker").GetComponent<Button>();
+        m_exitButton = Utill.GetChildObject(m_panelButton, "Button_GameExit").GetComponent<Button>();
+        SetListoner();
     }
-
+    public void SetActiveUI(bool isActive)
+    {
+        gameObject.SetActive(isActive);
+    }
+    
+    
+    #endregion
 
 }

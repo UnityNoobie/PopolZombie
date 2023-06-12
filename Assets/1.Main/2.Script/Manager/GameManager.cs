@@ -18,7 +18,6 @@ public enum Scene
 public class GameManager : SingletonDontDestroy<GameManager>
 {
     #region Constants and Field
-    [SerializeField]
     LightIntensityTween m_light;
     Scene m_scene;
     DaynNight roundTime;
@@ -83,11 +82,18 @@ public class GameManager : SingletonDontDestroy<GameManager>
     {
         m_round++;
         UIManager.Instance.RoundInfo(m_round);
-        if (m_round == 15 || m_round == 30)
+        if (m_round == 10 || m_round == 20)
         {
             UGUIManager.Instance.GetStoreUI().SetItemListTable();
         }
     }
+    /*
+    public void SetBossRound() //테스트 사진찍기용
+    {
+        StopAllCoroutines();
+        m_round = 10;
+        StartNight();
+    }*/
     public void LoadScene(Scene sin)
     {
         m_scene = sin;
@@ -113,6 +119,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     {
         UGUIManager.Instance.LoadLobbyScene();
         LoadScene(Scene.LobbyScene);
+        
     }
     public void ExitGame() //게임 종료 기능
     {
@@ -125,14 +132,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     protected override void OnStart()
     {
         Application.targetFrameRate = 60; //타겟프레임
-        if (m_scene.Equals(Scene.GameScene))   
-        {
-            StartDay();
-        }
-        else if(m_scene == Scene.LobbyScene) 
-        { 
-            StartLobby();
-        }
+        SoundManager.Instance.LobbyStart();
     }
 
     #endregion

@@ -9,20 +9,16 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
     TableSound m_info = new TableSound();
     AudioSource m_bgm;
     AudioSource m_sfx;
-    [SerializeField]
     AudioClip[] m_bgmClips;
-    [SerializeField]
     AudioClip[] m_sfxClips;
     public Dictionary<string, AudioClip> m_audioClips = new Dictionary<string, AudioClip>();
     Dictionary<AudioClip,int> m_sfxPlayList = new Dictionary<AudioClip,int>();
-
     const float MaxVolumLevel = 10;
     const float MinVolumLevel = 0;
     bool ismute = false;
     float totalVolume = 5;
     float bgmVolume = 10;
     float sfxVolume = 10;
-
     #endregion
 
     #region Coroutine
@@ -94,7 +90,6 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
         AudioClip sfx = m_audioClips[sound.GetSound(name).soundList[Random.Range(0,sound.soundList.Length)]];
         if (m_sfxPlayList.TryGetValue(sfx, out count))
         {
-            
             if (count >= m_info.GetSound(name).maxPlay) //지정된 사운드의 최대 재생횟수보다 크다면 리턴해서 시끄러워지지 않게.
             {
                 return;
@@ -118,7 +113,7 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
         source.PlayOneShot(sfx);
         StartCoroutine(Couroutine_CheckPlayEnded(sfx, sfx.length));
     }
-    public void SetBgmVolume(float level) //볼륨 설정 기능 UI로 슬라이드 만들어 적용 예정
+    public void SetBgmVolume(float level) //볼륨 설정 기능
     {
         if(level >= MaxVolumLevel)  //볼륨이 최대치보다 클 경우
         {

@@ -2577,7 +2577,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 3.2
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 12800000, guid: 35e8aa30ec76b274ba25f650234bc174, type: 3}
   mFont: {fileID: 0}
   mText: "\uC544\uC774\uD15C\uC0C1\uC810"
   mFontSize: 30
@@ -3847,7 +3847,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 3.2
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 12800000, guid: 35e8aa30ec76b274ba25f650234bc174, type: 3}
   mFont: {fileID: 0}
   mText: "\uBB34\uAE30\uC0C1\uC810"
   mFontSize: 30
@@ -4047,7 +4047,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 3.2
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 12800000, guid: 35e8aa30ec76b274ba25f650234bc174, type: 3}
   mFont: {fileID: 0}
   mText: "\uBC29\uC5B4\uAD6C\uC0C1\uC810"
   mFontSize: 30
@@ -5912,7 +5912,7 @@ MonoBehaviour:
   alwaysOnScreen: 0
   anchorOffset: 0
   renderQueue: 0
-  startingRenderQueue: 3006
+  startingRenderQueue: 3007
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -28865,7 +28865,7 @@ MonoBehaviour:
   alwaysOnScreen: 0
   anchorOffset: 0
   renderQueue: 0
-  startingRenderQueue: 3006
+  startingRenderQueue: 3008
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}

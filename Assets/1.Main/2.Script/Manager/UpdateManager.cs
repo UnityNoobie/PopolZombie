@@ -51,11 +51,15 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
             UGUIManager.Instance.CloseAllTabs();
             UGUIManager.Instance.OpenMenu();
         }
-
         for (int i = 0; i < MonsterManager.Instance.m_monsterList.Count; i++)
         {
             MonsterManager.Instance.m_monsterList[i].BehaviourProcess(); //각각 호출하는거보다 하나의 업데이트에서 사용하면 더 효율적임.
         }
+        /*
+        if (Input.GetKeyDown(KeyCode.V)) //테스트기능
+        {
+            GameManager.Instance.SetBossRound();
+        }*/
     }
     private void Awake()
     {

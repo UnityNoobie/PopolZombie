@@ -287,6 +287,7 @@ public class PlayerSkillController : MonoBehaviour
         m_player = GetComponent<PlayerController>();
         m_gunmanager = GetComponent<GunManager>();
         m_abilityType = PlayerAbilityType.None;
+       // m_skillPoint = 100; 테스트용
     }
     #endregion
 }

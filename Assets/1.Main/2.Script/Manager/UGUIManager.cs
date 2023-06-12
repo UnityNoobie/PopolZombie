@@ -11,6 +11,7 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     StatusUI m_statusUI;
     SkillUI m_skillUI;
     RoundUI m_roundUI;
+    Lobby_UI m_lobbyUI;
     LoadingScene m_loadingScene;
     AudioSource m_source;
     ExitMenu m_exit;
@@ -44,10 +45,7 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     #endregion
 
     #region Method
-    public void SetPlayer(PlayerController player)
-    {
-        m_statusUI.SetPlayer(player);
-    }
+   
     public StoreUI GetStoreUI()
     {
         return m_storeUI;
@@ -63,6 +61,10 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     public RoundUI GetRoundUI()
     {
         return m_roundUI;
+    }
+    public void SetPlayer(PlayerController player)
+    {
+        m_statusUI.SetPlayer(player);
     }
     public void PlayClickSFX()
     {
@@ -104,6 +106,10 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
         m_loadingScene.gameObject.SetActive(true);
         m_loadingScene.LoadLobbyScene();
     }
+    public void ActiveLobbyUI(bool isActive)
+    {
+        m_lobbyUI.SetActiveUI(isActive);
+    }
     public void LayerChanger(int layer)
     {
         m_canvas.sortingOrder = layer;
@@ -119,26 +125,26 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
             m_exit.ActiveUI();
         } 
     }
-
     public void ActiveVolumeControll()
     {
         m_volumeUI.ActiveUI();
-        LayerChanger(1);
     }
     void SetTransform()
     {
         m_canvas = GetComponent<Canvas>();
         m_source = GetComponentInChildren<AudioSource>();
-        m_exit = Utill.GetChildObject(gameObject, "ExitCheck").GetComponent<ExitMenu>();
-        m_systemMessage = Utill.GetChildObject(gameObject, "SystemMessage").GetComponent<TextMeshProUGUI>();
-        m_statusUI = Utill.GetChildObject(gameObject, "StatusUI").GetComponent<StatusUI>();
-        m_skillUI = Utill.GetChildObject(gameObject, "SkillUI").GetComponent<SkillUI>();
-        m_storeUI = Utill.GetChildObject(gameObject, "StoreUI").GetComponent<StoreUI>();
-        m_roundUI = Utill.GetChildObject(gameObject, "RoundUI").GetComponent<RoundUI>();
-        m_volumeUI = Utill.GetChildObject(gameObject, "VolumeControl").GetComponent<VolumeController>();
-        m_menuUI = Utill.GetChildObject(gameObject, "InGameMenu").GetComponent<GameMenuUI>();
+        m_exit = GetComponentInChildren<ExitMenu>(true);
+        m_systemMessage = GetComponentInChildren<TextMeshProUGUI>(true);
+        m_statusUI = GetComponentInChildren<StatusUI>(true);
+        m_skillUI = GetComponentInChildren<SkillUI>(true);
+        m_storeUI = GetComponentInChildren<StoreUI>(true);
+        m_roundUI = GetComponentInChildren<RoundUI>(true);
+        m_volumeUI = GetComponentInChildren<VolumeController>(true);
+        m_lobbyUI = GetComponentInChildren<Lobby_UI>(true);
+        m_menuUI = GetComponentInChildren<GameMenuUI>(true);
         m_volumeUI.SetTransform();
         m_menuUI.SetTransform();
+        m_lobbyUI.SetTransform();
         m_loadingScene = GetComponentInChildren<LoadingScene>(true);
     }
     protected override void OnAwake()

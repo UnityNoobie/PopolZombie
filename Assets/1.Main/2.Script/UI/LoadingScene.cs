@@ -37,7 +37,6 @@ public class LoadingScene : MonoBehaviour
     IEnumerator Coroutine_ToLobbyScene()
     {
         LoadLoading();
-        
         float initialValue = m_loadingslider.value;
         float timer = 0f;
         while (timer < 3)
@@ -61,14 +60,13 @@ public class LoadingScene : MonoBehaviour
     }
     void LoadFinished()
     {
-        UGUIManager.Instance.LayerChanger(0);
         m_startButton.gameObject.SetActive(true);
         m_loadingslider.gameObject.SetActive(false);
     }
     void LoadLobby()
     {
-        UGUIManager.Instance.LayerChanger(0);
         gameObject.SetActive(false);
+        UGUIManager.Instance.ActiveLobbyUI(true);
     }
     void LoadStart()
     {
@@ -81,7 +79,6 @@ public class LoadingScene : MonoBehaviour
     void LoadLoading()
     {
         m_startButton.gameObject.SetActive(false);
-        UGUIManager.Instance.LayerChanger(1);
         m_group.alpha = 1.0f;
         m_loadingslider.value = 0;
         m_loadingslider.gameObject.SetActive(true);
@@ -97,7 +94,7 @@ public class LoadingScene : MonoBehaviour
             m_startButton.onClick.AddListener(StartButton);
         }
         gameObject.SetActive(true);
-        UGUIManager.Instance.LayerChanger(1);
+        UGUIManager.Instance.ActiveLobbyUI(false);
         LoadStart();
     }
     public void LoadLobbyScene()

@@ -40,9 +40,9 @@ public class VolumeController : MonoBehaviour
         m_sfxValue = Utill.GetChildObject(m_sfxVolume.gameObject, "Value").GetComponent<TextMeshProUGUI>();
         m_muteButton = m_mutePos.GetComponentInChildren<Button>();
         m_muteImage = m_muteButton.GetComponent<Image>();
-        LoadImage();
         m_accaptButton = Utill.GetChildObject(gameObject, "Button_Accapt").GetComponent<Button>();
         m_cancleButton = Utill.GetChildObject(gameObject,"Button_Cancle").GetComponent<Button>();
+        LoadImage();
         m_muteButton.onClick.AddListener(SetMute);
         m_muteButton.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
         m_accaptButton.onClick.AddListener(SetValue);
@@ -52,6 +52,7 @@ public class VolumeController : MonoBehaviour
     }
     public void SetValueControl() //사운드 벨류값 표시
     {
+        UGUIManager.Instance.PlayClickSFX();
         m_totalValue.text = m_totalVolume.value.ToString();
         m_bgmValue.text = m_bgmVolume.value.ToString();
         m_sfxValue.text = m_sfxVolume.value.ToString();
@@ -89,7 +90,6 @@ public class VolumeController : MonoBehaviour
     }
     public void CancleMenu()
     {
-        UGUIManager.Instance.LayerChanger(0);
         UGUIManager.Instance.PlayClickSFX();
         gameObject.SetActive(false);
     }

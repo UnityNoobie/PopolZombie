@@ -6,21 +6,17 @@ using UnityEngine.UI;
 public class ExitMenu : MonoBehaviour
 {
     Button m_exit;
-    Button m_lobby;
     Button m_cancle;
     bool isfirst = true;
 
     void SetTransform()
     {
         m_exit = Utill.GetChildObject(gameObject, "ExitGame").GetComponent<Button>();
-        m_lobby = Utill.GetChildObject(gameObject, "LobbyScene").GetComponent<Button>();
         m_cancle = Utill.GetChildObject(gameObject, "Cancle").GetComponent<Button>();
     }
     void SetAdlistoner()
     {
         m_exit.onClick.AddListener(GameManager.Instance.ExitGame);
-        m_lobby.onClick.AddListener(GameManager.Instance.LoadLobbyScene);
-        m_lobby.onClick.AddListener(DeActiveUi);
         m_cancle.onClick.AddListener(DeActiveUi);
     }
     public void ActiveUI()

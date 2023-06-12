@@ -141,6 +141,7 @@ public class PlayerGetItem : MonoBehaviour
         m_collider = GetComponent<CapsuleCollider>();
         GetUIPos();
         SetPlayer(m_player);
+       // m_playerMoney = 10000;//테스트용
     }
     #endregion
 }
