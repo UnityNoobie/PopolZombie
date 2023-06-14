@@ -79,7 +79,7 @@ public class StoreUI : MonoBehaviour
     }
     public void SetItemListTable()
     {
-        if (GameManager.Instance.GetRoundInfo() >= 21) //라운드가 21이상일 때 상점에 상위 아이템 추가
+        if (GameManager.Instance.GetRoundInfo() >= 20) //라운드가 21이상일 때 상점에 상위 아이템 추가
         {
             for (int i = 0; i < TableArmorStat.Instance.m_highArmor.Count; i++)
             {
@@ -94,7 +94,7 @@ public class StoreUI : MonoBehaviour
                 m_itemList.Add(TableItemData.Instance.m_highItem[i]);
             }
         }
-        else if (GameManager.Instance.GetRoundInfo() >= 11) //라운드가 11이상일 때 상점에 중간아이템 추가
+        else if (GameManager.Instance.GetRoundInfo() >= 10) //라운드가 11이상일 때 상점에 중간아이템 추가
         {
             for (int i = 0; i < TableArmorStat.Instance.m_midArmor.Count; i++)
             {

@@ -25,6 +25,8 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
     [SerializeField]
     UILabel m_enemyReamain;
     [SerializeField]
+    UILabel m_gameDuration;
+    [SerializeField]
     TweenAlpha m_damagedUI;
     [SerializeField]
     TweenAlpha m_DieUI;
@@ -170,15 +172,14 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
     {
         m_enemyReamain.text = "밤까지 : " + remain;
     }
+    public void GameDuration(int time)
+    {
+        m_gameDuration.text = "진행시간 : "+ time/60 +":" + time%60;
+    }
     #endregion
     public Light GetLight()
     {
         return m_dirLight;
-    }
-    private void Start()
-    {
-        Skilldata.Instance.Load();
-        ImageLoader.Instance.Load();
     }
 
 }

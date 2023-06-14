@@ -35,7 +35,7 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
     {
         isSpawning = true;
         yield return new WaitForSeconds(5);
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 3; i++)
         {
             CreateMonster();
             yield return new WaitForSeconds(5);
@@ -82,9 +82,9 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
     public void CreateMonster() //몬스터를 랜덤확률로 소환하는기능
     {
         int a = GameManager.Instance.GetRoundInfo();
-        int Count = 7 + (a / 2);
-        if(Count>=30)
-            Count= 30;
+        int Count = 5 + (a / 2);
+        if(Count>=20)
+            Count= 20;
         for (int i = 0; i < Count; i++)
         {
                 var mon = m_monsterPools[(MonsterType)Random.Range(0, (int)MonsterType.Boss)].Get();
@@ -97,7 +97,7 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
                 mon.SetMonster(m_player,hud);
                 mon.tag = "Zombie"; //다시 태그를 좀비로 설정하여 맞을 수 있게끔.
                // mon.GetComponent<MonsterAnimController>().SetFloat("Speed",StatScale(thisRound));
-                hud.gameObject.SetActive(true); //어차피 데미지르 ㄹ줄때 hudcontroller에서 Show()로 키니까 꺼봄  작동이 잘 안됨..
+                hud.gameObject.SetActive(true); //어차피 데미지르 줄때 hudcontroller에서 Show()로 키니까 꺼봄  작동이 잘 안됨..
                 m_monsterList.Add(mon);
         }
         if(GameManager.Instance.GetRoundInfo() % 10 == 0) //10라운드마다 나오는 보스 스테이지
@@ -126,7 +126,6 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
     }
     protected override void OnStart()
     {
-        TableMonsterStat.Instance.Load();
         m_mainCam = Camera.main;
         m_uiCam = GameObject.FindGameObjectWithTag("UICamera").GetComponent<Camera>();
         m_monPrefabs = Resources.LoadAll<GameObject>("Prefabs/Zombie"); //몬스터의 프리펩을 가져와

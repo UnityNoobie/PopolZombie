@@ -134,7 +134,6 @@ public class PlayerGetItem : MonoBehaviour
     }
     void Awake()    
     {
-        TableItemData.Instance.Load();
         m_player = GetComponent<PlayerController>();
         m_weaponmanager = GetComponent<GunManager>();
         m_armormanager = GetComponent<ArmorManager>();

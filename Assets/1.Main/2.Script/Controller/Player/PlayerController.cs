@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour
     bool m_hastitle = false;
     bool m_skillactive = false;
     bool m_isactive = false;
+    float gameDuration = 0;
     public float pDefence;
     #endregion
     //방어구 정보 임시저장
@@ -442,6 +443,10 @@ public class PlayerController : MonoBehaviour
     {
         return m_level;
     }
+    public int GetScore()
+    {
+        return m_score;
+    }
     public void AddScore(int score)
     {
         m_score += score;
@@ -670,6 +675,10 @@ public class PlayerController : MonoBehaviour
         m_status.level = 1;
         HPControl(0);
         SetHudText();
+    }
+    private void Update()
+    {
+        BehaviorProcess();
     }
     #endregion
 }

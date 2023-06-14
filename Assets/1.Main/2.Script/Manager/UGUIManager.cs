@@ -12,12 +12,14 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     SkillUI m_skillUI;
     RoundUI m_roundUI;
     Lobby_UI m_lobbyUI;
+    ScoreUI m_scoreUI;
     LoadingScene m_loadingScene;
     AudioSource m_source;
     ExitMenu m_exit;
     Canvas m_canvas;
     VolumeController m_volumeUI;
     GameMenuUI m_menuUI;
+    PlayerController m_player;
     #endregion
 
     #region Coroutine
@@ -65,6 +67,7 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     public void SetPlayer(PlayerController player)
     {
         m_statusUI.SetPlayer(player);
+        m_player = player;
     }
     public void PlayClickSFX()
     {
@@ -80,7 +83,15 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     }
     public void OpenMenu()
     {
-        m_menuUI.ActiveUI();
+        if(m_menuUI.gameObject.activeSelf)
+        {
+            m_menuUI.DeactiveUI();
+        }
+        else
+        {
+            m_menuUI.ActiveUI();
+        }
+       
     }
     public void SkillUIChange(bool aa, PlayerSkillController skill)
     {
@@ -129,6 +140,14 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     {
         m_volumeUI.ActiveUI();
     }
+    public void SaveData(int gameduration,int round)
+    {
+        m_scoreUI.SaveGameData(m_player, gameduration,round);
+    }
+    public void ActiveScoreUI()
+    {
+        m_scoreUI.ActiveUI();
+    }
     void SetTransform()
     {
         m_canvas = GetComponent<Canvas>();
@@ -142,12 +161,16 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
         m_volumeUI = GetComponentInChildren<VolumeController>(true);
         m_lobbyUI = GetComponentInChildren<Lobby_UI>(true);
         m_menuUI = GetComponentInChildren<GameMenuUI>(true);
+        m_scoreUI = GetComponentInChildren<ScoreUI>(true);
+        m_loadingScene = GetComponentInChildren<LoadingScene>(true);
+        m_scoreUI.SetTransform();
         m_volumeUI.SetTransform();
         m_menuUI.SetTransform();
         m_lobbyUI.SetTransform();
-        m_loadingScene = GetComponentInChildren<LoadingScene>(true);
+        m_skillUI.SetTransform();
+     
     }
-    protected override void OnAwake()
+    protected override void OnStart()
     {
         SetTransform();
     }

@@ -20,7 +20,6 @@ public class EffectPool : SingletonMonoBehaviour<EffectPool>
     }
     void LoadEffect() //이펙트를 불러오는 메소드
     {
-        TableEffect.Instance.Load(); //
         EffectPoolUnit unit = null; //
         VFXAutoDestroy autoDestroy;
         foreach (KeyValuePair<int, TableEffect.Data> pair in TableEffect.Instance.m_tableData)

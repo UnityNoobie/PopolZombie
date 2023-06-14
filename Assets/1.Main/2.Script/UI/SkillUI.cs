@@ -56,10 +56,10 @@ public class SkillUI : MonoBehaviour
     void FindSlots() //위치에서 자식오브젝트의 슬롯목록 가져오기
     {
       //  m_SkillSlot = m_contents.GetComponentsInChildren<SkillSlot>();
-        m_lowSlots = m_low.GetComponentsInChildren<SkillSlot>();
-        m_midSlots = m_mid.GetComponentsInChildren<SkillSlot>();
-        m_highSlots = m_high.GetComponentsInChildren<SkillSlot>();
-        m_masterSlot = m_master.GetComponentInChildren<SkillSlot>();
+        m_lowSlots = m_low.GetComponentsInChildren<SkillSlot>(true);
+        m_midSlots = m_mid.GetComponentsInChildren<SkillSlot>(true);
+        m_highSlots = m_high.GetComponentsInChildren<SkillSlot>(true);
+        m_masterSlot = m_master.GetComponentInChildren<SkillSlot>(true);
     }
     void OpenSlots(int grade) //슬롯 OnOff기능
     {
@@ -272,18 +272,19 @@ public class SkillUI : MonoBehaviour
         parent.GetComponentsInChildren<SkillSlot>();
     }
 
-
-
-    private void Start()
+    public void SetTransform()
     {
         SetPos();
-        FindSlots(); 
+        FindSlots();
         m_skillOpen.onClick.AddListener(TryOpenSkill);
         m_masterOpen.onClick.AddListener(TryOpenMaster);
         m_Agility.onClick.AddListener(SetAgilitySlot);
         m_Strength.onClick.AddListener(SetStrengthSlot);
         m_Utility.onClick.AddListener(SetUtilitySlot);
-        SetAgilitySlot();   
+    }
+    private void Start()
+    {
+        SetAgilitySlot();
     }
     #endregion
 }

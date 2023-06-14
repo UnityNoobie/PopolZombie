@@ -119,6 +119,8 @@ public class MonsterController : MonoBehaviour
     #region AnimEvent
     protected virtual void AnimEvent_SetDie()
     {
+        StopAllCoroutines();
+        SetRimLight(Color.black);
         MonsterManager.Instance.ResetMonster(this, m_hudPanel);
     }
     protected virtual void AnimEvent_SetAttack()

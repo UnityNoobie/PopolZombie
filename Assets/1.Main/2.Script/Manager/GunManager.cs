@@ -131,7 +131,6 @@ public class GunManager : MonoBehaviour
         }
         private void Awake()
         {
-            TableGunstat.Instance.Load(); //종 테이블 정보를 로드해서 미리 가져다 두기.
             m_player = GetComponent<PlayerController>();
             shooter = GetComponent<PlayerShooter>();
             m_animCtr = GetComponent<PlayerAnimController>();

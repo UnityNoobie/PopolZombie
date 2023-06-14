@@ -181,10 +181,6 @@ public class ArmorManager : MonoBehaviour
         m_wearArmors[4] = m_boots[grade];
         m_wearArmors[4].SetActive(true); //헬멧을 장착아머0번에 넣어주고 액티브 켜주기.
     }
-    void Awake()
-    {
-        TableArmorStat.Instance.Load(); //Start에서 로드하여 딕셔너리에 아이템 정보값 저장해두기.
-    }
 
     void Start()
     {

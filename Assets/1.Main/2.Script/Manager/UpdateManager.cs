@@ -17,7 +17,6 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
     #region Method
     public void SetPlayerController(PlayerController player)
     {
-       
         if (m_players != null) //플레이어리스트가 비어있지 않다면
         {
             m_playersSave = m_players; //기존 플레이어리스트를 받아와줌.
@@ -42,10 +41,6 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < m_players.Length; i++)
-        {
-            m_players[i].BehaviorProcess();
-        }
         if (Input.GetKeyDown(KeyCode.Escape))
         {  
             UGUIManager.Instance.CloseAllTabs();
@@ -55,11 +50,7 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
         {
             MonsterManager.Instance.m_monsterList[i].BehaviourProcess(); //각각 호출하는거보다 하나의 업데이트에서 사용하면 더 효율적임.
         }
-        /*
-        if (Input.GetKeyDown(KeyCode.V)) //테스트기능
-        {
-            GameManager.Instance.SetBossRound();
-        }*/
+  
     }
     private void Awake()
     {

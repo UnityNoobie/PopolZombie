@@ -14,6 +14,12 @@ public enum WeaponType
     Axe,
     Max
 }
+public enum MeleeType
+{
+    Bat,
+    Axe,
+    Max
+}
 public class WeaponData
 {
     public int ID { get; set; } //무기의 ID값.

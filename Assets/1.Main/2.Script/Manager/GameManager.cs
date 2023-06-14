@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public enum DaynNight
@@ -22,6 +21,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     Scene m_scene;
     DaynNight roundTime;
     int m_round = 0;
+    int gameDuration = 0;
     #endregion
 
     #region Coroutine
@@ -38,12 +38,23 @@ public class GameManager : SingletonDontDestroy<GameManager>
     {
         yield return new WaitForSeconds(1);
         StartDay();
+        StartCoroutine(Coroutine_GameDuration()); //데이터 저장을 위한 게임 시간 누적용
+    }
+    IEnumerator Coroutine_GameDuration() //게임 진행시간 누적
+    {
+        while(m_scene == Scene.GameScene)
+        {
+            yield return new WaitForSeconds(1);
+            gameDuration++;
+            UIManager.Instance.GameDuration(gameDuration);
+        }
     }
     #endregion
 
     #region Methods
     void ResetRound()
     {
+        gameDuration = 0;
         m_round = 0;
     }
     public void SetTimeScale(float time)
@@ -74,6 +85,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     }
     public void StartLobby()
     {
+        StopAllCoroutines();
         ResetRound();
         SceneManager.LoadScene("LobbyScene");
         SoundManager.Instance.LobbyStart();
@@ -87,14 +99,11 @@ public class GameManager : SingletonDontDestroy<GameManager>
             UGUIManager.Instance.GetStoreUI().SetItemListTable();
         }
     }
-    /*
-    public void SetBossRound() //테스트 사진찍기용
+    void SaveScore() //게임 데이터 저장기능
     {
-        StopAllCoroutines();
-        m_round = 10;
-        StartNight();
-    }*/
-    public void LoadScene(Scene sin)
+        UGUIManager.Instance.SaveData(gameDuration, m_round);
+    }
+    public void LoadScene(Scene sin)// 씬바꿔주기
     {
         m_scene = sin;
         SceneManager.LoadScene(sin.ToString());
@@ -117,9 +126,9 @@ public class GameManager : SingletonDontDestroy<GameManager>
     }
     public void LoadLobbyScene()
     {
+        SaveScore();
         UGUIManager.Instance.LoadLobbyScene();
         LoadScene(Scene.LobbyScene);
-        
     }
     public void ExitGame() //게임 종료 기능
     {
@@ -128,6 +137,21 @@ public class GameManager : SingletonDontDestroy<GameManager>
 #else
         Application.Quit(); // 어플리케이션 종료
 #endif
+    }
+    void LoadAlltable()
+    {
+        TableEffect.Instance.Load();
+        TableGunstat.Instance.Load();
+        TableArmorStat.Instance.Load();
+        TableItemData.Instance.Load();
+        TableMonsterStat.Instance.Load();
+        TableSoundInfo.Instance.Load();
+        Skilldata.Instance.Load();
+        ImageLoader.Instance.Load();
+    }
+    protected override void OnAwake()
+    {
+        LoadAlltable();
     }
     protected override void OnStart()
     {

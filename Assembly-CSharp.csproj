@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIAnchor.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\ScoreUI.cs" />
     <Compile Include="Assets\1.Main\2.Script\Manager\ImageLoader.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\ResizePanel.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\LagRotation.cs" />
@@ -278,7 +279,6 @@
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\System\InvStat.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\Spin.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonKeys.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Data\TableMeleeStat.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIToggledObjects.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\WindowAutoYaw.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\Singleton\Singleton.cs" />
@@ -291,7 +291,6 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
-    <Compile Include="Assets\1.Main\2.Script\UI\ScoreUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

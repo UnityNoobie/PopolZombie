@@ -30,6 +30,7 @@ public class Lobby_UI : MonoBehaviour
         m_startButton.onClick.AddListener(StartButton);
         m_exitButton.onClick.AddListener(GameManager.Instance.ExitGame);
         m_settingButton.onClick.AddListener(UGUIManager.Instance.ActiveVolumeControll);
+        m_recordButton.onClick.AddListener(UGUIManager.Instance.ActiveScoreUI);
         m_startButton.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
         m_settingButton.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
         m_recordButton.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);

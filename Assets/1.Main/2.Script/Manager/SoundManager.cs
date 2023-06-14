@@ -167,7 +167,6 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
     }
     protected override void OnStart()
     {
-        TableSoundInfo.Instance.Load();
         m_bgmClips = Resources.LoadAll<AudioClip>("Audio/BGM");
         m_sfxClips = Resources.LoadAll<AudioClip>("Audio/SFX");
         m_bgm = Utill.GetChildObject(gameObject, "BGM").GetComponent<AudioSource>();

@@ -18,7 +18,6 @@ public class ImageLoader : Singleton<ImageLoader>
         for (int i = 0; i < Tex.Length; i++)
         {
             m_weaponImages.Add(Tex[i].name, Tex[i]);
-          //  Debug.Log(m_weaponImages[Tex[i].name]);
         }
 
     }
