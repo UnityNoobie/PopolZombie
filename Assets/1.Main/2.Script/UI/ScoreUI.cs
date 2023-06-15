@@ -36,11 +36,18 @@ public class ScoreUI : MonoBehaviour
 
     void SetText()
     {
-        for(int i = page*10; i < page * 10 + 10; i++)
+        int temp = 0;
+        for(int i = page*10; i < (page * 10) + 10; i++)
         {
             if (i >= gameDataList.Count)
-                break;
-            m_records[i].text = (i + 1) + "\t" + gameDataList[i].level + "\t" + gameDataList[i].nickName + "\t\t" + gameDataList[i].round + "\t\t" + (int)gameDataList[i].gameDuration/60 +" : "+ gameDataList[i].gameDuration%60 + "\t\t" + gameDataList[i].score + "\t\t";
+            {
+                m_records[temp].text = null;
+            }
+            else
+            {
+                m_records[temp].text = (i + 1) + "\t" + gameDataList[i].level + "\t" + gameDataList[i].nickName + "\t\t" + gameDataList[i].round + "\t\t" + (int)gameDataList[i].gameDuration / 60 + " : " + gameDataList[i].gameDuration % 60 + "\t\t" + gameDataList[i].score + "\t\t";
+            }
+            temp++;
         }
     }
     public void SaveGameData(PlayerController player,int gameDuration, int round)
@@ -53,7 +60,7 @@ public class ScoreUI : MonoBehaviour
         newData.score = player.GetScore();
 
         gameDataList.Add(newData);
-        gameDataList = gameDataList.OrderByDescending(data => data.round).ThenBy(data => data.score).ToList();
+        gameDataList = gameDataList.OrderByDescending(data => data.round).ThenByDescending(data => data.score).ThenBy(data => Mathf.FloorToInt(data.gameDuration)).ToList();
 
         string jsonData = JsonConvert.SerializeObject(gameDataList, Formatting.Indented);
         string filePath = Path.Combine(Application.persistentDataPath, fileName);
@@ -67,7 +74,6 @@ public class ScoreUI : MonoBehaviour
             string jsonData = File.ReadAllText(filePath);
             gameDataList = JsonConvert.DeserializeObject<List<ScoreData>>(jsonData);
         }
-        Debug.Log(filePath);
     }
     void NextPage()
     {

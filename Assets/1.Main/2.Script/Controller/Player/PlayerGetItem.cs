@@ -32,6 +32,10 @@ public class PlayerGetItem : MonoBehaviour
         }
         return false;
     }
+    public int GetMoney()
+    {
+        return m_playerMoney;
+    }
     #endregion
 
     #region Methods

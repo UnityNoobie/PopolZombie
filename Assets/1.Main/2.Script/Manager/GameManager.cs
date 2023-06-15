@@ -22,6 +22,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     DaynNight roundTime;
     int m_round = 0;
     int gameDuration = 0;
+    string playerNickname;
     #endregion
 
     #region Coroutine
@@ -124,11 +125,19 @@ public class GameManager : SingletonDontDestroy<GameManager>
     {
         return roundTime;
     }
+    public string GetNickname()
+    {
+        return playerNickname;
+    }
     public void LoadLobbyScene()
     {
         SaveScore();
         UGUIManager.Instance.LoadLobbyScene();
         LoadScene(Scene.LobbyScene);
+    }
+    public void SetNickname(string str)
+    {
+        playerNickname = str;
     }
     public void ExitGame() //게임 종료 기능
     {

@@ -664,7 +664,7 @@ public class PlayerController : MonoBehaviour
         m_hitPos = Utill.GetChildObject(gameObject, "Dummy_Pos");
         m_level = 1;
         m_levelexp = Levelexp();
-        SetPlayerKnickName("Hunter");
+        SetPlayerKnickName(GameManager.Instance.GetNickname());
     }
     private void Start()
     {

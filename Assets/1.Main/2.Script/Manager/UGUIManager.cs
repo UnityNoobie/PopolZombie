@@ -13,6 +13,8 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     RoundUI m_roundUI;
     Lobby_UI m_lobbyUI;
     ScoreUI m_scoreUI;
+    TipsUI m_tipsUI;
+    NickInput m_input;
     LoadingScene m_loadingScene;
     AudioSource m_source;
     ExitMenu m_exit;
@@ -25,9 +27,11 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     #region Coroutine
     IEnumerator SystemMessage(string message)
     {
+        m_systemMessage.gameObject.SetActive(true);
         m_systemMessage.text = message;
         yield return new WaitForSeconds(1.5f);
         m_systemMessage.text = null;
+        m_systemMessage.gameObject.SetActive(false);
     }
     #endregion
 
@@ -80,6 +84,7 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
         m_statusUI.SetActive(false);
         m_skillUI.DeActiveSkill();
         m_volumeUI.CancleMenu();
+        m_tipsUI.gameObject.SetActive(false);
     }
     public void OpenMenu()
     {
@@ -107,6 +112,16 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     public void StartRound()
     {
         m_roundUI.ChangeRound();
+    }
+    public void GameStart()
+    {
+        m_lobbyUI.gameObject.SetActive(false);
+        LoadGameScene();
+        GameManager.Instance.LoadScene(Scene.GameScene);
+    }
+    public void InputNickName()
+    {
+        m_input.ActiveUI();
     }
     public void LoadGameScene()
     {
@@ -148,12 +163,16 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     {
         m_scoreUI.ActiveUI();
     }
+    public void ActiveTipMenu() 
+    {
+        m_tipsUI.ActiveUI();
+    }
     void SetTransform()
     {
         m_canvas = GetComponent<Canvas>();
         m_source = GetComponentInChildren<AudioSource>();
         m_exit = GetComponentInChildren<ExitMenu>(true);
-        m_systemMessage = GetComponentInChildren<TextMeshProUGUI>(true);
+        m_systemMessage = Utill.GetChildObject(gameObject, "SystemMessage").GetComponent<TextMeshProUGUI>();
         m_statusUI = GetComponentInChildren<StatusUI>(true);
         m_skillUI = GetComponentInChildren<SkillUI>(true);
         m_storeUI = GetComponentInChildren<StoreUI>(true);
@@ -163,6 +182,10 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
         m_menuUI = GetComponentInChildren<GameMenuUI>(true);
         m_scoreUI = GetComponentInChildren<ScoreUI>(true);
         m_loadingScene = GetComponentInChildren<LoadingScene>(true);
+        m_input = GetComponentInChildren<NickInput>(true);
+        m_tipsUI = GetComponentInChildren<TipsUI>(true);
+        m_tipsUI.SetTransform();
+        m_input.SetTransform();
         m_scoreUI.SetTransform();
         m_volumeUI.SetTransform();
         m_menuUI.SetTransform();
@@ -172,7 +195,6 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     }
     protected override void OnStart()
     {
-        SetTransform();
-    }
+        SetTransform();    }
     #endregion
 }

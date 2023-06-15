@@ -17,10 +17,9 @@ public class GameMenuUI : MonoBehaviour
     {
         m_play.onClick.AddListener(DeactiveUI); //시간 재개 게임오브젝트 종료
         m_sound.onClick.AddListener(UGUIManager.Instance.ActiveVolumeControll); //
-        //m_vidio.onClick.AddListener(); 기능이 아직 업소용
-        // m_control.onClick.AddListener 이것도용
         m_lobby.onClick.AddListener(GameManager.Instance.LoadLobbyScene); //로비 불러오기
         m_lobby.onClick.AddListener(DeactiveUI);
+        m_control.onClick.AddListener(UGUIManager.Instance.ActiveTipMenu);
         m_exit.onClick.AddListener(UGUIManager.Instance.OpenExitMenu);//게임종료
         m_play.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
         m_sound.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);

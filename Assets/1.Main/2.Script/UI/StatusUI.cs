@@ -63,11 +63,11 @@ public class StatusUI : MonoBehaviour
         m_status[11].text = "³Ë¹é ÆÄ¿ö : " + m_player.GetStatus.KnockBackDist;
         if (m_player.HasTitle())
         {
-            m_name.text = "["+m_player.GetStatus.Title+"]\nLV" + m_player.GetStatus.level + " " + m_player.GetStatus.KnickName;
+            m_name.text = "["+m_player.GetStatus.Title+"]\nLV" + m_player.GetStatus.level + " [" + m_player.GetStatus.KnickName+"]";
         }
         else
         {
-            m_name.text = "LV" + m_player.GetStatus.level + " " + m_player.GetStatus.KnickName;
+            m_name.text = "LV" + m_player.GetStatus.level + " [" + m_player.GetStatus.KnickName + "]";
         }
       
     }
