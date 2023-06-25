@@ -22,6 +22,7 @@ public class StoreUI : MonoBehaviour
     TextMeshProUGUI m_StoreName;
     BuyItems m_buyItem;
     PanelItemInfo m_info;
+    PanelItemInfo m_equipItem;
     StatusUI m_status;
     PlayerController m_player;
     bool isloaded = false;
@@ -147,6 +148,7 @@ public class StoreUI : MonoBehaviour
         m_slots = m_content.GetComponentsInChildren<Slot>(true);
         m_status = UGUIManager.Instance.GetStatusUI();
         m_info = Utill.GetChildObject(gameObject, "ItemInfo").GetComponent<PanelItemInfo>();
+        m_equipItem = Utill.GetChildObject(gameObject, "EquipItem").GetComponent<PanelItemInfo>();
         m_buyItem = Utill.GetChildObject(gameObject, "BuyItem").GetComponent<BuyItems>();
         m_StoreName = Utill.GetChildObject(gameObject,"StoreName").GetComponent<TextMeshProUGUI>();
         m_closebutton = Utill.GetChildObject(gameObject,"CloseButton").GetComponent<Button>();
@@ -158,7 +160,7 @@ public class StoreUI : MonoBehaviour
         SetItemListTable();
         for (int i = 0; i < m_slots.Length; i++)
         {
-            m_slots[i].SetStore(this, m_buyItem, m_info);
+            m_slots[i].SetStore(this, m_buyItem, m_info,m_equipItem);
         }
         m_closebutton.onClick.AddListener(CloseStore);
         isloaded = true;

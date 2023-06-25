@@ -13,7 +13,7 @@ public class SlotStatus : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     TextMeshProUGUI m_itemName;
     Image m_itemImage;
     ItemType m_type;
-    int m_id;
+    int m_id = -1;
     #endregion
 
     #region Methods
@@ -26,15 +26,20 @@ public class SlotStatus : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         m_type = type;
         m_id = id;
         m_infoUI = infoui;
-
+    }
+    public int GetEquipItemId()
+    {
+        return m_id;
     }
     public void OnPointerEnter(PointerEventData pointer)
     {
-            m_infoUI.ActiveUI(m_id,m_type);
+        if (m_id == -1) return;
+        m_infoUI.ActiveUI(m_id,m_type);
     }
     public void OnPointerExit(PointerEventData pointer)
     {
-        if(pointer.pointerEnter.CompareTag("Slot"))
+        if (m_id == -1) return;
+        if (pointer.pointerEnter.CompareTag("Slot"))
         m_infoUI.DeActiveUI();
     }
     #endregion

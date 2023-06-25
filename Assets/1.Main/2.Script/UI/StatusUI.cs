@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static ItemData;
 
 public class StatusUI : MonoBehaviour
 {
@@ -52,7 +53,7 @@ public class StatusUI : MonoBehaviour
         m_status[0].text = "체력 : "+ m_player.GetStatus.hp + " / " + m_player.GetStatus.hpMax;
         m_status[1].text = "공격력 : "+ m_player.GetStatus.damage;
         m_status[2].text = "방어력 : "+ m_player.GetStatus.defense;
-        m_status[3].text = "공격속도 : " + m_player.GetStatus.atkSpeed;
+        m_status[3].text = "공격속도 : " + m_player.GetStatus.atkSpeed.ToString("F1");
         m_status[4].text = "데미지 감소 : " + m_player.GetStatus.DamageRigist+"%";
         m_status[5].text = "크리티컬 확률 : " + m_player.GetStatus.criRate + "%";
         m_status[6].text = "초당 회복량 : " + m_player.GetStatus.SkillHeal;
@@ -70,6 +71,36 @@ public class StatusUI : MonoBehaviour
             m_name.text = "LV" + m_player.GetStatus.level + " [" + m_player.GetStatus.KnickName + "]";
         }
       
+    }
+    public int GetEquipItemID(ArmorType armortype, ItemType itemtype)
+    {
+        if (itemtype.Equals(ItemType.Armor))
+        {
+            switch (armortype)
+            {
+                case ArmorType.Helmet:
+                    return m_itemSlots[0].GetEquipItemId();
+                    break;
+                case ArmorType.Armor:
+                    return m_itemSlots[1].GetEquipItemId();
+                    break;
+                case ArmorType.Glove:
+                    return m_itemSlots[2].GetEquipItemId();
+                    break;
+                case ArmorType.Pants:
+                    return m_itemSlots[3].GetEquipItemId();
+                    break;
+                case ArmorType.Boots:
+                    return m_itemSlots[4].GetEquipItemId();
+                    break;
+            }
+        }
+        else if (itemtype.Equals(ItemType.Weapon))
+        {
+            return m_itemSlots[5].GetEquipItemId();
+        }
+        return -1;
+
     }
     public void SetSlot(int id, string imagename, ArmorType armortype,ItemType itemtype)
     {

@@ -90,7 +90,6 @@ public class PlayerGetItem : MonoBehaviour
     }
     void ChangeWeapon(int Id)
     {
-
         m_weaponmanager.ChangeWeapon(Id,m_statusUI);
     }
 
@@ -114,23 +113,6 @@ public class PlayerGetItem : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            if (m_player.GetHPValue() >= 0.95)
-            {
-                UGUIManager.Instance.SystemMessageItem("HealPack");
-                return;
-            }
-            m_slot.UseQuickSlotITem(1, "HealPack");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            m_slot.UseQuickSlotITem(2, "Barricade");
-        }
-    }
     void GetUIPos()
     {
         m_statusUI = UGUIManager.Instance.GetStatusUI();
@@ -144,7 +126,7 @@ public class PlayerGetItem : MonoBehaviour
         m_collider = GetComponent<CapsuleCollider>();
         GetUIPos();
         SetPlayer(m_player);
-       // m_playerMoney = 10000;//테스트용
+        m_playerMoney = 10000;//테스트용
     }
     #endregion
 }

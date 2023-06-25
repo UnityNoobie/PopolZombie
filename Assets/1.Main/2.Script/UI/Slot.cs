@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static ItemData;
 
 public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPointerExitHandler
 {
@@ -20,15 +21,18 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
     ItemType m_type;
     string m_name;
     StoreUI m_store;
+    ArmorType m_armortype;
     PanelItemInfo m_info;
+    PanelItemInfo m_equipItem;
     #endregion
 
     #region Methods
-    public void SetStore(StoreUI store, BuyItems buyItem,PanelItemInfo info)
+    public void SetStore(StoreUI store, BuyItems buyItem,PanelItemInfo info,PanelItemInfo equip)
     {
         m_store = store;
         m_buyItem = buyItem;
         m_info = info;
+        m_equipItem = equip;
     }
     public void BuyItem()
     {
@@ -54,6 +58,11 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
         if (m_image.sprite != null && eventData.pointerEnter.CompareTag("Slot")) //eventData.pointerEnter.CompareTag("Slot")
         {
             m_info.ActiveUI(itemID, m_type);
+            if(m_type != ItemType.Item)
+            {
+                m_equipItem.ActiveUI(UGUIManager.Instance.GetStatusUI().GetEquipItemID(m_armortype, m_type), m_type);
+            }
+            
         }
     }
     
@@ -62,6 +71,7 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
         if (eventData.pointerEnter.CompareTag("Slot"))
         {
             m_info.DeActiveUI();
+            m_equipItem.DeActiveUI();
        }
     }
     public void SetStoreItem(int ID,string image,ItemType type,PlayerController player)
@@ -71,8 +81,10 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
         itemID = ID;
         m_type = type;
         isEmpty = false;
+
         if (type.Equals(ItemType.Item))
         {
+            m_armortype = ArmorType.Max;
             price = m_store.m_itemdata[ID].Price;
             itemType = m_store.m_itemdata[ID].type;
             m_name = itemType + ".LV"+ m_store.m_itemdata[ID].Grade;
@@ -83,10 +95,12 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
             price = m_store.m_armordata[ID].Price;
             itemType = m_store.m_armordata[ID].ItemType;
             m_name = m_store.m_armordata[ID].Type + ".LV" + m_store.m_armordata[ID].Grade;
+            m_armortype = m_store.m_armordata[ID].armorType;
             m_text.text = (m_name + "\n 가격 : " + m_store.m_armordata[ID].Price);
         }
         else if (type.Equals(ItemType.Weapon))
         {
+            m_armortype = ArmorType.Max;
             price = m_store.m_weapondata[ID].Price;
             itemType = m_store.m_weapondata[ID].ItemType;
             m_name = m_store.m_weapondata[ID].Type + ".LV" + m_store.m_weapondata[ID].Grade;
@@ -95,7 +109,7 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
     }
     public void ResetSlot()
     {
-        m_image = Utill.GetChildObject(gameObject,"ItemImage").GetComponent<Image>(); //GetComponentsintChileren으로 찾으면 게임오브젝트의 Image가 잡히기 때문에 이런식으로 처리한
+        m_image = Utill.GetChildObject(gameObject,"ItemImage").GetComponent<Image>(); 
         m_text = GetComponentInChildren<TextMeshProUGUI>();
         m_image.sprite = null;
         m_text.text = null;

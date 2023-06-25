@@ -132,6 +132,7 @@
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\UISliderColors.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\UISnapshotPoint.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\ExitMenu.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\TipsUI.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenHeight.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonMessage.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\SetColorOnSelection.cs" />
@@ -285,14 +286,13 @@
     <Compile Include="Assets\1.Main\2.Script\Utill\Singleton\SingletonDontDestroy.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UI2DSprite.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIPlaySound.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\NickInput.cs" />
     <Compile Include="Assets\1.Main\2.Script\Data\TableItemInfo.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\AnimatedColor.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenTransform.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
-    <Compile Include="Assets\1.Main\2.Script\UI\NickInput.cs" />
-    <Compile Include="Assets\1.Main\2.Script\UI\TipsUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

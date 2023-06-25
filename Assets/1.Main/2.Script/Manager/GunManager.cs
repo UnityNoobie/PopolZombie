@@ -8,11 +8,6 @@ using static Gun;
 public class GunManager : MonoBehaviour
 {
     #region Constants and Fields
-    public enum CurrentSlot
-    {
-        Main,
-        Sub
-    }
     [SerializeField]
     GameObject[] Weapons;
     [SerializeField]
@@ -26,6 +21,7 @@ public class GunManager : MonoBehaviour
     public bool isMelee;
     float weaponChangeTime = 0.3f;
     int testweapon = 1;
+    int currentWeaponId;
     public static Transform currentWeapon;
     public static bool isGun;
     public static PlayerAnimController m_animCtr;
@@ -41,6 +37,7 @@ public class GunManager : MonoBehaviour
     #region Coroutine
     public IEnumerator ChangeWeaponRoutine(string name, WeaponType type, int ID, int grade, string atkType, string image, StatusUI statusui)
     {
+        currentWeaponId = ID;
         // Debug.Log(image);
         if (atkType.Equals("Gun")) //무기의 공격타입이 총기라면 
         {
@@ -85,6 +82,7 @@ public class GunManager : MonoBehaviour
             m_animCtr.Play("MeleeArm");
             yield return new WaitForSeconds(weaponChangeTime);
             MeleeChange(name, type, ID, grade);
+            statusui.SetSlot(ID, image, ArmorType.Max, ItemType.Weapon);
             yield return new WaitForSeconds(weaponChangeTime);
             m_animCtr.Play("MeleeIdle");
             isChange = false;
@@ -96,6 +94,12 @@ public class GunManager : MonoBehaviour
     #endregion
 
     #region Methods
+   
+    public int GetWeaponId()
+    {
+        return currentWeaponId;
+    }
+
     public void SkillUpSignal()
     {
         if (shooter.enabled)
@@ -104,6 +108,7 @@ public class GunManager : MonoBehaviour
         }
     }
     
+
 
         public void ChangeWeapon(int id,StatusUI statusui)
         {

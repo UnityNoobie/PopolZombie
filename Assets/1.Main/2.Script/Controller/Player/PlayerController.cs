@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using static Gun;
+using static InvBaseItem;
 using static PlayerStriker;
 
 
@@ -54,6 +55,7 @@ public class PlayerController : MonoBehaviour
     bool m_skillactive = false;
     bool m_isactive = false;
     float gameDuration = 0;
+    float m_stamina = 10f;
     public float pDefence;
     #endregion
     //방어구 정보 임시저장
@@ -217,6 +219,10 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    void AnimEvent_FootStep() //발자국 소리 재생용. 블랜드트리 사용 구현이라 걱정했는데 앞, 뒤 이동만 사용하니 문제없이 작동하였음.
+    {
+        SoundManager.Instance.PlaySFX("SFX_PlayerFootStep", m_audio);
+    }
     //근접 공격 종료 후 실행되는 코드
     public void AnimEvnet_MeleeFinished()
     {
@@ -357,6 +363,19 @@ public class PlayerController : MonoBehaviour
             UGUIManager.Instance.GetStatusUI().SetActive(m_isactive);
             UGUIManager.Instance.PlayClickSFX();
         }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            if (GetHPValue() >= 0.95)
+            {
+                UGUIManager.Instance.SystemMessageItem("HealPack");
+                return;
+            }
+            m_quickSlot.UseQuickSlotITem(1, "HealPack");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            m_quickSlot.UseQuickSlotITem(2, "Barricade");
+        }
         m_dir = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
         if(m_dir.x !=0 && m_dir.z !=0)
         {
@@ -365,6 +384,10 @@ public class PlayerController : MonoBehaviour
         if (m_dir != Vector3.zero)
         {
             m_navAgent.ResetPath();
+        }
+        if (Input.GetKey(KeyCode.LeftShift)) //달리기 기능 테스트
+        {
+            m_dir = new Vector3(m_dir.x * 1.5f, 0f, m_dir.z * 1.5f);
         }
         MoveAnimCtr(m_dir); //방향, 속도별 애니메이션 조절
         PlayerLookAt();     //플레이어 마우스방향 주시기능

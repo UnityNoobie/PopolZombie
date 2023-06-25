@@ -24,7 +24,9 @@ public class Gun : MonoBehaviour
     ParticleSystem m_flashEffect;
     [SerializeField]
     ParticleSystem m_ShellEffect;
-    LineRenderer m_bulletRender;
+    LineRenderer[] m_bulletRender;
+    [SerializeField]
+    GameObject m_linePrefab;
     AudioSource m_gunAudio;
     [SerializeField]
     AudioClip m_shootSound;
@@ -59,12 +61,19 @@ public class Gun : MonoBehaviour
     {     
         m_flashEffect.Play();  //화염이펙트
         m_ShellEffect.Play(); //탄피 이펙트
-        m_bulletRender.SetPosition(0, m_firePos.position);  //레이 시작점
-        m_bulletRender.SetPosition(1, hitPos); //레이 도착점
-        m_bulletRender.enabled = true;
-        //0.03초간 라인렌더러를 켯다꺼 총알흔적 남기기.
-        yield return new WaitForSeconds(0.03f);
-        m_bulletRender.enabled = false;
+        for(int i = 0; i < m_bulletRender.Length; i++)
+        {
+            if (!m_bulletRender[i].enabled)
+            {
+                m_bulletRender[i].SetPosition(0, m_firePos.position);  //레이 시작점
+                m_bulletRender[i].SetPosition(1, hitPos); //레이 도착점
+                m_bulletRender[i].enabled = true;
+                //0.03초간 라인렌더러를 켯다꺼 총알흔적 남기기.
+                yield return new WaitForSeconds(0.05f);
+                m_bulletRender[i].enabled = false;
+                break;
+            }
+        } 
     }
     IEnumerator ShotGunReload()
     {
@@ -152,9 +161,12 @@ public class Gun : MonoBehaviour
     void Start()
     {
         m_gunAudio = GetComponent<AudioSource>();
-        m_bulletRender = GetComponent<LineRenderer>();
-        m_bulletRender.positionCount = 2;
-        m_bulletRender.enabled = false;
+        m_bulletRender = GetComponentsInChildren<LineRenderer>();
+        for(int i = 0; i < m_bulletRender.Length; i++)
+        {
+            m_bulletRender[i].positionCount = 2;
+            m_bulletRender[i].enabled = false;
+        } 
         m_firePos = Utill.GetChildObject(gameObject, "Dummy_Firepos");
     }
   
@@ -179,12 +191,13 @@ public class Gun : MonoBehaviour
         Vector3 hitPos = Vector3.zero;
         Vector3 shotFire = Vector3.zero;
         shotFire = m_player.transform.forward;
+        float verti = Random.Range(-0.05f, 0.05f);
         if (m_type == WeaponType.ShotGun) //샷건의 경우 특수한 작동방식을 가지기 때문에 이렇게 합시다.
         {
             for (int i = 0; i < m_player.GetStatus.ShotGun; i++)
             {
                 shotFire = m_player.transform.forward;
-                float verti = Random.Range(-0.3f, 0.3f);
+                verti = Random.Range(-0.3f, 0.3f);
                 shotFire.x += verti;
                 if (pierce)
                 {
@@ -195,29 +208,40 @@ public class Gun : MonoBehaviour
                         {
                             AttackProcess(hits[j]);
                         }
+                        hitPos = m_firePos.position + shotFire * m_player.GetStatus.AtkDist;
+                        StartCoroutine(ShootEffect(hitPos));
                     }
                 }
                 else
                 {
                     if (Physics.Raycast(m_firePos.position, shotFire, out hit, m_player.GetStatus.AtkDist)) //시작지점, 방향, 충돌정보, 사정거리 
                     {
-                        if (hit.collider.CompareTag("Zombie"))
+                        if (hit.collider.CompareTag("Background"))
                         {
-                            AttackProcess(hit);
+                            hitPos = hit.point;
                         }
+                        else if (hit.collider.CompareTag("Zombie"))
+                        {
+                            hitPos = AttackProcess(hit);
+                        }  
                     }
-                   
+                    else
+                    {
+                        hitPos = m_firePos.position + shotFire * m_player.GetStatus.AtkDist;
+                    }
+                    StartCoroutine(ShootEffect(hitPos));
+
                 }
-                Debug.DrawRay(m_firePos.position, shotFire * m_player.GetStatus.AtkDist, Color.yellow, 0.1f);
+                //Debug.DrawRay(m_firePos.position, shotFire * m_player.GetStatus.AtkDist, Color.yellow, 0.1f);
             }
             m_flashEffect.Play();  //화염이펙트
             m_ShellEffect.Play(); //탄피 이펙트
-            //m_gunAudio.PlayOneShot(m_shootSound); //총소리 
             SoundManager.Instance.PlaySFX(m_shot, m_gunAudio);
         }
         else //샷건외의 총은
         {
-
+            shotFire = m_player.transform.forward;
+            shotFire.x += verti;
             if (pierce)
             {
                 RaycastHit[] hits = Physics.RaycastAll(m_firePos.position, shotFire, m_player.GetStatus.AtkDist);
@@ -281,7 +305,6 @@ public class Gun : MonoBehaviour
         mon.PlayHitSound(m_hit); //피해사실 전달하며 소리재생유도 시도
         if (burn) //화상 효과 활성화 되있다면. 화상딜 들어가는 신호를 추가로 줌.
         {
-           
             mon.SetDamage(type, damage, m_player,true);
         }
         if (lastfire && ammoRemain == 1) //마지막 한발특성이 활성화 되어있고 탄환이 한발일때 사격을 시도하면 5배의 데미지

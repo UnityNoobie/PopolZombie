@@ -94,7 +94,6 @@ public class ArmorData
         }
         else if (armordata.Type == "Glove")
         {
-        
             type = ArmorType.Glove;
         }
         else if (armordata.Type == "Armor")
@@ -152,6 +151,26 @@ public class TableArmorStat : Singleton<TableArmorStat>
             data.Image = TableLoader.Instance.GetString("Image", i);
             data.Info = TableLoader.Instance.GetString("Info", i);
             data.ItemType = TableLoader.Instance.GetString("ItemType", i);
+            if (data.Type == "Helmet")
+            {
+                data.armorType = ArmorType.Helmet;
+            }
+            else if (data.Type == "Glove")
+            {
+                data.armorType = ArmorType.Glove;
+            }
+            else if (data.Type == "Armor")
+            {
+                data.armorType = ArmorType.Armor;
+            }
+            else if (data.Type == "Pants")
+            {
+                data.armorType = ArmorType.Pants;
+            }
+            else if (data.Type == "Boots")
+            {
+                data.armorType = ArmorType.Boots;
+            }
             if (data.Grade == 1) m_lowArmor.Add(data.Id);
             else if (data.Grade == 2) m_midArmor.Add(data.Id);
             else if (data.Grade == 3) m_highArmor.Add(data.Id);

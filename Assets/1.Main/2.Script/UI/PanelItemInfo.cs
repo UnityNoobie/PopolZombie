@@ -124,6 +124,7 @@ public class PanelItemInfo : MonoBehaviour
     }
     public void ActiveUI(int ID, ItemType type)
     {
+        if(ID == -1) return;
         if (isfirst)
         {
             LoadData();
