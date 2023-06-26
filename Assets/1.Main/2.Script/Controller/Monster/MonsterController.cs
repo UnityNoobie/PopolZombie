@@ -109,7 +109,12 @@ public class MonsterController : MonoBehaviour
     {
         while (m_state == MonsterState.Chase)
         {
-            m_navAgent.SetDestination(m_player.transform.position);
+            m_navAgent.SetDestination(GameManager.Instance.GetTargetObject(transform.position).transform.position);
+            /*
+            if(CheckArea(GameManager.Instance.GetTargetObject(transform.position).transform.position, m_status.attackDist))
+            {
+                break;
+            }*/
             for (int i = 0; i < frame; i++)
                 yield return null;
         }
@@ -126,15 +131,31 @@ public class MonsterController : MonoBehaviour
     protected virtual void AnimEvent_SetAttack()
     {
         PlayAtkSound();
-        float damage = CalculationDamage.NormalDamage(m_status.damage, m_player.GetStatus.defense, 0f);
-        var dir = m_player.transform.position - transform.position;
-        float sqrAttackDist = Mathf.Pow(m_status.attackDist, 2f);
-        if (Mathf.Approximately(dir.sqrMagnitude, sqrAttackDist) || dir.sqrMagnitude < sqrAttackDist)
+        /*
+        GameObject target = GameManager.Instance.GetTargetObject(transform.position);
+        var dir = target.transform.position - transform.position;
+        
+       float sqrAttackDist = Mathf.Pow(m_status.attackDist, 2f);
+       if (Mathf.Approximately(dir.sqrMagnitude, sqrAttackDist) || dir.sqrMagnitude < sqrAttackDist)
+       {
+           var dot = Vector3.Dot(transform.forward, dir.normalized);
+           if (dot >= 0.5f) //공격시 지정한 범위 안쪽을 향한 공간일때만 데미지를 가하는 식으로.
+           {
+               m_player.GetDamage(m_status.damage);
+           }
+       }*/
+        Collider[] colliders = Physics.OverlapSphere(transform.position, m_status.attackDist);
+        foreach (Collider collider in colliders)
         {
-            var dot = Vector3.Dot(transform.forward, dir.normalized);
-            if (dot >= 0.5f) //공격시 지정한 범위 안쪽을 향한 공간일때만 데미지를 가하는 식으로.
+            IDamageAbleObject damageableObject = collider.GetComponent<IDamageAbleObject>();
+            PlayerController player = collider.GetComponent<PlayerController>();
+            if (damageableObject != null)
             {
-                m_player.GetDamage(damage);
+                damageableObject.SetDamage(m_status.damage);
+            }
+            if(player != null)
+            {
+                player.GetDamage(m_status.damage);
             }
         }
     }
@@ -184,7 +205,7 @@ public class MonsterController : MonoBehaviour
         m_player = player;
         m_hudPanel = hud;
         SetState(MonsterState.Idle);
-        StartCoroutine(Coroutine_SerchTargetPath(10));
+        StartCoroutine(Coroutine_SerchTargetPath(60));
     }
     public void InitMonster(MonsterType type) //몬스터의 타입을 받아옴
     {//체력 공속 공격력 방어력 이동속도 순서로
@@ -280,10 +301,9 @@ public class MonsterController : MonoBehaviour
         var dir = target.position - transform.position;
         dir.y = 0f;
         var layer = (1 << LayerMask.NameToLayer("Background") | 1 << LayerMask.NameToLayer("Player"));
-        Debug.DrawRay(transform.position + Vector3.up * 1.2f, dir.normalized * dist, Color.magenta);
         if (Physics.Raycast(transform.position + Vector3.up * 1.2f, dir.normalized, out hit, dist, layer))
         {
-            if (hit.transform.CompareTag("Player"))
+            if (hit.transform.CompareTag("Player")||hit.transform.CompareTag("Generator") || hit.transform.CompareTag("Barricade"))
                 return true;
         }
         return false;
@@ -298,6 +318,13 @@ public class MonsterController : MonoBehaviour
         m_tweenmove = GetComponent<TweenMove>();
         m_source = GetComponent<AudioSource>();
         SetRimLight(Color.black);
+    }
+    protected void ResetPath()
+    {
+        StopCoroutine(Coroutine_SerchTargetPath(60));
+        StopCoroutine(Coroutine_SerchTargetPath(30));
+        StopCoroutine(Coroutine_SerchTargetPath(5));
+        StopCoroutine(Coroutine_SerchTargetPath(10));
     }
     public virtual void BehaviourProcess()
     {
@@ -314,15 +341,17 @@ public class MonsterController : MonoBehaviour
                 if (m_idleTime >= m_idleDuration) //대기시간을 초과한다면
                 {
                     m_idleTime = 0f; //대기시간 초기화
-                    if (FindTarget(m_player.transform,50)) //관측 가능한 거리에 플레이어가 있다면.
+                    GameObject target = GameManager.Instance.GetTargetObject(transform.position);
+                    if (FindTarget(target.transform,20)) //관측 가능한 거리에 공격 가능한 오브젝트가 있다면.
                     {
-                        if (CheckArea(m_player.transform.position, m_status.attackDist)) // 사정거리 내에 위치해 있으면
+                        if (CheckArea(target.transform.position, m_status.attackDist)) // 사정거리 내에 위치해 있으면
                         {
                             if (m_status.atkSpeed <= timeafterAttack)
                             {
-                                transform.forward = GetTargetDir(m_player.transform);//플레이어 방향 봐주기
+                                transform.forward = GetTargetDir(target.transform);//타겟 방향 봐주기
                                 timeafterAttack = 0f;
                                 m_navAgent.ResetPath();
+                                ResetPath();
                                 SetState(MonsterState.Attack);
                                 m_animctr.Play(MonsterAnimController.Motion.Attack);
                             }   
@@ -332,6 +361,7 @@ public class MonsterController : MonoBehaviour
                         m_animctr.Play(MonsterAnimController.Motion.Chase);
                         m_navAgent.isStopped = false; //다시 움직이기 시작s
                         m_navAgent.stoppingDistance = m_status.attackDist -1f; //사정거리 안에 들어오면 멈추도록
+                        ResetPath();
                         StartCoroutine(Coroutine_SerchTargetPath(5));
                         return;
                     }
@@ -341,12 +371,15 @@ public class MonsterController : MonoBehaviour
                         SetState(MonsterState.Chase); //상태를 추적으로 변경
                         m_animctr.Play(MonsterAnimController.Motion.Chase);
                         m_navAgent.stoppingDistance = m_status.attackDist -1f;
-                        StartCoroutine(Coroutine_SerchTargetPath(60)); //거리안에 적이 없다면 느린 간격으로 추적 실행
+                        ResetPath();
+                        StartCoroutine(Coroutine_SerchTargetPath(60));
                     }
                 }
                 break;
+                
             case MonsterState.Chase:
-                if (CheckArea(m_player.transform.position, m_navAgent.stoppingDistance))
+                GameObject targets = GameManager.Instance.GetTargetObject(transform.position);
+                if (CheckArea(targets.transform.position, m_navAgent.stoppingDistance))
                 {
                     SetIdle(0.1f);
                 }

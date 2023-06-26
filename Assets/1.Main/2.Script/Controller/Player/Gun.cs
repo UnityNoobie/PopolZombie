@@ -197,7 +197,7 @@ public class Gun : MonoBehaviour
             for (int i = 0; i < m_player.GetStatus.ShotGun; i++)
             {
                 shotFire = m_player.transform.forward;
-                verti = Random.Range(-0.3f, 0.3f);
+                verti = Random.Range(-0.4f, 0.4f);
                 shotFire.x += verti;
                 if (pierce)
                 {

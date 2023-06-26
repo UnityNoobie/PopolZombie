@@ -14,6 +14,8 @@ TagManager:
   - UI
   - Slot
   - Button
+  - Barricade
+  - Generator
   layers:
   - Default
   - TransparentFX

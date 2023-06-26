@@ -301,6 +301,7 @@ public class PlayerController : MonoBehaviour
     {
         UGUIManager.Instance.SetPlayer(this);
         m_updateManager.SetPlayerController(this);
+        GameManager.Instance.SetGameObject(gameObject);
     }
     void MoveAnimCtr(Vector3 dir) //움직임 구현기능. 8방향 다리모양 다른식으로 세분화해보리기!
     {
@@ -551,6 +552,7 @@ public class PlayerController : MonoBehaviour
     {
         if (m_status.hp <= 0 || m_Pstate == PlayerState.dead || m_Pstate == PlayerState.Invincible) //피가 0이거나 죽었을땐 적용 X
             return;
+        damage = CalculationDamage.NormalDamage(damage, m_status.defense, 0f);
         PlayDamagedSound();
         int mondamage = Mathf.CeilToInt(damage - (damage*skillDamageRigist)); //피해 저항 적용
         HPControl(-mondamage);
@@ -592,6 +594,7 @@ public class PlayerController : MonoBehaviour
     {
         ReleaseKeyBuffer();
         PlayDieSound();
+        GameManager.Instance.DestroyTarget(gameObject);
         if (GetMotion.Equals(PlayerAnimController.Motion.Combo1))
         {
             AnimEvnet_MeleeFinished();

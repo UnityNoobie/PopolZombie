@@ -18,6 +18,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
 {
     #region Constants and Field
     LightIntensityTween m_light;
+    List<GameObject> m_attackAbleObject = new List<GameObject>();
     Scene m_scene;
     DaynNight roundTime;
     int m_round = 0;
@@ -53,10 +54,52 @@ public class GameManager : SingletonDontDestroy<GameManager>
     #endregion
 
     #region Methods
+    public GameObject GetTargetObject(Vector3 dir) //좀비등 AI가 거리, 벨류값에 따라 타겟을 가져오도록.
+    {
+        float targetValue = 1000f;
+        GameObject target = null;
+        for(int i = 0; i < m_attackAbleObject.Count; i++)
+        {
+            if(m_attackAbleObject[i].CompareTag("Player"))
+            {
+                if(Vector3.Distance(m_attackAbleObject[i].transform.position,dir) * 2 < targetValue)
+                {
+                    targetValue = Vector3.Distance(m_attackAbleObject[i].transform.position, dir) * 2;
+                    target = m_attackAbleObject[i]; 
+                }
+            }
+            else if (m_attackAbleObject[i].CompareTag("Player"))
+            {
+                if (Vector3.Distance(m_attackAbleObject[i].transform.position, dir)  < targetValue)
+                {
+                    targetValue = Vector3.Distance(m_attackAbleObject[i].transform.position, dir);
+                    target = m_attackAbleObject[i];
+                }  
+            }
+            else if (m_attackAbleObject[i].CompareTag("Generator"))
+            {
+                if (Vector3.Distance(m_attackAbleObject[i].transform.position, dir) * 3  < targetValue)
+                {
+                    targetValue = Vector3.Distance(m_attackAbleObject[i].transform.position, dir) * 3;
+                    target = m_attackAbleObject[i];
+                }
+            }
+        }
+        return target;
+    }
+    public void SetGameObject(GameObject target)
+    {
+        m_attackAbleObject.Add(target);
+    }
+    public void DestroyTarget(GameObject target)
+    {
+        m_attackAbleObject.Remove(target);
+    }
     void ResetRound()
     {
         gameDuration = 0;
         m_round = 0;
+        m_attackAbleObject.Clear(); 
     }
     public void SetTimeScale(float time)
     {
@@ -138,6 +181,10 @@ public class GameManager : SingletonDontDestroy<GameManager>
     public void SetNickname(string str)
     {
         playerNickname = str;
+    }
+    public void GameOver()
+    {
+
     }
     public void ExitGame() //게임 종료 기능
     {
