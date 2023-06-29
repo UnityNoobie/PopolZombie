@@ -7,7 +7,7 @@ public class ProjectileController : MonoBehaviour
 {
     MonsterController m_atkMon; 
     PlayerController m_hitPlayer;
-    IDamageAbleObject m_target;
+    
 
     [SerializeField]
     ProjectileController[] m_child;
@@ -43,15 +43,15 @@ public class ProjectileController : MonoBehaviour
     }
     private void OnParticleCollision(GameObject other) //투사체가 명중했을 시 실행
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             m_hitPlayer = other.GetComponent<PlayerController>();
             m_hitPlayer.GetDamage(m_atkMon.GetStatus.damage * damageValue);
         }
         if(other.CompareTag("Barricade") || other.CompareTag("Generator"))
         {
-            m_target = other.GetComponent<IDamageAbleObject>();
-            m_target.SetDamage(m_atkMon.GetStatus.damage * damageValue);
+            IDamageAbleObject target = other.GetComponent<IDamageAbleObject>();
+            target.SetDamage(m_atkMon.GetStatus.damage * damageValue);
         }
     }
 }

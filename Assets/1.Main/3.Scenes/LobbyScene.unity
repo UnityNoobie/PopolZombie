@@ -29800,7 +29800,7 @@ GameObject:
   - component: {fileID: 3041008389668848506}
   - component: {fileID: 3041008389668848508}
   - component: {fileID: 3041008389668848507}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SystemMessage
   m_TagString: Untagged
   m_Icon: {fileID: 0}

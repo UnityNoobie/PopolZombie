@@ -9,7 +9,7 @@ public class SpiterController : MonsterController
     SpiterController m_spit;
     protected override void AnimEvent_SetAttack()
     {
-        var dir = GameManager.Instance.GetTargetObject(transform.position).transform.position - Dummy_Projectile.transform.position;
+        var dir = m_target.transform.position - Dummy_Projectile.transform.position;
         dir.y = 0;
         var effectName = TableEffect.Instance.m_tableData[5].Prefab[0];
         var effect = EffectPool.Instance.Create(effectName);

@@ -35,6 +35,8 @@ public class MonsterController : MonoBehaviour
     [Header("몬스터 능력치")]
     [SerializeField]
     protected MonStatus m_status;
+    [SerializeField]
+    protected GameObject m_target;
     protected TweenMove m_tweenmove;
     protected NavMeshAgent m_navAgent;
     protected MonsterAnimController m_animctr;
@@ -109,12 +111,8 @@ public class MonsterController : MonoBehaviour
     {
         while (m_state == MonsterState.Chase)
         {
-            m_navAgent.SetDestination(GameManager.Instance.GetTargetObject(transform.position).transform.position);
-            /*
-            if(CheckArea(GameManager.Instance.GetTargetObject(transform.position).transform.position, m_status.attackDist))
-            {
-                break;
-            }*/
+            SetTarget();
+            m_navAgent.SetDestination(m_target.transform.position);
             for (int i = 0; i < frame; i++)
                 yield return null;
         }
@@ -143,7 +141,7 @@ public class MonsterController : MonoBehaviour
            {
                m_player.GetDamage(m_status.damage);
            }
-       }*/
+       }
         Collider[] colliders = Physics.OverlapSphere(transform.position, m_status.attackDist);
         foreach (Collider collider in colliders)
         {
@@ -156,6 +154,39 @@ public class MonsterController : MonoBehaviour
             if(player != null)
             {
                 player.GetDamage(m_status.damage);
+            }
+        }*/
+        Collider[] colliders = Physics.OverlapSphere(transform.position, m_status.attackDist);
+        foreach (Collider collider in colliders)
+        {
+            IDamageAbleObject damageableObject = collider.GetComponent<IDamageAbleObject>();
+            PlayerController player = collider.GetComponent<PlayerController>();
+
+            if (damageableObject != null)
+            {
+                var dir = m_target.transform.position - transform.position;
+                float sqrAttackDist = Mathf.Pow(m_status.attackDist, 2f);
+                if (Mathf.Approximately(dir.sqrMagnitude, sqrAttackDist) || dir.sqrMagnitude < sqrAttackDist)
+                {
+                    var dot = Vector3.Dot(transform.forward, dir.normalized);
+                    if (dot >= 0.5f)
+                    {
+                        damageableObject.SetDamage(m_status.damage);
+                    }
+                }
+            }
+            if (player != null)
+            {
+                var dir = m_target.transform.position - transform.position;
+                float sqrAttackDist = Mathf.Pow(m_status.attackDist, 2f);
+                if (Mathf.Approximately(dir.sqrMagnitude, sqrAttackDist) || dir.sqrMagnitude < sqrAttackDist)
+                {
+                    var dot = Vector3.Dot(transform.forward, dir.normalized);
+                    if (dot >= 0.5f)
+                    {
+                        player.GetDamage(m_status.damage);
+                    }
+                }
             }
         }
     }
@@ -227,6 +258,11 @@ public class MonsterController : MonoBehaviour
         defence = monStat.defense;
         InitStatus(monStat.type, monStat.name, monStat.hp, monStat.atkSpeed, monStat.damage, monStat.defense, monStat.speed, monStat.attackDist, StatScale,monStat.knockbackRegist,monStat.Score,monStat.coin,monStat.exp);
     }
+    public void SetTarget()
+    {
+        m_target = GameManager.Instance.GetTargetObject(transform.position);
+    }
+
     public void SetState(MonsterState state)
     {
         m_state = state;
@@ -272,9 +308,10 @@ public class MonsterController : MonoBehaviour
     {
         m_idleTime = m_idleDuration - duration;
     }
-    protected virtual bool CheckArea(Vector3 target, float area)
+    protected virtual bool CheckArea(float area)
     {
-        var dir = target - transform.position;
+        SetTarget();
+        var dir = m_target.transform.position - transform.position;
         dir.y = 0;
         float sqrArea = Mathf.Pow(area, 2f);
         if (Mathf.Approximately(dir.sqrMagnitude, sqrArea) || dir.sqrMagnitude < sqrArea)
@@ -283,27 +320,30 @@ public class MonsterController : MonoBehaviour
         }
         return false;
     }
-    protected virtual float GetTargetAngle(Transform target)
+    protected virtual float GetTargetAngle()
     {
-        var dir = target.transform.position - transform.position;
+        SetTarget();
+        var dir = m_target.transform.position - transform.position;
         dir.y = 0;
         return Vector3.Angle(transform.forward, dir);
     }
-    protected virtual Vector3 GetTargetDir(Transform target)
+    protected virtual Vector3 GetTargetDir()
     {
-        var dir = target.position - transform.position;
+        SetTarget();
+        var dir = m_target.transform.position - transform.position;
         dir.y = 0f;
         return dir.normalized;
     }
-    protected bool FindTarget(Transform target, float dist)
+    protected bool FindTarget(float dist)
     {
+        SetTarget();
         RaycastHit hit;
-        var dir = target.position - transform.position;
+        var dir = m_target.transform.position - transform.position;
         dir.y = 0f;
-        var layer = (1 << LayerMask.NameToLayer("Background") | 1 << LayerMask.NameToLayer("Player"));
+        var layer = (1 << LayerMask.NameToLayer("Background") | 1 << LayerMask.NameToLayer("Player")|1 << LayerMask.NameToLayer("DamageAbleObject"));
         if (Physics.Raycast(transform.position + Vector3.up * 1.2f, dir.normalized, out hit, dist, layer))
         {
-            if (hit.transform.CompareTag("Player")||hit.transform.CompareTag("Generator") || hit.transform.CompareTag("Barricade"))
+            if (hit.transform.CompareTag("Player")|| hit.transform.CompareTag("Generator") || hit.transform.CompareTag("Barricade"))
                 return true;
         }
         return false;
@@ -318,13 +358,6 @@ public class MonsterController : MonoBehaviour
         m_tweenmove = GetComponent<TweenMove>();
         m_source = GetComponent<AudioSource>();
         SetRimLight(Color.black);
-    }
-    protected void ResetPath()
-    {
-        StopCoroutine(Coroutine_SerchTargetPath(60));
-        StopCoroutine(Coroutine_SerchTargetPath(30));
-        StopCoroutine(Coroutine_SerchTargetPath(5));
-        StopCoroutine(Coroutine_SerchTargetPath(10));
     }
     public virtual void BehaviourProcess()
     {
@@ -341,17 +374,15 @@ public class MonsterController : MonoBehaviour
                 if (m_idleTime >= m_idleDuration) //대기시간을 초과한다면
                 {
                     m_idleTime = 0f; //대기시간 초기화
-                    GameObject target = GameManager.Instance.GetTargetObject(transform.position);
-                    if (FindTarget(target.transform,20)) //관측 가능한 거리에 공격 가능한 오브젝트가 있다면.
+                    if (FindTarget(30)) //관측 가능한 거리에 공격 가능한 오브젝트가 있다면.
                     {
-                        if (CheckArea(target.transform.position, m_status.attackDist)) // 사정거리 내에 위치해 있으면
+                        if (CheckArea(m_status.attackDist)) // 사정거리 내에 위치해 있으면
                         {
                             if (m_status.atkSpeed <= timeafterAttack)
                             {
-                                transform.forward = GetTargetDir(target.transform);//타겟 방향 봐주기
+                                transform.forward = GetTargetDir();//타겟 방향 봐주기
                                 timeafterAttack = 0f;
                                 m_navAgent.ResetPath();
-                                ResetPath();
                                 SetState(MonsterState.Attack);
                                 m_animctr.Play(MonsterAnimController.Motion.Attack);
                             }   
@@ -361,7 +392,6 @@ public class MonsterController : MonoBehaviour
                         m_animctr.Play(MonsterAnimController.Motion.Chase);
                         m_navAgent.isStopped = false; //다시 움직이기 시작s
                         m_navAgent.stoppingDistance = m_status.attackDist -1f; //사정거리 안에 들어오면 멈추도록
-                        ResetPath();
                         StartCoroutine(Coroutine_SerchTargetPath(5));
                         return;
                     }
@@ -371,15 +401,13 @@ public class MonsterController : MonoBehaviour
                         SetState(MonsterState.Chase); //상태를 추적으로 변경
                         m_animctr.Play(MonsterAnimController.Motion.Chase);
                         m_navAgent.stoppingDistance = m_status.attackDist -1f;
-                        ResetPath();
                         StartCoroutine(Coroutine_SerchTargetPath(60));
                     }
                 }
                 break;
                 
             case MonsterState.Chase:
-                GameObject targets = GameManager.Instance.GetTargetObject(transform.position);
-                if (CheckArea(targets.transform.position, m_navAgent.stoppingDistance))
+                if (CheckArea(m_navAgent.stoppingDistance))
                 {
                     SetIdle(0.1f);
                 }

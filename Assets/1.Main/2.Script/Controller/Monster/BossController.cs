@@ -235,14 +235,13 @@ public class BossController : MonsterController
                 if (m_idleTime >= m_idleDuration) //대기시간을 초과한다면
                 {
                     m_idleTime = 0f; //대기시간 초기화
-                    GameObject target = GameManager.Instance.GetTargetObject(transform.position);
-                    if (FindTarget(target.transform, 20)) //관측 가능한 거리에 플레이어가 있다면.
+                    if (FindTarget(30)) //관측 가능한 거리에 플레이어가 있다면.
                     {
-                        if (CheckArea(target.transform.position, m_status.attackDist)) // 사정거리 내에 위치해 있으면
+                        if (CheckArea(m_status.attackDist)) // 사정거리 내에 위치해 있으면
                         {
                             if (m_status.atkSpeed <= timeafterAttack)
                             {
-                                transform.forward = GetTargetDir(target.transform);//플레이어 방향 봐주기
+                                transform.forward = GetTargetDir();//플레이어 방향 봐주기
                                 timeafterAttack = 0f;
                                 m_navAgent.ResetPath();
                                 SetAttack();
@@ -253,7 +252,6 @@ public class BossController : MonsterController
                         m_animctr.Play(MonsterAnimController.Motion.Chase);
                         m_navAgent.isStopped = false; //다시 움직이기 시작s
                         m_navAgent.stoppingDistance = m_status.attackDist - 1f; //사정거리 안에 들어오면 멈추도록
-                        ResetPath();
                         StartCoroutine(Coroutine_SerchTargetPath(10));
                         return;
                     }
@@ -263,14 +261,13 @@ public class BossController : MonsterController
                         SetState(MonsterState.Chase); //상태를 추적으로 변경
                         m_animctr.Play(MonsterAnimController.Motion.Chase);
                         m_navAgent.stoppingDistance = m_status.attackDist - 1f;
-                        ResetPath();
                         StartCoroutine(Coroutine_SerchTargetPath(60)); //거리안에 적이 없다면 느린 간격으로 추적 실행
                     }
                 }
                 break;
                 
             case MonsterState.Chase:
-                if (CheckArea(GameManager.Instance.GetTargetObject(transform.position).transform.position, m_navAgent.stoppingDistance))
+                if (CheckArea(m_navAgent.stoppingDistance))
                 {
                     SetIdle(0.1f);
                 }

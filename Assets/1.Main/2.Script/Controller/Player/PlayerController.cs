@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     UpdateManager m_updateManager;
     AudioSource m_audio;
     GunManager m_manager;
+    PlayerShooter m_shooter;
     Transform m_leftDir;
     Transform m_hitPos;
     MeleeType m_meleetype;
@@ -377,6 +378,27 @@ public class PlayerController : MonoBehaviour
         {
             m_quickSlot.UseQuickSlotITem(2, "Barricade");
         }
+        if(Input.GetMouseButton(0))
+        {
+            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) //마우스 포인터가 UI 위에 있을 시 공격 안하게 만드는 기능. 다만 현재 NGUI에서는 적용이 안됨.
+            {
+                if (m_manager.IsGun())
+                {
+                    m_shooter.AttackProcess();
+                }
+                else
+                {
+                    SetAttack();
+                }
+            } 
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (m_manager.IsGun())
+            {
+                m_shooter.ReloadProcess();
+            }
+        }
         m_dir = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
         if(m_dir.x !=0 && m_dir.z !=0)
         {
@@ -690,6 +712,7 @@ public class PlayerController : MonoBehaviour
         m_hitPos = Utill.GetChildObject(gameObject, "Dummy_Pos");
         m_level = 1;
         m_levelexp = Levelexp();
+        m_shooter = GetComponent<PlayerShooter>();
         SetPlayerKnickName(GameManager.Instance.GetNickname());
     }
     private void Start()

@@ -13,6 +13,8 @@ public class Generator : MonoBehaviour , IDamageAbleObject
     int m_defence;
     [SerializeField]
     int m_hprestore;
+    GameObject m_destroyd;
+    AudioSource m_audio;
     #endregion
 
     #region Coroutine
@@ -29,13 +31,18 @@ public class Generator : MonoBehaviour , IDamageAbleObject
     {
         float attack = CalculationDamage.NormalDamage(damage, m_defence, 0f);
         UGUIManager.Instance.SystemMessageSendMessage("발전기가 공격받고 있습니다!!");
+        SoundManager.Instance.PlaySFX("SFX_Generator", m_audio);
         m_hp -= Mathf.CeilToInt(attack);
         if(m_hp <= 0)
         {
-            StopAllCoroutines();
-            GameManager.Instance.DestroyTarget(gameObject); //공격 가능한 목록에서 게임오브젝트 삭제처리
-            GameManager.Instance.GameOver();
+            Destroyed();
         }
+    }
+    void Destroyed()
+    {
+        StopAllCoroutines();
+        m_destroyd.SetActive(true);        GameManager.Instance.DestroyTarget(gameObject); //공격 가능한 목록에서 게임오브젝트 삭제처리
+        GameManager.Instance.GameOver();
     }
     public void RestoreHP(int heal) //피해회복
     {
@@ -60,5 +67,7 @@ public class Generator : MonoBehaviour , IDamageAbleObject
         m_maxHP = m_hp = 1000;
         m_defence = 30;
         GameManager.Instance.SetGameObject(gameObject);
+        m_destroyd = Utill.GetChildObject(gameObject, "DestroyEffect").gameObject;
+        m_audio = GetComponent<AudioSource>();
     }
 }

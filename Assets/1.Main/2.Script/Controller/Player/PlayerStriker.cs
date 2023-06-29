@@ -32,17 +32,5 @@ public class PlayerStriker : MonoBehaviour
         m_player.SetStatus(ID);// 플레이어의 스테이터스를 재설정
 
     }
-    private void Update()
-    {
-        if (isActive)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) //마우스 포인터가 UI 위에 있을 시 공격 안하게 만드는 기능. 다만 현재 NGUI에서는 적용이 안됨.
-                {
-                    m_player.SetAttack();
-                }
-            }
-        }
-    }
+    
 }

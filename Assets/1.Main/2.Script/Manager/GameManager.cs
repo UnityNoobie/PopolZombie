@@ -56,31 +56,31 @@ public class GameManager : SingletonDontDestroy<GameManager>
     #region Methods
     public GameObject GetTargetObject(Vector3 dir) //좀비등 AI가 거리, 벨류값에 따라 타겟을 가져오도록.
     {
-        float targetValue = 1000f;
+        float targetValue = 10000f;
         GameObject target = null;
         for(int i = 0; i < m_attackAbleObject.Count; i++)
         {
             if(m_attackAbleObject[i].CompareTag("Player"))
             {
-                if(Vector3.Distance(m_attackAbleObject[i].transform.position,dir) * 2 < targetValue)
+                if(Vector3.Distance(m_attackAbleObject[i].transform.position,dir) < targetValue)
                 {
-                    targetValue = Vector3.Distance(m_attackAbleObject[i].transform.position, dir) * 2;
+                    targetValue = Vector3.Distance(m_attackAbleObject[i].transform.position, dir) ;
                     target = m_attackAbleObject[i]; 
                 }
             }
-            else if (m_attackAbleObject[i].CompareTag("Player"))
+            else if (m_attackAbleObject[i].CompareTag("Barricade"))
             {
-                if (Vector3.Distance(m_attackAbleObject[i].transform.position, dir)  < targetValue)
+                if (Vector3.Distance(m_attackAbleObject[i].transform.position, dir) * 2 < targetValue)
                 {
-                    targetValue = Vector3.Distance(m_attackAbleObject[i].transform.position, dir);
+                    targetValue = Vector3.Distance(m_attackAbleObject[i].transform.position, dir) * 2;
                     target = m_attackAbleObject[i];
                 }  
             }
             else if (m_attackAbleObject[i].CompareTag("Generator"))
             {
-                if (Vector3.Distance(m_attackAbleObject[i].transform.position, dir) * 3  < targetValue)
+                if (Vector3.Distance(m_attackAbleObject[i].transform.position, dir) * 3 + 10  < targetValue)
                 {
-                    targetValue = Vector3.Distance(m_attackAbleObject[i].transform.position, dir) * 3;
+                    targetValue = Vector3.Distance(m_attackAbleObject[i].transform.position, dir) * 3 + 10;
                     target = m_attackAbleObject[i];
                 }
             }

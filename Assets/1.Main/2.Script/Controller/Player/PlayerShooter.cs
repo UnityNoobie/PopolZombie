@@ -63,6 +63,17 @@ public class PlayerShooter : MonoBehaviour
         gun.ResetBoolin();
         gun.CheckBoolin();
     }
+    public void AttackProcess()
+    {
+        if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) //마우스 포인터가 UI 위에 있을 시 공격 안하게 만드는 기능. 다만 현재 NGUI에서는 적용이 안됨.
+        {
+            gun.Fire();
+        }
+    }
+    public void ReloadProcess()
+    {
+        gun.Reload();
+    }
     private void Start()
     {
         m_anim = GetComponent<Animator>();
@@ -79,37 +90,6 @@ public class PlayerShooter : MonoBehaviour
             m_anim.SetIKPositionWeight(AvatarIKGoal.RightHand, 1.0f);
             m_anim.SetIKPosition(AvatarIKGoal.RightHand, m_Pivot.position);
         }
-    }
-        private void Update()
-    {
-        if (isActive && m_player.m_Pstate != PlayerController.PlayerState.dead)
-        {
-           // Ray mousepos = m_Camera.ScreenPointToRay(Input.mousePosition);
-           // RaycastHit hit;
-           
-       
-            if (Input.GetMouseButtonDown(0))
-            {    
-                GunManager.m_animCtr.Play("Fire");
-            }
-            if (Input.GetMouseButton(0))
-            {
-              if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) //마우스 포인터가 UI 위에 있을 시 공격 안하게 만드는 기능. 다만 현재 NGUI에서는 적용이 안됨.
-                {
-                    gun.Fire();
-                }
-                
-            }
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                if (gun.Reload())
-                {
-                   
-                }
-
-            }
-        }
-       
     }
     #endregion
 }

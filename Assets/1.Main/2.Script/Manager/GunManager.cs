@@ -95,6 +95,10 @@ public class GunManager : MonoBehaviour
 
     #region Methods
    
+    public bool IsGun()
+    {
+        return isGun;
+    }
     public int GetWeaponId()
     {
         return currentWeaponId;
@@ -143,7 +147,6 @@ public class GunManager : MonoBehaviour
             m_gunStatus = new TableGunstat();
             m_weapondata = new WeaponData();
         }
-
         private void Start()
         {
             for (int i = 0; i < Weapons.Length; i++) //µñ¼Å³Ê¸®¿¡ ÃÑÀÇ ÀÌ¸§°ú °³Ã¼ Àû¿ë.
