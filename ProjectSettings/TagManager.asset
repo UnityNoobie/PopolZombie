@@ -16,6 +16,7 @@ TagManager:
   - Button
   - Barricade
   - Generator
+  - ClickAble
   layers:
   - Default
   - TransparentFX

@@ -216,6 +216,7 @@
     <Compile Include="Assets\1.Main\2.Script\Manager\UGUIManager.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerShooter.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenOrthoSize.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Utill\Barricade.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\ActiveAnimation.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\DropMe.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\UIRect.cs" />
@@ -268,6 +269,7 @@
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\Game\EquipRandomItem.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\ActiveSkill.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIRoot.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Manager\ObjectManager.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\CalculationDamage.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIDragDropRoot.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\SlotStatus.cs" />
@@ -280,6 +282,7 @@
     <Compile Include="Assets\1.Main\2.Script\Utill\Singleton\SingletonMonoBehaviour.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\System\InvStat.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\Spin.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\DamageAbleObjectHUD.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonKeys.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\IDamageAbleObject.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIToggledObjects.cs" />
@@ -295,6 +298,7 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\DamagedText.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

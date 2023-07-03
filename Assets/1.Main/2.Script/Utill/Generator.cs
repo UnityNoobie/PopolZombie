@@ -15,6 +15,9 @@ public class Generator : MonoBehaviour , IDamageAbleObject
     int m_hprestore;
     GameObject m_destroyd;
     AudioSource m_audio;
+    DamageAbleObjectHUD m_hud;
+    Camera m_uiCam;
+
     #endregion
 
     #region Coroutine
@@ -33,6 +36,7 @@ public class Generator : MonoBehaviour , IDamageAbleObject
         UGUIManager.Instance.SystemMessageSendMessage("발전기가 공격받고 있습니다!!");
         SoundManager.Instance.PlaySFX("SFX_Generator", m_audio);
         m_hp -= Mathf.CeilToInt(attack);
+        m_hud.DisplayDamage(damage, m_hp,m_maxHP);
         if(m_hp <= 0)
         {
             Destroyed();
@@ -41,7 +45,8 @@ public class Generator : MonoBehaviour , IDamageAbleObject
     void Destroyed()
     {
         StopAllCoroutines();
-        m_destroyd.SetActive(true);        GameManager.Instance.DestroyTarget(gameObject); //공격 가능한 목록에서 게임오브젝트 삭제처리
+        m_destroyd.SetActive(true);        
+        GameManager.Instance.DestroyTarget(gameObject); //공격 가능한 목록에서 게임오브젝트 삭제처리
         GameManager.Instance.GameOver();
     }
     public void RestoreHP(int heal) //피해회복
@@ -69,5 +74,9 @@ public class Generator : MonoBehaviour , IDamageAbleObject
         GameManager.Instance.SetGameObject(gameObject);
         m_destroyd = Utill.GetChildObject(gameObject, "DestroyEffect").gameObject;
         m_audio = GetComponent<AudioSource>();
+        //  m_uiCam = UGUIManager.Instance.GetUICam();
+        m_uiCam = Camera.main;
+        m_hud = ObjectManager.Instance.GetHud();
+        m_hud.SetTransform(m_uiCam,transform);
     }
 }

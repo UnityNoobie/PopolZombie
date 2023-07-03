@@ -19,6 +19,7 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     AudioSource m_source;
     ExitMenu m_exit;
     Canvas m_canvas;
+    Camera m_uiCam;
     VolumeController m_volumeUI;
     GameMenuUI m_menuUI;
     PlayerController m_player;
@@ -67,6 +68,10 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     public RoundUI GetRoundUI()
     {
         return m_roundUI;
+    }
+    public Camera GetUICam()
+    {
+        return m_uiCam;
     }
     public void SetPlayer(PlayerController player)
     {
@@ -184,6 +189,7 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
         m_loadingScene = GetComponentInChildren<LoadingScene>(true);
         m_input = GetComponentInChildren<NickInput>(true);
         m_tipsUI = GetComponentInChildren<TipsUI>(true);
+        m_uiCam = GetComponentInChildren<Camera>();
         m_tipsUI.SetTransform();
         m_input.SetTransform();
         m_scoreUI.SetTransform();
@@ -191,6 +197,7 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
         m_menuUI.SetTransform();
         m_lobbyUI.SetTransform();
         m_skillUI.SetTransform();
+       
      
     }
     protected override void OnStart()

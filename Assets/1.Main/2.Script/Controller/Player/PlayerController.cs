@@ -8,6 +8,7 @@ using UnityEngine.AI;
 using static Gun;
 using static InvBaseItem;
 using static PlayerStriker;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 
 public class PlayerController : MonoBehaviour
@@ -380,16 +381,20 @@ public class PlayerController : MonoBehaviour
         }
         if(Input.GetMouseButton(0))
         {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            Physics.Raycast(ray, out hit);
+            GameObject hitObject = hit.collider.gameObject;
             if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) //마우스 포인터가 UI 위에 있을 시 공격 안하게 만드는 기능. 다만 현재 NGUI에서는 적용이 안됨.
-            {
-                if (m_manager.IsGun())
-                {
+            {  
+                if (m_manager.IsGun())  
+                {    
                     m_shooter.AttackProcess();
                 }
                 else
                 {
                     SetAttack();
-                }
+                }    
             } 
         }
         if (Input.GetKeyDown(KeyCode.R))

@@ -100,7 +100,7 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
                 hud.gameObject.SetActive(true); //어차피 데미지르 줄때 hudcontroller에서 Show()로 키니까 꺼봄  작동이 잘 안됨..
                 m_monsterList.Add(mon);
         }
-        if(GameManager.Instance.GetRoundInfo() % 1 == 0) //10라운드마다 나오는 보스 스테이지
+        if(GameManager.Instance.GetRoundInfo() % 5 == 0) //10라운드마다 나오는 보스 스테이지
         {
             if(currentBossCound < MaxBossCount())
             {
