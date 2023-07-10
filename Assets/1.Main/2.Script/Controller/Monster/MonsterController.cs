@@ -362,7 +362,7 @@ public class MonsterController : MonoBehaviour
     public virtual void BehaviourProcess()
     {
         if (!gameObject.activeSelf || m_state.Equals(MonsterState.Die)) return;
-        
+
         timeafterAttack += Time.deltaTime;
 
         switch (m_state)

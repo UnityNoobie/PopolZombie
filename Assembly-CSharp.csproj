@@ -143,6 +143,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\UI\UITooltip.cs" />
     <Compile Include="Assets\SlimUI\Modern Menu 1\Scripts\Managers\UIMenuManager.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\Store.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\DamagedText.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\BMSymbol.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonColor.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerAnimController.cs" />
@@ -298,7 +299,6 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
-    <Compile Include="Assets\1.Main\2.Script\UI\DamagedText.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

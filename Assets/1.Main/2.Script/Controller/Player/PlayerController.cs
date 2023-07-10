@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour
     float gameDuration = 0;
     float m_stamina = 10f;
     public float pDefence;
+    bool isbuild = false;
     #endregion
     //방어구 정보 임시저장
     #region ArmorData
@@ -354,6 +355,13 @@ public class PlayerController : MonoBehaviour
     public void BehaviorProcess()
     {
         if (m_Pstate.Equals(PlayerState.dead)) return; // 사망시 작동 x
+        if (isbuild)
+        {
+            if(Input.GetKeyDown(KeyCode.Z))
+            {
+                ObjectManager.Instance.RotationChanger();
+            }
+        }
         if (Input.GetKeyDown(KeyCode.K)) //플레이어별 스킬창을 관리하기 위함
         {    
             m_skillactive = !m_skillactive;
@@ -366,7 +374,7 @@ public class PlayerController : MonoBehaviour
             UGUIManager.Instance.GetStatusUI().SetActive(m_isactive);
             UGUIManager.Instance.PlayClickSFX();
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha3)) // 구급상자 사용
         {
             if (GetHPValue() >= 0.95)
             {
@@ -377,7 +385,16 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            m_quickSlot.UseQuickSlotITem(2, "Barricade");
+            isbuild = !isbuild;
+            if (isbuild)
+            {
+                ObjectManager.Instance.StartPreviewBuild();
+            }
+            else
+            {
+                ObjectManager.Instance.StopBuilding();
+            }
+            //m_quickSlot.UseQuickSlotITem(2, "Barricade");
         }
         if(Input.GetMouseButton(0))
         {
@@ -385,16 +402,25 @@ public class PlayerController : MonoBehaviour
             RaycastHit hit;
             Physics.Raycast(ray, out hit);
             GameObject hitObject = hit.collider.gameObject;
-            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) //마우스 포인터가 UI 위에 있을 시 공격 안하게 만드는 기능. 다만 현재 NGUI에서는 적용이 안됨.
-            {  
-                if (m_manager.IsGun())  
-                {    
-                    m_shooter.AttackProcess();
-                }
-                else
+            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) //마우스 포인터가 UI 위에 있을 시 공격 안하게 만드는 기능.
+            {
+                if (!isbuild) //건설상태가 아닐경우
                 {
-                    SetAttack();
-                }    
+                    if (m_manager.IsGun())
+                    {
+                        m_shooter.AttackProcess();
+                    }
+                    else
+                    {
+                        SetAttack();
+                    }
+                }
+                else if(isbuild)
+                {
+                    ObjectManager.Instance.BuildBarricade();
+                    isbuild = false;
+                }
+                 
             } 
         }
         if (Input.GetKeyDown(KeyCode.R))

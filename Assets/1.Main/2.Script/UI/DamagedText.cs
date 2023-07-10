@@ -16,7 +16,7 @@ public class DamagedText : MonoBehaviour
     DamageAbleObjectHUD m_hud;
     IEnumerator Coroutine_DamageText(float value)
     {
-        Vector3 startPos = m_hud.transform.position + new Vector3(0f, 0.1f, 0f); ;
+        Vector3 startPos = m_hud.transform.position + new Vector3(0f, 0.3f, 0f); ;
         Vector3 targetPos = startPos + new Vector3(0f, 1f, 0f);
         m_text.alpha = m_startAlpha;
         m_text.text = value.ToString();
@@ -51,19 +51,19 @@ public class DamagedText : MonoBehaviour
         {
             m_color = Color.yellow;
             m_text.color = m_color;
-            m_text.fontSize = 30;
+            m_text.fontSize = 0.2f;
         }
         else if(value < 0)
         {
             m_color = Color.red;
             m_text.color = m_color;
-            m_text.fontSize = 20;
+            m_text.fontSize = 0.15f;
         }
         else
         {
             m_color = Color.green;
             m_text.color = m_color;
-            m_text.fontSize = 25;
+            m_text.fontSize = 0.15f;
         }
         StartCoroutine(Coroutine_DamageText(value));
     }

@@ -18,7 +18,7 @@ public class StoreUI : MonoBehaviour
     #region Constants and Fields
     Slot[] m_slots;
     Transform m_content;
-    Button m_closebutton;
+   // Button m_closebutton;
     TextMeshProUGUI m_StoreName;
     BuyItems m_buyItem;
     PanelItemInfo m_info;
@@ -151,7 +151,6 @@ public class StoreUI : MonoBehaviour
         m_equipItem = Utill.GetChildObject(gameObject, "EquipItem").GetComponent<PanelItemInfo>();
         m_buyItem = Utill.GetChildObject(gameObject, "BuyItem").GetComponent<BuyItems>();
         m_StoreName = Utill.GetChildObject(gameObject,"StoreName").GetComponent<TextMeshProUGUI>();
-        m_closebutton = Utill.GetChildObject(gameObject,"CloseButton").GetComponent<Button>();
     }
     void LoadUIInfo()
     {
@@ -162,7 +161,7 @@ public class StoreUI : MonoBehaviour
         {
             m_slots[i].SetStore(this, m_buyItem, m_info,m_equipItem);
         }
-        m_closebutton.onClick.AddListener(CloseStore);
+       // m_closebutton.onClick.AddListener(CloseStore);
         isloaded = true;
     }
     public void LoadInfo()

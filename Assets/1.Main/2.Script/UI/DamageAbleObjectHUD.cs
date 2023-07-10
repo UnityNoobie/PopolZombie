@@ -9,28 +9,25 @@ using static UnityEditor.PlayerSettings;
 public class DamageAbleObjectHUD : MonoBehaviour
 {
     #region Constants and Fields
-    [SerializeField]
     Slider m_hpSlider;
-    [SerializeField]
     TextMeshProUGUI m_hpValue;
-    [SerializeField]
     GameObject m_damagedText;
     GameObjectPool<DamagedText> m_damageTextPool = new GameObjectPool<DamagedText>();
-    Camera m_mainCam;
-    Camera m_uiCam;
     Transform m_targtObj;
+    Transform m_hudPos;
     #endregion
+
    
     #region Methods
     public void SetHUD()
     {
-        m_hpSlider = GetComponent<Slider>();
+        m_hpSlider = GetComponentInChildren<Slider>(true);
         m_hpValue = Utill.GetChildObject(gameObject, "ValueText").GetComponent<TextMeshProUGUI>();
         m_damagedText = Resources.Load<GameObject>("Prefabs/DamageText");
         m_damageTextPool = new GameObjectPool<DamagedText>(5, () =>
         {
             var obj = Instantiate(m_damagedText);
-            obj.transform.SetParent(transform);
+            obj.transform.SetParent(m_hudPos);
             obj.transform.localPosition = Vector3.zero;
             obj.transform.localScale = Vector3.one;
             obj.gameObject.SetActive(false);
@@ -38,15 +35,14 @@ public class DamageAbleObjectHUD : MonoBehaviour
             return text;
         });
     }
-
-    public void SetTransform(Camera uiCam,Transform target)
+    public void SetTransform(Transform target)
     {
         m_targtObj = target;
-        m_mainCam = Camera.main;
-        m_uiCam = uiCam;
-        Vector3 Pos = m_mainCam.WorldToScreenPoint(transform.position);
-        Pos = m_uiCam.ViewportToWorldPoint(Pos);
-        Pos.z = 0f;
+        transform.parent = m_targtObj;
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+        transform.localScale = Vector3.one;
+        m_hudPos = Utill.GetChildObject(gameObject, "ObjectHUD");
     }
     void CreateText(float damage)
     {
@@ -68,7 +64,10 @@ public class DamageAbleObjectHUD : MonoBehaviour
         {
             CancelInvoke("Hide");
         }
-        Invoke("Hide", 5f);
+        if (hp >= maxhp*0.95f)
+        {
+            Invoke("Hide", 5f);
+        }
         m_hpValue.text = hp + "/" + maxhp;
         m_hpSlider.value = hp/maxhp;
         CreateText(damage);

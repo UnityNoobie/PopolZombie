@@ -17,6 +17,7 @@ public class Generator : MonoBehaviour , IDamageAbleObject
     AudioSource m_audio;
     DamageAbleObjectHUD m_hud;
     Camera m_uiCam;
+    Transform m_hudPos;
 
     #endregion
 
@@ -36,7 +37,7 @@ public class Generator : MonoBehaviour , IDamageAbleObject
         UGUIManager.Instance.SystemMessageSendMessage("발전기가 공격받고 있습니다!!");
         SoundManager.Instance.PlaySFX("SFX_Generator", m_audio);
         m_hp -= Mathf.CeilToInt(attack);
-        m_hud.DisplayDamage(damage, m_hp,m_maxHP);
+        m_hud.DisplayDamage(-damage, m_hp,m_maxHP);
         if(m_hp <= 0)
         {
             Destroyed();
@@ -67,16 +68,20 @@ public class Generator : MonoBehaviour , IDamageAbleObject
     {
         m_defence += defence;
     }
+    void SetGenerator(int hp, int def)
+    {
+        m_maxHP = m_hp = hp;
+        m_defence = def;
+        m_destroyd = Utill.GetChildObject(gameObject, "DestroyEffect").gameObject;
+        m_hudPos = Utill.GetChildObject(gameObject, "HudPos");
+        m_audio = GetComponent<AudioSource>();
+        m_uiCam = UGUIManager.Instance.GetUICam();
+        m_hud = ObjectManager.Instance.GetHud();
+        m_hud.SetTransform(m_hudPos);
+        GameManager.Instance.SetGameObject(gameObject);
+    }
     private void Start()
     {
-        m_maxHP = m_hp = 1000;
-        m_defence = 30;
-        GameManager.Instance.SetGameObject(gameObject);
-        m_destroyd = Utill.GetChildObject(gameObject, "DestroyEffect").gameObject;
-        m_audio = GetComponent<AudioSource>();
-        //  m_uiCam = UGUIManager.Instance.GetUICam();
-        m_uiCam = Camera.main;
-        m_hud = ObjectManager.Instance.GetHud();
-        m_hud.SetTransform(m_uiCam,transform);
+        SetGenerator(1000, 30);
     }
 }

@@ -12,7 +12,7 @@ public class LightIntensityTween : MonoBehaviour
     }
     public void StartNight()
     {
-        directionalLight.DOIntensity(0.05f, 7);
+        directionalLight.DOIntensity(0.1f, 7);
     }
     void Awake()
     {

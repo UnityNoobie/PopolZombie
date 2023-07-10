@@ -15,6 +15,8 @@ public class Barricade : MonoBehaviour, IDamageAbleObject
     int m_hprestore;
     GameObject m_destroyd;
     AudioSource m_audio;
+    DamageAbleObjectHUD m_hud;
+    Transform m_hudPos;
     #endregion
 
     #region Coroutine
@@ -30,9 +32,9 @@ public class Barricade : MonoBehaviour, IDamageAbleObject
     public void SetDamage(float damage)
     {
         float attack = CalculationDamage.NormalDamage(damage, m_defence, 0f);
-        UGUIManager.Instance.SystemMessageSendMessage("발전기가 공격받고 있습니다!!");
-        SoundManager.Instance.PlaySFX("SFX_Generator", m_audio);
+        SoundManager.Instance.PlaySFX("SFX_GunHit", m_audio);
         m_hp -= Mathf.CeilToInt(attack);
+        m_hud.DisplayDamage(-damage, m_hp, m_maxHP);
         if (m_hp <= 0)
         {
             Destroyed();
@@ -41,8 +43,15 @@ public class Barricade : MonoBehaviour, IDamageAbleObject
     void Destroyed()
     {
         StopAllCoroutines();
-        m_destroyd.SetActive(true); GameManager.Instance.DestroyTarget(gameObject); //공격 가능한 목록에서 게임오브젝트 삭제처리
-        GameManager.Instance.GameOver();
+        m_destroyd.SetActive(true);
+        GameManager.Instance.DestroyTarget(gameObject); //공격 가능한 목록에서 게임오브젝트 삭제처리
+        Invoke("DestroyGameObject", 1f); // 오브젝트 풀링해주기
+    }
+    void DestroyGameObject() //활성화 종료 후 풀에 다시 넣어주기
+    {
+        m_destroyd.SetActive(false);
+        gameObject.SetActive(false);
+        ObjectManager.Instance.SetBarricade(this);
     }
     public void RestoreHP(int heal) //피해회복
     {
@@ -62,12 +71,22 @@ public class Barricade : MonoBehaviour, IDamageAbleObject
     {
         m_defence += defence;
     }
-    private void Start()
+    public void SetTransform()
     {
-        m_maxHP = m_hp = 200;
-        m_defence = 20;
-        GameManager.Instance.SetGameObject(gameObject);
-        m_destroyd = Utill.GetChildObject(gameObject, "DestroyEffect").gameObject;
+        m_destroyd = Utill.GetChildObject(gameObject, "DestroyEffect").gameObject; //파괴시 활성화 시켜줄 오브젝트
         m_audio = GetComponent<AudioSource>();
+        m_hudPos = Utill.GetChildObject(gameObject, "HudPos");
+        m_hud = ObjectManager.Instance.GetHud();
+        m_hud.SetTransform(m_hudPos);
+    }
+    public void BuildBarricade(int hp, int def,Vector3 buildPos, float barirota, float hudrota)
+    {
+        m_maxHP = m_hp = hp;
+        m_defence = def;
+        transform.position = buildPos;
+        transform.localEulerAngles = new Vector3(0f, barirota, 0f);
+        m_hudPos.transform.localEulerAngles = new Vector3(30f,hudrota, 0f);
+        gameObject.SetActive(true); //게임오브젝트 활성화
+        GameManager.Instance.SetGameObject(gameObject);//공격 가능한 오브젝트 목록에 추가해주기
     }
 }
