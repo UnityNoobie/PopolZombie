@@ -161,7 +161,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\Internal\RealTime.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\VolumeController.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\SkillSlot.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Utill\Generator.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Controller\Object\Generator.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\Lobby_UI.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIInput.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIViewport.cs" />
@@ -217,7 +217,7 @@
     <Compile Include="Assets\1.Main\2.Script\Manager\UGUIManager.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerShooter.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenOrthoSize.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Utill\Barricade.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Controller\Object\Barricade.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\ActiveAnimation.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\DropMe.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\UIRect.cs" />
@@ -285,7 +285,7 @@
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\Spin.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\DamageAbleObjectHUD.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonKeys.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Utill\IDamageAbleObject.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Controller\Object\IDamageAbleObject.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIToggledObjects.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\WindowAutoYaw.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\Singleton\Singleton.cs" />
@@ -299,6 +299,8 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
+    <Compile Include="Assets\FREE GatlingGun\Turrets\Gatling Gun\Scripts\GatlingGun.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Controller\Object\TowerController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -326,6 +328,7 @@
     <None Include="Assets\External\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 2.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\External\NGUI\Resources\Shaders\Unlit - Transparent Colored 2.shader" />
+    <None Include="Assets\FREE GatlingGun\ReadMe.txt" />
     <None Include="Assets\External\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
     <None Include="Assets\External\NGUI\Resources\Shaders\Unlit - Text 3.shader" />
     <None Include="Assets\External\NGUI\Resources\Shaders\Unlit - Text 2.shader" />
