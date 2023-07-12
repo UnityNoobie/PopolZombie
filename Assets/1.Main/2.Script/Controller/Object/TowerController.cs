@@ -1,56 +1,93 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
-public class TowerController : MonoBehaviour
+public class TowerController : MonoBehaviour ,IDamageAbleObject
 {
     #region Constants and Fields
-    protected Transform m_target;
+    [SerializeField]
+    protected GameObject m_target;
+    [SerializeField]
     protected Transform m_baseRoation;
+    [SerializeField]
     protected Transform m_gunBody;
+    [SerializeField]
     protected Transform m_barrel;
+    [SerializeField]
     protected ParticleSystem m_effect;
+    [SerializeField]
     protected LineRenderer m_renderer;
-
+    [SerializeField]
     protected List<GameObject> m_targetList = new List<GameObject>(); //공격 가능한 타겟 리스트
-    protected List<GameObject> m_activeTargets = new List<GameObject>();
+    
+    [SerializeField]
     protected float m_rotationSpeed;
+    [SerializeField]
     protected float m_barrelSpeed;
+    [SerializeField]
     protected float m_fireRange;
-    protected bool m_canFire;
-
+    [SerializeField]
+    protected float m_fireRate;
+    [SerializeField]
+    protected float m_damage;
+    float lastFireTime;
+    protected int m_hp = 1000;
+    protected int m_hpMax = 1000;
     #endregion
-
-    #region Methods
-    public void SetTower(float roatation, float barrel, float range)
+    IEnumerator ShootEffect(Vector3 hitPos)
     {
-        m_rotationSpeed = roatation;
+        m_renderer.SetPosition(0, m_renderer.gameObject.transform.position);  //레이 시작점
+        m_renderer.SetPosition(1, hitPos); //레이 도착점
+        m_renderer.enabled = true;
+        //0.03초간 라인렌더러를 켯다꺼 총알흔적 남기기.
+        yield return new WaitForSeconds(0.03f);
+        m_renderer.enabled = false;
+    }
+    #region Methods
+
+    public void SetDamage(float damage)
+    {
+        m_hp -= (int)damage;
+    }
+    private void Start()
+    {
+        SetTower(10,5,1000,20);
+    }
+    public void SetTower(float damage,float fireRate, float barrel, float range)
+    {
+        m_damage = damage;
+        m_fireRate = fireRate;
         m_barrelSpeed = barrel;
         m_fireRange = range;
 
 
         this.GetComponent<SphereCollider>().radius = m_fireRange;
     }
-    protected void FindNearTarget() //가장 가까운 타겟 탐색해서 정해주는 로직
+   
+    protected void FindNearTarget() //가장 가까운 타겟 탐색
     {
-        if (HasTarget())
+        GameObject closestTarget = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (GameObject target in m_targetList)
         {
-            m_target = m_targetList[0].transform;
-            foreach (GameObject target in m_targetList) //
+            float distance = Vector3.Distance(target.transform.position, transform.position);
+            if (distance <= closestDistance)
             {
-                if (Vector3.Distance(target.transform.position, transform.position) < Vector3.Distance(m_target.transform.position, transform.position))
-                {
-                    m_target = target.transform;
-                }
+                closestDistance = distance;
+                closestTarget = target;
             }
         }
+        m_target = closestTarget;
     }
+
     protected bool HasTarget()
     {
-        m_activeTargets.Clear();
         if(m_targetList.Count > 0)
         {
-            foreach(GameObject go in m_targetList)//리스트 안의 표적이 죽었을 경우를 생각하여 체크
+            List<GameObject> m_activeTargets = new List<GameObject>();
+            foreach (GameObject go in m_targetList)//리스트 안의 표적이 죽었을 경우를 생각하여 체크
             {
                 if (go.gameObject.activeSelf)
                 {
@@ -59,13 +96,10 @@ public class TowerController : MonoBehaviour
             }
             m_targetList = m_activeTargets;
         }
-
         if (m_targetList.Count > 0)//리스트에 적이 남아 있으면 트루
         {
-            m_canFire = true;
             return true;
         }
-        m_canFire = false;
         return false; //아니면 false
     }
     void OnDrawGizmosSelected() //사정거리 체크용 기즈모
@@ -90,31 +124,53 @@ public class TowerController : MonoBehaviour
     }
     protected void AimAndFire()
     {
-        // Gun barrel rotation
+       // 총열 회전속도
         m_barrel.transform.Rotate(0, 0, m_rotationSpeed * Time.deltaTime);
 
-        // if can fire turret activates
-        if (m_canFire) //공격 가능한 상태이고
+        if (HasTarget()) //타겟이 있다면
         {
-            if (HasTarget()) //타겟있는게 맞다면
-            {
-                FindNearTarget(); //가까운 표적을 지정해주고
+             FindNearTarget(); //가까운 표적을 지정해주고
+             m_rotationSpeed = m_barrelSpeed; //회전 , 조준 시작
 
-                m_rotationSpeed = m_barrelSpeed; //회전 , 조준 시작
+             Vector3 baseTargetPostition = new Vector3(m_target.transform.position.x, transform.position.y, m_target.transform.position.z);
+             Vector3 gunBodyTargetPostition = new Vector3(m_target.transform.position.x, m_target.transform.position.y, m_target.transform.position.z);
 
-                Vector3 baseTargetPostition = new Vector3(m_target.position.x, this.transform.position.y, m_target.position.z);
-                Vector3 gunBodyTargetPostition = new Vector3(m_target.position.x, m_target.position.y, m_target.position.z);
+             m_baseRoation.transform.LookAt(baseTargetPostition);
+             m_gunBody.transform.LookAt(gunBodyTargetPostition);
 
-                m_baseRoation.transform.LookAt(baseTargetPostition);
-                m_gunBody.transform.LookAt(gunBodyTargetPostition);
-
-                // start particle system 
-                if (!m_effect.isPlaying)
+             if(Time.time >= lastFireTime + 1 / m_fireRate)
+             {
+                lastFireTime = Time.time;
+                RaycastHit hit;
+                Vector3 hitPos = Vector3.zero;
+                Vector3 shotFire = Vector3.zero;
+                shotFire = m_renderer.gameObject.transform.forward;
+                float verti = Random.Range(-0.05f, 0.05f);
+                if (Physics.Raycast(m_renderer.gameObject.transform.position, shotFire, out hit, m_fireRange)) //시작지점, 방향, 충돌정보, 사정거리 
                 {
-                    m_effect.Play();
+                    if (hit.collider.CompareTag("Background"))
+                    {
+                        hitPos = hit.point;
+                    }
+                    else if (hit.collider.CompareTag("Zombie"))
+                    {
+                        hitPos = AttackProcess(hit);
+                    }
+                    else
+                    {
+                        hitPos = m_renderer.transform.position + shotFire * m_fireRange;
+                    }
                 }
-            }
-            
+                if (hit.collider == null)
+                {
+                    hitPos = m_renderer.transform.position + shotFire * m_fireRange;
+                }
+                StartCoroutine(ShootEffect(hitPos));
+             }
+             if (!m_effect.isPlaying)
+             {
+                 m_effect.Play();   
+             }
         }
         else
         {
@@ -126,9 +182,29 @@ public class TowerController : MonoBehaviour
             }
         }
     }
+    Vector3 AttackProcess(RaycastHit hit) //공격 시 좀비와의 상호작용하기위한 프로세스 모음
+    {
+        float damage = 0f;
+        Vector3 hitPos = Vector3.zero;
+        var mon = hit.collider.GetComponent<MonsterController>();
+ 
+        //mon.PlayHitSound(m_hit); //피해사실 전달하며 소리재생유도 시도
+        
+        mon.SetDamage(AttackType.Normal, damage, null, false);
+        
+        hitPos = hit.point;
+       
+        var hiteffect = TableEffect.Instance.m_tableData[4].Prefab[2];
+        var effect = EffectPool.Instance.Create(hiteffect);
+        effect.transform.position = hitPos;
+        effect.SetActive(true);
+        
+        return hitPos;
+
+    }
     protected void Update()
     {
-        AimAndFire();
+       AimAndFire();
     }
 
     #endregion

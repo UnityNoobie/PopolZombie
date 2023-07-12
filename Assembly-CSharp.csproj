@@ -75,6 +75,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\Internal\ByteReader.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIStretch.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\ProjectileController.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Controller\Object\TowerController.cs" />
     <Compile Include="Assets\External\HUD Text\Examples\Scripts\ColliderDisplayText.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\LookAtTarget.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenFOV.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\System\InvBaseItem.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerController.cs" />
     <Compile Include="Assets\External\HUD Text\Scripts\HUDText.cs" />
+    <Compile Include="Assets\FREE GatlingGun\Turrets\Gatling Gun\Scripts\GatlingGun.cs" />
     <Compile Include="Assets\SlimUI\Modern Menu 1\Scripts\Audio\CheckMusicVolume.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\ChangeColor.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UICenterOnChild.cs" />
@@ -299,8 +301,6 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
-    <Compile Include="Assets\FREE GatlingGun\Turrets\Gatling Gun\Scripts\GatlingGun.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Controller\Object\TowerController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
