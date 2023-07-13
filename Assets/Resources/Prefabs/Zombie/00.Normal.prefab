@@ -9342,6 +9342,7 @@ MonoBehaviour:
     score: 0
     coin: 0
     exp: 0
+  m_target: {fileID: 0}
   DummyHud: {fileID: 0}
   m_state: 0
 --- !u!114 &2353354408184542167
@@ -9383,8 +9384,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.3
-  m_Height: 2
+  m_Radius: 0.5
+  m_Height: 3
   m_Direction: 1
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &2057570179

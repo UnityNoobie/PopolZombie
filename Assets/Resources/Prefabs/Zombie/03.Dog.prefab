@@ -1834,9 +1834,9 @@ GameObject:
   - component: {fileID: 8419956227553138303}
   - component: {fileID: 6495100783549812643}
   - component: {fileID: 5854853939226007993}
-  - component: {fileID: 2636074399382591308}
   - component: {fileID: 1842428649}
   - component: {fileID: 583134963}
+  - component: {fileID: 4741764666638636065}
   m_Layer: 0
   m_Name: 03.Dog
   m_TagString: Zombie
@@ -1891,16 +1891,16 @@ NavMeshAgent:
   m_GameObject: {fileID: 4405211035329319289}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 1
   m_Speed: 3.5
   m_Acceleration: 20
-  avoidancePriority: 50
+  avoidancePriority: 49
   m_AngularSpeed: 1000
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 2
+  m_Height: 3
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
@@ -1932,6 +1932,7 @@ MonoBehaviour:
     score: 0
     coin: 0
     exp: 0
+  m_target: {fileID: 0}
   DummyHud: {fileID: 0}
   m_state: 0
 --- !u!114 &6495100783549812643
@@ -1963,20 +1964,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!136 &2636074399382591308
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4405211035329319289}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 1.4
-  m_Height: 3.2
-  m_Direction: 2
-  m_Center: {x: 0, y: 2, z: 0}
 --- !u!114 &1842428649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2122,6 +2109,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &4741764666638636065
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4405211035329319289}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 3, z: 2}
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &4434563310472187387
 GameObject:
   m_ObjectHideFlags: 0

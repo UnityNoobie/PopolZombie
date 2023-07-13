@@ -19,7 +19,9 @@ public class TowerController : MonoBehaviour ,IDamageAbleObject
     [SerializeField]
     protected LineRenderer m_renderer;
     [SerializeField]
-    protected List<GameObject> m_targetList = new List<GameObject>(); //공격 가능한 타겟 리스트
+    protected Transform m_firePos;
+    [SerializeField]
+    protected List<MonsterController> m_targetList = new List<MonsterController>(); //공격 가능한 타겟 리스트
     
     [SerializeField]
     protected float m_rotationSpeed;
@@ -34,10 +36,13 @@ public class TowerController : MonoBehaviour ,IDamageAbleObject
     float lastFireTime;
     protected int m_hp = 1000;
     protected int m_hpMax = 1000;
+    protected float m_criRate = 10;
+    protected float m_criDamage = 50;
+    protected float m_armorPierce = 0;
     #endregion
     IEnumerator ShootEffect(Vector3 hitPos)
     {
-        m_renderer.SetPosition(0, m_renderer.gameObject.transform.position);  //레이 시작점
+        m_renderer.SetPosition(0, m_firePos.position);  //레이 시작점
         m_renderer.SetPosition(1, hitPos); //레이 도착점
         m_renderer.enabled = true;
         //0.03초간 라인렌더러를 켯다꺼 총알흔적 남기기.
@@ -60,17 +65,17 @@ public class TowerController : MonoBehaviour ,IDamageAbleObject
         m_fireRate = fireRate;
         m_barrelSpeed = barrel;
         m_fireRange = range;
-
+        m_renderer.positionCount = 2;
 
         this.GetComponent<SphereCollider>().radius = m_fireRange;
     }
    
     protected void FindNearTarget() //가장 가까운 타겟 탐색
     {
-        GameObject closestTarget = null;
+        MonsterController closestTarget = null;
         float closestDistance = Mathf.Infinity;
 
-        foreach (GameObject target in m_targetList)
+        foreach (MonsterController target in m_targetList)
         {
             float distance = Vector3.Distance(target.transform.position, transform.position);
             if (distance <= closestDistance)
@@ -79,17 +84,17 @@ public class TowerController : MonoBehaviour ,IDamageAbleObject
                 closestTarget = target;
             }
         }
-        m_target = closestTarget;
+        m_target = closestTarget.gameObject;
     }
 
     protected bool HasTarget()
     {
         if(m_targetList.Count > 0)
         {
-            List<GameObject> m_activeTargets = new List<GameObject>();
-            foreach (GameObject go in m_targetList)//리스트 안의 표적이 죽었을 경우를 생각하여 체크
+            List<MonsterController> m_activeTargets = new List<MonsterController>();
+            foreach (MonsterController go in m_targetList)//리스트 안의 표적이 죽었을 경우를 생각하여 체크
             {
-                if (go.gameObject.activeSelf)
+                if (go.IsAliveObject())
                 {
                     m_activeTargets.Add(go);
                 }
@@ -111,7 +116,7 @@ public class TowerController : MonoBehaviour ,IDamageAbleObject
     {
         if (other.gameObject.CompareTag("Zombie"))
         {
-            m_targetList.Add(other.gameObject);
+            m_targetList.Add(other.GetComponent<MonsterController>());
         }
     }
     // Stop firing
@@ -119,7 +124,7 @@ public class TowerController : MonoBehaviour ,IDamageAbleObject
     {
         if (other.gameObject.CompareTag("Zombie")) //사정거리 밖으로 나가면 리스트에서 제거
         {
-            m_targetList.Remove(other.gameObject);
+            m_targetList.Remove(other.GetComponent<MonsterController>());
         }
     }
     protected void AimAndFire()
@@ -138,32 +143,26 @@ public class TowerController : MonoBehaviour ,IDamageAbleObject
              m_baseRoation.transform.LookAt(baseTargetPostition);
              m_gunBody.transform.LookAt(gunBodyTargetPostition);
 
-             if(Time.time >= lastFireTime + 1 / m_fireRate)
+             if(Time.time >= lastFireTime + (1 / m_fireRate))
              {
                 lastFireTime = Time.time;
                 RaycastHit hit;
                 Vector3 hitPos = Vector3.zero;
-                Vector3 shotFire = Vector3.zero;
-                shotFire = m_renderer.gameObject.transform.forward;
-                float verti = Random.Range(-0.05f, 0.05f);
-                if (Physics.Raycast(m_renderer.gameObject.transform.position, shotFire, out hit, m_fireRange)) //시작지점, 방향, 충돌정보, 사정거리 
+                Vector3 shotFire = m_firePos.transform.forward;            
+                if (Physics.Raycast(m_firePos.position, shotFire, out hit, m_fireRange)) //시작지점, 방향, 충돌정보, 사정거리 
                 {
-                    if (hit.collider.CompareTag("Background"))
+                    if (hit.collider.CompareTag("Zombie"))
                     {
-                        hitPos = hit.point;
-                    }
-                    else if (hit.collider.CompareTag("Zombie"))
-                    {
-                        hitPos = AttackProcess(hit);
+                       hitPos = AttackProcess(hit);
                     }
                     else
                     {
-                        hitPos = m_renderer.transform.position + shotFire * m_fireRange;
+                        hitPos = hit.point;
                     }
                 }
                 if (hit.collider == null)
                 {
-                    hitPos = m_renderer.transform.position + shotFire * m_fireRange;
+                    hitPos = m_firePos.position + shotFire * m_fireRange;
                 }
                 StartCoroutine(ShootEffect(hitPos));
              }
@@ -184,21 +183,19 @@ public class TowerController : MonoBehaviour ,IDamageAbleObject
     }
     Vector3 AttackProcess(RaycastHit hit) //공격 시 좀비와의 상호작용하기위한 프로세스 모음
     {
-        float damage = 0f;
+        float damage;
         Vector3 hitPos = Vector3.zero;
         var mon = hit.collider.GetComponent<MonsterController>();
- 
-        //mon.PlayHitSound(m_hit); //피해사실 전달하며 소리재생유도 시도
-        
+     
+        GunManager.AttackProcess(mon, m_damage, m_criRate, m_criDamage, m_armorPierce, out damage);
         mon.SetDamage(AttackType.Normal, damage, null, false);
-        
+
         hitPos = hit.point;
-       
+
         var hiteffect = TableEffect.Instance.m_tableData[4].Prefab[2];
         var effect = EffectPool.Instance.Create(hiteffect);
         effect.transform.position = hitPos;
         effect.SetActive(true);
-        
         return hitPos;
 
     }

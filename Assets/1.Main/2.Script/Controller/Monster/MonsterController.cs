@@ -436,12 +436,17 @@ public class MonsterController : MonoBehaviour
         HPControl(-damage,type);
         m_damagedCoroutine = StartCoroutine("Coroutine_SetDamagedColor");
     }
+    public bool IsAliveObject()
+    {
+        if(m_state != MonsterState.Die) return true;
+        else return false;
+    }
     public virtual void SetDamage(AttackType type, float damage, PlayerController player, bool isburn)
-        {
+    {
         if (m_status.hp <= 0) //hp가 0이하일때는 적용 x // 바로 리턴을 하였는데 죽어도 안죽는 현상 발생 다시 수정함.
         {
            SetDie();
-            return;
+           return;
         }   
         int dmg = Mathf.CeilToInt(damage); // 데미지를 인트로 바꾸어 받기
         DamageProcess(dmg, type);

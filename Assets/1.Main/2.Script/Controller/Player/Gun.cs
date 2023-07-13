@@ -264,7 +264,7 @@ public class Gun : MonoBehaviour
                     }
                     else if (hit.collider.CompareTag("Zombie"))
                     {
-                        hitPos = AttackProcess(hit);
+                        hitPos = AttackProcess(hit); 
                     }
                     else
                     {
