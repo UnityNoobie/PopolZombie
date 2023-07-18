@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7778983211725343117}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Dummy
   m_TagString: Dummy
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8416111817808193377}
   - component: {fileID: 8416111817813374501}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Zombie_Cylinder
   m_TagString: Zombie
   m_Icon: {fileID: 0}
@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 1286043959}
   - component: {fileID: 693901662}
   - component: {fileID: 1323870002}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 02.Heavy
   m_TagString: Zombie
   m_Icon: {fileID: 0}
@@ -430,7 +430,7 @@ GameObject:
   - component: {fileID: 8413354012829018535}
   - component: {fileID: 8535278890095413595}
   - component: {fileID: 8507005507368090343}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BloodSprayEffect
   m_TagString: Zombie
   m_Icon: {fileID: 0}
@@ -5070,7 +5070,7 @@ GameObject:
   - component: {fileID: 8413354015231781209}
   - component: {fileID: 8535278887385909835}
   - component: {fileID: 8507005505807300043}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BloodGlobs
   m_TagString: Untagged
   m_Icon: {fileID: 0}

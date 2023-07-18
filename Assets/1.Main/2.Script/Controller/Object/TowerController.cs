@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
 
-public class TowerController : MonoBehaviour ,IDamageAbleObject
+enum TowerState
+{
+    Alive,
+    Destroyed,
+    Max
+}
+public class TowerController : BuildableObject 
 {
     #region Constants and Fields
-    [SerializeField]
-    protected GameObject m_target;
     [SerializeField]
     protected Transform m_baseRoation;
     [SerializeField]
@@ -20,25 +24,9 @@ public class TowerController : MonoBehaviour ,IDamageAbleObject
     protected LineRenderer m_renderer;
     [SerializeField]
     protected Transform m_firePos;
-    [SerializeField]
-    protected List<MonsterController> m_targetList = new List<MonsterController>(); //공격 가능한 타겟 리스트
-    
-    [SerializeField]
-    protected float m_rotationSpeed;
-    [SerializeField]
-    protected float m_barrelSpeed;
-    [SerializeField]
-    protected float m_fireRange;
-    [SerializeField]
-    protected float m_fireRate;
-    [SerializeField]
-    protected float m_damage;
-    float lastFireTime;
-    protected int m_hp = 1000;
-    protected int m_hpMax = 1000;
-    protected float m_criRate = 10;
-    protected float m_criDamage = 50;
-    protected float m_armorPierce = 0;
+
+    TowerState m_state;
+
     #endregion
     IEnumerator ShootEffect(Vector3 hitPos)
     {
@@ -51,67 +39,33 @@ public class TowerController : MonoBehaviour ,IDamageAbleObject
     }
     #region Methods
 
-    public void SetDamage(float damage)
-    {
-        m_hp -= (int)damage;
-    }
+
     private void Start()
     {
-        SetTower(10,5,1000,20);
+        SetTransform();
+        SetTower(200,10,20,5,20,10,50,0);
+        GameManager.Instance.SetGameObject(gameObject);
     }
-    public void SetTower(float damage,float fireRate, float barrel, float range)
+    public override void SetTower(int hp, float damage,float defence, float fireRate, float range, float crirate, float cridam, float armorpierce)
     {
-        m_damage = damage;
-        m_fireRate = fireRate;
-        m_barrelSpeed = barrel;
-        m_fireRange = range;
+        base.SetTower(hp,damage,defence,fireRate,range,crirate,cridam,armorpierce);
+        m_attackArea = GetComponentInChildren<AreaChecker>();
+        m_attackArea.SetTower(this);
+        m_attackArea.GetComponent<SphereCollider>().radius = m_fireRange;
+        m_state = TowerState.Alive;
+        SetBarrelSpeed(m_fireRate);
         m_renderer.positionCount = 2;
-
-        this.GetComponent<SphereCollider>().radius = m_fireRange;
     }
-   
-    protected void FindNearTarget() //가장 가까운 타겟 탐색
+    void SetBarrelSpeed(float fireRate)
     {
-        MonsterController closestTarget = null;
-        float closestDistance = Mathf.Infinity;
-
-        foreach (MonsterController target in m_targetList)
-        {
-            float distance = Vector3.Distance(target.transform.position, transform.position);
-            if (distance <= closestDistance)
-            {
-                closestDistance = distance;
-                closestTarget = target;
-            }
-        }
-        m_target = closestTarget.gameObject;
-    }
-
-    protected bool HasTarget()
-    {
-        if(m_targetList.Count > 0)
-        {
-            List<MonsterController> m_activeTargets = new List<MonsterController>();
-            foreach (MonsterController go in m_targetList)//리스트 안의 표적이 죽었을 경우를 생각하여 체크
-            {
-                if (go.IsAliveObject())
-                {
-                    m_activeTargets.Add(go);
-                }
-            }
-            m_targetList = m_activeTargets;
-        }
-        if (m_targetList.Count > 0)//리스트에 적이 남아 있으면 트루
-        {
-            return true;
-        }
-        return false; //아니면 false
+        m_barrelSpeed = m_fireRate * 100;
     }
     void OnDrawGizmosSelected() //사정거리 체크용 기즈모
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, m_fireRange);
     }
+    /*
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Zombie"))
@@ -126,6 +80,26 @@ public class TowerController : MonoBehaviour ,IDamageAbleObject
         {
             m_targetList.Remove(other.GetComponent<MonsterController>());
         }
+    }*/
+    public void AddTargetList(MonsterController mon)
+    {
+        m_targetList.Add(mon);
+    }
+    public void RemoveTargetList(MonsterController mon)
+    {
+        m_targetList.Remove(mon);
+    }
+    protected override void Destroyed()
+    {
+        base.Destroyed();
+        m_state = TowerState.Destroyed;
+        StopAllCoroutines();
+        Invoke("DestroyGameObject", 1f); // 오브젝트 풀링해주기
+    }
+    protected override void DestroyGameObject() //활성화 종료 후 풀에 다시 넣어주기
+    {
+        base.DestroyGameObject();
+        ObjectManager.Instance.SetGunTower(this); //풀에 넣기
     }
     protected void AimAndFire()
     {
@@ -148,8 +122,9 @@ public class TowerController : MonoBehaviour ,IDamageAbleObject
                 lastFireTime = Time.time;
                 RaycastHit hit;
                 Vector3 hitPos = Vector3.zero;
-                Vector3 shotFire = m_firePos.transform.forward;            
-                if (Physics.Raycast(m_firePos.position, shotFire, out hit, m_fireRange)) //시작지점, 방향, 충돌정보, 사정거리 
+                Vector3 shotFire = m_firePos.transform.forward;
+                var layer = (1 << LayerMask.NameToLayer("Background") | 1 << LayerMask.NameToLayer("Zombie")); //레이의 충돌은 배경, 몬스터로 제한
+                if (Physics.Raycast(m_firePos.position, shotFire, out hit, m_fireRange,layer)) //시작지점, 방향, 충돌정보, 사정거리 
                 {
                     if (hit.collider.CompareTag("Zombie"))
                     {
@@ -201,7 +176,8 @@ public class TowerController : MonoBehaviour ,IDamageAbleObject
     }
     protected void Update()
     {
-       AimAndFire();
+        if(m_state.Equals(TowerState.Alive)) //생존 상태일때만 작동
+            AimAndFire();
     }
 
     #endregion

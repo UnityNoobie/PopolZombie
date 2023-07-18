@@ -56,7 +56,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     #region Methods
     public GameObject GetTargetObject(Vector3 dir) //좀비등 AI가 거리, 벨류값에 따라 타겟을 가져오도록.
     {
-        float targetValue = 10000f;
+        float targetValue = Mathf.Infinity;
         GameObject target = null;
         for(int i = 0; i < m_attackAbleObject.Count; i++)
         {
@@ -66,6 +66,14 @@ public class GameManager : SingletonDontDestroy<GameManager>
                 {
                     targetValue = Vector3.Distance(m_attackAbleObject[i].transform.position, dir) ;
                     target = m_attackAbleObject[i]; 
+                }
+            }
+            else if (m_attackAbleObject[i].CompareTag("Tower"))
+            {
+                if (Vector3.Distance(m_attackAbleObject[i].transform.position, dir) * 1.5f < targetValue)
+                {
+                    targetValue = Vector3.Distance(m_attackAbleObject[i].transform.position, dir) * 1.5f;
+                    target = m_attackAbleObject[i];
                 }
             }
             else if (m_attackAbleObject[i].CompareTag("Barricade"))

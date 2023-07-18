@@ -48,10 +48,14 @@ public class ProjectileController : MonoBehaviour
             m_hitPlayer = other.GetComponent<PlayerController>();
             m_hitPlayer.GetDamage(m_atkMon.GetStatus.damage * damageValue);
         }
-        if(other.CompareTag("Barricade") || other.CompareTag("Generator"))
+        else
         {
-            IDamageAbleObject target = other.GetComponent<IDamageAbleObject>();
-            target.SetDamage(m_atkMon.GetStatus.damage * damageValue);
+            if (other.GetComponent<IDamageAbleObject>() != null)
+            {
+                IDamageAbleObject target = other.GetComponent<IDamageAbleObject>();
+                target.SetDamage(m_atkMon.GetStatus.damage * damageValue);
+            }
         }
+       
     }
 }

@@ -18,11 +18,15 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     GameObject m_hudPrefab;
     [SerializeField]
     GameObject m_barricadePrefab;
+    [SerializeField]
+    GameObject m_gunTowerPrefab;
     GameObject m_previewBarricade;
+
 
     GameObject preview;
     GameObjectPool<DamageAbleObjectHUD> m_hudPool = new GameObjectPool<DamageAbleObjectHUD>();
     GameObjectPool<Barricade> m_barricadePool = new GameObjectPool<Barricade>();
+    GameObjectPool<TowerController> m_towerPool = new GameObjectPool<TowerController>();
 
     float m_bariRotation = 0f;
     float m_hudRotation = 0f;
@@ -75,6 +79,10 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
 
     public DamageAbleObjectHUD GetHud()
     {
+        if(m_hudPool.Count == 0)
+        {
+            SetObjectPool();
+        }
         DamageAbleObjectHUD hud = m_hudPool.Get();
         return hud;
     }
@@ -86,15 +94,16 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     {
         m_barricadePool.Set(obj);
     }
-    public void SetTransform()
+    public void SetGunTower(TowerController obj)
     {
-        m_uiCam = UGUIManager.Instance.GetUICam();
-        m_mainCam = Camera.main;
+        m_towerPool.Set(obj);
     }
+
     public void SetObjectPool()
     {
         m_hudPrefab = Resources.Load<GameObject>("Prefabs/HUDCanvas");
         m_barricadePrefab = Resources.Load<GameObject>("Prefabs/Barricade");
+        m_gunTowerPrefab = Resources.Load<GameObject>("Prefabs/GunTower");
         m_previewBarricade = Resources.Load<GameObject>("Prefabs/Preview_Barricade");
         preview = Instantiate(m_previewBarricade);
         preview.transform.localScale = Vector3.one;
@@ -120,13 +129,23 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
             obj.transform.localScale = Vector3.one;
             obj.gameObject.SetActive(false);
             var bar = obj.GetComponent<Barricade>();
-            bar.SetTransform();
+            //bar.SetTransform();
             return bar;
+        });
+        m_towerPool = new GameObjectPool<TowerController>(5, () =>
+        {
+            var obj = Instantiate(m_gunTowerPrefab);
+            obj.transform.SetParent(transform);
+            obj.transform.localPosition = Vector3.zero;
+            obj.transform.localScale = Vector3.one;
+            obj.gameObject.SetActive(false);
+            var top = obj.GetComponent<TowerController>();
+            //top.SetTransform();
+            return top;
         });
     }
     protected override void OnStart()
     {
-        SetTransform();
         SetObjectPool();
     }
 

@@ -6520,6 +6520,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_hudPrefab: {fileID: 0}
   m_barricadePrefab: {fileID: 0}
+  m_gunTowerPrefab: {fileID: 0}
 --- !u!4 &285459331
 Transform:
   m_ObjectHideFlags: 0
@@ -6696,7 +6697,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 479
+    m_Bits: 991
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -35674,7 +35675,14 @@ MonoBehaviour:
   m_maxHP: 0
   m_hp: 0
   m_defence: 0
-  m_hprestore: 0
+  m_damage: 0
+  m_criRate: 0
+  m_criDamage: 0
+  m_fireRate: 0
+  m_barrelSpeed: 0
+  m_rotationSpeed: 0
+  m_fireRange: 0
+  m_targetList: []
 --- !u!65 &2113270005
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -36686,7 +36694,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1309086235084734
 GameObject:
   m_ObjectHideFlags: 0

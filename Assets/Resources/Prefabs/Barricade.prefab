@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1985456662}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: DestroyEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,7 +54,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &737799584177241093
 Transform:
   m_ObjectHideFlags: 0
@@ -63,7 +63,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 732303916292561269}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: -11.42}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -149,8 +149,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.8606335, y: 2, z: 0.42384574}
-  m_Center: {x: 0, y: 0.46036658, z: 0}
+  m_Size: {x: 1.8, y: 2, z: 0.4}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!208 &733510434249665971
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -161,11 +161,11 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.93000007, y: 0.5, z: 0.21200001}
+  m_Extents: {x: 0.9, y: 1, z: 0.2}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
   m_TimeToStationary: 0.5
 --- !u!114 &733510435272342820
 MonoBehaviour:
@@ -182,7 +182,14 @@ MonoBehaviour:
   m_maxHP: 0
   m_hp: 0
   m_defence: 0
-  m_hprestore: 0
+  m_damage: 0
+  m_criRate: 0
+  m_criDamage: 0
+  m_fireRate: 0
+  m_barrelSpeed: 0
+  m_rotationSpeed: 0
+  m_fireRange: 0
+  m_targetList: []
 --- !u!82 &2577809805409440159
 AudioSource:
   m_ObjectHideFlags: 0
@@ -194,7 +201,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.67
   m_Pitch: 1
   Loop: 0
@@ -288,7 +295,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5458986038115485967}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: HudPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -319,11 +326,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1209615476248102, guid: ee50fc417b9c9d042875bbe275d6b15c, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1228365099249328, guid: ee50fc417b9c9d042875bbe275d6b15c, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1809022330002312, guid: ee50fc417b9c9d042875bbe275d6b15c, type: 3}
       propertyPath: m_Name
@@ -331,7 +338,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1809022330002312, guid: ee50fc417b9c9d042875bbe275d6b15c, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4150649967365504, guid: ee50fc417b9c9d042875bbe275d6b15c, type: 3}
       propertyPath: m_RootOrder
