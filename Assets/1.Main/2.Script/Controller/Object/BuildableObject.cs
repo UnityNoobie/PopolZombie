@@ -94,7 +94,6 @@ public class BuildableObject : MonoBehaviour, IDamageAbleObject
         m_criDamage = cridam;
         m_criRate = crirate;
         m_armorPierce = armorpierce;
-
     }
     public virtual void SetDamage(float damage)
     {

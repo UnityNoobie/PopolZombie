@@ -19,17 +19,20 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     [SerializeField]
     GameObject m_barricadePrefab;
     [SerializeField]
-    GameObject m_gunTowerPrefab;
+    GameObject m_gunTurretPrefab;
     GameObject m_previewBarricade;
+    GameObject m_previewGunTurret;
 
-
+    [SerializeField]
     GameObject preview;
+
     GameObjectPool<DamageAbleObjectHUD> m_hudPool = new GameObjectPool<DamageAbleObjectHUD>();
     GameObjectPool<Barricade> m_barricadePool = new GameObjectPool<Barricade>();
     GameObjectPool<TowerController> m_towerPool = new GameObjectPool<TowerController>();
 
     float m_bariRotation = 0f;
     float m_hudRotation = 0f;
+    int m_id;
 
     
     IEnumerator Coroutine_PreviewBuilding()
@@ -44,7 +47,10 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
             {
                 Vector3 pointTolook = cameraRay.GetPoint(rayLength);
                 preview.transform.position = new Vector3(pointTolook.x, 0f, pointTolook.z);
-                preview.transform.localEulerAngles = new Vector3(0f,m_bariRotation,0f);
+                if (m_id == 3)
+                {
+                    preview.transform.localEulerAngles = new Vector3(0f, m_bariRotation, 0f);
+                }
             }
             yield return new WaitForEndOfFrame();
         }
@@ -53,10 +59,14 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     {
         StartCoroutine(Coroutine_PreviewBuilding());
     }
+    public void BuildObject()
+    {
+        if (m_id == 3) BuildBarricade();
+        else if (m_id == 4) BuildTurret();
+    }
     public void BuildBarricade()
     {
         StopBuilding();
-        preview.SetActive(false);
         var obj = m_barricadePool.Get();
         Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         Plane GroupPlane = new Plane(Vector3.up, Vector3.zero);
@@ -67,9 +77,38 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
             obj.BuildBarricade(200, 30, new Vector3(pointTolook.x, 0f, pointTolook.z), m_bariRotation, m_hudRotation);
         }
     }
+    public void BuildTurret()
+    {
+        StopBuilding();
+        var obj = m_towerPool.Get();
+        Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Plane GroupPlane = new Plane(Vector3.up, Vector3.zero);
+        float rayLength;
+        if (GroupPlane.Raycast(cameraRay, out rayLength))
+        {
+            Vector3 pointTolook = cameraRay.GetPoint(rayLength);
+            obj.BuildTurretObject(new Vector3(pointTolook.x, 0f, pointTolook.z), 200, 10, 20, 5, 20, 10, 50, 0);
+        }
+
+    }
     public void StopBuilding()
     {
+        preview.SetActive(false);
         StopAllCoroutines();
+    }
+    public void SetPreviewObject(int id)
+    {
+        m_id = id;
+        if (m_id == 3)
+        {
+            preview = null;
+            preview = Instantiate(m_previewBarricade);
+        }
+        else if(m_id == 4)
+        {
+            preview = null;
+            preview = Instantiate(m_previewGunTurret);
+        }
     }
     public void RotationChanger()
     {
@@ -103,9 +142,10 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     {
         m_hudPrefab = Resources.Load<GameObject>("Prefabs/HUDCanvas");
         m_barricadePrefab = Resources.Load<GameObject>("Prefabs/Barricade");
-        m_gunTowerPrefab = Resources.Load<GameObject>("Prefabs/GunTower");
+        m_gunTurretPrefab = Resources.Load<GameObject>("Prefabs/GunTower");
         m_previewBarricade = Resources.Load<GameObject>("Prefabs/Preview_Barricade");
-        preview = Instantiate(m_previewBarricade);
+        m_previewGunTurret = Resources.Load<GameObject>("Prefabs/PreviewGunTower");
+        SetPreviewObject(3);
         preview.transform.localScale = Vector3.one;
         preview.gameObject.SetActive(false);
         
@@ -134,7 +174,7 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         });
         m_towerPool = new GameObjectPool<TowerController>(5, () =>
         {
-            var obj = Instantiate(m_gunTowerPrefab);
+            var obj = Instantiate(m_gunTurretPrefab);
             obj.transform.SetParent(transform);
             obj.transform.localPosition = Vector3.zero;
             obj.transform.localScale = Vector3.one;

@@ -6520,7 +6520,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_hudPrefab: {fileID: 0}
   m_barricadePrefab: {fileID: 0}
-  m_gunTowerPrefab: {fileID: 0}
+  m_gunTurretPrefab: {fileID: 0}
 --- !u!4 &285459331
 Transform:
   m_ObjectHideFlags: 0
@@ -129647,6 +129647,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GunTower
+      objectReference: {fileID: 0}
+    - target: {fileID: 9163190174173971636, guid: 140ed0e72dc2f1e41ae4e3705d584695,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9168539638705242448, guid: 140ed0e72dc2f1e41ae4e3705d584695,
         type: 3}

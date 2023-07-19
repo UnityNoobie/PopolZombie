@@ -40,14 +40,17 @@ public class TowerController : BuildableObject
     #region Methods
 
 
-    private void Start()
+
+    public void BuildTurretObject(Vector3 buildPos,int hp, float damage, float defence, float fireRate, float range, float crirate, float cridam, float armorpierce)
     {
-        SetTransform();
-        SetTower(200,10,20,5,20,10,50,0);
+        SetTower(hp, damage, defence, fireRate, range, crirate, cridam, armorpierce);
+        transform.position = buildPos;
+        gameObject.SetActive(true);
         GameManager.Instance.SetGameObject(gameObject);
     }
     public override void SetTower(int hp, float damage,float defence, float fireRate, float range, float crirate, float cridam, float armorpierce)
     {
+        SetTransform();
         base.SetTower(hp,damage,defence,fireRate,range,crirate,cridam,armorpierce);
         m_attackArea = GetComponentInChildren<AreaChecker>();
         m_attackArea.SetTower(this);
@@ -80,7 +83,7 @@ public class TowerController : BuildableObject
         {
             m_targetList.Remove(other.GetComponent<MonsterController>());
         }
-    }*/
+    }*/ //AreaChecker로 기능 이동
     public void AddTargetList(MonsterController mon)
     {
         m_targetList.Add(mon);
@@ -89,6 +92,7 @@ public class TowerController : BuildableObject
     {
         m_targetList.Remove(mon);
     }
+   
     protected override void Destroyed()
     {
         base.Destroyed();

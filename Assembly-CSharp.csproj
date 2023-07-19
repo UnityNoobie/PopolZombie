@@ -74,6 +74,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIDragObject.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\ByteReader.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIStretch.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Controller\Object\AreaChecker.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\ProjectileController.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Object\TowerController.cs" />
     <Compile Include="Assets\External\HUD Text\Examples\Scripts\ColliderDisplayText.cs" />
@@ -302,7 +303,9 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Controller\Object\AreaChecker.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerObjectController.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Data\TableObjectStat.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Data\TableUtilitySkillStat.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

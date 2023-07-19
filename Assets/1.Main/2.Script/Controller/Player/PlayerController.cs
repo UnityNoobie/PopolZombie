@@ -194,7 +194,6 @@ public class PlayerController : MonoBehaviour
     //근접 공격 프로세스 실행하는 이벤트
     void AnimEvent_MeleeAttack()
     {
-
         float damage = 0;
         var area = m_area.GetComponent<AttackAreaUnitFind>();
         var areaList = area.m_unitList;
@@ -374,7 +373,7 @@ public class PlayerController : MonoBehaviour
             UGUIManager.Instance.GetStatusUI().SetActive(m_isactive);
             UGUIManager.Instance.PlayClickSFX();
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3)) // 구급상자 사용
+        if (Input.GetKeyDown(KeyCode.Alpha2)) // 구급상자 사용
         {
             if (GetHPValue() >= 0.95)
             {
@@ -383,11 +382,12 @@ public class PlayerController : MonoBehaviour
             }
             m_quickSlot.UseQuickSlotITem(1, "HealPack");
         }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             isbuild = !isbuild;
             if (isbuild)
             {
+                ObjectManager.Instance.SetPreviewObject(3);
                 ObjectManager.Instance.StartPreviewBuild();
             }
             else
@@ -396,7 +396,21 @@ public class PlayerController : MonoBehaviour
             }
             //m_quickSlot.UseQuickSlotITem(2, "Barricade");
         }
-        if(Input.GetMouseButton(0))
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            isbuild = !isbuild;
+            if (isbuild)
+            {
+                ObjectManager.Instance.SetPreviewObject(4);
+                ObjectManager.Instance.StartPreviewBuild();
+            }
+            else
+            {
+                ObjectManager.Instance.StopBuilding();
+            }
+            //m_quickSlot.UseQuickSlotITem(3, "Tower");
+        }
+        if (Input.GetMouseButton(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -417,7 +431,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else if(isbuild)
                 {
-                    ObjectManager.Instance.BuildBarricade();
+                    ObjectManager.Instance.BuildObject();
                     isbuild = false;
                 }
                  
