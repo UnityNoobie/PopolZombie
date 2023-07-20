@@ -126,9 +126,7 @@ public class WeaponData
 }
 public class TableGunstat : Singleton<TableGunstat>
 {
-    // Start is called before the first frame update
-    
-    
+   
     public  Dictionary<int, WeaponData> m_WeaponData = new Dictionary<int, WeaponData>();
     public List<int> m_lowWeapon = new List<int>();
     public List<int> m_midWeapon = new List<int>();

@@ -70,6 +70,7 @@
     <Compile Include="Assets\Unity UI Samples\Scripts\DragPanel.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UISoundVolume.cs" />
     <Compile Include="Assets\External\HUD Text\Examples\Scripts\HUDRoot.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Data\TableObjectStat.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\ExampleDragDropSurface.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIDragObject.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\ByteReader.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Assets\1.Main\2.Script\Utill\GameObjectPool.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Tweening\TweenAlpha.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\Game\UIItemStorage.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerObjectController.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\AnimationController.cs" />
     <Compile Include="Assets\1.Main\2.Script\TestMonster.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonScale.cs" />
@@ -285,6 +287,7 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\BossAnimController.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\Singleton\SingletonMonoBehaviour.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\System\InvStat.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Data\TableUtilitySkillStat.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\Spin.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\DamageAbleObjectHUD.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonKeys.cs" />
@@ -303,9 +306,6 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerObjectController.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Data\TableObjectStat.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Data\TableUtilitySkillStat.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
