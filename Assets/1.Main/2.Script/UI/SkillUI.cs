@@ -105,6 +105,12 @@ public class SkillUI : MonoBehaviour
                 m_highSlots[1].ChoiceSkillTypes(m_player, PlayerAbilityType.MG, "MachineGunLv3", "기관총 강화", this);
                 m_highSlots[2].ChoiceSkillTypes(m_player, PlayerAbilityType.Melee, "AxeLv3", "근접무기 강화", this);
             }
+            else if (m_Type.Equals(SkillType.Utility))
+            {
+                m_highSlots[0].ChoiceSkillTypes(m_player, PlayerAbilityType.Turret, "GunTurret", "포탑 강화", this);
+                m_highSlots[1].ChoiceSkillTypes(m_player, PlayerAbilityType.Barricade, "Barricade", "바리케이드 강화", this);
+                m_highSlots[2].ChoiceSkillTypes(m_player, PlayerAbilityType.CyberWear, "CyberWear", "아군 강화", this);
+            }
         }
     }
     public void RefreshSP(PlayerSkillController player)
@@ -137,7 +143,8 @@ public class SkillUI : MonoBehaviour
     }
     void SetUtilitySlot()
     {
-        UGUIManager.Instance.SystemMessageSendMessage("유틸리티 스틸은 아직 미구현 되었습니다 다음 패치 후 이용해 주세요.");
+        m_Type = SkillType.Utility;
+        SetSlotList(m_Type);
     }
     void SetSlotList(SkillType type)
     {
@@ -154,7 +161,7 @@ public class SkillUI : MonoBehaviour
         }
         else if(m_Type.Equals(SkillType.Utility))
         {
-            m_SkillList = Skilldata.UtilityList;
+            m_SkillList = UtillData.UtilityList;
         }
         for (int i = 0; i < m_SkillList.Count; i++)
         {

@@ -10,7 +10,10 @@ public enum PlayerAbilityType
     Rifle,
     MG,
     ShotGun,
-    Melee
+    Melee,
+    Turret,
+    Barricade,
+    CyberWear
 }
 public class PlayerSkillController : MonoBehaviour
 {
@@ -88,8 +91,7 @@ public class PlayerSkillController : MonoBehaviour
             }
             else if (skillgrade == 4 && m_highLvCount < 3)
             {
-                UGUIManager.Instance.SystemMessageSendMessage("하와왕");
-                Debug.Log("ㅎ");
+                UGUIManager.Instance.SystemMessageSendMessage("특성 스킬 모두 습득 시 습득 가능합니다.");
                 return false;
             }
             else
@@ -135,6 +137,7 @@ public class PlayerSkillController : MonoBehaviour
     #region Property
   
     public TableSkillStat m_skilldata{get;set;}
+    public TableUtilitySkillStat m_utilldata { get; set;}
     #endregion
 
     #region Constants and Fields

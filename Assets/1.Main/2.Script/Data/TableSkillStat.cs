@@ -113,11 +113,10 @@ public class SKillPos
 }
 class Skilldata : Singleton<Skilldata>
 {
-    public TableSkillStat m_stat { get; set; }
     public Dictionary<int, TableSkillStat> m_dic = new Dictionary<int, TableSkillStat>();
     public static List<int> AgilityList = new List<int>();
     public static List<int> StrengthList = new List<int>();
-    public static List<int> UtilityList = new List<int>();
+
 
     /*
    public void AA()
@@ -197,7 +196,7 @@ class Skilldata : Singleton<Skilldata>
     {
         TableLoader.Instance.LoadData(TableLoader.Instance.LoadTableData("Ability"));
         m_dic.Clear();
-        for (int i = 0; i < 93; i++)
+        for (int i = 0; i < 62; i++)
         {
             TableSkillStat data = new TableSkillStat();
             data.SkillName = TableLoader.Instance.GetString("Skill", i);
@@ -282,11 +281,6 @@ class Skilldata : Singleton<Skilldata>
                 data.SkillType = SkillType.Physical;
                 StrengthList.Add(data.ID);
             }
-            else if (skilltype.Equals("Utility"))
-            {
-                data.SkillType = SkillType.Utility;
-                UtilityList.Add(data.ID);
-            }
             else
             {
                 Debug.Log("특성타입 입력이 잘못되었습니다.");
@@ -294,7 +288,6 @@ class Skilldata : Singleton<Skilldata>
             m_dic.Add(data.ID, data);
         }
         TableLoader.Instance.Clear();
-       // AA();
     }
 }
 

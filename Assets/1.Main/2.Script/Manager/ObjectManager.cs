@@ -3,13 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public enum ObjectType
-{
-    Generator,
-    Barricade,
-    Turret,
-    Max
-}
+
 public class ObjectManager : SingletonMonoBehaviour<ObjectManager> 
 {
     Camera m_mainCam;

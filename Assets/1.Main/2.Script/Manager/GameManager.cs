@@ -212,6 +212,8 @@ public class GameManager : SingletonDontDestroy<GameManager>
         TableSoundInfo.Instance.Load();
         Skilldata.Instance.Load();
         ImageLoader.Instance.Load();
+        TableObjectStat.Instance.Load();
+        UtillData.Instance.Load();
     }
     protected override void OnAwake()
     {
