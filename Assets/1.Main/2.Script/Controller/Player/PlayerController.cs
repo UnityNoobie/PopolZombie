@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     QuickSlot m_quickSlot;
     [SerializeField]
     UpdateManager m_updateManager;
+    TableSkillStat m_skillStat;
     AudioSource m_audio;
     GunManager m_manager;
     PlayerShooter m_shooter;
@@ -70,8 +71,10 @@ public class PlayerController : MonoBehaviour
     int armCriRate;
     float armSpeed;
     #endregion
-    //스킬 정보 임시 저장
+    //스킬 정보 임시 저장 (이었던것)
     #region SkillData
+    bool crush;
+    /*
     float skillamage;
     float skillAtkSpeed;
     float skillReload;
@@ -92,7 +95,7 @@ public class PlayerController : MonoBehaviour
     int skillDrain;
     float skillCrush;
     int skillBurn;
-    bool crush;
+    ;*/
     #endregion
 
     #region Property
@@ -166,7 +169,7 @@ public class PlayerController : MonoBehaviour
     {
         while (true)
         {
-            SkillHeal(Mathf.CeilToInt(skillHeal * m_status.hpMax / 100));
+            SkillHeal(Mathf.CeilToInt(m_status.SkillHeal * m_status.hpMax / 100));
             yield return new WaitForSeconds(2);
         }
     }
@@ -205,7 +208,7 @@ public class PlayerController : MonoBehaviour
                 var type = GunManager.AttackProcess(mon, m_status.damage, m_status.criRate, m_status.criAttack, m_status.ArmorPierce, out damage);
                 if (crush)//분쇄스킬이 찍혀있으면..
                 {
-                    mon.Crush(skillCrush);
+                    mon.Crush(m_skillStat.Crush);
                 }
                 mon.SetDamage(type, damage, this, false);
                 if (m_meleetype.Equals(MeleeType.Axe))
@@ -485,8 +488,26 @@ public class PlayerController : MonoBehaviour
         armSpeed = speed;
         SetStatus(m_weaponData.ID);
     }
-    public void SetSkillData(float damage, float atkspeed, float reload, float speed, int crirate, float cridamage, float mag, float defence, float damagerigist, float hp, float knockbackrate, float heal, int lastfire, int pierce, int boom, float armorPierce, float Remove, int Drain, float Crush, int Burn)
-    {
+    public void SetSkillData(TableSkillStat stat)
+    {//float damage, float atkspeed, float reload, float speed, int crirate, float cridamage, float mag, float defence, float damagerigist, float hp, float knockbackrate, float heal, int lastfire, int pierce, int boom, float armorPierce, float Remove, int Drain, float Crush, int Burn
+        m_skillStat = stat;
+        if (stat.Crush > 0)
+        {
+            crush = true;
+        }
+        else
+        {
+            crush = false;
+        }
+        if (stat.Heal > 0)// 스킬의 지속힐이 0 보다 크다면 힐 코루틴 시작.
+        {
+            if (CheckCoroutine != null) //기존에 실행중이라면 멈추고 다시실행
+            {
+                StopCoroutine(CheckCoroutine);
+            }
+            CheckCoroutine = StartCoroutine(Coroutine_SustainedHeal());
+        }
+        /*
         skillamage = damage;
         skillAtkSpeed = atkspeed;
         skillReload = reload;
@@ -507,7 +528,8 @@ public class PlayerController : MonoBehaviour
         skillDrain = Drain;
         skillCrush = Crush;
         skillBurn = Burn;
-        if(skillCrush > 0)
+        
+        if (skillCrush > 0)
         {
             crush = true;
         }
@@ -522,7 +544,7 @@ public class PlayerController : MonoBehaviour
                 StopCoroutine(CheckCoroutine);
             }
             CheckCoroutine = StartCoroutine(Coroutine_SustainedHeal());
-        }
+        }*/ //기존방식 하드코딩이라 수정중
         //CheckBoolin();
     }
     public void LevelUp()
@@ -556,8 +578,7 @@ public class PlayerController : MonoBehaviour
     void InitStatus(float itemhp, float I_Criper, float I_CriDam, float I_atkSpeed, float I_Atk, float I_Def, float I_speed, int maxammo, float reloadtime,float knockbackPer, float knockbackDist,float atkDist, int shotgun,int level) 
     {//SetStatus에서 스킬과 아이템의 추가값들을 받아옴.
      //(float skillhp, float itemhp, float S_CriPer, float I_Criper, float S_CriDam, float I_CriDam, float S_atkSpeed, float I_atkSpeed, float S_Atk, float I_Atk, float S_Def, float I_Def, float S_speed, float I_speed, int maxammo, float reloadtime,float knockbackPer, float knockbackDist,float atkDist, int shotgun,int level) 
-     //스테이터스 입력값의 순서 : 최대체력 , 크리티컬 확률, 크리티컬 추가 데미지,공격속도, 공격력, 방어력, 이동속도
-        m_status = new Status(hp,200 * (1 + (skillHP + itemhp + hpPer)), 10f + skillCriRate+ I_Criper + armCriRate, 50f + (skillCriDamage + I_CriDam), 0 + (skillAtkSpeed + I_atkSpeed) * (1 + armAttackSpeed),(1+ (skillamage + armDamage)) * I_Atk, 0 + skillDefence + I_Def + armDefence, 130 * (1 + skillSpeed + I_speed + armSpeed), maxammo * Mathf.CeilToInt(1+skillMag), reloadtime - (reloadtime * skillReload) ,knockbackPer+skillKnockBackRate,knockbackDist,atkDist,shotgun,level,skillDamageRigist,skillLastFire,skillPierce,skillBoom,skillArmorPierce,skillRemove,skillDrain,skillCrush,skillBurn,skillHeal,m_knickName,m_title);
+        m_status = new Status(hp,200 * (1 + (m_skillStat.HP + itemhp + hpPer)), 10f + m_skillStat.CriRate+ I_Criper + armCriRate, 50f + (m_skillStat.CriDamage + I_CriDam), 0 + (m_skillStat.AtkSpeed + I_atkSpeed) * (1 + armAttackSpeed),(1+ (m_skillStat.Damage + armDamage)) * I_Atk, 0 + m_skillStat.Defence + I_Def + armDefence, 130 * (1 + m_skillStat.Speed + I_speed + armSpeed), maxammo * Mathf.CeilToInt(1+ m_skillStat.Mag), reloadtime - (reloadtime * m_skillStat.Reload) ,knockbackPer+ m_skillStat.KnockBackRate, knockbackDist,atkDist,shotgun,level, m_skillStat.DamageRigist, m_skillStat.LastFire, m_skillStat.Pierce, m_skillStat.Boom, m_skillStat.ArmorPierce, m_skillStat.Remove, m_skillStat.Drain, m_skillStat.Crush, m_skillStat.Burn, m_skillStat.Heal, m_knickName,m_title);
         // m_status.hpMax = Mathf.CeilToInt(m_status.hpMax); //최대체력 가져오기
         HPControl(0);
         m_animCtr.SetFloat("MeleeSpeed", m_status.atkSpeed);
@@ -577,9 +598,9 @@ public class PlayerController : MonoBehaviour
         SetWeaponID(ID);
         //스테이터스 입력값의 순서 : 스킬, 아이템 최대체력 ,스킬아이템 크리티컬 확률, 스킬, 아이템 크리티컬 추가 데미지,스킬 아이템 공격속도, 스킬아이템 공격력, 스킬 아이템 방어력 , 이동속도
         float penaltyRemove = m_weaponData.Speed;
-        if (skillRemove != 0 && m_weaponData.Speed < 0) //스킬 데이터로 이동속도 패널티감소가 있고 무기의 이속감소 효과가 있을 경우 이속올려줌
+        if (m_skillStat.Remove != 0 && m_weaponData.Speed < 0) //스킬 데이터로 이동속도 패널티감소가 있고 무기의 이속감소 효과가 있을 경우 이속올려줌
         {
-            penaltyRemove = penaltyRemove - (penaltyRemove * skillRemove);
+            penaltyRemove = penaltyRemove - (penaltyRemove * m_skillStat.Remove);
         }
         InitStatus(m_weaponData.HP,  m_weaponData.CriRate, m_weaponData.CriDamage, m_weaponData.AtkSpeed,  m_weaponData.Damage, m_weaponData.Defence, penaltyRemove/*패널티감소 스킬이 있기 때문에 따로 적용*/, m_weaponData.Mag, m_weaponData.ReloadTime,m_weaponData.KnockBack,m_weaponData.KnockBackDist,m_weaponData.AttackDist,m_weaponData.Shotgun,m_level);
      //   m_animCtr.SetFloat("MoveSpeed", m_status.speed / 150); //이동속도별 다리움직임 속도조절용.
@@ -621,7 +642,7 @@ public class PlayerController : MonoBehaviour
             return;
         damage = CalculationDamage.NormalDamage(damage, m_status.defense, 0f);
         PlayDamagedSound();
-        int mondamage = Mathf.CeilToInt(damage - (damage*skillDamageRigist)); //피해 저항 적용
+        int mondamage = Mathf.CeilToInt(damage - (damage* m_status.DamageRigist)); //피해 저항 적용
         HPControl(-mondamage);
         var hiteffect = TableEffect.Instance.m_tableData[6].Prefab[2];
         var effect = EffectPool.Instance.Create(hiteffect);

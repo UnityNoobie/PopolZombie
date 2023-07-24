@@ -161,7 +161,7 @@ public class SkillUI : MonoBehaviour
         }
         else if(m_Type.Equals(SkillType.Utility))
         {
-            m_SkillList = UtillData.UtilityList;
+            m_SkillList = Skilldata.UtilityList;
         }
         for (int i = 0; i < m_SkillList.Count; i++)
         {
@@ -187,7 +187,6 @@ public class SkillUI : MonoBehaviour
                         CloseSlots(3);
                         break;
                     case PlayerAbilityType.Pistol:
-                        
                         if(m_stat.GetSkillData(m_SkillList[i]).SkillWeaponType == SkillWeaponType.Pistol)
                         {
                             OpenSlots(3);
@@ -234,6 +233,27 @@ public class SkillUI : MonoBehaviour
 
                     case PlayerAbilityType.Melee:
                         if (m_stat.GetSkillData(m_SkillList[i]).SkillWeaponType == SkillWeaponType.Melee)
+                        {
+                            OpenSlots(3);
+                            m_highSlots[m_count].SetSkillSlot(m_SkillList[i], m_player, m_player.IsActived(m_SkillList[i]), m_active, m_skillInfo);
+                            m_count++;
+                        }
+                        break;
+                    case PlayerAbilityType.Barricade:
+                        {
+                            OpenSlots(3);
+                            m_highSlots[m_count].SetSkillSlot(m_SkillList[i], m_player, m_player.IsActived(m_SkillList[i]), m_active, m_skillInfo);
+                            m_count++;
+                        }
+                        break;
+                    case PlayerAbilityType.Turret:
+                        {
+                            OpenSlots(3);
+                            m_highSlots[m_count].SetSkillSlot(m_SkillList[i], m_player, m_player.IsActived(m_SkillList[i]), m_active, m_skillInfo);
+                            m_count++;
+                        }
+                        break;
+                    case PlayerAbilityType.CyberWear:
                         {
                             OpenSlots(3);
                             m_highSlots[m_count].SetSkillSlot(m_SkillList[i], m_player, m_player.IsActived(m_SkillList[i]), m_active, m_skillInfo);

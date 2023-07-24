@@ -213,7 +213,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
         Skilldata.Instance.Load();
         ImageLoader.Instance.Load();
         TableObjectStat.Instance.Load();
-        UtillData.Instance.Load();
+       // UtillData.Instance.Load();
     }
     protected override void OnAwake()
     {

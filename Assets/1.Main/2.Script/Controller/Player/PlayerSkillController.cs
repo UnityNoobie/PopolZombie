@@ -19,6 +19,7 @@ public class PlayerSkillController : MonoBehaviour
 {
 
     #region PlayerSkillDatas
+    /*
     float Damage;
     float AtkSpeed;
     float Reload;
@@ -38,7 +39,7 @@ public class PlayerSkillController : MonoBehaviour
     float Remove;
     int Drain;
     float Crush;
-    int Burn;
+    int Burn;*/ //이전버전 사용X
     #endregion
 
     #region PublicReturnMethod
@@ -131,13 +132,18 @@ public class PlayerSkillController : MonoBehaviour
     {
         return m_skillPoint;
     }
+    public TableSkillStat GetPlayerSkillData()
+    {
+        RefreshSKillData();
+        return m_playerSkillstat;
+    }
 
     #endregion
 
     #region Property
   
     public TableSkillStat m_skilldata{get;set;}
-    public TableUtilitySkillStat m_utilldata { get; set;}
+
     #endregion
 
     #region Constants and Fields
@@ -145,6 +151,7 @@ public class PlayerSkillController : MonoBehaviour
     SkillWeaponType m_skillweapon;
     PlayerAbilityType m_abilityType;
     PlayerController m_player;
+    TableSkillStat m_playerSkillstat;
     GunManager m_gunmanager;
     SkillUI m_skillUI;
     int m_skillPoint = 0;
@@ -155,6 +162,7 @@ public class PlayerSkillController : MonoBehaviour
 
 
     public List<int> m_skillList = new List<int>(); //현재 활성화한 스킬 리스트 저장용
+    public List<int> m_utillList = new List<int>(); //유틸리티 스킬의 경우 사용스탯이 다르게 새로 만들어 따로 저장
     #endregion
 
     #region publicMethod
@@ -231,6 +239,8 @@ public class PlayerSkillController : MonoBehaviour
     }
     void ResetDatas() //이전에 가지고 있던 정보 초기화.
     {
+        m_playerSkillstat = new TableSkillStat();
+        /*
         Damage = 0;
         AtkSpeed = 0;
         Reload = 0;
@@ -250,7 +260,7 @@ public class PlayerSkillController : MonoBehaviour
         Remove = 0;
         Drain = 0;
         Crush = 0;
-        Burn = 0;
+        Burn = 0;*/
     }
     void RefreshSKillData() //스킬데이터 가져올 때마다 수행할 작업.
     {
@@ -259,6 +269,51 @@ public class PlayerSkillController : MonoBehaviour
         {
             if (isActiveType(m_skilldata.GetSkillData(m_skillList[i]).SkillWeaponType, m_weapontype)) //현재 무기 정보와 스킬이 요구하는 무기의 종류가 같다면 스탯 더해줌.
             {
+                m_skilldata = m_skilldata.GetSkillData(m_skillList[i]);
+                m_playerSkillstat.Damage += m_skilldata.Damage;
+                m_playerSkillstat.AtkSpeed += m_skilldata.AtkSpeed;
+                m_playerSkillstat.Reload += m_skilldata.Reload;
+                m_playerSkillstat.Speed += m_skilldata.Speed;
+                m_playerSkillstat.CriRate += m_skilldata.CriRate;
+                m_playerSkillstat.CriDamage += m_skilldata.CriDamage;
+                m_playerSkillstat.Mag += m_skilldata.Mag;
+                m_playerSkillstat.Defence += m_skilldata.Defence;
+                m_playerSkillstat.DamageRigist += m_skilldata.DamageRigist;
+                m_playerSkillstat.KnockBackRate += m_skilldata.KnockBackRate;
+                m_playerSkillstat.HP += m_skilldata.HP;
+                m_playerSkillstat.Heal += m_skilldata.Heal;
+                m_playerSkillstat.LastFire += m_skilldata.LastFire;
+                m_playerSkillstat.Pierce += m_skilldata.Pierce;
+                m_playerSkillstat.Boom += m_skilldata.Boom;
+                m_playerSkillstat.SkillPoint += m_skilldata.SkillPoint;
+                m_playerSkillstat.ArmorPierce += m_skilldata.ArmorPierce;
+                m_playerSkillstat.Remove += m_skilldata.Remove;
+                m_playerSkillstat.Drain += m_skilldata.Drain;
+                m_playerSkillstat.Crush += m_skilldata.Crush;
+                m_playerSkillstat.Burn += m_skilldata.Burn;
+                m_playerSkillstat.TurretMaxBuild += m_skilldata.TurretMaxBuild;
+                m_playerSkillstat.BarricadeMaxBuild += m_skilldata.BarricadeMaxBuild;
+                m_playerSkillstat.ObjectRegen += m_skilldata.ObjectRegen;
+                m_playerSkillstat.BarricadeRegen += m_skilldata.BarricadeRegen;
+                m_playerSkillstat.BonusHP += m_skilldata.BonusHP;
+                m_playerSkillstat.TurretHP += m_skilldata.TurretHP;
+                m_playerSkillstat.BarricadeHP += m_skilldata.BarricadeHP;
+                m_playerSkillstat.ObjectHP += m_skilldata.ObjectHP;
+                m_playerSkillstat.CyberWear += m_skilldata.CyberWear;
+                m_playerSkillstat.publicBuffDamage += m_skilldata.publicBuffDamage;
+                m_playerSkillstat.BuffArmorPierce += m_skilldata.BuffArmorPierce;
+                m_playerSkillstat.TurretRigist += m_skilldata.TurretRigist;
+                m_playerSkillstat.BarricadeRigist += m_skilldata.BarricadeRigist;
+                m_playerSkillstat.ObjectRigist += m_skilldata.ObjectRigist;
+                m_playerSkillstat.TurretDamage += m_skilldata.TurretDamage;
+                m_playerSkillstat.TurretRange += m_skilldata.TurretRange;
+                m_playerSkillstat.TurretAttackSpeed += m_skilldata.TurretAttackSpeed;
+                m_playerSkillstat.TurretArmorPierce = m_skilldata.TurretArmorPierce;
+                m_playerSkillstat.BarricadeDefence += m_skilldata.BarricadeDefence;
+                m_playerSkillstat.ObjectDefence += m_skilldata.ObjectDefence;
+                m_playerSkillstat.ReflectDamge += m_skilldata.ReflectDamge;
+                m_playerSkillstat.MaxMachineLearning += m_skilldata.MaxMachineLearning;
+                /*
                 Damage += m_skilldata.GetSkillData(m_skillList[i]).Damage;
                 AtkSpeed += m_skilldata.GetSkillData(m_skillList[i]).AtkSpeed;
                 Reload += m_skilldata.GetSkillData(m_skillList[i]).Reload;
@@ -279,18 +334,18 @@ public class PlayerSkillController : MonoBehaviour
                 Drain += m_skilldata.GetSkillData(m_skillList[i]).Drain;
                 Crush += m_skilldata.GetSkillData(m_skillList[i]).Crush;
                 Burn += m_skilldata.GetSkillData(m_skillList[i]).Burn;
+                */
             }
         }
-        m_player.SetSkillData(Damage, AtkSpeed, Reload, Speed, CriRate, CriDamage, Mag, Defence, DamageRigist, HP, KnockBackRate, Heal, LastFire, Pierce, Boom, ArmorPierce, Remove, Drain, Crush, Burn);
+        m_player.SetSkillData(m_playerSkillstat);
     } //플레이어에게 데이터 전송
     private void Awake()
     {
-
         m_skilldata = new TableSkillStat();
         m_player = GetComponent<PlayerController>();
         m_gunmanager = GetComponent<GunManager>();
         m_abilityType = PlayerAbilityType.None;
-       // m_skillPoint = 100; 테스트용
+         m_skillPoint = 100;// 테스트용
     }
     #endregion
 }
