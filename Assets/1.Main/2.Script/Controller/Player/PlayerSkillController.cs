@@ -148,7 +148,6 @@ public class PlayerSkillController : MonoBehaviour
 
     #region Constants and Fields
     WeaponType m_weapontype;
-    SkillWeaponType m_skillweapon;
     PlayerAbilityType m_abilityType;
     PlayerController m_player;
     TableSkillStat m_playerSkillstat;
@@ -162,7 +161,6 @@ public class PlayerSkillController : MonoBehaviour
 
 
     public List<int> m_skillList = new List<int>(); //현재 활성화한 스킬 리스트 저장용
-    public List<int> m_utillList = new List<int>(); //유틸리티 스킬의 경우 사용스탯이 다르게 새로 만들어 따로 저장
     #endregion
 
     #region publicMethod
@@ -334,7 +332,7 @@ public class PlayerSkillController : MonoBehaviour
                 Drain += m_skilldata.GetSkillData(m_skillList[i]).Drain;
                 Crush += m_skilldata.GetSkillData(m_skillList[i]).Crush;
                 Burn += m_skilldata.GetSkillData(m_skillList[i]).Burn;
-                */
+                */ //이전버전
             }
         }
         m_player.SetSkillData(m_playerSkillstat);
@@ -345,7 +343,8 @@ public class PlayerSkillController : MonoBehaviour
         m_player = GetComponent<PlayerController>();
         m_gunmanager = GetComponent<GunManager>();
         m_abilityType = PlayerAbilityType.None;
-         m_skillPoint = 100;// 테스트용
+        m_skillPoint = 100;// 테스트용
+        ObjectManager.Instance.SetPlayer(this);
     }
     #endregion
 }

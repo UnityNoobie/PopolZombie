@@ -19,31 +19,16 @@ public class Generator : BuildableObject
         StopAllCoroutines();   
         GameManager.Instance.GameOver();
     }
-    public override void RestoreHP(int heal) //피해회복
-    {
-        m_hp += (m_maxHP * heal) / 100;
-        if(m_hp >= m_maxHP)
-        {
-            m_hp = m_maxHP;
-        }
-    }
-    public override void IncreaseMaxHp(int hp) //최대체력 증가
-    {
-        float value = m_hp / m_maxHP;
-        m_maxHP += hp;
-        m_hp = Mathf.CeilToInt(m_maxHP * value);
-    }
-    public override void IncreaseDefence(int defence)
-    {
-        m_defence += defence;
-    }
-    public override void SetObject(int hp, int def)
+    void SetObject()
     {
         SetTransform();
-        base.SetObject(hp, def);
+        m_stat = ObjectManager.Instance.GetObjectStat(ObjectType.Generator);
+        InitStatus(null, m_stat);
+        GameManager.Instance.SetGameObject(gameObject);
+        
     }
     private void Start()
     {
-        SetObject(1000, 30);
+        SetObject();
     }
 }

@@ -122,7 +122,7 @@ public class GunManager : MonoBehaviour
         {
             AttackType attackType = AttackType.Normal; //기본적으로는 치명타상태가 아닌 일반적인 공격으로 계산
             damage = 0f;
-            damage = CalculationDamage.NormalDamage(Pdamage, mon.GetStatus.defense,armorpierce); //공격의 경우 총의 공격력과 총알에 맞은 콜라이더의 방어력 정보를 얻어와 적용.
+            damage = CalculationDamage.NormalDamage(Pdamage, mon.GetStatus.defense,armorpierce,0); //공격의 경우 총의 공격력과 총알에 맞은 콜라이더의 방어력 정보를 얻어와 적용.
             if (CalculationDamage.CriticalDecision(criper))   //크리티컬의 유무를 확인하기.
             {
                 attackType = AttackType.Critical; //공격의 타입을 크리티컬로 지정

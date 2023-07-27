@@ -5,6 +5,8 @@ using UnityEngine;
 public class Barricade : BuildableObject
 {
     #region Constants and Fields
+
+
     #endregion
 
     #region Coroutine
@@ -26,11 +28,10 @@ public class Barricade : BuildableObject
         base.DestroyGameObject();
         ObjectManager.Instance.SetBarricade(this); //풀에 넣기
     }
-    public void BuildBarricade(int hp, int def,Vector3 buildPos, float barirota, float hudrota)
+    public void BuildBarricade(Vector3 buildPos, float barirota, float hudrota,TableSkillStat skill,ObjectStat stat)
     {
         SetTransform();
-        m_maxHP = m_hp = hp;
-        m_defence = def;
+        InitStatus(skill,stat);
         transform.position = buildPos;
         transform.localEulerAngles = new Vector3(0f, barirota, 0f);
         m_hudPos.transform.localEulerAngles = new Vector3(30f,hudrota, 0f);

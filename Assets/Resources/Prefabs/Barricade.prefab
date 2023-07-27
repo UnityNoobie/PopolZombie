@@ -149,7 +149,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.8, y: 2, z: 0.4}
+  m_Size: {x: 2, y: 2, z: 0.5}
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!208 &733510434249665971
 NavMeshObstacle:
@@ -179,13 +179,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d51f49ec6e9f3e4c86be47405cd8dc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxHP: 0
-  m_hp: 0
-  m_defence: 0
-  m_damage: 0
-  m_criRate: 0
-  m_criDamage: 0
-  m_fireRate: 0
   m_barrelSpeed: 0
   m_rotationSpeed: 0
   m_fireRange: 0

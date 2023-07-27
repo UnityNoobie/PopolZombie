@@ -5,7 +5,7 @@ using UnityEngine.Rendering.Universal;
 
 public class TableObjectStat : Singleton<TableObjectStat>
 {
-    public Dictionary<int,ObjectStat> m_objectData = new Dictionary<int,ObjectStat>();
+    public Dictionary<ObjectType,ObjectStat> m_objectData = new Dictionary<ObjectType,ObjectStat>();
     public void Load()
     {
         TableLoader.Instance.LoadData(TableLoader.Instance.LoadTableData("Object"));
@@ -37,6 +37,7 @@ public class TableObjectStat : Singleton<TableObjectStat>
             data.ArmorPierce = TableLoader.Instance.GetFloat("ArmorPierce", i);
             data.DamageReflect = TableLoader.Instance.GetInteger("MaxBuild", i);
             data.Info = TableLoader.Instance.GetString("Info", i);
+            m_objectData.Add(data.Objecttype, data);
         }
         TableLoader.Instance.Clear();
     }
@@ -78,10 +79,10 @@ public class ObjectStat
         this.MaxBuild = maxbuild;
         this.Info = info;
     }
-    public ObjectStat GetObjectStatus(int Id)
+    public ObjectStat GetObjectStatus(ObjectType type)
     {
         ObjectStat data = null;
-        data = TableObjectStat.Instance.m_objectData[Id];
+        data = TableObjectStat.Instance.m_objectData[type];
         ObjectStat stat = new ObjectStat(data.ID, data.Objecttype, data.HP, data.MaxHP, data.Defence, data.DamageRigist, data.Damage, data.FireRate, data.Range, data.CriRate, data.CriDamage, data.ArmorPierce, data.DamageReflect, data.MaxBuild, data.Info);
         return stat;
     }

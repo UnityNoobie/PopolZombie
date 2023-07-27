@@ -25,6 +25,8 @@ public class TowerController : BuildableObject
     [SerializeField]
     protected Transform m_firePos;
 
+
+    int m_machineLearning = 0;
     TowerState m_state;
 
     #endregion
@@ -41,32 +43,32 @@ public class TowerController : BuildableObject
 
 
 
-    public void BuildTurretObject(Vector3 buildPos,int hp, float damage, float defence, float fireRate, float range, float crirate, float cridam, float armorpierce)
+    public void BuildTurretObject(Vector3 buildPos,TableSkillStat skill,ObjectStat stat)
     {
-        SetTower(hp, damage, defence, fireRate, range, crirate, cridam, armorpierce);
+        InitStatus(skill,stat);
         transform.position = buildPos;
         gameObject.SetActive(true);
         GameManager.Instance.SetGameObject(gameObject);
     }
-    public override void SetTower(int hp, float damage,float defence, float fireRate, float range, float crirate, float cridam, float armorpierce)
+    public override void InitStatus(TableSkillStat skill, ObjectStat stat)
     {
         SetTransform();
-        base.SetTower(hp,damage,defence,fireRate,range,crirate,cridam,armorpierce);
+        base.InitStatus(skill,stat);
         m_attackArea = GetComponentInChildren<AreaChecker>();
         m_attackArea.SetTower(this);
-        m_attackArea.GetComponent<SphereCollider>().radius = m_fireRange;
+        m_attackArea.GetComponent<SphereCollider>().radius = m_stat.Range;
         m_state = TowerState.Alive;
-        SetBarrelSpeed(m_fireRate);
+        SetBarrelSpeed(m_stat.FireRate);
         m_renderer.positionCount = 2;
     }
     void SetBarrelSpeed(float fireRate)
     {
-        m_barrelSpeed = m_fireRate * 100;
+        m_barrelSpeed = m_stat.FireRate * 100;
     }
     void OnDrawGizmosSelected() //사정거리 체크용 기즈모
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, m_fireRange);
+        Gizmos.DrawWireSphere(transform.position, m_stat.Range);
     }
     /*
     void OnTriggerEnter(Collider other)
@@ -92,7 +94,14 @@ public class TowerController : BuildableObject
     {
         m_targetList.Remove(mon);
     }
-   
+    public void MachineLearning()
+    {
+        m_machineLearning++;
+        if(m_machineLearning >= 50)
+        {
+            m_machineLearning = 50;
+        }
+    }
     protected override void Destroyed()
     {
         base.Destroyed();
@@ -121,14 +130,14 @@ public class TowerController : BuildableObject
              m_baseRoation.transform.LookAt(baseTargetPostition);
              m_gunBody.transform.LookAt(gunBodyTargetPostition);
 
-             if(Time.time >= lastFireTime + (1 / m_fireRate))
+             if(Time.time >= lastFireTime + (1 / m_stat.FireRate))
              {
                 lastFireTime = Time.time;
                 RaycastHit hit;
                 Vector3 hitPos = Vector3.zero;
                 Vector3 shotFire = m_firePos.transform.forward;
-                var layer = (1 << LayerMask.NameToLayer("Background") | 1 << LayerMask.NameToLayer("Zombie")); //레이의 충돌은 배경, 몬스터로 제한
-                if (Physics.Raycast(m_firePos.position, shotFire, out hit, m_fireRange,layer)) //시작지점, 방향, 충돌정보, 사정거리 
+                var layer = (1 << LayerMask.NameToLayer("Background") | 1 << LayerMask.NameToLayer("Monster")); //레이의 충돌은 배경, 몬스터로 제한
+                if (Physics.Raycast(m_firePos.position, shotFire, out hit, m_stat.Range,layer)) //시작지점, 방향, 충돌정보, 사정거리 
                 {
                     if (hit.collider.CompareTag("Zombie"))
                     {
@@ -141,7 +150,7 @@ public class TowerController : BuildableObject
                 }
                 if (hit.collider == null)
                 {
-                    hitPos = m_firePos.position + shotFire * m_fireRange;
+                    hitPos = m_firePos.position + shotFire * m_stat.Range;
                 }
                 StartCoroutine(ShootEffect(hitPos));
              }
@@ -166,7 +175,7 @@ public class TowerController : BuildableObject
         Vector3 hitPos = Vector3.zero;
         var mon = hit.collider.GetComponent<MonsterController>();
      
-        GunManager.AttackProcess(mon, m_damage, m_criRate, m_criDamage, m_armorPierce, out damage);
+        GunManager.AttackProcess(mon, m_stat.Damage + m_machineLearning , m_stat.CriRate, m_stat.CriRate, m_stat.ArmorPierce, out damage);
         mon.SetDamage(AttackType.Normal, damage, null, false);
 
         hitPos = hit.point;

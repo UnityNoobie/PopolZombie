@@ -6,8 +6,7 @@ using UnityEngine;
 
 public class ObjectManager : SingletonMonoBehaviour<ObjectManager> 
 {
-    Camera m_mainCam;
-    Camera m_uiCam;
+
     [SerializeField]
     GameObject m_hudPrefab;
     [SerializeField]
@@ -23,12 +22,15 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     GameObjectPool<DamageAbleObjectHUD> m_hudPool = new GameObjectPool<DamageAbleObjectHUD>();
     GameObjectPool<Barricade> m_barricadePool = new GameObjectPool<Barricade>();
     GameObjectPool<TowerController> m_towerPool = new GameObjectPool<TowerController>();
+    PlayerSkillController m_player;
+    PlayerObjectController m_playerObject;
 
     float m_bariRotation = 0f;
     float m_hudRotation = 0f;
     int m_id;
 
-    
+    ObjectStat m_obejctStat = new ObjectStat(); 
+
     IEnumerator Coroutine_PreviewBuilding()
     {
         preview.SetActive(true);
@@ -49,6 +51,11 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
             yield return new WaitForEndOfFrame();
         }
     }
+    public ObjectStat GetObjectStat(ObjectType type)
+    {
+        var stat = m_obejctStat.GetObjectStatus(type);
+        return stat;
+    }
     public void StartPreviewBuild()
     {
         StartCoroutine(Coroutine_PreviewBuilding());
@@ -68,7 +75,7 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         if (GroupPlane.Raycast(cameraRay, out rayLength))
         {
             Vector3 pointTolook = cameraRay.GetPoint(rayLength);
-            obj.BuildBarricade(200, 30, new Vector3(pointTolook.x, 0f, pointTolook.z), m_bariRotation, m_hudRotation);
+            obj.BuildBarricade(new Vector3(pointTolook.x, 0f, pointTolook.z), m_bariRotation, m_hudRotation, m_player.GetPlayerSkillData(), GetObjectStat(ObjectType.Barricade));
         }
     }
     public void BuildTurret()
@@ -81,7 +88,7 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         if (GroupPlane.Raycast(cameraRay, out rayLength))
         {
             Vector3 pointTolook = cameraRay.GetPoint(rayLength);
-            obj.BuildTurretObject(new Vector3(pointTolook.x, 0f, pointTolook.z), 200, 10, 20, 5, 20, 10, 50, 0);
+            obj.BuildTurretObject(new Vector3(pointTolook.x, 0f, pointTolook.z),m_player.GetPlayerSkillData(),GetObjectStat(ObjectType.Turret));
         }
 
     }
@@ -125,13 +132,19 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     }
     public void SetBarricade(Barricade obj)
     {
+        m_playerObject.DestroyedBarricade(obj);
         m_barricadePool.Set(obj);
     }
     public void SetGunTower(TowerController obj)
     {
+        m_playerObject.DestroyedTurret(obj);
         m_towerPool.Set(obj);
     }
-
+    public void SetPlayer(PlayerSkillController player)
+    {
+        m_player = player;
+        m_playerObject = m_player.GetComponent<PlayerObjectController>();
+    }
     public void SetObjectPool()
     {
         m_hudPrefab = Resources.Load<GameObject>("Prefabs/HUDCanvas");

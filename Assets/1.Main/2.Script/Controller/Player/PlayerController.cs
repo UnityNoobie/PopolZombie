@@ -46,6 +46,9 @@ public class PlayerController : MonoBehaviour
     GameObject m_area;
     [SerializeField]
     Vector3 m_dir;
+
+
+
     int hp;
     int m_comboIndex;
     int m_experience;
@@ -640,7 +643,7 @@ public class PlayerController : MonoBehaviour
     {
         if (m_status.hp <= 0 || m_Pstate == PlayerState.dead || m_Pstate == PlayerState.Invincible) //피가 0이거나 죽었을땐 적용 X
             return;
-        damage = CalculationDamage.NormalDamage(damage, m_status.defense, 0f);
+        damage = CalculationDamage.NormalDamage(damage, m_status.defense, 0f,m_status.DamageRigist);
         PlayDamagedSound();
         int mondamage = Mathf.CeilToInt(damage - (damage* m_status.DamageRigist)); //피해 저항 적용
         HPControl(-mondamage);

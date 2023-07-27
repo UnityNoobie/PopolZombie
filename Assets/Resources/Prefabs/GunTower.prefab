@@ -34322,13 +34322,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9b0e3eee23f9d143b25afbae97dcd33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxHP: 0
-  m_hp: 0
-  m_defence: 0
-  m_damage: 0
-  m_criRate: 0
-  m_criDamage: 0
-  m_fireRate: 0
   m_barrelSpeed: 0
   m_rotationSpeed: 0
   m_fireRange: 0
@@ -34349,11 +34342,11 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 1, y: 1.5, z: 1}
+  m_Extents: {x: 0.75, y: 1, z: 0.75}
   m_MoveThreshold: 0.1
   m_Carve: 0
   m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 1.5, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
   m_TimeToStationary: 0.5
 --- !u!54 &9076878824143569298
 Rigidbody:
