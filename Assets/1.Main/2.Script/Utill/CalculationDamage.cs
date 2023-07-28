@@ -9,7 +9,7 @@ public class CalculationDamage
 
         float rigistDefence =  defence - (defence * armorpierce) / 100; //방어구관통
         float attack = damage * (100 /(100 + rigistDefence)); //방어력 적용
-        attack -= ((attack * damageRigist) / 100);
+        attack -= (attack * damageRigist);
         return attack;
     }
     public static bool CriticalDecision(float criRate) // 크리티컬 확률

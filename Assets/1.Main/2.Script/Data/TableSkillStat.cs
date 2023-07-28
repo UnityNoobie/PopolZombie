@@ -80,8 +80,9 @@ public class TableSkillStat
     public float ObjectDefence { get; set; }
     public float ReflectDamge { get; set; }
     public int MaxMachineLearning { get; set; }
+    public string AbilityTypeChecker { get; set; }
     public TableSkillStat() { }
-    public TableSkillStat(string skillName, int Id, string image, SkillType skilltype, SkillWeaponType skillweapon, string skillInfo, float damage, float atkSpeed, float Reload, float speed, int criRate, float cridam, float mag, float defence, float damageRigist, float hp, float knockbackrate, float heal, int lastfire, int pierce, int boom, int skillpoint, float armorpierce, float remove, int drain, float crush, int burn, bool isactive, int skillPos, int nextID, int prevID, int skillGrade, int turretmaxbuild, int barricademaxbuld, float objectregen, float barricaderegen, float bonushp, float turrethp, float barricadehp, float objecthp, float cyberwear, float publicbuffdamge, int buffarmorpierce, float turretrigist, float barricaderigist, float objectrigist, float turretdamage, float turretrange, float turretattackspeed, int turretarmorpierce, float barricadedefence, float objectdefence, float reflectdamage, int maxmachinelearning)
+    public TableSkillStat(string skillName, int Id, string image, SkillType skilltype, SkillWeaponType skillweapon, string skillInfo, float damage, float atkSpeed, float Reload, float speed, int criRate, float cridam, float mag, float defence, float damageRigist, float hp, float knockbackrate, float heal, int lastfire, int pierce, int boom, int skillpoint, float armorpierce, float remove, int drain, float crush, int burn, bool isactive, int skillPos, int nextID, int prevID, int skillGrade, int turretmaxbuild, int barricademaxbuld, float objectregen, float barricaderegen, float bonushp, float turrethp, float barricadehp, float objecthp, float cyberwear, float publicbuffdamge, int buffarmorpierce, float turretrigist, float barricaderigist, float objectrigist, float turretdamage, float turretrange, float turretattackspeed, int turretarmorpierce, float barricadedefence, float objectdefence, float reflectdamage, int maxmachinelearning, string abilityTypeChecker)
     {
         // int burn, bool isactive
         this.SkillName = skillName;
@@ -137,14 +138,16 @@ public class TableSkillStat
         this.ObjectDefence = objectdefence;
         this.ReflectDamge = reflectdamage;
         this.MaxMachineLearning = maxmachinelearning;
+        this.AbilityTypeChecker = abilityTypeChecker;
     }
     public TableSkillStat GetSkillData(int id)
     {
         TableSkillStat skilldata = null;
         skilldata = Skilldata.Instance.m_dic[id];
+        /*
         TableSkillStat stat = new TableSkillStat(skilldata.SkillName, skilldata.ID, skilldata.Image, skilldata.SkillType, skilldata.SkillWeaponType, skilldata.SkillInfo, skilldata.Damage, skilldata.AtkSpeed, skilldata.Reload, skilldata.Speed, skilldata.CriRate,
             skilldata.Mag, skilldata.CriDamage, skilldata.Defence, skilldata.DamageRigist, skilldata.HP, skilldata.KnockBackRate, skilldata.Heal, skilldata.LastFire, skilldata.Pierce, skilldata.Boom, skilldata.SkillPoint, skilldata.ArmorPierce
-            ,skilldata.Remove, skilldata.Drain,skilldata.Crush, skilldata.Burn, skilldata.isActive, skilldata.SkillPos,skilldata.NextID,skilldata.PrevID,skilldata.SkillGrade,skilldata.TurretMaxBuild,skilldata.BarricadeMaxBuild,skilldata.ObjectRegen,skilldata.BarricadeRegen,skilldata.BonusHP,skilldata.TurretHP,skilldata.BarricadeHP,skilldata.ObjectHP,skilldata.CyberWear,skilldata.publicBuffDamage,skilldata.BuffArmorPierce,skilldata.TurretRigist,skilldata.BarricadeRigist,skilldata.ObjectRigist,skilldata.TurretDamage,skilldata.TurretRange,skilldata.TurretAttackSpeed,skilldata.TurretArmorPierce,skilldata.BarricadeDefence,skilldata.ObjectDefence,skilldata.ReflectDamge,skilldata.MaxMachineLearning);
+            ,skilldata.Remove, skilldata.Drain,skilldata.Crush, skilldata.Burn, skilldata.isActive, skilldata.SkillPos,skilldata.NextID,skilldata.PrevID,skilldata.SkillGrade,skilldata.TurretMaxBuild,skilldata.BarricadeMaxBuild,skilldata.ObjectRegen,skilldata.BarricadeRegen,skilldata.BonusHP,skilldata.TurretHP,skilldata.BarricadeHP,skilldata.ObjectHP,skilldata.CyberWear,skilldata.publicBuffDamage,skilldata.BuffArmorPierce,skilldata.TurretRigist,skilldata.BarricadeRigist,skilldata.ObjectRigist,skilldata.TurretDamage,skilldata.TurretRange,skilldata.TurretAttackSpeed,skilldata.TurretArmorPierce,skilldata.BarricadeDefence,skilldata.ObjectDefence,skilldata.ReflectDamge,skilldata.MaxMachineLearning);*/
         return skilldata;
     }
 
@@ -258,6 +261,7 @@ class Skilldata : Singleton<Skilldata>
             data.ObjectDefence = TableLoader.Instance.GetFloat("ObjectDefence", i);
             data.ReflectDamge = TableLoader.Instance.GetFloat("ReflectDamage", i);
             data.MaxMachineLearning = TableLoader.Instance.GetInteger("MachineLearing", i);
+            data.AbilityTypeChecker = TableLoader.Instance.GetString("AbilityType", i);
             string skilltype = TableLoader.Instance.GetString("SkillType", i);
             if (skilltype.Equals("Shooter"))
             {

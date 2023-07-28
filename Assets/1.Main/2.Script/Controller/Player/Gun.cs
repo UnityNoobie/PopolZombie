@@ -156,7 +156,14 @@ public class Gun : MonoBehaviour
     }
     public void ammoCheck() //남은총알을 실시간으로 확인.
     {
-        UIManager.Instance.WeaponInfoUI(m_type + ".LV" + m_grade + "\n" + ammoRemain + " / " + m_player.GetStatus.maxammo);
+        if(m_player.GetStatus.maxammo > 1000)
+        {
+            UIManager.Instance.WeaponInfoUI(m_type + ".LV" + m_grade + "\n∞ / ∞");
+        }
+        else
+        {
+            UIManager.Instance.WeaponInfoUI(m_type + ".LV" + m_grade + "\n" + ammoRemain + " / " + m_player.GetStatus.maxammo);
+        }
     }
     void Start()
     {

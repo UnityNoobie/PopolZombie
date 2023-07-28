@@ -2,7 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-
+public enum ObjectType
+{
+    Player,
+    Generator,
+    Barricade,
+    Turret,
+    Max
+}
 
 public class ObjectManager : SingletonMonoBehaviour<ObjectManager> 
 {
@@ -17,23 +24,25 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     GameObject m_previewGunTurret;
 
     [SerializeField]
-    GameObject preview;
+    PreviewObject preview;
 
     GameObjectPool<DamageAbleObjectHUD> m_hudPool = new GameObjectPool<DamageAbleObjectHUD>();
     GameObjectPool<Barricade> m_barricadePool = new GameObjectPool<Barricade>();
     GameObjectPool<TowerController> m_towerPool = new GameObjectPool<TowerController>();
     PlayerSkillController m_player;
     PlayerObjectController m_playerObject;
+    PlayerController m_playerC;
 
     float m_bariRotation = 0f;
     float m_hudRotation = 0f;
     int m_id;
 
+
     ObjectStat m_obejctStat = new ObjectStat(); 
 
     IEnumerator Coroutine_PreviewBuilding()
     {
-        preview.SetActive(true);
+        preview.ActiveOBJ();
         while (true)
         {
             Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -42,10 +51,10 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
             if (GroupPlane.Raycast(cameraRay, out rayLength))
             {
                 Vector3 pointTolook = cameraRay.GetPoint(rayLength);
-                preview.transform.position = new Vector3(pointTolook.x, 0f, pointTolook.z);
+                preview.gameObject.transform.position = new Vector3(pointTolook.x, 0f, pointTolook.z);
                 if (m_id == 3)
                 {
-                    preview.transform.localEulerAngles = new Vector3(0f, m_bariRotation, 0f);
+                    preview.gameObject.transform.localEulerAngles = new Vector3(0f, m_bariRotation, 0f);
                 }
             }
             yield return new WaitForEndOfFrame();
@@ -62,8 +71,17 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     }
     public void BuildObject()
     {
-        if (m_id == 3) BuildBarricade();
-        else if (m_id == 4) BuildTurret();
+        if (preview.IsCanBuild())
+        {
+            if (m_id == 3) BuildBarricade();
+            else if (m_id == 4) BuildTurret();
+            m_playerC.IsBuildingConvert();
+        }
+        else
+        {
+            UGUIManager.Instance.SystemMessageSendMessage("적합하지 않은 장소입니다. 비어있는 위치에 다시 건설해 주세요.");
+        }
+        
     }
     public void BuildBarricade()
     {
@@ -76,6 +94,8 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         {
             Vector3 pointTolook = cameraRay.GetPoint(rayLength);
             obj.BuildBarricade(new Vector3(pointTolook.x, 0f, pointTolook.z), m_bariRotation, m_hudRotation, m_player.GetPlayerSkillData(), GetObjectStat(ObjectType.Barricade));
+            m_playerObject.BuildBarricade(obj);
+            m_playerC.ObjcetBuildSuccesed(2);
         }
     }
     public void BuildTurret()
@@ -89,12 +109,14 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         {
             Vector3 pointTolook = cameraRay.GetPoint(rayLength);
             obj.BuildTurretObject(new Vector3(pointTolook.x, 0f, pointTolook.z),m_player.GetPlayerSkillData(),GetObjectStat(ObjectType.Turret));
+            m_playerObject.BuildTurret(obj);
+            m_playerC.ObjcetBuildSuccesed(3);
         }
 
     }
     public void StopBuilding()
     {
-        preview.SetActive(false);
+        preview.DeActive();
         StopAllCoroutines();
     }
     public void SetPreviewObject(int id)
@@ -103,12 +125,12 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         if (m_id == 3)
         {
             preview = null;
-            preview = Instantiate(m_previewBarricade);
+            preview = Instantiate(m_previewBarricade).GetComponent<PreviewObject>();
         }
         else if(m_id == 4)
         {
             preview = null;
-            preview = Instantiate(m_previewGunTurret);
+            preview = Instantiate(m_previewGunTurret).GetComponent<PreviewObject>();
         }
     }
     public void RotationChanger()
@@ -143,6 +165,7 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     public void SetPlayer(PlayerSkillController player)
     {
         m_player = player;
+        m_playerC = m_player.GetComponent<PlayerController>();
         m_playerObject = m_player.GetComponent<PlayerObjectController>();
     }
     public void SetObjectPool()

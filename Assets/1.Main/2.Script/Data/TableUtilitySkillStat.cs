@@ -2,14 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ObjectType
-{
-    Player,
-    Generator,
-    Barricade,
-    Turret,
-    Max
-}
+/*
 public class TableUtilitySkillStat
 {
     public string SkillName { get; set; }
@@ -135,7 +128,7 @@ public class UtillData : Singleton<UtillData>
     }
    
 
-}
+}*/
 
 
 

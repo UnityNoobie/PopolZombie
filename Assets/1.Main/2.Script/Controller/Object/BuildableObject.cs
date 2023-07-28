@@ -23,11 +23,21 @@ public class BuildableObject : MonoBehaviour, IDamageAbleObject
     protected Transform m_hudPos;
     protected AreaChecker m_attackArea;
     protected ObjectStat m_stat;
-
+    protected TableSkillStat m_skill;
     [SerializeField]
     protected List<MonsterController> m_targetList = new List<MonsterController>(); //공격 가능한 타겟 리스트
     #endregion
 
+    #region Coroutine
+    IEnumerator Coroutine_SelfRecovery()
+    {
+        while (true)
+        {
+            RestoreHP(m_stat.Regen);
+            yield return new WaitForSeconds(2);
+        }
+    }
+    #endregion
     #region Methods
 
     public virtual float GetMaxHP()
@@ -81,6 +91,7 @@ public class BuildableObject : MonoBehaviour, IDamageAbleObject
     public virtual void InitStatus(TableSkillStat skill, ObjectStat stat)
     {
         float hpvalue = 1;
+        m_skill = skill;
         if(m_stat != null) //이미 설치되어있다면 벨류값을 통해 현재 hp 조절
         {
             hpvalue = m_stat.HP / m_stat.MaxHP;
@@ -91,18 +102,25 @@ public class BuildableObject : MonoBehaviour, IDamageAbleObject
         }
         else if(stat.Objecttype == ObjectType.Barricade)
         {
-            m_stat = new ObjectStat(stat.ID, stat.Objecttype, (stat.HP + skill.BonusHP) * (1 + skill.ObjectHP) * (1 + skill.BarricadeHP) * (1 + skill.CyberWear) * hpvalue, (stat.HP + skill.BonusHP) * (1 + skill.ObjectHP) * (1 + skill.BarricadeHP) * (1 + skill.CyberWear), (stat.Defence + skill.ObjectDefence + skill.BarricadeDefence) * (1 + skill.CyberWear), (stat.DamageRigist * (1 + skill.ObjectRigist) * (1 + skill.BarricadeRigist)) * (1 + skill.CyberWear), stat.Damage, stat.FireRate, stat.Range, stat.CriRate, stat.CriDamage, stat.ArmorPierce, stat.DamageReflect * (1 + skill.CyberWear), stat.MaxBuild + skill.BarricadeMaxBuild, stat.Info);
+            m_stat = new ObjectStat(stat.ID, stat.Objecttype, ((stat.HP + skill.BonusHP) * ((1 + skill.ObjectHP + skill.BarricadeHP) * (1 + skill.CyberWear))) * hpvalue, (stat.HP + skill.BonusHP) * ((1 + skill.ObjectHP + skill.BarricadeHP) * (1 + skill.CyberWear)), stat.Defence + (skill.ObjectDefence + skill.BarricadeDefence) * (1 + skill.CyberWear), stat.DamageRigist + ((skill.ObjectRigist + skill.BarricadeRigist) * (1 + skill.CyberWear)), stat.Damage, stat.FireRate, stat.Range, stat.CriRate, stat.CriDamage, stat.ArmorPierce, stat.DamageReflect * (1 + skill.CyberWear), stat.MaxBuild + skill.BarricadeMaxBuild, stat.Info,(m_skill.ObjectRegen + m_skill.BarricadeRegen) * (1+m_skill.CyberWear));
+
         }
         else if(stat.Objecttype == ObjectType.Turret)
         {
-            m_stat = new ObjectStat(stat.ID, stat.Objecttype, stat.HP * (1 + skill.ObjectHP) * (1 + skill.TurretHP) * (1 + skill.CyberWear) * hpvalue, stat.HP * (1 + skill.ObjectHP) * (1 + skill.TurretHP) * (1 + skill.CyberWear), (stat.Defence + skill.ObjectDefence) * (1 + skill.CyberWear), (stat.DamageRigist * (1 + skill.ObjectRigist) * (1 + skill.TurretRigist)) * (1 + skill.CyberWear), stat.Damage * (1+skill.TurretDamage) * (1 + skill.publicBuffDamage) * (1 + skill.CyberWear), stat.FireRate * (1+skill.TurretAttackSpeed) * (1 + skill.CyberWear), stat.Range * (1+  skill.TurretRange), stat.CriRate, stat.CriDamage, stat.ArmorPierce + skill.TurretArmorPierce + skill.BuffArmorPierce, stat.DamageReflect, stat.MaxBuild + skill.TurretMaxBuild, stat.Info);
-        }  
+            m_stat = new ObjectStat(stat.ID, stat.Objecttype, (stat.HP * ((1 + skill.ObjectHP + skill.TurretHP) * (1 + skill.CyberWear))) * hpvalue, stat.HP * ((1 + skill.ObjectHP + skill.TurretHP) * (1 + skill.CyberWear)), stat.Defence + (skill.ObjectDefence * (1 + skill.CyberWear)), stat.DamageRigist + ((skill.ObjectRigist + skill.TurretRigist) * (1 + skill.CyberWear)), stat.Damage * ((1+skill.TurretDamage + skill.publicBuffDamage) * (1 + skill.CyberWear)), stat.FireRate * ((1+skill.TurretAttackSpeed) * (1 + skill.CyberWear)), stat.Range * (1 +  skill.TurretRange), stat.CriRate, stat.CriDamage, stat.ArmorPierce + skill.TurretArmorPierce + skill.BuffArmorPierce, stat.DamageReflect, stat.MaxBuild + skill.TurretMaxBuild, stat.Info, m_skill.ObjectRegen * (1 + m_skill.CyberWear));
+        } 
+        if(m_stat.Regen > 0)
+        {
+            StopCoroutine("Coroutine_SelfRecovery");
+            StartCoroutine("Coroutine_SelfRecovery");
+        }
     }
     public virtual void SetDamage(float damage)
     {
         float attack = CalculationDamage.NormalDamage(damage, m_stat.Defence, 0f, m_stat.DamageRigist);
-        m_stat.HP -= Mathf.CeilToInt(attack);
-        m_hud.DisplayDamage(-damage, m_stat.HP, m_stat.MaxHP);
+        m_stat.HP -= attack;
+        Debug.Log(m_stat.HP + "받은 데미지 : " + attack + " 방어력 : " +m_stat.Defence + "데미지저항 : " + m_stat.DamageRigist);
+        m_hud.DisplayDamage(-attack, m_stat.HP, m_stat.MaxHP);
         if (m_stat.HP <= 0)
         {
             Destroyed();
@@ -119,7 +137,7 @@ public class BuildableObject : MonoBehaviour, IDamageAbleObject
         GameManager.Instance.DestroyTarget(gameObject); //공격 가능한 목록에서 게임오브젝트 삭제처리
 
     }
-    public virtual void RestoreHP(int heal) //피해회복
+    public virtual void RestoreHP(float heal) //피해회복
     {
         m_stat.HP += (m_stat.MaxHP * heal) / 100;
         if (m_stat.HP >= m_stat.MaxHP)

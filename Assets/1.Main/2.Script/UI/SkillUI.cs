@@ -241,23 +241,32 @@ public class SkillUI : MonoBehaviour
                         break;
                     case PlayerAbilityType.Barricade:
                         {
-                            OpenSlots(3);
-                            m_highSlots[m_count].SetSkillSlot(m_SkillList[i], m_player, m_player.IsActived(m_SkillList[i]), m_active, m_skillInfo);
-                            m_count++;
+                            if (m_stat.GetSkillData(m_SkillList[i]).AbilityTypeChecker.Equals("Barricade"))
+                            {
+                                OpenSlots(3);
+                                m_highSlots[m_count].SetSkillSlot(m_SkillList[i], m_player, m_player.IsActived(m_SkillList[i]), m_active, m_skillInfo);
+                                m_count++;
+                            }
                         }
                         break;
                     case PlayerAbilityType.Turret:
                         {
-                            OpenSlots(3);
-                            m_highSlots[m_count].SetSkillSlot(m_SkillList[i], m_player, m_player.IsActived(m_SkillList[i]), m_active, m_skillInfo);
-                            m_count++;
+                            if (m_stat.GetSkillData(m_SkillList[i]).AbilityTypeChecker.Equals("Turret"))
+                            {
+                                OpenSlots(3);
+                                m_highSlots[m_count].SetSkillSlot(m_SkillList[i], m_player, m_player.IsActived(m_SkillList[i]), m_active, m_skillInfo);
+                                m_count++;
+                            }
                         }
                         break;
                     case PlayerAbilityType.CyberWear:
                         {
-                            OpenSlots(3);
-                            m_highSlots[m_count].SetSkillSlot(m_SkillList[i], m_player, m_player.IsActived(m_SkillList[i]), m_active, m_skillInfo);
-                            m_count++;
+                            if (m_stat.GetSkillData(m_SkillList[i]).AbilityTypeChecker.Equals("CynerWare"))
+                            {
+                                OpenSlots(3);
+                                m_highSlots[m_count].SetSkillSlot(m_SkillList[i], m_player, m_player.IsActived(m_SkillList[i]), m_active, m_skillInfo);
+                                m_count++;
+                            }
                         }
                         break;
                 }

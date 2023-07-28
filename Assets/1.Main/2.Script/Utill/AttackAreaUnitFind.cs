@@ -15,7 +15,6 @@ public class AttackAreaUnitFind : MonoBehaviour
             m_unitList.Remove(m_unitList[i]);
         }
        // m_unitList.Clear(); 클리어는 가비지가 생성되었던걸로 기억
-      //  Debug.Log("리셋적용되었음을 알림");
     }
     void OnTriggerEnter(Collider other)
     {

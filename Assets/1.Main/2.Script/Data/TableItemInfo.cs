@@ -11,6 +11,9 @@ public class ItemData
         Armor,
         HealPack,
         Barricade,
+        Generator,
+        GunTurret,
+        FlameTurret,
         Max
     }
    
@@ -44,27 +47,15 @@ public class ItemData
 
      public ItemData GetItemInfo(int ID)
      {
-         ItemData Info = null;
-         Info = TableItemData.Instance.itemData[ID];
-         ItemType itype = new ItemType();
-         if (Info.type.Equals("HealPack"))
-         {
-             itype = ItemType.HealPack;
-         }
-         else if (Info.type.Equals("Barricade"))
-         {
-             itype = ItemType.Barricade;
-         }
-         else { Debug.Log("아이템타입 뭔가 이상"); }
+        ItemData Info = null;
+        Info = TableItemData.Instance.itemData[ID];
 
-         ItemData iinfo = new ItemData(Info.type, Info.ID,Info.Grade,Info.Heal,Info.Price,Info.HP,Info.Defence,Info.ItemInfo,itype);
-         return iinfo;
-       //  itemInfo = 
+        return Info;
      }
  }
  public class TableItemData : Singleton<TableItemData>
  {
-     public Dictionary<int, ItemData> itemData = new Dictionary<int, ItemData>();
+    public Dictionary<int, ItemData> itemData = new Dictionary<int, ItemData>();
     public List<int> m_lowItem = new List<int>();
     public List<int> m_midItem = new List<int>();
     public List<int> m_highItem = new List<int>();
@@ -72,24 +63,49 @@ public class ItemData
      {
          TableLoader.Instance.LoadData(TableLoader.Instance.LoadTableData("ItemInfo"));
          itemData.Clear();
-        m_lowItem.Clear();
-        m_midItem.Clear();
-        m_highItem.Clear();
-         for (int i = 0; i < 6; i++)
+         m_lowItem.Clear();
+         m_midItem.Clear();
+         m_highItem.Clear();
+         for (int i = 0; i < 7; i++)
          {
-             ItemData data = new ItemData();
-             data.type = TableLoader.Instance.GetString("Type", i);
-             data.ID = TableLoader.Instance.GetInteger("Id", i);
-             data.Grade = TableLoader.Instance.GetInteger("grade", i);
-             data.Heal = TableLoader.Instance.GetInteger("Heal", i);
-             data.Price = TableLoader.Instance.GetInteger("Price", i);
-             data.HP = TableLoader.Instance.GetInteger("HP", i);
-             data.Defence = TableLoader.Instance.GetInteger("Defence", i);
-             data.ItemInfo = TableLoader.Instance.GetString("Info", i);
-             itemData.Add(data.ID, data);
-             if (data.Grade == 1) m_lowItem.Add(data.ID);
-             else if (data.Grade == 2) m_midItem.Add(data.ID);
-             else if (data.Grade == 3) m_highItem.Add(data.ID);
+            ItemData data = new ItemData();
+            data.type = TableLoader.Instance.GetString("Type", i);
+            data.ID = TableLoader.Instance.GetInteger("Id", i);
+            data.Grade = TableLoader.Instance.GetInteger("grade", i);
+            data.Heal = TableLoader.Instance.GetInteger("Heal", i);
+            data.Price = TableLoader.Instance.GetInteger("Price", i);
+            data.HP = TableLoader.Instance.GetInteger("HP", i);
+            data.Defence = TableLoader.Instance.GetInteger("Defence", i);
+            string itype = TableLoader.Instance.GetString("ItemType", i);
+            if (itype.Equals("Generator"))
+            {
+                data.Type = ItemData.ItemType.Generator;
+            }
+            else if (itype.Equals("HealPack"))
+            {
+                data.Type = ItemData.ItemType.HealPack;
+            }
+            else if (itype.Equals("Barricade"))
+            {
+                data.Type = ItemData.ItemType.Barricade;
+            }
+            else if (itype.Equals("GunTurret"))
+            {
+                data.Type = ItemData.ItemType.GunTurret;
+            }
+            else if (itype.Equals("FlameTurret"))
+            {
+                data.Type = ItemData.ItemType.FlameTurret;
+            }
+            else
+            {
+                Debug.Log("타입이 이상합니다.");
+            }
+            data.ItemInfo = TableLoader.Instance.GetString("Info", i);
+            itemData.Add(data.ID, data);
+            if (data.Grade == 1) m_lowItem.Add(data.ID);
+            else if (data.Grade == 2) m_midItem.Add(data.ID);
+            else if (data.Grade == 3) m_highItem.Add(data.ID);
         }
      }
 

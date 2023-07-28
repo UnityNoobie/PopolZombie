@@ -124,7 +124,7 @@ public class StoreUI : MonoBehaviour
         {
             for (int i = 0; i < list.Count; i++)
             {
-                m_slots[i].SetStoreItem(list[i], m_itemdata[list[i]].type, type, m_player);
+                m_slots[i].SetStoreItem(list[i], m_itemdata[list[i]].Type.ToString(), type, m_player);
             }
         }
         else if (type.Equals(ItemType.Armor))

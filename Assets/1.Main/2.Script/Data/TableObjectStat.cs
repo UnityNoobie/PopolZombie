@@ -59,9 +59,10 @@ public class ObjectStat
     public float DamageReflect { get; set; }
     public int MaxBuild { get; set; }
     public string Info { get; set; }
+    public float Regen { get; set; }
     public ObjectStat() { }
 
-    public ObjectStat(int id,ObjectType type ,float hp, float maxhp, float defence, float rigist,float damage,float firerate,float range, float crirate, float cridam, float armorpierce, float reflect, int maxbuild, string info )
+    public ObjectStat(int id,ObjectType type ,float hp, float maxhp, float defence, float rigist,float damage,float firerate,float range, float crirate, float cridam, float armorpierce, float reflect, int maxbuild, string info,float regen )
     {
         this.ID = id;
         this.Objecttype = type;
@@ -78,12 +79,13 @@ public class ObjectStat
         this.DamageReflect = reflect;
         this.MaxBuild = maxbuild;
         this.Info = info;
+        this.Regen = regen;
     }
     public ObjectStat GetObjectStatus(ObjectType type)
     {
         ObjectStat data = null;
         data = TableObjectStat.Instance.m_objectData[type];
-        ObjectStat stat = new ObjectStat(data.ID, data.Objecttype, data.HP, data.MaxHP, data.Defence, data.DamageRigist, data.Damage, data.FireRate, data.Range, data.CriRate, data.CriDamage, data.ArmorPierce, data.DamageReflect, data.MaxBuild, data.Info);
+        ObjectStat stat = new ObjectStat(data.ID, data.Objecttype, data.HP, data.MaxHP, data.Defence, data.DamageRigist, data.Damage, data.FireRate, data.Range, data.CriRate, data.CriDamage, data.ArmorPierce, data.DamageReflect, data.MaxBuild, data.Info,0);
         return stat;
     }
 }

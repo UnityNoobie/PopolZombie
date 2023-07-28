@@ -68,8 +68,11 @@ public class DamageAbleObjectHUD : MonoBehaviour
         {
             Invoke("Hide", 5f);
         }
+        m_hpSlider.value = hp / maxhp;
+        hp = Mathf.CeilToInt(hp);
+        maxhp = Mathf.CeilToInt(maxhp);
+        damage = Mathf.CeilToInt(damage);
         m_hpValue.text = hp + "/" + maxhp;
-        m_hpSlider.value = hp/maxhp;
         CreateText(damage);
     }
     void Show()

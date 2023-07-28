@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class QuickSlot_slot : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class QuickSlot_slot : MonoBehaviour
     PlayerController m_player;
     bool isNull;
     int count = 0;
+    string itemName = "";
     public void SetPlayer(PlayerController player)
     {
         m_player = player;
@@ -33,13 +35,19 @@ public class QuickSlot_slot : MonoBehaviour
         count++;
         m_lable.text = count.ToString();
     }
+    public bool HaveEnoughItem()
+    {
+        if(count > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     public void UseItem(string item)
     {
-        if (count <= 0)
-        {
-            UGUIManager.Instance.SystemMessageItem(item);
-            return;
-        }
         if (item.Equals("HealPack")) Setheal(30);
         count--;
         m_lable.text = count.ToString();
@@ -61,6 +69,7 @@ public class QuickSlot_slot : MonoBehaviour
 
     public void SetSlot(string name,int num)
     {
+        itemName = name;
         if (num == 0)
         {
             SetWeapon(name);

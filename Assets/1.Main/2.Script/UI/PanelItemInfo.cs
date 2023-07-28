@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,17 +25,33 @@ public class PanelItemInfo : MonoBehaviour
     {
         if (m_type.Equals(ItemType.Item))
         {
-            m_ItemName.text = m_store.m_itemdata[m_id].type;
-            m_ItemInfo.text = m_store.m_itemdata[m_id].ItemInfo;
-            m_image.sprite = ImageLoader.Instance.GetImage(m_store.m_itemdata[m_id].type);
+            ItemData data = m_store.m_itemdata[m_id];
+            ObjectStat stat = new ObjectStat();
+            m_ItemName.text = data.Type.ToString();
+            m_ItemInfo.text = data.ItemInfo;
+            m_image.sprite = ImageLoader.Instance.GetImage(data.Type.ToString());
             if (m_ItemName.Equals("HealPack"))
             {
-                m_infoText[0].text = ("회복량 : " + m_store.m_itemdata[m_id].Heal + "%");
+                m_infoText[0].text = ("회복량 : " + data.Heal + "%");
             }
             else if (m_ItemName.Equals("Barricade"))
             {
-                m_infoText[0].text = ("체력 : " + m_store.m_itemdata[m_id].HP);
-                m_infoText[1].text = ("방어력 : " + m_store.m_itemdata[m_id].Defence);
+                stat = ObjectManager.Instance.GetObjectStat(ObjectType.Barricade);
+                m_infoText[0].text = ("체력 : " + stat.HP);
+                m_infoText[1].text = ("방어력 : " + stat.Defence);
+                m_infoText[2].text = ("최대 설치수 : " + stat.MaxBuild);
+            }
+            else if (m_ItemName.Equals("GunTurret"))
+            {
+                stat = ObjectManager.Instance.GetObjectStat(ObjectType.Turret);
+                m_infoText[0].text = ("공격력 : " + stat.Damage);
+                m_infoText[1].text = ("방어력 : " + stat.Defence); 
+                m_infoText[2].text = ("체력 : " + stat.HP);
+                m_infoText[3].text = ("공격속도 : " + stat.FireRate);
+                m_infoText[4].text = ("사정거리 : " + stat.Range);
+                m_infoText[5].text = ("크리티컬확률 : " + stat.CriRate);
+                m_infoText[6].text = ("크리티컬데미지 : " + stat.CriDamage);
+                m_infoText[7].text = ("최대설치수 : " + stat.MaxBuild +"(스킬 습득 시 설치 가능)");
             }
         }
         else if (m_type.Equals(ItemType.Weapon))

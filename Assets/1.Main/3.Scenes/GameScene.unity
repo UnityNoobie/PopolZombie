@@ -6521,6 +6521,7 @@ MonoBehaviour:
   m_hudPrefab: {fileID: 0}
   m_barricadePrefab: {fileID: 0}
   m_gunTurretPrefab: {fileID: 0}
+  preview: {fileID: 0}
 --- !u!4 &285459331
 Transform:
   m_ObjectHideFlags: 0
@@ -12054,6 +12055,10 @@ PrefabInstance:
     - target: {fileID: 1589240936164142, guid: 1722a7e7db835f84e99c793413b77078, type: 3}
       propertyPath: m_Name
       value: SM_Veh_Light_Car_Destroyed_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1589240936164142, guid: 1722a7e7db835f84e99c793413b77078, type: 3}
+      propertyPath: m_TagString
+      value: Background
       objectReference: {fileID: 0}
     - target: {fileID: 1589240936164142, guid: 1722a7e7db835f84e99c793413b77078, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -35498,16 +35503,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c332a9eef98e0464cba5fb48bbe7e08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxHP: 0
-  m_hp: 0
-  m_defence: 0
-  m_damage: 0
-  m_criRate: 0
-  m_criDamage: 0
-  m_fireRate: 0
   m_barrelSpeed: 0
   m_rotationSpeed: 0
-  m_fireRange: 0
   m_targetList: []
 --- !u!65 &2113270005
 BoxCollider:
@@ -36958,6 +36955,7 @@ GameObject:
   - component: {fileID: 95808264624923305}
   - component: {fileID: 95808264624923306}
   - component: {fileID: 95808264624923307}
+  - component: {fileID: 95808264624923308}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -41440,6 +41438,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_skillList: 
+--- !u!114 &95808264624923308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1564443519141528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c33a29a8feea104782924685641355c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!137 &137247186619484432
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
@@ -129190,6 +129200,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Store
+      objectReference: {fileID: 0}
+    - target: {fileID: 2552096612102670040, guid: 96e334fad4fdb55488daceb6d18ecfa0,
+        type: 3}
+      propertyPath: m_TagString
+      value: Background
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96e334fad4fdb55488daceb6d18ecfa0, type: 3}

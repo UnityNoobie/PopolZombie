@@ -150,6 +150,7 @@ public class PlayerSkillController : MonoBehaviour
     WeaponType m_weapontype;
     PlayerAbilityType m_abilityType;
     PlayerController m_player;
+    PlayerObjectController m_playerObject;
     TableSkillStat m_playerSkillstat;
     GunManager m_gunmanager;
     SkillUI m_skillUI;
@@ -232,8 +233,8 @@ public class PlayerSkillController : MonoBehaviour
     void PushSkillUpSignal()
     {
         RefreshSP();
-        m_player.SkillUpInitstatus(); //플레이어와 총에 스킬올라갔다는 정보 전달.
         m_gunmanager.SkillUpSignal();
+        m_playerObject.ObjectUpgrade();
     }
     void ResetDatas() //이전에 가지고 있던 정보 초기화.
     {
@@ -342,6 +343,7 @@ public class PlayerSkillController : MonoBehaviour
         m_skilldata = new TableSkillStat();
         m_player = GetComponent<PlayerController>();
         m_gunmanager = GetComponent<GunManager>();
+        m_playerObject = GetComponent<PlayerObjectController>();
         m_abilityType = PlayerAbilityType.None;
         m_skillPoint = 100;// 테스트용
         ObjectManager.Instance.SetPlayer(this);

@@ -23,4 +23,8 @@ public class QuickSlot : MonoBehaviour
     {
         slots[num].UseItem(name);
     }
+    public bool CheckItemCount(int num)
+    {
+       return slots[num].HaveEnoughItem();
+    }
 }

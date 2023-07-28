@@ -74,32 +74,7 @@ public class PlayerController : MonoBehaviour
     int armCriRate;
     float armSpeed;
     #endregion
-    //스킬 정보 임시 저장 (이었던것)
-    #region SkillData
     bool crush;
-    /*
-    float skillamage;
-    float skillAtkSpeed;
-    float skillReload;
-    float skillSpeed;
-    int skillCriRate;
-    float skillCriDamage;
-    float skillMag;
-    float skillDefence;
-    float skillDamageRigist;
-    float skillHP;
-    float skillKnockBackRate;
-    float skillHeal;
-    int skillLastFire;
-    int skillPierce;
-    int skillBoom;
-    float skillArmorPierce;
-    float skillRemove;
-    int skillDrain;
-    float skillCrush;
-    int skillBurn;
-    ;*/
-    #endregion
 
     #region Property
     public enum PlayerState //플레이어의 상태 알림
@@ -357,6 +332,21 @@ public class PlayerController : MonoBehaviour
             transform.LookAt(new Vector3(pointTolook.x, transform.position.y, pointTolook.z));
         }
     }
+    public void ObjcetBuildSuccesed(int num)
+    {
+        if(num == 3)
+        {
+            m_quickSlot.UseQuickSlotITem(2, "Barricade");
+        }
+        else if(num == 4)
+        {
+            m_quickSlot.UseQuickSlotITem(3, "Turret");
+        }
+    }
+    public void IsBuildingConvert()
+    {
+        isbuild = !isbuild;
+    }
     public void BehaviorProcess()
     {
         if (m_Pstate.Equals(PlayerState.dead)) return; // 사망시 작동 x
@@ -390,31 +380,36 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            isbuild = !isbuild;
-            if (isbuild)
+            if (m_quickSlot.CheckItemCount(2))
             {
-                ObjectManager.Instance.SetPreviewObject(3);
-                ObjectManager.Instance.StartPreviewBuild();
+                IsBuildingConvert();
+                if (isbuild)
+                {
+                    ObjectManager.Instance.SetPreviewObject(3);
+                    ObjectManager.Instance.StartPreviewBuild();
+                }
+                else
+                {
+                    ObjectManager.Instance.StopBuilding();
+                }
+
             }
-            else
-            {
-                ObjectManager.Instance.StopBuilding();
-            }
-            //m_quickSlot.UseQuickSlotITem(2, "Barricade");
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            isbuild = !isbuild;
-            if (isbuild)
+            if (m_quickSlot.CheckItemCount(2))
             {
-                ObjectManager.Instance.SetPreviewObject(4);
-                ObjectManager.Instance.StartPreviewBuild();
+                IsBuildingConvert();
+                if (isbuild)
+                {
+                    ObjectManager.Instance.SetPreviewObject(4);
+                    ObjectManager.Instance.StartPreviewBuild();
+                }
+                else
+                {
+                    ObjectManager.Instance.StopBuilding();
+                }
             }
-            else
-            {
-                ObjectManager.Instance.StopBuilding();
-            }
-            //m_quickSlot.UseQuickSlotITem(3, "Tower");
         }
         if (Input.GetMouseButton(0))
         {
@@ -438,9 +433,7 @@ public class PlayerController : MonoBehaviour
                 else if(isbuild)
                 {
                     ObjectManager.Instance.BuildObject();
-                    isbuild = false;
                 }
-                 
             } 
         }
         if (Input.GetKeyDown(KeyCode.R))
@@ -494,6 +487,7 @@ public class PlayerController : MonoBehaviour
     public void SetSkillData(TableSkillStat stat)
     {//float damage, float atkspeed, float reload, float speed, int crirate, float cridamage, float mag, float defence, float damagerigist, float hp, float knockbackrate, float heal, int lastfire, int pierce, int boom, float armorPierce, float Remove, int Drain, float Crush, int Burn
         m_skillStat = stat;
+        InitStatus();
         if (stat.Crush > 0)
         {
             crush = true;
@@ -502,7 +496,7 @@ public class PlayerController : MonoBehaviour
         {
             crush = false;
         }
-        if (stat.Heal > 0)// 스킬의 지속힐이 0 보다 크다면 힐 코루틴 시작.
+        if (m_status.SkillHeal > 0)// 스킬의 지속힐이 0 보다 크다면 힐 코루틴 시작.
         {
             if (CheckCoroutine != null) //기존에 실행중이라면 멈추고 다시실행
             {
@@ -510,45 +504,6 @@ public class PlayerController : MonoBehaviour
             }
             CheckCoroutine = StartCoroutine(Coroutine_SustainedHeal());
         }
-        /*
-        skillamage = damage;
-        skillAtkSpeed = atkspeed;
-        skillReload = reload;
-        skillSpeed = speed;
-        skillCriRate = crirate;
-        skillCriDamage = cridamage;
-        skillMag = mag;
-        skillDefence = defence;
-        skillDamageRigist = damagerigist;
-        skillHP = hp;
-        skillKnockBackRate = knockbackrate;
-        skillHeal = heal;
-        skillLastFire = lastfire;
-        skillPierce = pierce;
-        skillBoom = boom;
-        skillArmorPierce = armorPierce;
-        skillRemove = Remove;
-        skillDrain = Drain;
-        skillCrush = Crush;
-        skillBurn = Burn;
-        
-        if (skillCrush > 0)
-        {
-            crush = true;
-        }
-        else
-        {
-           crush = false;
-        }
-        if (skillHeal > 0)// 스킬의 지속힐이 0 보다 크다면 힐 코루틴 시작.
-        {
-            if (CheckCoroutine != null) //기존에 실행중이라면 멈추고 다시실행
-            {
-                StopCoroutine(CheckCoroutine);
-            }
-            CheckCoroutine = StartCoroutine(Coroutine_SustainedHeal());
-        }*/ //기존방식 하드코딩이라 수정중
-        //CheckBoolin();
     }
     public void LevelUp()
     {
@@ -578,36 +533,31 @@ public class PlayerController : MonoBehaviour
         hp = Mathf.CeilToInt(m_status.hp);
         UIManager.Instance.HPBar(m_status.hp,m_status.hpMax);
     }
-    void InitStatus(float itemhp, float I_Criper, float I_CriDam, float I_atkSpeed, float I_Atk, float I_Def, float I_speed, int maxammo, float reloadtime,float knockbackPer, float knockbackDist,float atkDist, int shotgun,int level) 
+    void InitStatus() 
     {//SetStatus에서 스킬과 아이템의 추가값들을 받아옴.
-     //(float skillhp, float itemhp, float S_CriPer, float I_Criper, float S_CriDam, float I_CriDam, float S_atkSpeed, float I_atkSpeed, float S_Atk, float I_Atk, float S_Def, float I_Def, float S_speed, float I_speed, int maxammo, float reloadtime,float knockbackPer, float knockbackDist,float atkDist, int shotgun,int level) 
-        m_status = new Status(hp,200 * (1 + (m_skillStat.HP + itemhp + hpPer)), 10f + m_skillStat.CriRate+ I_Criper + armCriRate, 50f + (m_skillStat.CriDamage + I_CriDam), 0 + (m_skillStat.AtkSpeed + I_atkSpeed) * (1 + armAttackSpeed),(1+ (m_skillStat.Damage + armDamage)) * I_Atk, 0 + m_skillStat.Defence + I_Def + armDefence, 130 * (1 + m_skillStat.Speed + I_speed + armSpeed), maxammo * Mathf.CeilToInt(1+ m_skillStat.Mag), reloadtime - (reloadtime * m_skillStat.Reload) ,knockbackPer+ m_skillStat.KnockBackRate, knockbackDist,atkDist,shotgun,level, m_skillStat.DamageRigist, m_skillStat.LastFire, m_skillStat.Pierce, m_skillStat.Boom, m_skillStat.ArmorPierce, m_skillStat.Remove, m_skillStat.Drain, m_skillStat.Crush, m_skillStat.Burn, m_skillStat.Heal, m_knickName,m_title);
-        // m_status.hpMax = Mathf.CeilToInt(m_status.hpMax); //최대체력 가져오기
-        HPControl(0);
-        m_animCtr.SetFloat("MeleeSpeed", m_status.atkSpeed);
-        m_animCtr.SetFloat("MoveSpeed", m_status.speed / 100);
-      //  m_inven.GetStatusInfo(this); 구 인벤토리
-        m_statusUI.SetStatus(); // 신 인벤토리
-        pDefence = m_status.defense;  //방어력 가져오기
-        m_area.transform.localScale = new Vector3(m_status.AtkDist, 1f, m_status.AtkDist);
-    }
-    public void SkillUpInitstatus()
-    {
-        InitStatus(m_weaponData.HP, m_weaponData.CriRate, m_weaponData.CriDamage, m_weaponData.AtkSpeed, m_weaponData.Damage, m_weaponData.Defence, m_weaponData.Speed, m_weaponData.Mag, m_weaponData.ReloadTime, m_weaponData.KnockBack, m_weaponData.KnockBackDist, m_weaponData.AttackDist, m_weaponData.Shotgun, m_level);
-        SetHudText();
-    }
-    public void SetStatus(int ID)
-    {
-        SetWeaponID(ID);
-        //스테이터스 입력값의 순서 : 스킬, 아이템 최대체력 ,스킬아이템 크리티컬 확률, 스킬, 아이템 크리티컬 추가 데미지,스킬 아이템 공격속도, 스킬아이템 공격력, 스킬 아이템 방어력 , 이동속도
         float penaltyRemove = m_weaponData.Speed;
         if (m_skillStat.Remove != 0 && m_weaponData.Speed < 0) //스킬 데이터로 이동속도 패널티감소가 있고 무기의 이속감소 효과가 있을 경우 이속올려줌
         {
             penaltyRemove = penaltyRemove - (penaltyRemove * m_skillStat.Remove);
         }
-        InitStatus(m_weaponData.HP,  m_weaponData.CriRate, m_weaponData.CriDamage, m_weaponData.AtkSpeed,  m_weaponData.Damage, m_weaponData.Defence, penaltyRemove/*패널티감소 스킬이 있기 때문에 따로 적용*/, m_weaponData.Mag, m_weaponData.ReloadTime,m_weaponData.KnockBack,m_weaponData.KnockBackDist,m_weaponData.AttackDist,m_weaponData.Shotgun,m_level);
-     //   m_animCtr.SetFloat("MoveSpeed", m_status.speed / 150); //이동속도별 다리움직임 속도조절용.
-    }   //넉백을 아직은 무기에서만 적용을 하여 추후 더 넣어줘야함!
+        if(m_skillStat.CyberWear > 0)
+        m_status = new Status(hp, 200 * (1 + (m_skillStat.HP + m_weaponData.HP + hpPer + (m_skillStat.ObjectHP *(1 + m_skillStat.CyberWear)))), 10f + m_skillStat.CriRate + m_weaponData.CriRate + armCriRate, 50f + (m_skillStat.CriDamage + m_weaponData.CriRate), 0 + (m_skillStat.AtkSpeed + m_weaponData.AtkSpeed) * (1 + armAttackSpeed), (1 + (m_skillStat.Damage + armDamage + m_skillStat.publicBuffDamage * (1 + m_skillStat.CyberWear))) * m_weaponData.Damage, 0 + m_skillStat.Defence + m_weaponData.Defence + armDefence + m_skillStat.ObjectDefence * (1 + m_skillStat.CyberWear), 130 * (1 + m_skillStat.Speed + penaltyRemove + armSpeed), m_weaponData.Mag * Mathf.CeilToInt(1 + m_skillStat.Mag), m_weaponData.ReloadTime - (m_weaponData.ReloadTime * m_skillStat.Reload), m_weaponData.KnockBack + m_skillStat.KnockBackRate, m_weaponData.KnockBackDist, m_weaponData.AttackDist, m_weaponData.Shotgun, m_level, m_skillStat.DamageRigist + m_skillStat.ObjectRigist * (1 + m_skillStat.CyberWear), m_skillStat.LastFire, m_skillStat.Pierce, m_skillStat.Boom, m_skillStat.ArmorPierce+ m_skillStat.BuffArmorPierce * (1 + m_skillStat.CyberWear), m_skillStat.Remove, m_skillStat.Drain, m_skillStat.Crush, m_skillStat.Burn, m_skillStat.Heal + m_skillStat.ObjectRegen * (1 + m_skillStat.CyberWear), m_knickName, m_title);
+        else
+        m_status = new Status(hp, 200 * (1 + (m_skillStat.HP + m_weaponData.HP + hpPer)), 10f + m_skillStat.CriRate+ m_weaponData.CriRate + armCriRate, 50f + (m_skillStat.CriDamage + m_weaponData.CriRate), 0 + (m_skillStat.AtkSpeed + m_weaponData.AtkSpeed) * (1 + armAttackSpeed),(1+ (m_skillStat.Damage + armDamage + m_skillStat.publicBuffDamage)) * m_weaponData.Damage, 0 + m_skillStat.Defence + m_weaponData.Defence + armDefence, 130 * (1 + m_skillStat.Speed +penaltyRemove + armSpeed), m_weaponData.Mag * Mathf.CeilToInt(1+ m_skillStat.Mag), m_weaponData.ReloadTime - (m_weaponData.ReloadTime * m_skillStat.Reload) ,m_weaponData.KnockBack + m_skillStat.KnockBackRate, m_weaponData.KnockBackDist,m_weaponData.AttackDist,m_weaponData.Shotgun,m_level, m_skillStat.DamageRigist, m_skillStat.LastFire, m_skillStat.Pierce, m_skillStat.Boom, m_skillStat.ArmorPierce + m_skillStat.BuffArmorPierce , m_skillStat.Remove, m_skillStat.Drain, m_skillStat.Crush, m_skillStat.Burn, m_skillStat.Heal, m_knickName,m_title);
+        // m_status.hpMax = Mathf.CeilToInt(m_status.hpMax); //최대체력 가져오기
+        HPControl(0);
+        SetHudText();
+        m_animCtr.SetFloat("MeleeSpeed", m_status.atkSpeed);
+        m_animCtr.SetFloat("MoveSpeed", m_status.speed / 100);
+        m_statusUI.SetStatus(); // 신 인벤토리
+        pDefence = m_status.defense;  //방어력 가져오기
+        m_area.transform.localScale = new Vector3(m_status.AtkDist, 1f, m_status.AtkDist);
+    }
+    public void SetStatus(int ID) //무기의 아이디값을 바탕으로 스탯설정
+    {
+        SetWeaponID(ID);
+        InitStatus();
+    }   
     void SetWeaponID(int ID)
     {
         m_weaponData = m_weaponData.GetWeaponStatus(ID);

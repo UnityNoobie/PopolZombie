@@ -181,7 +181,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_barrelSpeed: 0
   m_rotationSpeed: 0
-  m_fireRange: 0
   m_targetList: []
 --- !u!82 &2577809805409440159
 AudioSource:

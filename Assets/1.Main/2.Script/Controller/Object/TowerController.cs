@@ -32,6 +32,7 @@ public class TowerController : BuildableObject
     #endregion
     IEnumerator ShootEffect(Vector3 hitPos)
     {
+        SoundManager.Instance.PlaySFX("SFX_MGShot", m_audio);
         m_renderer.SetPosition(0, m_firePos.position);  //레이 시작점
         m_renderer.SetPosition(1, hitPos); //레이 도착점
         m_renderer.enabled = true;
