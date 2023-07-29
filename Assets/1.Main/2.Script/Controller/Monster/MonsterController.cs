@@ -242,9 +242,9 @@ public class MonsterController : MonoBehaviour
     {//체력 공속 공격력 방어력 이동속도 순서로
         Type = type;
     }
-    public void InitStatus(MonsterType type, string name, float hp, float atkSpeed, float dmg, float def, float speed, float attackDist, float StatScale, float knockBackRigist,float Score,float coin,float exp) //이 몬스터의 스탯을 적용.
+    public void InitStatus(MonStat stat,float StatScale) //이 몬스터의 스탯을 적용.
     {
-        m_status = new MonStatus(type, name, hp * StatScale, atkSpeed * StatScale, dmg * StatScale, def * StatScale, speed * StatScale, attackDist,knockBackRigist,Score*StatScale,coin*StatScale,exp*StatScale);
+        m_status = new MonStatus(stat.type, stat.name, stat.hp * StatScale, stat.atkSpeed * StatScale, stat.damage * StatScale, stat.defense * StatScale, stat.speed * StatScale, stat.attackDist,stat.knockbackRegist,stat.Score*StatScale,stat.coin*StatScale,stat.exp *StatScale);
         m_status.hp = m_status.hpMax; //최대체력 설정.
         m_navAgent.stoppingDistance = m_status.attackDist;
         timeafterAttack = m_status.atkSpeed;
@@ -255,8 +255,8 @@ public class MonsterController : MonoBehaviour
     public void SetStatus(MonsterType type, float StatScale) //몬스터의 타입과 라운드에 따른 StatScale을 받아 몬스터의 정보를 가져와 InitStatus로 보내주기
     {
         var monStat = m_monStat.GetMonStat(type);
-        defence = monStat.defense;
-        InitStatus(monStat.type, monStat.name, monStat.hp, monStat.atkSpeed, monStat.damage, monStat.defense, monStat.speed, monStat.attackDist, StatScale,monStat.knockbackRegist,monStat.Score,monStat.coin,monStat.exp);
+        defence = monStat.defense; //방어력감소 효과 적용용
+        InitStatus(monStat,StatScale);
     }
     public void SetTarget()
     {

@@ -6,6 +6,7 @@ public enum DaynNight
 {
     Day,
     Night,
+    GameOver,
     MAX
 }
 public enum Scene
@@ -49,6 +50,23 @@ public class GameManager : SingletonDontDestroy<GameManager>
             yield return new WaitForSeconds(1);
             gameDuration++;
             UIManager.Instance.GameDuration(gameDuration);
+        }
+    }
+    IEnumerator Coroutine_RevivePlayer(PlayerController player)
+    {
+        for (int i = 10; i > 0; i--)
+        {
+            UGUIManager.Instance.SystemMessageSendMessage("부활까지 : " + i);
+            yield return new WaitForSeconds(1);
+            if (GetDayInfo().Equals(DaynNight.GameOver))
+            {
+                UGUIManager.Instance.SystemMessageSendMessage("부활 실패.");
+                break;
+            }
+        }
+        if (GetDayInfo() != DaynNight.GameOver)
+        {
+            player.Revive();
         }
     }
     #endregion
@@ -102,6 +120,10 @@ public class GameManager : SingletonDontDestroy<GameManager>
     public void DestroyTarget(GameObject target)
     {
         m_attackAbleObject.Remove(target);
+    }
+    public void PlayerDeath(PlayerController player)
+    {
+        StartCoroutine(Coroutine_RevivePlayer(player));
     }
     void ResetRound()
     {
@@ -164,6 +186,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
             StartLobby();
         }
     }
+   
     public void GameStart()
     {
         StartCoroutine(Coroutine_GameStart());
@@ -192,7 +215,9 @@ public class GameManager : SingletonDontDestroy<GameManager>
     }
     public void GameOver()
     {
-
+       // SetTimeScale(0);
+        StopAllCoroutines();
+        roundTime = DaynNight.GameOver;
     }
     public void ExitGame() //게임 종료 기능
     {

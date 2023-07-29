@@ -151,6 +151,7 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(2);
         }
     }
+   
     Coroutine CheckCoroutine;
     #endregion
 
@@ -158,6 +159,7 @@ public class PlayerController : MonoBehaviour
     // 사망 이벤트
     void AnimEvent_Dead()
     {
+        GameManager.Instance.PlayerDeath(this);
         gameObject.SetActive(false);
         m_PlayerHuD.SetActive(false);
     }
@@ -392,12 +394,11 @@ public class PlayerController : MonoBehaviour
                 {
                     ObjectManager.Instance.StopBuilding();
                 }
-
             }
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            if (m_quickSlot.CheckItemCount(2))
+            if (m_quickSlot.CheckItemCount(3))
             {
                 IsBuildingConvert();
                 if (isbuild)
@@ -649,7 +650,6 @@ public class PlayerController : MonoBehaviour
     {
         PlayReviveSound();
         HPControl(Mathf.CeilToInt(m_status.hpMax));
-        Debug.Log(m_status.atkSpeed);
         gameObject.SetActive(true);
         m_PlayerHuD.gameObject.SetActive(true);
         UIManager.Instance.ReviveUI();
@@ -660,6 +660,7 @@ public class PlayerController : MonoBehaviour
         effect.transform.localScale = new Vector3(2f, 2f, 2f);
         effect.SetActive(true);
         SetStatus(m_weaponData.ID); //스테이터스 재정비 합니다잉
+        GameManager.Instance.SetGameObject(gameObject);
     }
 
     void LevelUP()

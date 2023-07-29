@@ -345,7 +345,7 @@ public class PlayerSkillController : MonoBehaviour
         m_gunmanager = GetComponent<GunManager>();
         m_playerObject = GetComponent<PlayerObjectController>();
         m_abilityType = PlayerAbilityType.None;
-        m_skillPoint = 100;// 테스트용
+       // m_skillPoint = 100;// 테스트용
         ObjectManager.Instance.SetPlayer(this);
     }
     #endregion

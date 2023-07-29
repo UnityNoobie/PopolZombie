@@ -119,7 +119,6 @@ public class BuildableObject : MonoBehaviour, IDamageAbleObject
     {
         float attack = CalculationDamage.NormalDamage(damage, m_stat.Defence, 0f, m_stat.DamageRigist);
         m_stat.HP -= attack;
-        Debug.Log(m_stat.HP + "받은 데미지 : " + attack + " 방어력 : " +m_stat.Defence + "데미지저항 : " + m_stat.DamageRigist);
         m_hud.DisplayDamage(-attack, m_stat.HP, m_stat.MaxHP);
         if (m_stat.HP <= 0)
         {

@@ -69,6 +69,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIScrollBar.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\DragPanel.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UISoundVolume.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Controller\Object\PreviewObject.cs" />
     <Compile Include="Assets\External\HUD Text\Examples\Scripts\HUDRoot.cs" />
     <Compile Include="Assets\1.Main\2.Script\Data\TableObjectStat.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\ExampleDragDropSurface.cs" />
@@ -306,7 +307,6 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Controller\Object\PreviewObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
