@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -61,11 +62,11 @@ public class BuildableObject : MonoBehaviour, IDamageAbleObject
         float damage = 0;
         float armorPierce = 0;
         int killdamage = m_killCount;
-        if (killdamage <= (m_skill.MaxMachineLearning))
+        m_hud.SetKillCount(m_killCount);
+        if (killdamage <= (m_skill.MaxMachineLearning)) //킬할때마다 스테이터스 전체 수정은 어려워 해당 스탯만 적용.
         {
             armorPierce = m_baseStat.ArmorPierce + m_skill.TurretArmorPierce + m_skill.BuffArmorPierce + killdamage;
             damage = m_baseStat.Damage * ((1 + m_skill.TurretDamage + m_skill.publicBuffDamage + (killdamage / 100)) * (1 + m_skill.CyberWear));
-            Debug.Log(m_killCount + " 사냥한 적, 추가 데미지 :  " + damage + "추가 방어구관통" + armorPierce + "기존 데미지 : " + m_stat.Damage + " 기존방관 : " + m_stat.ArmorPierce);
             m_stat.Damage = damage;
             m_stat.ArmorPierce = armorPierce;
         }
@@ -151,7 +152,6 @@ public class BuildableObject : MonoBehaviour, IDamageAbleObject
                 armorPierce = m_baseStat.ArmorPierce + m_skill.TurretArmorPierce + m_skill.BuffArmorPierce;
                 damage = m_baseStat.Damage * ((1 + m_skill.TurretDamage + m_skill.publicBuffDamage) * (1 + m_skill.CyberWear));
             }
-            Debug.Log("킬카운트 : " + m_killCount + " 데미지 보너스 : " + killdamage);
             m_stat = new ObjectStat(m_baseStat.ID, m_baseStat.Objecttype, (m_baseStat.HP * ((1 + m_skill.ObjectHP + m_skill.TurretHP) * (1 + m_skill.CyberWear))) * hpvalue, m_baseStat.HP * ((1 + m_skill.ObjectHP + m_skill.TurretHP) * (1 + m_skill.CyberWear)), m_baseStat.Defence + (m_skill.ObjectDefence * (1 + m_skill.CyberWear)), m_baseStat.DamageRigist + ((m_skill.ObjectRigist + m_skill.TurretRigist) * (1 + m_skill.CyberWear)), damage, m_baseStat.FireRate * ((1+m_skill.TurretAttackSpeed) * (1 + m_skill.CyberWear)), m_baseStat.Range * (1 +  m_skill.TurretRange), m_baseStat.CriRate, m_baseStat.CriDamage,armorPierce, m_baseStat.DamageReflect, m_baseStat.MaxBuild +m_skill.TurretMaxBuild, m_baseStat.Info, m_skill.ObjectRegen * (1 + m_skill.CyberWear));
         } 
         if(m_stat.Regen > 0)
@@ -196,16 +196,7 @@ public class BuildableObject : MonoBehaviour, IDamageAbleObject
         }
         m_hud.DisplayDamage(healvalue, m_stat.HP, m_stat.MaxHP);
     }
-    public virtual void IncreaseMaxHp(int hp) //최대체력 증가
-    {
-        float value = m_stat.HP / m_stat.MaxHP;
-        m_stat.MaxHP += hp;
-        m_stat.HP = Mathf.CeilToInt(m_stat.MaxHP * value);
-    }
-    public virtual void IncreaseDefence(int defence)
-    {
-        m_stat.Defence += defence;
-    }
+   
     public virtual void SetTransform()
     {
         m_destroyd = Utill.GetChildObject(gameObject, "DestroyEffect").gameObject;

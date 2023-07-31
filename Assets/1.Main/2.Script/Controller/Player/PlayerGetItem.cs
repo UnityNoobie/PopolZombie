@@ -74,6 +74,21 @@ public class PlayerGetItem : MonoBehaviour
         {
             AddTurret(Id);
         }   
+        else if (itemtype.Equals("Generator"))
+        {
+            if(Id == 38)
+            {
+                ObjectManager.Instance.GetGenerator().IncreaseMaxHp(TableItemData.Instance.itemData[Id].HP);
+            }
+            else if(Id == 39)
+            {
+                ObjectManager.Instance.GetGenerator().IncreaseDefence(TableItemData.Instance.itemData[Id].Defence);
+            }
+            else if (Id == 40)
+            {
+                ObjectManager.Instance.GetGenerator().IncreaseHPRegen(TableItemData.Instance.itemData[Id].Heal);
+            }
+        }
         MoneyChange(price);
     }
     void AddHealPack(int Id)

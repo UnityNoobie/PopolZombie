@@ -46,6 +46,10 @@ public class HUDController : MonoBehaviour
         }
         m_hpBar.value = normalizedHP;
     }
+    public void Died()
+    {
+        Hide();
+    }
     void Show()
     {
         gameObject.SetActive(true);

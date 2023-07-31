@@ -26,7 +26,7 @@ public class MonsterController : MonoBehaviour
     ProjectileController m_burn;
     ProjectileController m_crush;
     protected AudioSource m_source;
-    HUDController m_hudPanel;
+    protected HUDController m_hudPanel;
     [SerializeField, HideInInspector]
     MonStat m_monStat;
     [SerializeField]
@@ -480,6 +480,7 @@ public class MonsterController : MonoBehaviour
         if (m_status.hp <= 0) //피해를 받은 후 피가 0 이하일때 사망처리
         {
             obj.KillCount();
+            m_hudPanel.Died();
             SetDie();
         }      
     }

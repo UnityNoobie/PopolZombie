@@ -1,22 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+public enum UseItemType
+{
+    Gun,
+    Melee,
+    Armor,
+    HealPack,
+    Barricade,
+    Generator,
+    GunTurret,
+    FlameTurret,
+    Max
+}
 public class ItemData
 {
-    public enum ItemType
-    {
-        Gun,
-        Melee,
-        Armor,
-        HealPack,
-        Barricade,
-        Generator,
-        GunTurret,
-        FlameTurret,
-        Max
-    }
-   
      //Type	Id	grade	Heal	Price	HP	Defence	Info
      public string type { get; set; }
      public int ID { get; set; }
@@ -26,13 +24,13 @@ public class ItemData
      public int Price { get;set; }
      public int HP { get; set; }
      public int Defence { get; set; }
-     public ItemType Type { get; set; }
+     public UseItemType Type { get; set; }
 
 
      public string ItemInfo { get;set; }
      public ItemData() { }
 
-     public ItemData(string type,int id,int grade,int heal,int price,int hp, int defecne,string itemInfo,ItemType itype)
+     public ItemData(string type,int id,int grade,int heal,int price,int hp, int defecne,string itemInfo,UseItemType itype)
      {
          this.type = type;
          this.ID = id;
@@ -79,23 +77,23 @@ public class ItemData
             string itype = TableLoader.Instance.GetString("ItemType", i);
             if (itype.Equals("Generator"))
             {
-                data.Type = ItemData.ItemType.Generator;
+                data.Type = UseItemType.Generator;
             }
             else if (itype.Equals("HealPack"))
             {
-                data.Type = ItemData.ItemType.HealPack;
+                data.Type = UseItemType.HealPack;
             }
             else if (itype.Equals("Barricade"))
             {
-                data.Type = ItemData.ItemType.Barricade;
+                data.Type = UseItemType.Barricade;
             }
             else if (itype.Equals("GunTurret"))
             {
-                data.Type = ItemData.ItemType.GunTurret;
+                data.Type = UseItemType.GunTurret;
             }
             else if (itype.Equals("FlameTurret"))
             {
-                data.Type = ItemData.ItemType.FlameTurret;
+                data.Type = UseItemType.FlameTurret;
             }
             else
             {

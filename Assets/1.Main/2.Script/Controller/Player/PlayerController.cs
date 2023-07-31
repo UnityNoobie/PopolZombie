@@ -55,7 +55,6 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     int m_experience;
     int m_levelexp;
     int m_score;
-    int m_level;
     int killCount = 0;
     string m_knickName;
     string m_title = "";
@@ -64,7 +63,6 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     bool m_isactive = false;
     float gameDuration = 0;
     float m_stamina = 10f;
-    public float pDefence;
     bool isbuild = false;
     
     #endregion
@@ -118,6 +116,8 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             return false;
         }
     }*/
+
+    // 근접 공격 메소드.
     public void SetAttack()
     {
        if(m_Pstate != PlayerState.dead &&  GetMotion.Equals(PlayerAnimController.Motion.MeleeIdle) || m_Pstate != PlayerState.dead && GetMotion.Equals(PlayerAnimController.Motion.Idle))
@@ -138,6 +138,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     #endregion
 
     #region Coroutine  //코루틴
+    //부활 등의 이벤트에서 캐릭터를 무적 상태로 만들어줌.
     IEnumerator Coroutine_Invincible(float time)
     {
         m_Pstate = PlayerState.Invincible;
@@ -145,8 +146,8 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         yield return new WaitForSeconds(time);
         m_Pstate = PlayerState.alive;
     }
-
-    IEnumerator Coroutine_SustainedHeal() //스킬 찍었을 시 지속힐용
+    //스킬 찍었을 시 지속힐 적용용 코루틴
+    IEnumerator Coroutine_SustainedHeal() 
     {
         while (true)
         {
@@ -207,7 +208,8 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             }
         }
     }
-    void AnimEvent_FootStep() //발자국 소리 재생용. 블랜드트리 사용 구현이라 걱정했는데 앞, 뒤 이동만 사용하니 문제없이 작동하였음.
+    //발자국 소리 재생용 이벤트.
+    void AnimEvent_FootStep() 
     {
         SoundManager.Instance.PlaySFX("SFX_PlayerFootStep", m_audio);
     }
@@ -285,14 +287,9 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     #endregion 
 
     #region PlayerInput  //플레이어의 움직임 관련 메소드
-
-    void SetPlayer()
-    {
-        UGUIManager.Instance.SetPlayer(this);
-        m_updateManager.SetPlayerController(this);
-        GameManager.Instance.SetGameObject(gameObject);
-    }
-    void MoveAnimCtr(Vector3 dir) //움직임 구현기능. 8방향 다리모양 다른식으로 세분화해보리기!
+   
+    //움직임 구현기능. 8방향 다리모양 다른식으로 세분화
+    void MoveAnimCtr(Vector3 dir) 
     {
         var fdot = Vector3.Dot(gameObject.transform.forward, dir.normalized);
         var dot = Vector3.Dot(m_leftDir.forward, dir.normalized);
@@ -327,7 +324,8 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         }
         
     }
-    public void PlayerLookAt() //플레이어 전방 시선처리
+    //플레이어 전방 시선처리
+    public void PlayerLookAt() 
     {
         Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         Plane GroupPlane = new Plane(Vector3.up, Vector3.zero);
@@ -338,10 +336,12 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             transform.LookAt(new Vector3(pointTolook.x, transform.position.y, pointTolook.z));
         }
     }
+    //플레이어가 처치한 적의 수를 카운트
     public void KillCount()
     {
         killCount++;
-    }
+    } 
+    //성공적으로 오브젝트 건설에 성공했을 때 호출. 소지 아이템 개수 --
     public void ObjcetBuildSuccesed(int num)
     {
         if(num == 2)
@@ -352,14 +352,19 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         {
             m_quickSlot.UseQuickSlotITem(3, "Turret");
         }
-    }
-    public void IsBuildingConvert()
+    } 
+    // 현재 상태를 건설 / 평상시 전환
+    public void BuildingConvert()
     {
         isbuild = !isbuild;
     }
+    
+    //플레이어의 전체적인 조작을 담당하는 메소드
     public void BehaviorProcess()
     {
-        if (m_Pstate.Equals(PlayerState.dead)) return; // 사망시 작동 x
+        // 사망시 작동 x
+        if (m_Pstate.Equals(PlayerState.dead)) return;
+        // 현재 상태가 오브젝트 설치중일 때 실행.
         if (isbuild)
         {
             if(Input.GetKeyDown(KeyCode.Z))
@@ -367,19 +372,22 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
                 ObjectManager.Instance.RotationChanger();
             }
         }
-        if (Input.GetKeyDown(KeyCode.K)) //플레이어별 스킬창을 관리하기 위함
+        // 플레이어 스킬창
+        if (Input.GetKeyDown(KeyCode.K)) 
         {    
             m_skillactive = !m_skillactive;
             UGUIManager.Instance.SkillUIChange(m_skillactive,m_skill);
             UGUIManager.Instance.PlayClickSFX();
         }
-        if (Input.GetKeyDown(KeyCode.I)) //인벤토리 온오프
+        // 인벤토리 온오프
+        if (Input.GetKeyDown(KeyCode.I)) 
         {
             m_isactive = !m_isactive; //불값으로 액티브 변경. 
             UGUIManager.Instance.GetStatusUI().SetActive(m_isactive);
             UGUIManager.Instance.PlayClickSFX();
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2)) // 구급상자 사용
+        // 구급상자 사용
+        if (Input.GetKeyDown(KeyCode.Alpha2)) 
         {
             if (GetHPValue() >= 0.95)
             {
@@ -388,11 +396,12 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             }
             m_quickSlot.UseQuickSlotITem(1, "HealPack");
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        // 바리케이드 설치
+        if (Input.GetKeyDown(KeyCode.Alpha3)) 
         {
             if (m_quickSlot.CheckItemCount(2) && m_playerObject.IsCanBuildObject(2))
             {
-                IsBuildingConvert();
+                BuildingConvert();
                 if (isbuild)
                 {
                     ObjectManager.Instance.SetPreviewObject(3);
@@ -404,11 +413,12 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
                 }
             }
         }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
+        // 포탑 설치
+        if (Input.GetKeyDown(KeyCode.Alpha4)) 
         {
             if (m_quickSlot.CheckItemCount(3) && m_playerObject.IsCanBuildObject(3))
             {
-                IsBuildingConvert();
+                BuildingConvert();
                 if (isbuild)
                 {
                     ObjectManager.Instance.SetPreviewObject(4);
@@ -420,6 +430,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
                 }
             }
         }
+        // 마우스 클릭을 활용한 공격, 오브젝트 설치
         if (Input.GetMouseButton(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -445,6 +456,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
                 }
             } 
         }
+        // 총기 사용중일 때 재장전 메소드 실행.
         if (Input.GetKeyDown(KeyCode.R))
         {
             if (m_manager.IsGun())
@@ -461,18 +473,30 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         {
             m_navAgent.ResetPath();
         }
-        if (Input.GetKey(KeyCode.LeftShift)) //달리기 기능 테스트
+        //달리기 기능 테스트
+        if (Input.GetKey(KeyCode.LeftShift)) 
         {
+            m_stamina -= 2 * Time.deltaTime;
+            if(m_stamina < 0)
+            {
+                m_stamina = 0;
+                return;
+            }
             m_dir = new Vector3(m_dir.x * 1.5f, 0f, m_dir.z * 1.5f);
+        }
+        else
+        {
+            m_stamina += Time.deltaTime;
         }
         MoveAnimCtr(m_dir); //방향, 속도별 애니메이션 조절
         PlayerLookAt();     //플레이어 마우스방향 주시기능
-        m_navAgent.Move(m_dir * m_status.speed/20 * Time.deltaTime);
+        m_navAgent.Move(m_dir * m_status.speed/20 * Time.deltaTime); //실질적으로 이동을 시키는 코드. 네비메쉬에이전트를 활용하여 움직임 처리.
     }
 
     #endregion
 
     #region AboutStatus  //플레이어 스테이터스 관련 메소드
+    //방어구 데이터. 데이터 양이 적어 임시 처리 하였음. 추후 수정 해야함.
     private void ResetData()
     {
         armDefence = 0;
@@ -494,7 +518,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         SetStatus(m_weaponData.ID);
     }
     public void SetSkillData(TableSkillStat stat)
-    {//float damage, float atkspeed, float reload, float speed, int crirate, float cridamage, float mag, float defence, float damagerigist, float hp, float knockbackrate, float heal, int lastfire, int pierce, int boom, float armorPierce, float Remove, int Drain, float Crush, int Burn
+    {
         m_skillStat = stat;
         InitStatus();
         if (stat.Crush > 0)
@@ -516,12 +540,11 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     }
     public void LevelUp()
     {
-        m_level++;
-        m_status.level = m_level;
+        m_status.level++;
     }
     public int GetLVInfo()
     {
-        return m_level;
+        return m_status.level;
     }
     public int GetScore()
     {
@@ -532,37 +555,39 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         m_score += score;
         UIManager.Instance.ScoreChange(m_score);
     }
-    void HPControl(int value)
+    void HPControl(int value) //HP 컨트롤 메소드
     {
         m_status.hp += value;   
         if(m_status.hp > m_status.hpMax) 
             m_status.hp = m_status.hpMax; 
         if(m_status.hp < 0)
             m_status.hp = 0;
-        hp = Mathf.CeilToInt(m_status.hp);
         UIManager.Instance.HPBar(m_status.hp,m_status.hpMax);
     }
     void InitStatus() 
-    {//SetStatus에서 스킬과 아이템의 추가값들을 받아옴.
+    {
         float penaltyRemove = m_weaponData.Speed;
+        float hpvalue = 1; //HP상승 시 현재 hp의 value값을 바탕으로 비율 유지하도록 하기 위해
         if (m_skillStat.Remove != 0 && m_weaponData.Speed < 0) //스킬 데이터로 이동속도 패널티감소가 있고 무기의 이속감소 효과가 있을 경우 이속올려줌
         {
             penaltyRemove = penaltyRemove - (penaltyRemove * m_skillStat.Remove);
         }
+        hpvalue = m_status.hp / m_status.hpMax;
         if(m_skillStat.CyberWear > 0)
-        m_status = new Status(hp, 200 * (1 + (m_skillStat.HP + m_weaponData.HP + hpPer + (m_skillStat.ObjectHP *(1 + m_skillStat.CyberWear)))), 10f + m_skillStat.CriRate + m_weaponData.CriRate + armCriRate, 50f + (m_skillStat.CriDamage + m_weaponData.CriRate), 0 + (m_skillStat.AtkSpeed + m_weaponData.AtkSpeed) * (1 + armAttackSpeed), (1 + (m_skillStat.Damage + armDamage + m_skillStat.publicBuffDamage * (1 + m_skillStat.CyberWear))) * m_weaponData.Damage, 0 + m_skillStat.Defence + m_weaponData.Defence + armDefence + m_skillStat.ObjectDefence * (1 + m_skillStat.CyberWear), 130 * (1 + m_skillStat.Speed + penaltyRemove + armSpeed), m_weaponData.Mag * Mathf.CeilToInt(1 + m_skillStat.Mag), m_weaponData.ReloadTime - (m_weaponData.ReloadTime * m_skillStat.Reload), m_weaponData.KnockBack + m_skillStat.KnockBackRate, m_weaponData.KnockBackDist, m_weaponData.AttackDist, m_weaponData.Shotgun, m_level, m_skillStat.DamageRigist + m_skillStat.ObjectRigist * (1 + m_skillStat.CyberWear), m_skillStat.LastFire, m_skillStat.Pierce, m_skillStat.Boom, m_skillStat.ArmorPierce+ m_skillStat.BuffArmorPierce * (1 + m_skillStat.CyberWear), m_skillStat.Remove, m_skillStat.Drain, m_skillStat.Crush, m_skillStat.Burn, m_skillStat.Heal + m_skillStat.ObjectRegen * (1 + m_skillStat.CyberWear), m_knickName, m_title);
+        m_status = new Status(200 * (1 + (m_skillStat.HP + m_weaponData.HP + hpPer + (m_skillStat.ObjectHP * (1 + m_skillStat.CyberWear)))) * hpvalue, 200 * (1 + (m_skillStat.HP + m_weaponData.HP + hpPer + (m_skillStat.ObjectHP *(1 + m_skillStat.CyberWear)))), 10f + m_skillStat.CriRate + m_weaponData.CriRate + armCriRate, 50f + (m_skillStat.CriDamage + m_weaponData.CriRate), 0 + (m_skillStat.AtkSpeed + m_weaponData.AtkSpeed) * (1 + armAttackSpeed), (1 + (m_skillStat.Damage + armDamage + m_skillStat.publicBuffDamage * (1 + m_skillStat.CyberWear))) * m_weaponData.Damage, 0 + m_skillStat.Defence + m_weaponData.Defence + armDefence + m_skillStat.ObjectDefence * (1 + m_skillStat.CyberWear), 130 * (1 + m_skillStat.Speed + penaltyRemove + armSpeed), m_weaponData.Mag * Mathf.CeilToInt(1 + m_skillStat.Mag), m_weaponData.ReloadTime - (m_weaponData.ReloadTime * m_skillStat.Reload), m_weaponData.KnockBack + m_skillStat.KnockBackRate, m_weaponData.KnockBackDist, m_weaponData.AttackDist, m_weaponData.Shotgun,m_status.level, m_skillStat.DamageRigist + m_skillStat.ObjectRigist * (1 + m_skillStat.CyberWear), m_skillStat.LastFire, m_skillStat.Pierce, m_skillStat.Boom, m_skillStat.ArmorPierce+ m_skillStat.BuffArmorPierce * (1 + m_skillStat.CyberWear), m_skillStat.Remove, m_skillStat.Drain, m_skillStat.Crush, m_skillStat.Burn, m_skillStat.Heal + m_skillStat.ObjectRegen * (1 + m_skillStat.CyberWear), m_knickName, m_title);
         else
-        m_status = new Status(hp, 200 * (1 + (m_skillStat.HP + m_weaponData.HP + hpPer)), 10f + m_skillStat.CriRate+ m_weaponData.CriRate + armCriRate, 50f + (m_skillStat.CriDamage + m_weaponData.CriRate), 0 + (m_skillStat.AtkSpeed + m_weaponData.AtkSpeed) * (1 + armAttackSpeed),(1+ (m_skillStat.Damage + armDamage + m_skillStat.publicBuffDamage)) * m_weaponData.Damage, 0 + m_skillStat.Defence + m_weaponData.Defence + armDefence, 130 * (1 + m_skillStat.Speed +penaltyRemove + armSpeed), m_weaponData.Mag * Mathf.CeilToInt(1+ m_skillStat.Mag), m_weaponData.ReloadTime - (m_weaponData.ReloadTime * m_skillStat.Reload) ,m_weaponData.KnockBack + m_skillStat.KnockBackRate, m_weaponData.KnockBackDist,m_weaponData.AttackDist,m_weaponData.Shotgun,m_level, m_skillStat.DamageRigist, m_skillStat.LastFire, m_skillStat.Pierce, m_skillStat.Boom, m_skillStat.ArmorPierce + m_skillStat.BuffArmorPierce , m_skillStat.Remove, m_skillStat.Drain, m_skillStat.Crush, m_skillStat.Burn, m_skillStat.Heal, m_knickName,m_title);
-        // m_status.hpMax = Mathf.CeilToInt(m_status.hpMax); //최대체력 가져오기
-        HPControl(0);
-        SetHudText();
-        m_animCtr.SetFloat("MeleeSpeed", m_status.atkSpeed);
-        m_animCtr.SetFloat("MoveSpeed", m_status.speed / 100);
-        m_statusUI.SetStatus(); // 신 인벤토리
-        pDefence = m_status.defense;  //방어력 가져오기
+        m_status = new Status(200 * (1 + (m_skillStat.HP + m_weaponData.HP + hpPer)) * hpvalue, 200 * (1 + (m_skillStat.HP + m_weaponData.HP + hpPer)), 10f + m_skillStat.CriRate+ m_weaponData.CriRate + armCriRate, 50f + (m_skillStat.CriDamage + m_weaponData.CriRate), 0 + (m_skillStat.AtkSpeed + m_weaponData.AtkSpeed) * (1 + armAttackSpeed),(1+ (m_skillStat.Damage + armDamage + m_skillStat.publicBuffDamage)) * m_weaponData.Damage, 0 + m_skillStat.Defence + m_weaponData.Defence + armDefence, 130 * (1 + m_skillStat.Speed +penaltyRemove + armSpeed), m_weaponData.Mag * Mathf.CeilToInt(1+ m_skillStat.Mag), m_weaponData.ReloadTime - (m_weaponData.ReloadTime * m_skillStat.Reload) ,m_weaponData.KnockBack + m_skillStat.KnockBackRate, m_weaponData.KnockBackDist,m_weaponData.AttackDist,m_weaponData.Shotgun, m_status.level, m_skillStat.DamageRigist, m_skillStat.LastFire, m_skillStat.Pierce, m_skillStat.Boom, m_skillStat.ArmorPierce + m_skillStat.BuffArmorPierce , m_skillStat.Remove, m_skillStat.Drain, m_skillStat.Crush, m_skillStat.Burn, m_skillStat.Heal, m_knickName,m_title);
+        HPControl(0); //바뀐 hp정보 UI에 보내주기 위해 0을 보내줌
+        SetHudText(); //레벨 갱신을 위해 정보 업로드
+        SetAnimSpeed(); //캐릭터의 속도에 비례하여애니메이션 속도 조절용
         m_area.transform.localScale = new Vector3(m_status.AtkDist, 1f, m_status.AtkDist);
     }
-    public void SetStatus(int ID) //무기의 아이디값을 바탕으로 스탯설정
+    void SetAnimSpeed()
+    {
+        m_animCtr.SetFloat("MeleeSpeed", m_status.atkSpeed);
+        m_animCtr.SetFloat("MoveSpeed", m_status.speed / 100);
+    }
+    public void SetStatus(int ID) //무기 변경 시 사용하는 메소드로 무기의 데이터를 받아와준 후 스텟설정
     {
         SetWeaponID(ID);
         InitStatus();
@@ -584,6 +609,13 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         }
         m_skill.SetWeaponType(m_weaponData.weaponType); //무기타입 전송
     }
+    //다른 클래스에 플레이어컨트롤러 정보 전달
+    void SetPlayer()
+    {
+        UGUIManager.Instance.SetPlayer(this);
+        m_updateManager.SetPlayerController(this);
+        GameManager.Instance.SetGameObject(gameObject);
+    }
 
     #endregion
 
@@ -598,26 +630,6 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         float value = m_status.hp / m_status.hpMax;
         return value;
     }
-    /*
-    public void GetDamage(float damage)
-    {
-        if (m_status.hp <= 0 || m_Pstate == PlayerState.dead || m_Pstate == PlayerState.Invincible) //피가 0이거나 죽었을땐 적용 X
-            return;
-        damage = CalculationDamage.NormalDamage(damage, m_status.defense, 0f,m_status.DamageRigist);
-        PlayDamagedSound();
-        int mondamage = Mathf.CeilToInt(damage - (damage* m_status.DamageRigist)); //피해 저항 적용
-        HPControl(-mondamage);
-        var hiteffect = TableEffect.Instance.m_tableData[6].Prefab[2];
-        var effect = EffectPool.Instance.Create(hiteffect);
-        effect.transform.position = m_hitPos.position;
-        effect.SetActive(true);
-        m_hudText.Add(-damage,Color.red,0f);
-        UIManager.Instance.DamagedUI();
-        if (m_status.hp <= 0)
-        {
-            Dead(); //hp가 0이하일때 사망처리
-        }
-    }*/
     public void SetDamage(float damage,MonsterController mon)
     {
         if (m_status.hp <= 0 || m_Pstate == PlayerState.dead || m_Pstate == PlayerState.Invincible) //피가 0이거나 죽었을땐 적용 X
@@ -637,17 +649,17 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             Dead(); //hp가 0이하일때 사망처리
         }
     }
-    void SkillHeal(int healvalue)
+    void SkillHeal(int healvalue) // 스킬 중 지속적으로 회복하기 위해 사용하는 메소드.
     {
         HPControl(healvalue);
         m_hudText.Add(healvalue, Color.green, 0f);
     }
-    public void GetHeal(float heal)
+    public void GetHeal(float heal) //
     {
         if (m_status.hp >= m_status.hpMax || m_Pstate == PlayerState.dead) return; //이미 풀피이거나 죽었을경우 실행 X
         float percentHeal = m_status.hpMax * (heal / 100);
-        PlayHealSound();
         int healvalue = Mathf.CeilToInt(percentHeal);
+        PlayHealSound();
         HPControl(healvalue);
         m_hudText.Add(healvalue, Color.green, 0f);
         var healeffect = TableEffect.Instance.m_tableData[6].Prefab[1];
@@ -655,7 +667,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         effect.transform.position = gameObject.transform.position;
         effect.SetActive(true);
         UIManager.Instance.HealUI();
-        if (m_status.hp >= m_status.hpMax) //최대체력 초과한 힐은 적용 X 추후 회복량 자체 줄이는식으로 수정할것    *****
+        if (m_status.hp >= m_status.hpMax) //최대체력 초과한 힐은 적용 X
         {
             m_status.hp = m_status.hpMax;
         }
@@ -696,7 +708,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         PlayLvUpSound();
         LevelUp();
         m_levelexp = Levelexp();
-        HPControl(Mathf.CeilToInt(m_status.hpMax)); //풀피로 만들어줌
+        HPControl(Mathf.CeilToInt((m_status.hpMax - m_status.hp) / 2)); //풀피로 만들어줌 은 너무 사기이므로 잃은 피해의 50%로 수정.
         UIManager.Instance.LevelUPUI(m_status.level);
         SetHudText();
         m_skill.LevelUP();
@@ -707,7 +719,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         effect.transform.localScale = new Vector3(2f, 2f, 2f);
         effect.SetActive(true);
     }   
-    public void SetHudText()
+    public void SetHudText() //HUD상에 닉네임, 레벨, 타이틀 표기
     {
         if (HasTitle())
         {
@@ -718,10 +730,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             m_hudLabel.text = "[FFFF00]LV." + m_status.level + "[FFFFFF]" + m_knickName;
         }
     }
-    void SetUIInfo()
-    {
-        m_statusUI = UGUIManager.Instance.GetStatusUI();
-    }
+
 
     #endregion
 
@@ -741,7 +750,22 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         int lvupexp = 100 + (80 * m_status.level);
         return lvupexp;
     }
-
+    
+    void SetTransform()
+    {
+        m_skill = GetComponent<PlayerSkillController>();
+        m_navAgent = GetComponent<NavMeshAgent>();
+        m_audio = GetComponent<AudioSource>();
+        m_animCtr = GetComponent<PlayerAnimController>();
+        m_playerObject = GetComponent<PlayerObjectController>();
+        m_statusUI = UGUIManager.Instance.GetStatusUI();
+        m_leftDir = Utill.GetChildObject(gameObject, "LeftDir");
+        m_weaponData = new WeaponData();
+        m_armorManager = GetComponent<ArmorManager>();
+        m_manager = GetComponent<GunManager>();
+        m_hitPos = Utill.GetChildObject(gameObject, "Dummy_Pos");
+        m_shooter = GetComponent<PlayerShooter>();
+    }
     #endregion
 
     #region UnityMethods
@@ -749,34 +773,22 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     
     private void Awake()
     {
-        m_skill = GetComponent<PlayerSkillController>();
-        m_navAgent = GetComponent<NavMeshAgent>();
-        m_audio = GetComponent<AudioSource>();
-        m_animCtr = GetComponent<PlayerAnimController>();
-        m_playerObject = GetComponent<PlayerObjectController>();
-        m_leftDir = Utill.GetChildObject(gameObject, "LeftDir");
-        m_weaponData = new WeaponData();
-        m_armorManager= GetComponent<ArmorManager>();
-        m_manager = GetComponent<GunManager>();
-        m_hitPos = Utill.GetChildObject(gameObject, "Dummy_Pos");
-        m_level = 1;
-        m_levelexp = Levelexp();
-        m_shooter = GetComponent<PlayerShooter>();
+        SetTransform();
         SetPlayerKnickName(GameManager.Instance.GetNickname());
     }
     private void Start()
     {
         SetPlayer();
-        SetUIInfo();
         SetStatus(1); // 시작시 기본 권총으로
         m_status.hp = m_status.hpMax; //시작 시 hp 설정.
         m_status.level = 1;
+        m_levelexp = Levelexp();
         HPControl(0);
         SetHudText();
     }
     private void Update()
     {
-        BehaviorProcess();
+        BehaviorProcess(); //플레이어 입력 통합 메소드.
     }
     #endregion
 }

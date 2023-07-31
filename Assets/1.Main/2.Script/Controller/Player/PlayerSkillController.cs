@@ -224,6 +224,7 @@ public class PlayerSkillController : MonoBehaviour
         RefreshSP();
         m_gunmanager.SkillUpSignal();
         m_playerObject.ObjectUpgrade();
+        UGUIManager.Instance.GetStatusUI().SetStatus(); // 신 인벤토리
     }
     void ResetDatas() //이전에 가지고 있던 정보 초기화.
     {
@@ -306,14 +307,18 @@ public class PlayerSkillController : MonoBehaviour
         }
         m_player.SetSkillData(m_playerSkillstat);
     } //플레이어에게 데이터 전송
+    void GetPlayerData()
+    {
+       
+    }
     private void Awake()
     {
-        m_skilldata = new TableSkillStat();
         m_player = GetComponent<PlayerController>();
+        m_skilldata = new TableSkillStat();
         m_gunmanager = GetComponent<GunManager>();
         m_playerObject = GetComponent<PlayerObjectController>();
         m_abilityType = PlayerAbilityType.None;
-        m_skillPoint = 100;// 테스트용
+        // m_skillPoint = 100;// 테스트
         ObjectManager.Instance.SetPlayer(this);
     }
     #endregion

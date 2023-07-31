@@ -26,6 +26,16 @@ public class PlayerObjectController : MonoBehaviour
         m_maxBarricadeBuild = m_maxBuild + m_skillData.BarricadeMaxBuild;
         m_maxTurretBuild =  m_skillData .TurretMaxBuild;
     }
+    public int[] GetObjectBuildData()
+    {
+        MaxBuild();
+        int[] list = new int[4];
+        list[0] = m_maxBarricadeBuild;
+        list[1] = m_barricades.Count;
+        list[2] = m_maxTurretBuild;
+        list[3] = m_turrets.Count;
+        return list;
+    }
     public bool IsCanBuildObject(int id)
     {
         MaxBuild();
@@ -85,7 +95,7 @@ public class PlayerObjectController : MonoBehaviour
     {
         m_skillData = m_skill.GetPlayerSkillData();
     }
-    private void Start()
+    private void Awake()
     {
         m_skill = GetComponent<PlayerSkillController>();
     }

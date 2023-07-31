@@ -215,7 +215,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     }
     public void GameOver()
     {
-       // SetTimeScale(0);
+        SaveScore();
         StopAllCoroutines();
         roundTime = DaynNight.GameOver;
     }

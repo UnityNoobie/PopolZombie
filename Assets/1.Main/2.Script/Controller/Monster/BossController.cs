@@ -216,6 +216,7 @@ public class BossController : MonsterController
         if (m_status.hp <= 0) //피해를 받은 후 피가 0 이하일때 사망처리
         {
             obj.KillCount();
+            m_hudPanel.Died();
             SetDie();
         }
     }
@@ -225,7 +226,7 @@ public class BossController : MonsterController
         if (!gameObject.activeSelf || m_state.Equals(MonsterState.Die)) return;
         RageCool += Time.deltaTime;
         timeafterAttack += Time.deltaTime;
-        if(!isRage && (float)m_status.hp / m_status.hpMax < 0.5 && RageCool > 20 && m_state != MonsterState.Attack)
+        if(!isRage && m_status.hp / m_status.hpMax < 0.5 && RageCool > 20 && m_state != MonsterState.Attack)
         {
             isRage= true;
             RageCool= 0;

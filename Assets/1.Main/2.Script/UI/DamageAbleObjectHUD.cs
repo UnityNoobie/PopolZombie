@@ -11,6 +11,7 @@ public class DamageAbleObjectHUD : MonoBehaviour
     #region Constants and Fields
     Slider m_hpSlider;
     TextMeshProUGUI m_hpValue;
+    TextMeshProUGUI m_killCount;
     GameObject m_damagedText;
     GameObjectPool<DamagedText> m_damageTextPool = new GameObjectPool<DamagedText>();
     Transform m_targtObj;
@@ -23,6 +24,8 @@ public class DamageAbleObjectHUD : MonoBehaviour
     {
         m_hpSlider = GetComponentInChildren<Slider>(true);
         m_hpValue = Utill.GetChildObject(gameObject, "ValueText").GetComponent<TextMeshProUGUI>();
+        // m_killCount = Utill.GetChildObject(gameObject,"KillCount").GetComponent<TextMeshProUGUI>();
+        m_killCount = Utill.GetChildObject(gameObject, "KillCount").GetComponent<TextMeshProUGUI>() ;
         m_damagedText = Resources.Load<GameObject>("Prefabs/DamageText");
         m_damageTextPool = new GameObjectPool<DamagedText>(5, () =>
         {
@@ -51,6 +54,10 @@ public class DamageAbleObjectHUD : MonoBehaviour
         text.transform.position = transform.position;
         text.TextValue(damage);
         text.gameObject.SetActive(true);
+    }
+    public void SetKillCount(int count)
+    {
+        m_killCount.text = "처치한 적 : " + count;
     }
     public void EnqueDamageText(DamagedText text)
     {

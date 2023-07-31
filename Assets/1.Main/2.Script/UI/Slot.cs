@@ -38,12 +38,23 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
     {
         m_player.GetComponent<PlayerGetItem>().BuyItem(itemID, itemType,-price);
     }
-    public void OnPointerUp(PointerEventData eventData)
+    public void OnPointerUp(PointerEventData eventData) //마우스 클릭 시
     {
         UGUIManager.Instance.PlayClickSFX();
         if (!isEmpty)
         {
-            if (m_player.GetComponent<PlayerGetItem>().HaveEnoughMoney(price))
+            if(itemID == 38 ||  itemID == 39 || itemID == 40)
+            {
+                if (ObjectManager.Instance.GetGenerator().IsCanUpgrade(itemID))
+                {
+                    m_buyItem.ActiveUI(this, price, m_name);
+                }
+                else
+                {
+                    UGUIManager.Instance.SystemMessageCantUse("최대 업그레이드 횟수에 도달하여 더이상 업그레이드가 불가능합니다.");
+                }
+            }
+            else if (m_player.GetComponent<PlayerGetItem>().HaveEnoughMoney(price))
             {
                 m_buyItem.ActiveUI(this, price, m_name);
             }
@@ -58,7 +69,7 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
         if (m_image.sprite != null && eventData.pointerEnter.CompareTag("Slot")) //eventData.pointerEnter.CompareTag("Slot")
         {
             m_info.ActiveUI(itemID, m_type);
-            if(m_type != ItemType.Item)
+            if(m_type != ItemType.Item) //사용템 아닐경우 장착 아이템 정보 가져옴
             {
                 m_equipItem.ActiveUI(UGUIManager.Instance.GetStatusUI().GetEquipItemID(m_armortype, m_type), m_type);
             }
@@ -87,7 +98,7 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
             m_armortype = ArmorType.Max;
             price = m_store.m_itemdata[ID].Price;
             itemType = m_store.m_itemdata[ID].type;
-            m_name = itemType + ".LV"+ m_store.m_itemdata[ID].Grade;
+            m_name = itemType;
             m_text.text =  (m_name + "\n 가격 : " +price) ;
         }
         else if (type.Equals(ItemType.Armor))

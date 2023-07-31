@@ -26282,7 +26282,7 @@ GameObject:
   - component: {fileID: 3041008389323371425}
   - component: {fileID: 3041008389323371424}
   m_Layer: 5
-  m_Name: MaxBaricade
+  m_Name: MaxBarricade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32992,7 +32992,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC124\uCE58\uD55C \uD3EC\uD0D1 : 0\n"
+  m_text: "\uCD5C\uB300 \uD3EC\uD0D1 : 0\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 338c6c240c27b3b4386954ba0d8dbd8c, type: 2}
   m_sharedMaterial: {fileID: 6524739977371035946, guid: 338c6c240c27b3b4386954ba0d8dbd8c,

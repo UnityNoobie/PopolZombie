@@ -30,18 +30,18 @@ public class PanelItemInfo : MonoBehaviour
             m_ItemName.text = data.Type.ToString();
             m_ItemInfo.text = data.ItemInfo;
             m_image.sprite = ImageLoader.Instance.GetImage(data.Type.ToString());
-            if (m_ItemName.Equals("HealPack"))
+            if (data.Type.Equals(UseItemType.HealPack))
             {
                 m_infoText[0].text = ("회복량 : " + data.Heal + "%");
             }
-            else if (m_ItemName.Equals("Barricade"))
+            else if (data.Type.Equals(UseItemType.Barricade))
             {
                 stat = ObjectManager.Instance.GetObjectStat(ObjectType.Barricade);
                 m_infoText[0].text = ("체력 : " + stat.HP);
                 m_infoText[1].text = ("방어력 : " + stat.Defence);
                 m_infoText[2].text = ("최대 설치수 : " + stat.MaxBuild);
             }
-            else if (m_ItemName.Equals("GunTurret"))
+            else if (data.Type.Equals(UseItemType.GunTurret))
             {
                 stat = ObjectManager.Instance.GetObjectStat(ObjectType.Turret);
                 m_infoText[0].text = ("공격력 : " + stat.Damage);

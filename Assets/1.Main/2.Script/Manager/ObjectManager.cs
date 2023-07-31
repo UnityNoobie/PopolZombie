@@ -22,7 +22,7 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     GameObject m_gunTurretPrefab;
     GameObject m_previewBarricade;
     GameObject m_previewGunTurret;
-
+    Generator m_generator;
     [SerializeField]
     PreviewObject preview;
 
@@ -65,6 +65,14 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         var stat = m_obejctStat.GetObjectStatus(type);
         return stat;
     }
+    public void SetGenerator(Generator generator)
+    {
+        m_generator = generator;
+    }
+    public Generator GetGenerator()
+    {
+        return m_generator;
+    }
     public void StartPreviewBuild()
     {
         StartCoroutine(Coroutine_PreviewBuilding());
@@ -75,7 +83,7 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         {
             if (m_id == 3) BuildBarricade();
             else if (m_id == 4) BuildTurret();
-            m_playerC.IsBuildingConvert();
+            m_playerC.BuildingConvert();
         }
         else
         {
@@ -210,7 +218,6 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
             obj.transform.localScale = Vector3.one;
             obj.gameObject.SetActive(false);
             var top = obj.GetComponent<TowerController>();
-            //top.SetTransform();
             return top;
         });
     }
