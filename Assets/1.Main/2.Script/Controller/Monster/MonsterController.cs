@@ -49,6 +49,7 @@ public class MonsterController : MonoBehaviour
     protected float m_idleDuration = 0.5f;
     protected float m_idleTime;
     protected bool isburn;
+    protected float m_burnDamage = 5;
     int m_delayFrame;
     float defence = 0;
     #endregion
@@ -79,7 +80,7 @@ public class MonsterController : MonoBehaviour
         SetIdle(0.1f);
         m_delayFrame = 0;
     }
-    IEnumerator Couroutine_BurnDamage(int value) // 상태이상 화상 지속딜
+    protected IEnumerator Couroutine_BurnDamage(float value) // 상태이상 화상 지속딜
     {
         var effectName = TableEffect.Instance.m_tableData[1].Prefab[2];
         var effect = EffectPool.Instance.Create(effectName);
@@ -171,10 +172,11 @@ public class MonsterController : MonoBehaviour
                     var dot = Vector3.Dot(transform.forward, dir.normalized);
                     if (dot >= 0.5f)
                     {
-                        damageableObject.SetDamage(m_status.damage);
+                        damageableObject.SetDamage(m_status.damage,this);
                     }
                 }
             }
+            /*
             if (player != null)
             {
                 var dir = m_target.transform.position - transform.position;
@@ -184,10 +186,10 @@ public class MonsterController : MonoBehaviour
                     var dot = Vector3.Dot(transform.forward, dir.normalized);
                     if (dot >= 0.5f)
                     {
-                        player.GetDamage(m_status.damage);
+                        player.SetDamage(m_status.damage, this);
                     }
                 }
-            }
+            }*/
         }
     }
     void AnimEvent_AttackFinished()
@@ -417,12 +419,9 @@ public class MonsterController : MonoBehaviour
 
     }
   
-    public virtual void BurnDamage()
-    {   
-        if(m_burnCoroutine == null)
-        {
-            m_burnCoroutine = StartCoroutine(Couroutine_BurnDamage(5));
-        }     
+    public virtual void BurnDamage()//처음엔 중첩 안되게 하려 했으나 밸런스상 중첩 가능하게 수정(수치조정)
+    {
+        StartCoroutine(Couroutine_BurnDamage(m_burnDamage));
     }
     public virtual void Crush(float crushvalue)
     {
@@ -441,12 +440,13 @@ public class MonsterController : MonoBehaviour
         if(m_state != MonsterState.Die) return true;
         else return false;
     }
-    public virtual void SetDamage(AttackType type, float damage, PlayerController player, bool isburn)
+    public virtual void SetDamage(AttackType type, float damage, PlayerController player, bool isburn,IDamageAbleObject obj)
     {
         if (m_status.hp <= 0) //hp가 0이하일때는 적용 x // 바로 리턴을 하였는데 죽어도 안죽는 현상 발생 다시 수정함.
         {
-           SetDie();
-           return;
+            obj.KillCount();
+            SetDie();
+            return;
         }   
         int dmg = Mathf.CeilToInt(damage); // 데미지를 인트로 바꾸어 받기
         DamageProcess(dmg, type);
@@ -479,6 +479,7 @@ public class MonsterController : MonoBehaviour
         }
         if (m_status.hp <= 0) //피해를 받은 후 피가 0 이하일때 사망처리
         {
+            obj.KillCount();
             SetDie();
         }      
     }

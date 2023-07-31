@@ -50,7 +50,7 @@ public class BossController : MonsterController
         yield return new WaitForSeconds(10f);
         m_navAgent.speed = m_status.speed;
         m_animFloat.SetFloat("Speed", m_status.speed / 5f);
-        SetIdle(1f);
+        SetIdle(0.5f);
      //   m_fire.gameObject.SetActive(false);
         isRage= false;
     }
@@ -168,11 +168,14 @@ public class BossController : MonsterController
           //  m_navAgent.ResetPath();
              PlaySwingSound();
              m_animctr.Play(MonsterAnimController.Motion.Attack); }
-       
     }
-
-    public override void SetDamage(AttackType type, float damage, PlayerController player, bool isburn)
+    public override void BurnDamage() //처음엔 중첩 안되게 하려 했으나 밸런스상 중첩 가능하게 수정(수치조정)
     {
+        StartCoroutine(Couroutine_BurnDamage(m_burnDamage / 10));
+    }
+    public override void SetDamage(AttackType type, float damage, PlayerController player, bool isburn, IDamageAbleObject obj)
+    {
+   
         if (m_status.hp <= 0) //hp가 0이하일때는 적용 x // 바로 리턴을 하였는데 죽어도 안죽는 현상 발생 다시 수정함.
         {
             SetDie();
@@ -184,31 +187,35 @@ public class BossController : MonsterController
         {
             BurnDamage();
         }
-        if (player.GetStatus.KnockBackPer > Random.Range(0, 100 + m_status.KnockbackRigist)) //넉백이 될때만 아래 적용 넉백없는 공격은 무시하고 돌진하도록!
+        if(player != null)
         {
-            m_navAgent.ResetPath();
-            SetState(MonsterState.Damaged);
-            if (m_motionDelaycoroutine != null)
+            if (player.GetStatus.KnockBackPer > Random.Range(0, 100 + m_status.KnockbackRigist)) //넉백이 될때만 아래 적용 넉백없는 공격은 무시하고 돌진하도록!
             {
-                StopCoroutine(m_motionDelaycoroutine);
-                m_motionDelaycoroutine = null;
+                m_navAgent.ResetPath();
+                SetState(MonsterState.Damaged);
+                if (m_motionDelaycoroutine != null)
+                {
+                    StopCoroutine(m_motionDelaycoroutine);
+                    m_motionDelaycoroutine = null;
+                }
+                if (m_damagedCoroutine != null)
+                {
+                    StopCoroutine(m_damagedCoroutine);
+                    m_damagedCoroutine = null;
+                }
+                m_animctr.Play(MonsterAnimController.Motion.KnockBack, false);
+                StopSkill();
+                var dir = (transform.position - player.transform.position);
+                dir.y = 0f;
+                m_tweenmove.m_from = transform.position;
+                m_tweenmove.m_to = m_tweenmove.m_from + dir.normalized * player.GetStatus.KnockBackDist;
+                m_tweenmove.m_duration = player.GetStatus.KnockBackDist;
+                m_tweenmove.Play();
             }
-            if (m_damagedCoroutine != null)
-            {
-                StopCoroutine(m_damagedCoroutine);
-                m_damagedCoroutine = null;
-            }
-            m_animctr.Play(MonsterAnimController.Motion.KnockBack, false);
-            StopSkill();
-            var dir = (transform.position - player.transform.position);
-            dir.y = 0f;
-            m_tweenmove.m_from = transform.position;
-            m_tweenmove.m_to = m_tweenmove.m_from + dir.normalized * player.GetStatus.KnockBackDist;
-            m_tweenmove.m_duration = player.GetStatus.KnockBackDist;
-            m_tweenmove.Play();
         }
         if (m_status.hp <= 0) //피해를 받은 후 피가 0 이하일때 사망처리
         {
+            obj.KillCount();
             SetDie();
         }
     }

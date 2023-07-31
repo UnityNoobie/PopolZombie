@@ -7,11 +7,11 @@ public class Generator : BuildableObject
     #region Coroutine
 
     #endregion
-    public override void SetDamage(float damage)
+    public override void SetDamage(float damage, MonsterController mon)
     {
         UGUIManager.Instance.SystemMessageSendMessage("발전기가 공격받고 있습니다!!");
         SoundManager.Instance.PlaySFX("SFX_Generator", m_audio);
-        base.SetDamage(damage);
+        base.SetDamage(damage, mon);
     }
     protected override void Destroyed()
     {
@@ -25,7 +25,6 @@ public class Generator : BuildableObject
         m_stat = ObjectManager.Instance.GetObjectStat(ObjectType.Generator);
         InitStatus(null, m_stat);
         GameManager.Instance.SetGameObject(gameObject);
-        
     }
     private void Start()
     {

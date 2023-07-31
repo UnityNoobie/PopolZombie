@@ -47,6 +47,7 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     }
     public void SystemMessageSendMessage(string text)
     {
+        StopAllCoroutines(); //초기화진행
         StartCoroutine(SystemMessage(text));
     }
     #endregion

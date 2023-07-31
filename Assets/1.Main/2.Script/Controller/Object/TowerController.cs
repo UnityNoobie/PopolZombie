@@ -46,10 +46,10 @@ public class TowerController : BuildableObject
 
     public void BuildTurretObject(Vector3 buildPos,TableSkillStat skill,ObjectStat stat)
     {
-        InitStatus(skill,stat);
         transform.position = buildPos;
         gameObject.SetActive(true);
         GameManager.Instance.SetGameObject(gameObject);
+        InitStatus(skill,stat);
     }
     public override void InitStatus(TableSkillStat skill, ObjectStat stat)
     {
@@ -177,7 +177,7 @@ public class TowerController : BuildableObject
         var mon = hit.collider.GetComponent<MonsterController>();
      
         GunManager.AttackProcess(mon, m_stat.Damage + m_machineLearning , m_stat.CriRate, m_stat.CriRate, m_stat.ArmorPierce, out damage);
-        mon.SetDamage(AttackType.Normal, damage, null, false);
+        mon.SetDamage(AttackType.Normal, damage, null, false, this);
 
         hitPos = hit.point;
 

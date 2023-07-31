@@ -29,7 +29,7 @@ public struct Status
     public int ShotGun;
     public int level;
     public float DamageRigist;
-    public int LastFire;
+    public float LastFire;
     public int Pierce;
     public int Boom;
     public float ArmorPierce;
@@ -41,7 +41,7 @@ public struct Status
     public string KnickName;
     public string Title;
 
-    public Status(float hp,float hpMax,  float criRate, float criAttack,float atkSpeed, float damage, float defense, float speed, int maxammo, float reloadTime,float knockbackPer, float knockbackDist, float atkDist, int shotgun,int Level,float damagerigist,int lastfire, int pierce,int boom,float armorpierce,float remove,int drain,float crush,int burn,float heal,string knickName,string title)
+    public Status(float hp,float hpMax,  float criRate, float criAttack,float atkSpeed, float damage, float defense, float speed, int maxammo, float reloadTime,float knockbackPer, float knockbackDist, float atkDist, int shotgun,int Level,float damagerigist,float lastfire, int pierce,int boom,float armorpierce,float remove,int drain,float crush,int burn,float heal,string knickName,string title)
     {
         this.hp = hp;
         this.hpMax = hpMax; //이 객체의 최대체력과 현재 체력을 받아온 hp값으로 저장

@@ -148,7 +148,6 @@ public class Gun : MonoBehaviour
         {
             burn = true;
         }
-       
         if(m_player.GetStatus.Boom != 0)
         {
             boom = true;
@@ -156,7 +155,7 @@ public class Gun : MonoBehaviour
     }
     public void ammoCheck() //남은총알을 실시간으로 확인.
     {
-        if(m_player.GetStatus.maxammo > 1000)
+        if(m_player.GetStatus.maxammo > 1000) //기관총 특성 표기용.
         {
             UIManager.Instance.WeaponInfoUI(m_type + ".LV" + m_grade + "\n∞ / ∞");
         }
@@ -310,17 +309,13 @@ public class Gun : MonoBehaviour
         var mon = hit.collider.GetComponent<MonsterController>();
         var type = GunManager.AttackProcess(mon, m_player.GetStatus.damage, m_player.GetStatus.criRate, m_player.GetStatus.criAttack,m_player.GetStatus.ArmorPierce, out damage);
         mon.PlayHitSound(m_hit); //피해사실 전달하며 소리재생유도 시도
-        if (burn) //화상 효과 활성화 되있다면. 화상딜 들어가는 신호를 추가로 줌.
+        if (lastfire && ammoRemain == 1) //마지막 한발특성이 활성화 되어있고 탄환이 한발일때 사격을 시도하면 6.66배의 데미지
         {
-            mon.SetDamage(type, damage, m_player,true);
-        }
-        if (lastfire && ammoRemain == 1) //마지막 한발특성이 활성화 되어있고 탄환이 한발일때 사격을 시도하면 5배의 데미지
-        {
-            mon.SetDamage(type, damage * 5, m_player, false);
+            mon.SetDamage(type, damage * m_player.GetStatus.LastFire, m_player, burn,m_player);
         }
         else
         {
-            mon.SetDamage(type, damage, m_player, false);
+            mon.SetDamage(type, damage, m_player, burn,m_player);
         }
         hitPos = hit.point;
         if(boom && ammoRemain % 5 == 0) //Boom이 활성화 되어있고 총알이 5의배수로 있으면(5번째 탄마다 실행)

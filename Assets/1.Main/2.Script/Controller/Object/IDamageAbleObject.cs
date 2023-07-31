@@ -4,5 +4,6 @@ using UnityEngine;
 
 public interface IDamageAbleObject
 {
-    public void SetDamage(float damage);
+    public void KillCount();
+    public void SetDamage(float damage,MonsterController mon);
 }

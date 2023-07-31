@@ -129,6 +129,7 @@ public class SkillUI : MonoBehaviour
         {
             OpenSlots(4);
             SetSlotList(m_Type);
+            m_player.ActivedMasterSkill();
         }
     }
     void SetAgilitySlot()
@@ -273,9 +274,10 @@ public class SkillUI : MonoBehaviour
             }
             else if (m_stat.GetSkillData(m_SkillList[i]).SkillGrade == 4)
             {
-                if (!m_player.IsCanOpen(4, m_stat.GetSkillData(m_SkillList[i]).SkillType))
+
+                if (!m_player.IsMasterSkillActived())
                 {
-                    CloseSlots(4); 
+                     CloseSlots(4);
                 }
                 else
                 {

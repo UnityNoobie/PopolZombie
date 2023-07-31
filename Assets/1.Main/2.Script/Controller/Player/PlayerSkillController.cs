@@ -18,29 +18,7 @@ public enum PlayerAbilityType
 public class PlayerSkillController : MonoBehaviour
 {
 
-    #region PlayerSkillDatas
-    /*
-    float Damage;
-    float AtkSpeed;
-    float Reload;
-    float Speed;
-    int CriRate;
-    float CriDamage;
-    float Mag;
-    float Defence;
-    float DamageRigist;
-    float HP;
-    float KnockBackRate;
-    float Heal;
-    int LastFire;
-    int Pierce;
-    int Boom;
-    float ArmorPierce;
-    float Remove;
-    int Drain;
-    float Crush;
-    int Burn;*/ //이전버전 사용X
-    #endregion
+
 
     #region PublicReturnMethod
     public bool isActiveType(SkillWeaponType skillweapon, WeaponType weaponType)
@@ -119,10 +97,18 @@ public class PlayerSkillController : MonoBehaviour
         }
         else if (grade == 4 && m_highLvCount < 3)
         {
-            UGUIManager.Instance.SystemMessageSendMessage("특성스킬을 모두 마스터 후 습득 가능합니다.");
+            UGUIManager.Instance.SystemMessageSendMessage("특성 스킬 모두 습득 시 습득 가능합니다.");
             return false;
         }
         else return true;
+    }
+    public void ActivedMasterSkill()
+    {
+        m_ismasterskillactived = true;
+    }
+    public bool IsMasterSkillActived()
+    {
+        return m_ismasterskillactived;
     }
     public PlayerAbilityType GetPlayerAbilityState() //플레이어의 특성화한 어빌리티 타입을 보내줌
     {
@@ -159,6 +145,7 @@ public class PlayerSkillController : MonoBehaviour
     int m_lowLvCount = 0; //현재 플레이어가 습득하고있는 스킬의 등급별 갯수 체크용
     int m_midLvCount = 0;
     int m_highLvCount = 0;
+    bool m_ismasterskillactived = false;
 
 
     public List<int> m_skillList = new List<int>(); //현재 활성화한 스킬 리스트 저장용
@@ -186,8 +173,10 @@ public class PlayerSkillController : MonoBehaviour
     {
         m_abilityType = type;
     }
-    public void LevelUP() //레벨업 시 스킬포인트 증가 기능 최대 30까지 가능 하도록.
+    public void LevelUP() //레벨업 시 스킬포인트 증가 기능 최대 30까지 가능 하도록. 했었으나 무한라운드니까 특성 스킬 이하는 무한으로 해볼까 함.
     {
+        m_skillPoint++;
+        /*
         if (SPCount < 30)
         {
             m_skillPoint++;
@@ -196,7 +185,7 @@ public class PlayerSkillController : MonoBehaviour
         else if (SPCount == 30)
         {
             UGUIManager.Instance.SystemMessageSendMessage("최대 스킬 포인트에 도달했습니다.");
-        }
+        }*/
     }
     #endregion
 
@@ -239,27 +228,6 @@ public class PlayerSkillController : MonoBehaviour
     void ResetDatas() //이전에 가지고 있던 정보 초기화.
     {
         m_playerSkillstat = new TableSkillStat();
-        /*
-        Damage = 0;
-        AtkSpeed = 0;
-        Reload = 0;
-        Speed = 0;
-        CriRate = 0;
-        CriDamage = 0;
-        Mag = 0;
-        Defence = 0;
-        DamageRigist = 0;
-        HP = 0;
-        KnockBackRate = 0;
-        Heal = 0;
-        LastFire = 0;
-        Pierce = 0;
-        Boom = 0;
-        ArmorPierce = 0;
-        Remove = 0;
-        Drain = 0;
-        Crush = 0;
-        Burn = 0;*/
     }
     void RefreshSKillData() //스킬데이터 가져올 때마다 수행할 작업.
     {
@@ -345,7 +313,7 @@ public class PlayerSkillController : MonoBehaviour
         m_gunmanager = GetComponent<GunManager>();
         m_playerObject = GetComponent<PlayerObjectController>();
         m_abilityType = PlayerAbilityType.None;
-       // m_skillPoint = 100;// 테스트용
+        m_skillPoint = 100;// 테스트용
         ObjectManager.Instance.SetPlayer(this);
     }
     #endregion

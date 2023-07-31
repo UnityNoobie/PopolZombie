@@ -12,9 +12,9 @@ public class Barricade : BuildableObject
     #region Coroutine
 
     #endregion
-    public override void SetDamage(float damage)
+    public override void SetDamage(float damage, MonsterController mon)
     {
-        base.SetDamage(damage);
+        base.SetDamage(damage,mon);
         SoundManager.Instance.PlaySFX("SFX_GunHit", m_audio);
     }
     protected override void Destroyed()
@@ -31,11 +31,11 @@ public class Barricade : BuildableObject
     public void BuildBarricade(Vector3 buildPos, float barirota, float hudrota,TableSkillStat skill,ObjectStat stat)
     {
         SetTransform();
+        gameObject.SetActive(true); //게임오브젝트 활성화
         InitStatus(skill,stat);
         transform.position = buildPos;
         transform.localEulerAngles = new Vector3(0f, barirota, 0f);
         m_hudPos.transform.localEulerAngles = new Vector3(30f,hudrota, 0f);
-        gameObject.SetActive(true); //게임오브젝트 활성화
         GameManager.Instance.SetGameObject(gameObject);//공격 가능한 오브젝트 목록에 추가해주기
     }
 }

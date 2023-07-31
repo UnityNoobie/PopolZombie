@@ -7,6 +7,7 @@ using UnityEngine;
 public class PlayerObjectController : MonoBehaviour
 {
     PlayerSkillController m_skill;
+    ObjectStat stat;
     TowerController m_turret;
     Barricade m_barricade;
 
@@ -18,23 +19,30 @@ public class PlayerObjectController : MonoBehaviour
   
     int m_maxTurretBuild = 0;
     int m_maxBarricadeBuild = 0;
-    
+    const int m_maxBuild = 10;
+    public void MaxBuild()
+    {
+        GetSkillData();
+        m_maxBarricadeBuild = m_maxBuild + m_skillData.BarricadeMaxBuild;
+        m_maxTurretBuild =  m_skillData .TurretMaxBuild;
+    }
     public bool IsCanBuildObject(int id)
     {
-        if(id == 3)
+        MaxBuild();
+        if(id == 2)
         {
             if (m_maxBarricadeBuild <= m_barricades.Count) //설치 가능 수 보다 설치되어 있는 수가 많다면.
             {
-                UGUIManager.Instance.SystemMessageSendMessage("바리케이드 최대 설치 개수를 초과하였습니다. 최대 설치 수 : " + m_maxBarricadeBuild + " 현재 설치 수 : " + m_barricades);
+                UGUIManager.Instance.SystemMessageSendMessage("바리케이드 최대 설치 개수를 초과하였습니다. 최대 설치 수 : " + m_maxBarricadeBuild + " 현재 설치 수 : " + m_barricades.Count);
                 return false;
             }
             return true;
         }
-        else if(id == 4)
+        else if(id == 3)
         {
             if (m_maxTurretBuild <= m_turrets.Count)//설치 가능 수 보다 설치되어 있는 수가 많다면.
             {
-                UGUIManager.Instance.SystemMessageSendMessage("포탑 최대 설치 개수를 초과하였습니다. 최대 설치 수 : " + m_maxTurretBuild + " 현재 설치 수 : " + m_turrets);
+                UGUIManager.Instance.SystemMessageSendMessage("포탑 최대 설치 개수를 초과하였습니다. 최대 설치 수 : " + m_maxTurretBuild + " 현재 설치 수 : " + m_turrets.Count);
                 return false;
             }
             return true;
@@ -64,7 +72,7 @@ public class PlayerObjectController : MonoBehaviour
     public void ObjectUpgrade() 
     {
         GetSkillData();
-        foreach(var item in m_barricades)
+        foreach (var item in m_barricades)
         {
             item.InitStatus(m_skillData, ObjectManager.Instance.GetObjectStat(ObjectType.Barricade));
         }

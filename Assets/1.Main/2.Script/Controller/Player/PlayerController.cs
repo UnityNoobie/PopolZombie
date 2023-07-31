@@ -11,7 +11,7 @@ using static PlayerStriker;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour ,IDamageAbleObject
 {
 
     #region Constant and Fields
@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
     NavMeshAgent m_navAgent;
     PlayerAnimController m_animCtr;
     PlayerSkillController m_skill;
+    PlayerObjectController m_playerObject;
     [SerializeField]
     GameObject m_area;
     [SerializeField]
@@ -55,6 +56,7 @@ public class PlayerController : MonoBehaviour
     int m_levelexp;
     int m_score;
     int m_level;
+    int killCount = 0;
     string m_knickName;
     string m_title = "";
     bool m_hastitle = false;
@@ -64,6 +66,7 @@ public class PlayerController : MonoBehaviour
     float m_stamina = 10f;
     public float pDefence;
     bool isbuild = false;
+    
     #endregion
     //방어구 정보 임시저장
     #region ArmorData
@@ -190,7 +193,7 @@ public class PlayerController : MonoBehaviour
                 {
                     mon.Crush(m_skillStat.Crush);
                 }
-                mon.SetDamage(type, damage, this, false);
+                mon.SetDamage(type, damage, this, false, this);
                 if (m_meleetype.Equals(MeleeType.Axe))
                     mon.PlayHitSound("SFX_AxeHit");
                 else
@@ -250,6 +253,7 @@ public class PlayerController : MonoBehaviour
     {
         m_gun = gun.GetComponent<Gun>();
     }
+
     #endregion
 
     #region SFXPlay // SFX재생 메소드
@@ -334,13 +338,17 @@ public class PlayerController : MonoBehaviour
             transform.LookAt(new Vector3(pointTolook.x, transform.position.y, pointTolook.z));
         }
     }
+    public void KillCount()
+    {
+        killCount++;
+    }
     public void ObjcetBuildSuccesed(int num)
     {
-        if(num == 3)
+        if(num == 2)
         {
             m_quickSlot.UseQuickSlotITem(2, "Barricade");
         }
-        else if(num == 4)
+        else if(num == 3)
         {
             m_quickSlot.UseQuickSlotITem(3, "Turret");
         }
@@ -382,7 +390,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            if (m_quickSlot.CheckItemCount(2))
+            if (m_quickSlot.CheckItemCount(2) && m_playerObject.IsCanBuildObject(2))
             {
                 IsBuildingConvert();
                 if (isbuild)
@@ -398,7 +406,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            if (m_quickSlot.CheckItemCount(3))
+            if (m_quickSlot.CheckItemCount(3) && m_playerObject.IsCanBuildObject(3))
             {
                 IsBuildingConvert();
                 if (isbuild)
@@ -590,6 +598,7 @@ public class PlayerController : MonoBehaviour
         float value = m_status.hp / m_status.hpMax;
         return value;
     }
+    /*
     public void GetDamage(float damage)
     {
         if (m_status.hp <= 0 || m_Pstate == PlayerState.dead || m_Pstate == PlayerState.Invincible) //피가 0이거나 죽었을땐 적용 X
@@ -603,6 +612,25 @@ public class PlayerController : MonoBehaviour
         effect.transform.position = m_hitPos.position;
         effect.SetActive(true);
         m_hudText.Add(-damage,Color.red,0f);
+        UIManager.Instance.DamagedUI();
+        if (m_status.hp <= 0)
+        {
+            Dead(); //hp가 0이하일때 사망처리
+        }
+    }*/
+    public void SetDamage(float damage,MonsterController mon)
+    {
+        if (m_status.hp <= 0 || m_Pstate == PlayerState.dead || m_Pstate == PlayerState.Invincible) //피가 0이거나 죽었을땐 적용 X
+            return;
+        damage = CalculationDamage.NormalDamage(damage, m_status.defense, 0f, m_status.DamageRigist);
+        PlayDamagedSound();
+        int mondamage = Mathf.CeilToInt(damage - (damage * m_status.DamageRigist)); //피해 저항 적용
+        HPControl(-mondamage);
+        var hiteffect = TableEffect.Instance.m_tableData[6].Prefab[2];
+        var effect = EffectPool.Instance.Create(hiteffect);
+        effect.transform.position = m_hitPos.position;
+        effect.SetActive(true);
+        m_hudText.Add(-damage, Color.red, 0f);
         UIManager.Instance.DamagedUI();
         if (m_status.hp <= 0)
         {
@@ -725,6 +753,7 @@ public class PlayerController : MonoBehaviour
         m_navAgent = GetComponent<NavMeshAgent>();
         m_audio = GetComponent<AudioSource>();
         m_animCtr = GetComponent<PlayerAnimController>();
+        m_playerObject = GetComponent<PlayerObjectController>();
         m_leftDir = Utill.GetChildObject(gameObject, "LeftDir");
         m_weaponData = new WeaponData();
         m_armorManager= GetComponent<ArmorManager>();
