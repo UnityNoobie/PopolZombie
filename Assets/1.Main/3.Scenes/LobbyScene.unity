@@ -25577,7 +25577,7 @@ GameObject:
   - component: {fileID: 3041008389296306842}
   - component: {fileID: 3041008389296306841}
   m_Layer: 5
-  m_Name: ActiveBaricade
+  m_Name: ActiveBarricade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

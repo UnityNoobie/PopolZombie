@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using static PlayerStriker;
@@ -27,13 +28,13 @@ public class BossController : MonsterController
     bool isSkill()//스킬 체커
     {
         int skillRate = Random.Range(0, 100);
-        if (skillRate <= 70) return false;
+        if (skillRate <= 60) return false;
         else return true;
     }
     #endregion
 
     #region Coroutine
-    IEnumerator Coroutine_Rage()
+    IEnumerator Coroutine_Rage()// 보스몬스터의 분노패턴.
     {
         PlayRage();
         isRage = true;
@@ -50,19 +51,17 @@ public class BossController : MonsterController
         yield return new WaitForSeconds(10f);
         m_navAgent.speed = m_status.speed;
         m_animFloat.SetFloat("Speed", m_status.speed / 5f);
-        SetIdle(0.5f);
-     //   m_fire.gameObject.SetActive(false);
+        SetIdle(0.3f);
         isRage= false;
     }
     #endregion
 
     #region AnimEvent
-    void AnimEvent_CancleSkill()
+    void AnimEvent_CancleSkill() //넉백, 사망 등의 이슈로 스킬 사용이 중단되었을 때 호출.
     {
-        m_skill1Pos.gameObject.SetActive(false);
-        m_skill2Pos.gameObject.SetActive(false);
+        StopSkill();
     }
-    void AnimEvent_Skill1()    
+    void AnimEvent_Skill1()    //보스 스킬 1 이펙트 생성
     {
         PlaySkill1();
         m_skill2Pos.gameObject.SetActive(false);
@@ -75,7 +74,7 @@ public class BossController : MonsterController
         m_skill.transform.forward = gameObject.transform.forward;
         m_skill.transform.localScale = new Vector3(2f, 2f, 2f);
     } 
-    void AnimEvent_Skill2()
+    void AnimEvent_Skill2()//보스 스킬 2 이펙트 생성
     {
         PlaySkill2();
         m_skill1Pos.gameObject.SetActive(false);
@@ -87,7 +86,7 @@ public class BossController : MonsterController
         m_skill2.transform.position = gameObject.transform.position;
         m_skill2.transform.localScale = new Vector3(5f, 5f, 5f);
     }
-    void AnimEvent_Rage()
+    void AnimEvent_Rage() //보수 분노 패턴
     {
         RageCool = 0f;
         m_skill1Pos.gameObject.SetActive(false);
@@ -104,7 +103,7 @@ public class BossController : MonsterController
         StopSkill();
         base.SetDie();
     }
-    void StopSkill()
+    void StopSkill() //스킬 사용 취소
     {
         m_skill1Pos.gameObject.SetActive(false);
         m_skill2Pos.gameObject.SetActive(false) ;
@@ -144,12 +143,12 @@ public class BossController : MonsterController
     #endregion
 
     #region Methods
-    void SetAttack()
+    void SetAttack() //공격 실행.
     {
         SetState(MonsterState.Attack); //공격 상태로 변경
-        if(isSkill())  //30퍼센트 확률로 스킬 실행하도록.
+        if(isSkill())  //40퍼센트 확률로 스킬 실행하도록.
         {
-            if(Random.Range(0,5) <= 1)
+            if(Random.Range(0,3) <= 1) //스킬 1과 2중 랜덤으로 실행.
             {
                 
                 m_skill1Pos.gameObject.SetActive(true);
@@ -164,7 +163,7 @@ public class BossController : MonsterController
             }
             
         }
-        else {
+        else { //일반 공격 실행
           //  m_navAgent.ResetPath();
              PlaySwingSound();
              m_animctr.Play(MonsterAnimController.Motion.Attack); }
@@ -173,7 +172,7 @@ public class BossController : MonsterController
     {
         StartCoroutine(Couroutine_BurnDamage(m_burnDamage / 10));
     }
-    public override void SetDamage(AttackType type, float damage, PlayerController player, bool isburn, IDamageAbleObject obj)
+    public override void SetDamage(AttackType type, float damage, PlayerController player, bool isburn, IDamageAbleObject obj) //피격 프로세스
     {
    
         if (m_status.hp <= 0) //hp가 0이하일때는 적용 x // 바로 리턴을 하였는데 죽어도 안죽는 현상 발생 다시 수정함.
@@ -221,12 +220,12 @@ public class BossController : MonsterController
         }
     }
 
-    public override void BehaviourProcess()
+    public override void BehaviourProcess() //유한상태머신 활용한 패턴 제어.
     {
-        if (!gameObject.activeSelf || m_state.Equals(MonsterState.Die)) return;
+        if (!gameObject.activeSelf || m_state.Equals(MonsterState.Die)) return; //꺼져있거나 사망상태이면 동작 X
         RageCool += Time.deltaTime;
         timeafterAttack += Time.deltaTime;
-        if(!isRage && m_status.hp / m_status.hpMax < 0.5 && RageCool > 20 && m_state != MonsterState.Attack)
+        if(!isRage && m_status.hp / m_status.hpMax < 0.5 && RageCool > 20 && m_state != MonsterState.Attack) //분노패턴 실행.
         {
             isRage= true;
             RageCool= 0;
@@ -277,21 +276,24 @@ public class BossController : MonsterController
             case MonsterState.Chase:
                 if (CheckArea(m_navAgent.stoppingDistance))
                 {
-                    SetIdle(0.1f);
+                    SetIdle(0.05f);
                 }
                 break;
         }
     }
-    protected override void Awake()
+    protected override void SetTransform() // 위치 세팅
     {
-        base.Awake();
-
+        base.SetTransform();
         m_skill1Pos = Utill.GetChildObject(gameObject, "AttackArea");
         m_skill = GetComponent<ProjectileController>();
         m_skill1Pos.gameObject.SetActive(false);
         m_skill2Pos = Utill.GetChildObject(gameObject, "Circle");
         m_skill2Pos.gameObject.SetActive(false);
         RageCool = 15;
+    }
+    protected override void Awake()
+    {
+        base.Awake();
     }
     #endregion
 }

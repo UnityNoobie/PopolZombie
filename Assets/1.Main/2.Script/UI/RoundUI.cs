@@ -12,20 +12,20 @@ public class RoundUI : MonoBehaviour
     #endregion
 
     #region Coroutine
-    IEnumerator DayStart()
+    IEnumerator ConvertRound() //Dotween을 활용한 밤낮변경 코루틴
     {
         m_group.alpha = 0.01f;
-        m_group.DOFade(1f, 2f);
-        yield return new WaitForSeconds(2f);
-        m_group.DOFade(0f, 2f);
-        yield return new WaitForSeconds(2f);
+        m_group.DOFade(1f, 1.5f);
+        yield return new WaitForSeconds(1.5f);
+        m_group.DOFade(0f, 1.5f);
+        yield return new WaitForSeconds(1.5f);
         m_text.text = null;
         gameObject.SetActive(false);
     }
     #endregion
 
     #region Method
-    public void ChangeRound()
+    public void ChangeRound() //라운드 변경 UI
     {
         gameObject.SetActive(true);
         if (GameManager.Instance.GetDayInfo().Equals(DaynNight.Day))
@@ -36,16 +36,16 @@ public class RoundUI : MonoBehaviour
         {
             m_text.text = "<size=100>"+ GameManager.Instance.GetRoundInfo() + "일차 밤</size>\n<size=40>몰려오는 좀비로부터 생존하십시오.</size>";
         }
-        StartCoroutine(DayStart());
+        StartCoroutine(ConvertRound());
     }
-    public void SetUI()
+    public void SetTransform() // 위치 설정
     {
         m_text = GetComponentInChildren<TextMeshProUGUI>();
         m_group = GetComponent<CanvasGroup>();
     }
     private void Awake()
     {
-        SetUI();
+        SetTransform();
     }
     #endregion
 

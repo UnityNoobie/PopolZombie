@@ -35,7 +35,7 @@ public class GunManager : MonoBehaviour
     #endregion
 
     #region Coroutine
-    public IEnumerator ChangeWeaponRoutine(string name, WeaponType type, int ID, int grade, string atkType, string image, StatusUI statusui)
+    public IEnumerator ChangeWeaponRoutine(string name, WeaponType type, int ID, int grade, string atkType, string image, StatusUI statusui) //무기변경을 코루틴으로 제어
     {
         currentWeaponId = ID;
         // Debug.Log(image);
@@ -95,16 +95,16 @@ public class GunManager : MonoBehaviour
 
     #region Methods
    
-    public bool IsGun()
+    public bool IsGun() //무기의 상태가 총인지 근접인지 반환
     {
         return isGun;
     }
-    public int GetWeaponId()
+    public int GetWeaponId() //현재 장착중인 무기의 ID값 반환
     {
         return currentWeaponId;
     }
 
-    public void SkillUpSignal()
+    public void SkillUpSignal() //스킬 레벨이 변경했을 때 스테이터스 변경을 위해 호출
     {
         if (shooter.enabled)
         {
@@ -112,13 +112,11 @@ public class GunManager : MonoBehaviour
         }
     }
     
-
-
-        public void ChangeWeapon(int id,StatusUI statusui)
+    public void ChangeWeapon(int id,StatusUI statusui) //무기변경 루틴 시작
         {
             StartCoroutine(ChangeWeaponRoutine(m_weapondata.GetWeaponStatus(id).Type, m_weapondata.GetWeaponStatus(id).weaponType, id, m_weapondata.GetWeaponStatus(id).Grade, m_weapondata.GetWeaponStatus(id).AtkType, m_weapondata.GetWeaponStatus(id).Image,statusui));
         } //ID값 베이스로 무기 변경하는 메소드
-        public static AttackType AttackProcess(MonsterController mon, float Pdamage, float criper, float cridam,float armorpierce, out float damage) // 기본 공격과 치명타의 구분을 위한 메서드 damage를 넘겨줌
+    public static AttackType AttackProcess(MonsterController mon, float Pdamage, float criper, float cridam,float armorpierce, out float damage) // 기본 공격과 치명타의 구분을 위한 메서드 damage를 넘겨줌
         {
             AttackType attackType = AttackType.Normal; //기본적으로는 치명타상태가 아닌 일반적인 공격으로 계산
             damage = 0f;
@@ -130,30 +128,35 @@ public class GunManager : MonoBehaviour
             }
             return attackType; // 공격타입을 반환.
         }
-        void MeleeChange(string Type, WeaponType type, int ID, int grade)
+    void MeleeChange(string Type, WeaponType type, int ID, int grade) //근접무기로 변경
         {
             striker.ChangeMelee(weaponDic[Type], type, ID, grade);
         }
-        void GunChange(string Type, WeaponType type, int ID, int grade)
+    void GunChange(string Type, WeaponType type, int ID, int grade) //총기로 변경
         {
             shooter.ChangeGun(weaponDic[Type], type, ID, grade);
         }
-        private void Awake()
+    void SetTransform() //좌표지정
+    {
+        m_player = GetComponent<PlayerController>();
+        shooter = GetComponent<PlayerShooter>();
+        m_animCtr = GetComponent<PlayerAnimController>();
+        striker = GetComponent<PlayerStriker>();
+        m_getitem = GetComponent<PlayerGetItem>();
+        m_gunStatus = new TableGunstat();
+        m_weapondata = new WeaponData();
+
+    }
+    private void Awake()
         {
-            m_player = GetComponent<PlayerController>();
-            shooter = GetComponent<PlayerShooter>();
-            m_animCtr = GetComponent<PlayerAnimController>();
-            striker = GetComponent<PlayerStriker>();
-            m_gunStatus = new TableGunstat();
-            m_weapondata = new WeaponData();
+        SetTransform();
         }
-        private void Start()
+    private void Start()
         {
             for (int i = 0; i < Weapons.Length; i++) //딕셔너리에 총의 이름과 개체 적용.
             {
                 weaponDic.Add(Weapons[i].name, Weapons[i]);
             }
-            m_getitem = GetComponent<PlayerGetItem>();
             m_getitem.BuyItem(testweapon, m_weapondata.GetWeaponStatus(testweapon).ItemType,0);
         }
     #endregion

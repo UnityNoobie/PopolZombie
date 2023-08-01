@@ -79,7 +79,7 @@ public class PlayerObjectController : MonoBehaviour
     {
         m_barricades.Remove(bar);
     }
-    public void ObjectUpgrade() 
+    public void UpdateObjectStat() 
     {
         GetSkillData();
         foreach (var item in m_barricades)

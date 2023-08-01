@@ -8,21 +8,21 @@ using UnityEngine.SocialPlatforms;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
-
+public enum MonsterState //몬스터의 상태
+{
+    Chase,
+    Attack,
+    Die,
+    Idle,
+    Skill,
+    Rage,
+    Damaged,
+    Max
+}
 public class MonsterController : MonoBehaviour
 {
     #region Constants and Fields
-    public enum MonsterState
-    {
-        Chase,
-        Attack,
-        Die,
-        Idle,
-        Skill,
-        Rage,
-        Damaged,
-        Max
-    }
+    
     ProjectileController m_burn;
     ProjectileController m_crush;
     protected AudioSource m_source;
@@ -77,7 +77,7 @@ public class MonsterController : MonoBehaviour
         {
             yield return null;
         }
-        SetIdle(0.1f);
+        SetIdle(0.05f);
         m_delayFrame = 0;
     }
     protected IEnumerator Couroutine_BurnDamage(float value) // 상태이상 화상 지속딜
@@ -109,7 +109,7 @@ public class MonsterController : MonoBehaviour
         m_navAgent.speed = m_status.speed;
         m_crushCoroutine = null;
     }
-    protected IEnumerator Coroutine_SerchTargetPath(int frame)
+    protected IEnumerator Coroutine_SerchTargetPath(int frame) // 타겟을 추적하는 코루틴.
     {
         while (m_state == MonsterState.Chase)
         {
@@ -122,47 +122,19 @@ public class MonsterController : MonoBehaviour
     #endregion
 
     #region AnimEvent
-    protected virtual void AnimEvent_SetDie()
+    protected virtual void AnimEvent_SetDie() //사망 애니메이션 재생 시 호출되는 메소드
     {
         StopAllCoroutines();
         SetRimLight(Color.black);
         MonsterManager.Instance.ResetMonster(this, m_hudPanel);
     }
-    protected virtual void AnimEvent_SetAttack()
+    protected virtual void AnimEvent_SetAttack() //공격 판정 메소드. 
     {
         PlayAtkSound();
-        /*
-        GameObject target = GameManager.Instance.GetTargetObject(transform.position);
-        var dir = target.transform.position - transform.position;
-        
-       float sqrAttackDist = Mathf.Pow(m_status.attackDist, 2f);
-       if (Mathf.Approximately(dir.sqrMagnitude, sqrAttackDist) || dir.sqrMagnitude < sqrAttackDist)
-       {
-           var dot = Vector3.Dot(transform.forward, dir.normalized);
-           if (dot >= 0.5f) //공격시 지정한 범위 안쪽을 향한 공간일때만 데미지를 가하는 식으로.
-           {
-               m_player.GetDamage(m_status.damage);
-           }
-       }
         Collider[] colliders = Physics.OverlapSphere(transform.position, m_status.attackDist);
         foreach (Collider collider in colliders)
         {
             IDamageAbleObject damageableObject = collider.GetComponent<IDamageAbleObject>();
-            PlayerController player = collider.GetComponent<PlayerController>();
-            if (damageableObject != null)
-            {
-                damageableObject.SetDamage(m_status.damage);
-            }
-            if(player != null)
-            {
-                player.GetDamage(m_status.damage);
-            }
-        }*/
-        Collider[] colliders = Physics.OverlapSphere(transform.position, m_status.attackDist);
-        foreach (Collider collider in colliders)
-        {
-            IDamageAbleObject damageableObject = collider.GetComponent<IDamageAbleObject>();
-            PlayerController player = collider.GetComponent<PlayerController>();
             if (damageableObject != null)
             {
                 var dir = m_target.transform.position - transform.position;
@@ -176,25 +148,11 @@ public class MonsterController : MonoBehaviour
                     }
                 }
             }
-            /*
-            if (player != null)
-            {
-                var dir = m_target.transform.position - transform.position;
-                float sqrAttackDist = Mathf.Pow(m_status.attackDist, 2f);
-                if (Mathf.Approximately(dir.sqrMagnitude, sqrAttackDist) || dir.sqrMagnitude < sqrAttackDist)
-                {
-                    var dot = Vector3.Dot(transform.forward, dir.normalized);
-                    if (dot >= 0.5f)
-                    {
-                        player.SetDamage(m_status.damage, this);
-                    }
-                }
-            }*/
         }
     }
-    void AnimEvent_AttackFinished()
+    void AnimEvent_AttackFinished() //공격 종료 후 상태를 Idle로 변경
     {
-        SetIdle(0.1f);
+        SetIdle(0.05f);
     }
     void AnimEvent_HitFinished()
     {
@@ -210,12 +168,7 @@ public class MonsterController : MonoBehaviour
     #endregion
 
     #region Methods
-    void HPControl(int value, AttackType type)
-    {
-        m_status.hp += value;
-        if (m_status.hp > m_status.hpMax) { m_status.hp = m_status.hpMax; }
-        m_hudPanel.DisplayDamage(type, -value, m_status.hp / m_status.hpMax);
-    }
+    
     // Start is called before the first frame update
     #region SFX
 
@@ -224,16 +177,23 @@ public class MonsterController : MonoBehaviour
         SoundManager.Instance.PlaySFX(sound, m_source);
         SoundManager.Instance.PlaySFX("SFX_ZombieDamaged", m_source);
     }
-    void PlayDieSound()
+    void PlayDieSound() //사망음
     {
         SoundManager.Instance.PlaySFX("SFX_ZombieDeath", m_source);
     }
-    protected virtual void PlayAtkSound()
+    protected virtual void PlayAtkSound() //공격시 재생
     {
         SoundManager.Instance.PlaySFX("SFX_ZombieAtk", m_source);
     }
     #endregion
-    public void SetMonster(PlayerController player, HUDController hud)
+
+    void HPControl(int value, AttackType type) //hp값을 조절해주는 메소드
+    {
+        m_status.hp += value;
+        if (m_status.hp > m_status.hpMax) { m_status.hp = m_status.hpMax; }
+        m_hudPanel.DisplayDamage(type, -value, m_status.hp / m_status.hpMax);
+    }
+    public void SetMonster(PlayerController player, HUDController hud) //몬스터 소환 시 세팅
     {
         m_player = player;
         m_hudPanel = hud;
@@ -244,7 +204,7 @@ public class MonsterController : MonoBehaviour
     {//체력 공속 공격력 방어력 이동속도 순서로
         Type = type;
     }
-    public void InitStatus(MonStat stat,float StatScale) //이 몬스터의 스탯을 적용.
+    void InitStatus(MonStat stat,float StatScale) //이 몬스터의 스탯을 적용.
     {
         m_status = new MonStatus(stat.type, stat.name, stat.hp * StatScale, stat.atkSpeed * StatScale, stat.damage * StatScale, stat.defense * StatScale, stat.speed * StatScale, stat.attackDist,stat.knockbackRegist,stat.Score*StatScale,stat.coin*StatScale,stat.exp *StatScale);
         m_status.hp = m_status.hpMax; //최대체력 설정.
@@ -260,12 +220,11 @@ public class MonsterController : MonoBehaviour
         defence = monStat.defense; //방어력감소 효과 적용용
         InitStatus(monStat,StatScale);
     }
-    public void SetTarget()
+    public void SetTarget() //게임매니저를 통해 공격 가능한 오브젝트중 가장 적합한 오브젝트 가져옴.
     {
         m_target = GameManager.Instance.GetTargetObject(transform.position);
     }
-
-    public void SetState(MonsterState state)
+    public void SetState(MonsterState state) //몬스터의 상태 조절
     {
         m_state = state;
     }
@@ -275,7 +234,7 @@ public class MonsterController : MonoBehaviour
             m_Renderers[i].material.SetColor("_FresnelColor", color);
     }
 
-    protected virtual void SetDie()
+    protected virtual void SetDie() //사망 시 호출되는 메소드
     {
         PlayDieSound();
         StopAllCoroutines();
@@ -290,7 +249,7 @@ public class MonsterController : MonoBehaviour
         gameObject.tag = "Die";//죽었을때 태그를 Die로 설정하여 시체가 뒤의 좀비 타격방지.
         m_navAgent.ResetPath(); //더 추적금지!! 
     }
-    protected virtual void SetIdle(float duration)
+    protected virtual void SetIdle(float duration) //아이들상태로 초기화해주는 메소드. 사망상태일때는 제외
     {
         if(m_state == MonsterState.Die)  //죽어도 안죽는, 이동하는 현상 발생하여 추가함.
         {
@@ -306,11 +265,11 @@ public class MonsterController : MonoBehaviour
             SetIdleDuration(duration);
         } 
     }
-    protected virtual void SetIdleDuration(float duration)
+    protected virtual void SetIdleDuration(float duration) //아이들 대기시간 변경
     {
         m_idleTime = m_idleDuration - duration;
     }
-    protected virtual bool CheckArea(float area)
+    protected virtual bool CheckArea(float area) //사정거리 내부에 대상이 있는지 확인해서 반환
     {
         SetTarget();
         var dir = m_target.transform.position - transform.position;
@@ -322,21 +281,21 @@ public class MonsterController : MonoBehaviour
         }
         return false;
     }
-    protected virtual float GetTargetAngle()
+    protected virtual float GetTargetAngle() // 타겟 방향 알아오는 메소드였으나 현재 사용 X
     {
         SetTarget();
         var dir = m_target.transform.position - transform.position;
         dir.y = 0;
         return Vector3.Angle(transform.forward, dir);
     }
-    protected virtual Vector3 GetTargetDir()
+    protected virtual Vector3 GetTargetDir() // 타겟의 방향을 확인하여 반환.
     {
         SetTarget();
         var dir = m_target.transform.position - transform.position;
         dir.y = 0f;
         return dir.normalized;
     }
-    protected bool FindTarget(float dist)
+    protected bool FindTarget(float dist) // 대상이 관측 가능한 거리에 있는지 확인하는 메소드
     {
         SetTarget();
         RaycastHit hit;
@@ -350,7 +309,8 @@ public class MonsterController : MonoBehaviour
         }
         return false;
     }
-    protected virtual void Awake()
+
+    protected virtual void SetTransform() // 위치 세팅
     {
         m_animFloat = GetComponent<Animator>();
         m_navAgent = GetComponent<NavMeshAgent>();
@@ -359,9 +319,13 @@ public class MonsterController : MonoBehaviour
         m_Renderers = GetComponentsInChildren<Renderer>();
         m_tweenmove = GetComponent<TweenMove>();
         m_source = GetComponent<AudioSource>();
+    }
+    protected virtual void Awake()
+    {
+        SetTransform();  
         SetRimLight(Color.black);
     }
-    public virtual void BehaviourProcess()
+    public virtual void BehaviourProcess() // 유한 상태 머신을 활용한 몬스터 제어
     {
         if (!gameObject.activeSelf || m_state.Equals(MonsterState.Die)) return;
 
@@ -411,7 +375,7 @@ public class MonsterController : MonoBehaviour
             case MonsterState.Chase:
                 if (CheckArea(m_navAgent.stoppingDistance))
                 {
-                    SetIdle(0.1f);
+                    SetIdle(0.05f);
                 }
                 break;
 
@@ -435,12 +399,12 @@ public class MonsterController : MonoBehaviour
         HPControl(-damage,type);
         m_damagedCoroutine = StartCoroutine("Coroutine_SetDamagedColor");
     }
-    public bool IsAliveObject()
+    public bool IsAliveObject() //몬스터의 상태가 살아있는지 죽었는지 반환해주는 메소드
     {
         if(m_state != MonsterState.Die) return true;
         else return false;
     }
-    public virtual void SetDamage(AttackType type, float damage, PlayerController player, bool isburn,IDamageAbleObject obj)
+    public virtual void SetDamage(AttackType type, float damage, PlayerController player, bool isburn,IDamageAbleObject obj) //피격 프로세스 구현
     {
         if (m_status.hp <= 0) //hp가 0이하일때는 적용 x // 바로 리턴을 하였는데 죽어도 안죽는 현상 발생 다시 수정함.
         {

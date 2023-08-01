@@ -107,7 +107,7 @@ public class SkillSlot : MonoBehaviour ,IPointerUpHandler, IPointerEnterHandler,
         else // 슬롯이 특성 선택 모드일때
         {
             m_player.SetAblityType(m_type);
-            m_skillUI.ChoiceFinished(); 
+            m_skillUI.TypeChoiceFinished(); 
         }
     }
     public void OnPointerEnter(PointerEventData eventData) //올라왔을 때 정보창 불러움

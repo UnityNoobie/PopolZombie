@@ -28,7 +28,6 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     StatusUI m_statusUI;
     [SerializeField]
     QuickSlot m_quickSlot;
-    [SerializeField]
     UpdateManager m_updateManager;
     TableSkillStat m_skillStat;
     AudioSource m_audio;
@@ -48,9 +47,6 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     [SerializeField]
     Vector3 m_dir;
 
-
-
-    int hp;
     int m_comboIndex;
     int m_experience;
     int m_levelexp;
@@ -61,13 +57,13 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     bool m_hastitle = false;
     bool m_skillactive = false;
     bool m_isactive = false;
-    float gameDuration = 0;
     float m_stamina = 10f;
     bool isbuild = false;
-    
+    bool crush;
+
     #endregion
-    //방어구 정보 임시저장
-    #region ArmorData
+
+    #region ArmorData  //방어구 정보 임시저장
     int armDefence;
     float armDamage;
     float hpPer;
@@ -75,8 +71,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     int armCriRate;
     float armSpeed;
     #endregion
-    bool crush;
-
+    
     #region Property
     public enum PlayerState //플레이어의 상태 알림
     {
@@ -258,6 +253,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
 
     #endregion
 
+    #region Methods
     #region SFXPlay // SFX재생 메소드
     void PlayDamagedSound()
     {
@@ -497,7 +493,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
 
     #region AboutStatus  //플레이어 스테이터스 관련 메소드
     //방어구 데이터. 데이터 양이 적어 임시 처리 하였음. 추후 수정 해야함.
-    private void ResetData()
+    private void ResetData() //방어구 스탯 저장 정보 초기화
     {
         armDefence = 0;
         armDamage = 0;
@@ -506,7 +502,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         armCriRate = 0;
         armSpeed = 0;
     }
-    public void SetArmData(int defence, float damage, float hp, float attackSpeed, int criRate, float speed)
+    public void SetArmData(int defence, float damage, float hp, float attackSpeed, int criRate, float speed) //방어구 스탯 저장 후 플레이어 스탯 갱신
     {
         ResetData();
         armDefence = defence;
@@ -517,7 +513,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         armSpeed = speed;
         SetStatus(m_weaponData.ID);
     }
-    public void SetSkillData(TableSkillStat stat)
+    public void SetSkillData(TableSkillStat stat) //플레이어가 스킬을 활성화 했을 때 호출. 스탯정보를 가져오고 적용.
     {
         m_skillStat = stat;
         InitStatus();
@@ -538,19 +534,15 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             CheckCoroutine = StartCoroutine(Coroutine_SustainedHeal());
         }
     }
-    public void LevelUp()
+    public void LevelUp() //플레이어 레벨업
     {
         m_status.level++;
     }
-    public int GetLVInfo()
-    {
-        return m_status.level;
-    }
-    public int GetScore()
+    public int GetScore() //플레이어가 획득한 점수 정보 가져오기
     {
         return m_score;
     }
-    public void AddScore(int score)
+    public void AddScore(int score) //점수 추가.
     {
         m_score += score;
         UIManager.Instance.ScoreChange(m_score);
@@ -613,7 +605,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     void SetPlayer()
     {
         UGUIManager.Instance.SetPlayer(this);
-        m_updateManager.SetPlayerController(this);
+     // UpdateManager.Instance.SetPlayerController(this); 
         GameManager.Instance.SetGameObject(gameObject);
     }
 
@@ -790,6 +782,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     {
         BehaviorProcess(); //플레이어 입력 통합 메소드.
     }
+    #endregion
     #endregion
 }
 

@@ -2,20 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UpdateManager : SingletonDontDestroy<UpdateManager> 
+public class UpdateManager : SingletonMonoBehaviour<UpdateManager> //업데이트를 한곳에서 실행하기 위해 만든 클래스
 {
     #region Constant and Field
+    /*
     bool m_isactive = false;
     bool m_isopen = false;
     public PlayerController[] m_players;
     public PlayerGetItem[] m_playerItem;
     public PlayerController[] m_playersSave;
-    int m_playercount;
+    int m_playercount;*/
 
     #endregion
 
     #region Method
-    public void SetPlayerController(PlayerController player)
+    /*
+    public void SetPlayerController(PlayerController player)   
     {
         if (m_players != null) //플레이어리스트가 비어있지 않다면
         {
@@ -37,7 +39,7 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
             m_playerItem[i] = m_players[i].GetComponent<PlayerGetItem>();
         }
         m_playercount++;
-    }
+    }*/ //처음 멀티플레이로 기획했을 때 생각 한 방식이나 현재 싱글플레이만 지원하기로 하여 폐기. 플레이어 오브젝트는 PlayerController통해 제어
     // Update is called once per frame
     void Update()
     {
@@ -52,11 +54,12 @@ public class UpdateManager : SingletonDontDestroy<UpdateManager>
         {
             MonsterManager.Instance.m_monsterList[i].BehaviourProcess(); //각각 호출하는거보다 하나의 업데이트에서 사용하면 더 효율적임.
         }
-    }
+    }/*
     private void Awake()
     {
         m_playercount = 0;
         m_players = new PlayerController[m_players.Length];
-    }
+       
+} */
     #endregion
 }

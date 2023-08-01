@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArmorManager : MonoBehaviour
+public class ArmorManager : MonoBehaviour //장착 방어구의 정보를 관리하는 클래스. 단 현재 ArmorData가 아닌 단일 변수를 통해 정보를 제어하고 있어 추후 리펙토링 해야함.
 {
     #region Constants and Fields
     [SerializeField]
-    GameObject[] m_wearArmors = new GameObject[5];
+    GameObject[] m_wearArmors = new GameObject[5]; //방어구 목록
     [SerializeField]
     GameObject[] m_helmets;
     [SerializeField]
@@ -17,26 +17,19 @@ public class ArmorManager : MonoBehaviour
     GameObject[] m_pants;
     [SerializeField]
     GameObject[] m_boots;
-
+    Dictionary<string, ArmorData> wearArmor = new Dictionary<string, ArmorData>(); //장착하고 있는 방어구 데이터 저장
+    PlayerController m_player;
     int Defence;
     float Damage;
     float ReloadTime;
     float AttackSpeed;
     int CriRate;
     float Speed;
-
-    #endregion
-
-    #region Property
     ArmorData armorData { get; set; }
-    Dictionary<string, ArmorData> wearArmor = new Dictionary<string, ArmorData>();
-    WearArmorData GetArmordata { get; set; }
-    public PlayerController m_player{get;set;}
-
     #endregion
 
     #region Methods
-    void ResetStatus() 
+    void ResetStatus() //데이터 초기화
     { 
         Defence = 0;
         Damage = 0;
@@ -186,7 +179,6 @@ public class ArmorManager : MonoBehaviour
     {
         m_player = GetComponent<PlayerController>();
         armorData = new ArmorData();
-        GetArmordata = new WearArmorData();
     }
     #endregion
 }

@@ -37,9 +37,8 @@ public class SkillUI : MonoBehaviour
     #endregion
 
     #region Methods
-    void SetPos() 
+    public void SetTransform() // 하위 오브젝트에서 필요한 좌표, 컴포넌트 읽어옴
     {
-       // m_contents = Utill.GetChildObject(gameObject, "Content");
         m_low = Utill.GetChildObject(gameObject, "Lv1");
         m_mid = Utill.GetChildObject(gameObject, "Lv2");
         m_high = Utill.GetChildObject(gameObject, "Lv3");
@@ -52,14 +51,12 @@ public class SkillUI : MonoBehaviour
         m_Strength = Utill.GetChildObject(gameObject, "Button_Strength").GetComponent<Button>();
         m_Utility = Utill.GetChildObject(gameObject, "Button_Utility").GetComponent<Button>();
         m_skillPoints = Utill.GetChildObject(gameObject,"SkillPoint").GetComponent<TextMeshProUGUI>();
-    }
-    void FindSlots() //위치에서 자식오브젝트의 슬롯목록 가져오기
-    {
-      //  m_SkillSlot = m_contents.GetComponentsInChildren<SkillSlot>();
+
         m_lowSlots = m_low.GetComponentsInChildren<SkillSlot>(true);
         m_midSlots = m_mid.GetComponentsInChildren<SkillSlot>(true);
         m_highSlots = m_high.GetComponentsInChildren<SkillSlot>(true);
         m_masterSlot = m_master.GetComponentInChildren<SkillSlot>(true);
+        SetButtonAddListener();
     }
     void OpenSlots(int grade) //슬롯 OnOff기능
     {
@@ -74,7 +71,7 @@ public class SkillUI : MonoBehaviour
             m_master.gameObject.SetActive(true);
         }
     }
-    void CloseSlots(int grade)
+    void CloseSlots(int grade) //특성 오픈 가능 여부 확인하여 닫아줌
     {
         if (grade == 3)
         {
@@ -88,7 +85,7 @@ public class SkillUI : MonoBehaviour
         }
     }
 
-    void TryOpenSkill()
+    void TryOpenSkill() //특성화 스킬 슬롯의 개방 가능 여부 판단하여 열어줌
     {
         if (m_player.IsCanOpen(3, m_Type))
         {
@@ -113,41 +110,41 @@ public class SkillUI : MonoBehaviour
             }
         }
     }
-    public void RefreshSP(PlayerSkillController player)
+    public void UpdateSP(PlayerSkillController player) //스킬 포인트 갱신
     {
          m_player = player;
         int point = m_player.GetPlayerSP();
         m_skillPoints.text =  "보유스킬포인트 : " + point;
     }
-    public void ChoiceFinished()
+    public void TypeChoiceFinished() // 특성 선택이 완료되었을때 정보를 받아와 세팅.
     {
         SetSlotList(m_Type);
     }
-    void TryOpenMaster()
+    void TryOpenMasterSkillSlot() // 마스터 특성칸 열기 시도함.
     {
-        if (m_player.IsCanOpen(4, m_Type))
+        if (m_player.IsCanOpen(4, m_Type)) //플레이어 스킬 컨트롤러를 통해 가능한지 여부 판단하여 작동.
         {
             OpenSlots(4);
             SetSlotList(m_Type);
             m_player.ActivedMasterSkill();
         }
     }
-    void SetAgilitySlot()
+    void SetAgilitySlot() // 스킬 리스트를 사격술 리스트로.
     {
         m_Type = SkillType.Shooter;
         SetSlotList(m_Type);
     }
-    void SetStrengthSlot()
+    void SetStrengthSlot()// 스킬 리스트를 신체 리스트로.
     {
         m_Type = SkillType.Physical;
         SetSlotList(m_Type);
     }
-    void SetUtilitySlot()
+    void SetUtilitySlot()// 스킬 리스트를 유틸리티 리스트로.
     {
         m_Type = SkillType.Utility;
         SetSlotList(m_Type);
     }
-    void SetSlotList(SkillType type)
+    void SetSlotList(SkillType type) //스킬 타입에 따라 리스트의 종류를 바꾸어주고 습득 가능한 스킬을 세팅해줌.
     {
         ResetList();
         m_Type = type;
@@ -289,40 +286,33 @@ public class SkillUI : MonoBehaviour
         }
 
     }
-    void ResetList()
+    void ResetList() //현재 스킬 리스트를 초기화.
     {
-       // m_SkillList.Clear();
         m_SkillList = new List<int>();
     }
     public void ActiveSkill(PlayerSkillController skill) //스킬창 열때 플레이어 정보도 호출함
     {
         m_player = skill;
-        m_player.SetStore(this);
+        m_player.SetSkillUI(this);
         gameObject.SetActive(true);
-        RefreshSP(skill);
+        UpdateSP(skill);
     }
-    public void DeActiveSkill()
+    public void DeActiveSkill() //UI종료
     {
         gameObject.SetActive(false);
     }
-    void GetComponentsSlots(GameObject parent)
+    void SetButtonAddListener() //AddListener을 통해 버튼 UI에 기능 부여.
     {
-        parent.GetComponentsInChildren<SkillSlot>();
-    }
-
-    public void SetTransform()
-    {
-        SetPos();
-        FindSlots();
         m_skillOpen.onClick.AddListener(TryOpenSkill);
-        m_masterOpen.onClick.AddListener(TryOpenMaster);
+        m_masterOpen.onClick.AddListener(TryOpenMasterSkillSlot);
         m_Agility.onClick.AddListener(SetAgilitySlot);
         m_Strength.onClick.AddListener(SetStrengthSlot);
         m_Utility.onClick.AddListener(SetUtilitySlot);
     }
+
     private void Start()
     {
-        SetAgilitySlot();
+        SetAgilitySlot(); //스타트 할 때에 기본 리스트는 사격술 카테고리가 오게끔 초기화해줌.
     }
     #endregion
 }

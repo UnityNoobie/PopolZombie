@@ -26,15 +26,15 @@ public class ScoreUI : MonoBehaviour
     Button m_next;
     Button m_exit;
 
-    public const string fileName = "Score.json";
-    public List<ScoreData> gameDataList = new List<ScoreData>();
+    public const string fileName = "Score.json"; //데이터 저장 Json파일
+    public List<ScoreData> gameDataList = new List<ScoreData>(); // ScoreData를 임시 저장하는 List
     int page = 0;
 
     #endregion
 
     #region Methods
 
-    void SetText()
+    void SetText() //해당 페이지 범위의 점수를 표기해주는 메소드.
     {
         int temp = 0;
         for(int i = page*10; i < (page * 10) + 10; i++)
@@ -50,7 +50,7 @@ public class ScoreUI : MonoBehaviour
             temp++;
         }
     }
-    public void SaveGameData(PlayerController player,int gameDuration, int round)
+    public void SaveGameData(PlayerController player,int gameDuration, int round) // 게임 데이터를 Json형태로 라운드 > 점수 > 게임 시간 순서로 정렬하여 저장
     {
         ScoreData newData = new ScoreData();
         newData.level = player.GetStatus.level;
@@ -66,7 +66,7 @@ public class ScoreUI : MonoBehaviour
         string filePath = Path.Combine(Application.persistentDataPath, fileName);
         File.WriteAllText(filePath, jsonData);
     }
-    public void LoadGameData()
+    public void LoadGameData() // 게임 데이터를 불러와 ScoreData List에 넣어주기
     {
         string filePath = Path.Combine(Application.persistentDataPath, fileName);
         if (File.Exists(filePath))
@@ -75,7 +75,7 @@ public class ScoreUI : MonoBehaviour
             gameDataList = JsonConvert.DeserializeObject<List<ScoreData>>(jsonData);
         }
     }
-    void NextPage()
+    void NextPage() //페이지 이동
     {
         if((gameDataList.Count / 10) > page) //데이터 리스트가 페이지를 넘길 조건이 된다면.
         {
@@ -84,7 +84,7 @@ public class ScoreUI : MonoBehaviour
         }
     }
 
-    void BeforePage()
+    void BeforePage()//페이지 이동
     {
         if (page < 1) // 페이지가 1 미만이면 리턴
             return;
@@ -92,7 +92,7 @@ public class ScoreUI : MonoBehaviour
         SetText();
     }
 
-    public void SetTransform()
+    public void SetTransform() //하위 객체 위치지정, 데이터 가져오기
     {
         m_exit = Utill.GetChildObject(gameObject, "Button_Exit").GetComponent<Button>();
         m_fore = Utill.GetChildObject(gameObject, "Button_Before").GetComponent<Button>();
@@ -104,14 +104,14 @@ public class ScoreUI : MonoBehaviour
         LoadGameData();
     }
 
-    public void ActiveUI()
+    public void ActiveUI() // UI를 활성화 하며 데이터 가져와 배치.
     {
         gameObject.SetActive(true);
         LoadGameData();
         SetText();
     }
 
-    public void DeactiveUI()
+    public void DeactiveUI() //꺼주기
     {
         gameObject.SetActive(false);
     }

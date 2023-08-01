@@ -21,10 +21,6 @@ public class PlayerGetItem : MonoBehaviour
 
     #region Property
     public WeaponData m_weapondata { get; set; }
-
-    int m_healPackCount = 0;
-    int m_barricadeCount = 0;
-    int m_turretCount = 0;
     #endregion
 
     #region public return Method

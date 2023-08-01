@@ -20,7 +20,7 @@ public class ItemData
      public int ID { get; set; }
      public int Grade { get; set; } 
 
-     public  int Heal { get; set; }
+     public  float Heal { get; set; }
      public int Price { get;set; }
      public int HP { get; set; }
      public int Defence { get; set; }
@@ -30,7 +30,7 @@ public class ItemData
      public string ItemInfo { get;set; }
      public ItemData() { }
 
-     public ItemData(string type,int id,int grade,int heal,int price,int hp, int defecne,string itemInfo,UseItemType itype)
+     public ItemData(string type,int id,int grade,float heal,int price,int hp, int defecne,string itemInfo,UseItemType itype)
      {
          this.type = type;
          this.ID = id;
@@ -70,7 +70,7 @@ public class ItemData
             data.type = TableLoader.Instance.GetString("Type", i);
             data.ID = TableLoader.Instance.GetInteger("Id", i);
             data.Grade = TableLoader.Instance.GetInteger("grade", i);
-            data.Heal = TableLoader.Instance.GetInteger("Heal", i);
+            data.Heal = TableLoader.Instance.GetFloat("Heal", i);
             data.Price = TableLoader.Instance.GetInteger("Price", i);
             data.HP = TableLoader.Instance.GetInteger("HP", i);
             data.Defence = TableLoader.Instance.GetInteger("Defence", i);

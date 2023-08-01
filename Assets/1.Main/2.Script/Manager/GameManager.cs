@@ -25,10 +25,11 @@ public class GameManager : SingletonDontDestroy<GameManager>
     int m_round = 0;
     int gameDuration = 0;
     string playerNickname;
+    bool m_isFirst = true;
     #endregion
 
     #region Coroutine
-    IEnumerator Coroutine_DayTimeChecker()
+    IEnumerator Coroutine_DayTimeChecker() // 낮동안의 시간을 체크하고 제어하는 코루틴.
     {
         for(int i = 20; i >= 0; i--)
         {
@@ -37,7 +38,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
         }
         StartNight();
     }
-    IEnumerator Coroutine_GameStart()
+    IEnumerator Coroutine_GameStart() //첫 게임 시작때 실행되는 코루틴.
     {
         yield return new WaitForSeconds(1);
         StartDay();
@@ -52,7 +53,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
             UIManager.Instance.GameDuration(gameDuration);
         }
     }
-    IEnumerator Coroutine_RevivePlayer(PlayerController player)
+    IEnumerator Coroutine_RevivePlayer(PlayerController player) //플레이어 부활에 사용되는 코루틴.
     {
         for (int i = 10; i > 0; i--)
         {
@@ -72,7 +73,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     #endregion
 
     #region Methods
-    public GameObject GetTargetObject(Vector3 dir) //좀비등 AI가 거리, 벨류값에 따라 타겟을 가져오도록.
+    public GameObject GetTargetObject(Vector3 dir) //좀비등 AI에게 거리, 벨류값에 따라 공격 대상을 전달.
     {
         float targetValue = Mathf.Infinity;
         GameObject target = null;
@@ -113,29 +114,30 @@ public class GameManager : SingletonDontDestroy<GameManager>
         }
         return target;
     }
-    public void SetGameObject(GameObject target)
+    public void SetGameObject(GameObject target) //오브젝트가 생성되었을 때 오브젝트를 리스트에 등록.
     {
         m_attackAbleObject.Add(target);
     }
-    public void DestroyTarget(GameObject target)
+    public void DestroyTarget(GameObject target) //오브젝트가 사망, 파괴 되었을 경우 공격 가능한 리스트에서 삭제
     {
         m_attackAbleObject.Remove(target);
     }
-    public void PlayerDeath(PlayerController player)
+    public void PlayerDeath(PlayerController player) //플레이어가 사망하였을 때 발전기가 파괴되지 않았다면 10초뒤 부활 시켜주는 코루틴.
     {
         StartCoroutine(Coroutine_RevivePlayer(player));
     }
-    void ResetRound()
+    void ResetRound() //로비전환 등의 상황에서 초기화되어야 하는 데이터
     {
         gameDuration = 0;
         m_round = 0;
+        m_isFirst = true;
         m_attackAbleObject.Clear(); 
     }
-    public void SetTimeScale(float time)
+    public void SetTimeScale(float time) // 게임내 효과, 메뉴UI의 호출 등에 사용되는 타임스케일 조절 효과.
     {
         Time.timeScale = time;
     }
-    public void StartDay()
+    public void StartDay() // 밤이 지난 후 낮 시간을 호출하는 함수
     {
         if (m_light == null)
         {
@@ -149,7 +151,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
         MonsterManager.Instance.ResetBossCount();
         m_light.StartDay();
     }
-    public void StartNight()
+    public void StartNight() //낮 시간이 지난 후 밤 시작 호출
     {
         roundTime = DaynNight.Night;
         SoundManager.Instance.NightStart();
@@ -157,14 +159,14 @@ public class GameManager : SingletonDontDestroy<GameManager>
         m_light.StartNight();
         MonsterManager.Instance.StartNight();
     }
-    public void StartLobby()
+    public void StartLobby() //로비로 씬변경
     {
         StopAllCoroutines();
         ResetRound();
         SceneManager.LoadScene("LobbyScene");
         SoundManager.Instance.LobbyStart();
     }
-    void SetNextRound()
+    void SetNextRound() //라운드 정보 누적
     {
         m_round++;
         UIManager.Instance.RoundInfo(m_round);
@@ -177,7 +179,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     {
         UGUIManager.Instance.SaveData(gameDuration, m_round);
     }
-    public void LoadScene(Scene sin)// 씬바꿔주기
+    public void LoadScene(Scene sin)// 씬바꿔주는 기능.
     {
         m_scene = sin;
         SceneManager.LoadScene(sin.ToString());
@@ -187,33 +189,38 @@ public class GameManager : SingletonDontDestroy<GameManager>
         }
     }
    
-    public void GameStart()
+    public void GameStart() //스타트 버튼 누르면 시작되는 함수. 데이터 누적등의 시작.
     {
-        StartCoroutine(Coroutine_GameStart());
+        if(m_isFirst) //중복실행현상 발생해서 추가한 변수
+        {
+            StartCoroutine(Coroutine_GameStart());
+            m_isFirst = false;
+        }
+           
     }
-    public int GetRoundInfo()
+    public int GetRoundInfo() //현재 라운드의 정보를 전달.
     {
         return m_round;
     }
-    public DaynNight GetDayInfo()
+    public DaynNight GetDayInfo() //현재 라운드의 낮과밤 상태 전달
     {
         return roundTime;
     }
-    public string GetNickname()
+    public string GetNickname() //플레이어의 닉네임
     {
         return playerNickname;
     }
-    public void LoadLobbyScene()
+    public void LoadLobbyScene() //로비씬 로드 시작
     {
         SaveScore();
         UGUIManager.Instance.LoadLobbyScene();
         LoadScene(Scene.LobbyScene);
     }
-    public void SetNickname(string str)
+    public void SetNickname(string str) //플레이어의 닉네임 설정.
     {
         playerNickname = str;
     }
-    public void GameOver()
+    public void GameOver() // 발전기 파괴 시 호출되는 함수.
     {
         SaveScore();
         StopAllCoroutines();
@@ -227,7 +234,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
         Application.Quit(); // 어플리케이션 종료
 #endif
     }
-    void LoadAlltable()
+    void LoadAlltable() // 시작될 떄 게임 내 사용되는 모든 데이터 테이블을 로드해줌 
     {
         TableEffect.Instance.Load();
         TableGunstat.Instance.Load();

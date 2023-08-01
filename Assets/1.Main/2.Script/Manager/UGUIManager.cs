@@ -26,11 +26,11 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     #endregion
 
     #region Coroutine
-    IEnumerator SystemMessage(string message)
+    IEnumerator SystemMessage(string message) //화면에 표기해주는 메세지.
     {
         m_systemMessage.gameObject.SetActive(true);
         m_systemMessage.text = message;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
         m_systemMessage.text = null;
         m_systemMessage.gameObject.SetActive(false);
     }
@@ -53,7 +53,8 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     #endregion
 
     #region Method
-   
+
+    #region returnMethod
     public StoreUI GetStoreUI()
     {
         return m_storeUI;
@@ -74,16 +75,17 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     {
         return m_uiCam;
     }
-    public void SetPlayer(PlayerController player)
+    #endregion
+    public void SetPlayer(PlayerController player) //플레이어 설정.
     {
         m_statusUI.SetPlayer(player);
         m_player = player;
     }
-    public void PlayClickSFX()
+    public void PlayClickSFX() //클릭 효과에 실행될 SFX
     {
         SoundManager.Instance.PlaySFX("SFX_LobbyMouseEnter", m_source);
     }
-    public void CloseAllTabs()
+    public void CloseAllTabs() //현재 열려있는 UI탭들을 꺼주는 기능.
     {
         m_systemMessage.text = null;
         m_storeUI.CloseStore();
@@ -92,7 +94,7 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
         m_volumeUI.CancleMenu();
         m_tipsUI.gameObject.SetActive(false);
     }
-    public void OpenMenu()
+    public void OpenMenu() //메뉴창 온오프
     {
         if(m_menuUI.gameObject.activeSelf)
         {
@@ -104,7 +106,7 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
         }
        
     }
-    public void SkillUIChange(bool aa, PlayerSkillController skill)
+    public void SkillUIChange(bool aa, PlayerSkillController skill) //스킬창 온오프
     {
         if (aa)
         {
@@ -115,38 +117,38 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
             m_skillUI.DeActiveSkill();
         }
     }
-    public void StartRound()
+    public void StartRound() //라운드 UI를 통해 라운드 변경 전송
     {
         m_roundUI.ChangeRound();
     }
-    public void GameStart()
+    public void GameStart() //씬 변경 UI 호출.
     {
         m_lobbyUI.gameObject.SetActive(false);
         LoadGameScene();
         GameManager.Instance.LoadScene(Scene.GameScene);
     }
-    public void InputNickName()
+    public void InputNickName() //플레이어의 닉네임을 설정해주는 UI
     {
         m_input.ActiveUI();
     }
-    public void LoadGameScene()
+    public void LoadGameScene() // 로딩씬UI의 게임 시작 기능
     {
         m_loadingScene.StartGameScene();
     }
-    public void LoadLobbyScene()
+    public void LoadLobbyScene() // 로딩씬UI의 로비씬 불러오기
     {
         m_loadingScene.gameObject.SetActive(true);
         m_loadingScene.LoadLobbyScene();
     }
-    public void ActiveLobbyUI(bool isActive)
+    public void ActiveLobbyUI(bool isActive) // 로비씬으로 이동할 때 사용할 LobbyUI 활성화.
     {
         m_lobbyUI.SetActiveUI(isActive);
     }
-    public void LayerChanger(int layer)
+    public void LayerChanger(int layer) //UI의 레이어를 변경해주는 기능. 현재는 사용 X
     {
         m_canvas.sortingOrder = layer;
     }
-    public void OpenExitMenu()
+    public void OpenExitMenu() //게임 종료 UI
     {
         if (m_exit.gameObject.activeSelf)
         {
@@ -157,19 +159,19 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
             m_exit.ActiveUI();
         } 
     }
-    public void ActiveVolumeControll()
+    public void ActiveVolumeControll() // 볼륨 조저 UI 활성화.
     {
         m_volumeUI.ActiveUI();
     }
-    public void SaveData(int gameduration,int round)
+    public void SaveData(int gameduration,int round) //점수UI를 통해 현재 게임 진행 데이터를 저장하는 기능.
     {
         m_scoreUI.SaveGameData(m_player, gameduration,round);
     }
-    public void ActiveScoreUI()
+    public void ActiveScoreUI() //점수UI 활성화
     {
         m_scoreUI.ActiveUI();
     }
-    public void ActiveTipMenu() 
+    public void ActiveTipMenu() //조작법 UI 활성화
     {
         m_tipsUI.ActiveUI();
     }
@@ -198,11 +200,10 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
         m_menuUI.SetTransform();
         m_lobbyUI.SetTransform();
         m_skillUI.SetTransform();
-       
-     
     }
     protected override void OnStart()
     {
-        SetTransform();    }
+        SetTransform();    
+    }
     #endregion
 }

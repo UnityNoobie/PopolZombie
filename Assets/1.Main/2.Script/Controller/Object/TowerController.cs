@@ -12,6 +12,11 @@ enum TowerState
 public class TowerController : BuildableObject 
 {
     #region Constants and Fields
+
+    [SerializeField]
+    protected float m_barrelSpeed;
+    [SerializeField]
+    protected float m_rotationSpeed;
     [SerializeField]
     protected Transform m_baseRoation;
     [SerializeField]
@@ -24,6 +29,7 @@ public class TowerController : BuildableObject
     protected LineRenderer m_renderer;
     [SerializeField]
     protected Transform m_firePos;
+    protected float lastFireTime;
 
 
     int m_machineLearning = 0;

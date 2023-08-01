@@ -18,7 +18,37 @@ public enum PlayerAbilityType
 public class PlayerSkillController : MonoBehaviour
 {
 
+    #region Constants and Fields
 
+    WeaponType m_weapontype;
+    PlayerAbilityType m_abilityType;
+
+    PlayerController m_player;
+    PlayerObjectController m_playerObject;
+    TableSkillStat m_playerSkillstat;
+    GunManager m_gunmanager;
+    SkillUI m_skillUI;
+    int m_skillPoint = 0;
+
+    //int SPCount = 0; //최대 획득 포인트 제한용 이었으나 밸런스 이유로 적용 X
+
+    int m_lowLvCount = 0; //현재 플레이어가 습득하고있는 스킬의 등급별 갯수 체크용
+    int m_midLvCount = 0;
+    int m_highLvCount = 0;
+
+    bool m_ismasterskillactived = false;
+
+
+    public List<int> m_skillList = new List<int>(); //현재 활성화한 스킬 리스트 저장용
+    #endregion
+
+    
+
+    #region Property
+  
+    public TableSkillStat m_skilldata{get;set;}
+
+    #endregion
 
     #region PublicReturnMethod
     public bool isActiveType(SkillWeaponType skillweapon, WeaponType weaponType)
@@ -53,12 +83,12 @@ public class PlayerSkillController : MonoBehaviour
         }
         return false;
     } //장착한 무기와 스킬의 특성화값이 일치하는지 확인용
-    public bool IsCanActive(int point,int skillgrade,SkillType skilltype) //스킬 습득 가능한지 확인해주는 메서드
+    public bool IsCanActive(int point, int skillgrade, SkillType skilltype) //스킬 습득 가능한지 확인해주는 메서드
     {
         if (m_skillPoint >= point)
         {
             CheckActivedSkillLV(skilltype); //현재 활성화되어있는 스킬리스트로 단계별 갯수 확인
-            if(skillgrade == 2 && m_lowLvCount < 8)
+            if (skillgrade == 2 && m_lowLvCount < 8)
             {
                 UGUIManager.Instance.SystemMessageSendMessage("1단계 스킬에 8개 이상 습득 후 습득 가능합니다.");
                 return false;
@@ -74,11 +104,11 @@ public class PlayerSkillController : MonoBehaviour
                 return false;
             }
             else
-            return true;
+                return true;
         }
         else
         {
-            UGUIManager.Instance.SystemMessageSendMessage("스킬 포인트가 모자랍니다."); 
+            UGUIManager.Instance.SystemMessageSendMessage("스킬 포인트가 모자랍니다.");
             return false;
         }
     }
@@ -87,7 +117,7 @@ public class PlayerSkillController : MonoBehaviour
         if (m_skillList.Contains(id)) return true;
         else return false;
     }
-    public bool IsCanOpen(int grade,SkillType skilltype)
+    public bool IsCanOpen(int grade, SkillType skilltype)
     {
         CheckActivedSkillLV(skilltype);
         if (grade == 3 && m_midLvCount < 6)
@@ -120,35 +150,10 @@ public class PlayerSkillController : MonoBehaviour
     }
     public TableSkillStat GetPlayerSkillData()
     {
-        RefreshSKillData();
+        UpdateSkillData();
         return m_playerSkillstat;
     }
 
-    #endregion
-
-    #region Property
-  
-    public TableSkillStat m_skilldata{get;set;}
-
-    #endregion
-
-    #region Constants and Fields
-    WeaponType m_weapontype;
-    PlayerAbilityType m_abilityType;
-    PlayerController m_player;
-    PlayerObjectController m_playerObject;
-    TableSkillStat m_playerSkillstat;
-    GunManager m_gunmanager;
-    SkillUI m_skillUI;
-    int m_skillPoint = 0;
-    int SPCount = 0;
-    int m_lowLvCount = 0; //현재 플레이어가 습득하고있는 스킬의 등급별 갯수 체크용
-    int m_midLvCount = 0;
-    int m_highLvCount = 0;
-    bool m_ismasterskillactived = false;
-
-
-    public List<int> m_skillList = new List<int>(); //현재 활성화한 스킬 리스트 저장용
     #endregion
 
     #region publicMethod
@@ -156,16 +161,16 @@ public class PlayerSkillController : MonoBehaviour
     {
         m_skillPoint -= m_skilldata.GetSkillData(id).SkillPoint;
         m_skillList.Add(id);
-        RefreshSKillData();
+        UpdateSkillData();
         PushSkillUpSignal();
     }
     public void SetWeaponType(WeaponType type)  //무기 변경 시 마다 호출하여 현재 착용중인 무기와 스킬이 호환되는지 판단하기 위함.
     {
         m_weapontype = type;
-        RefreshSKillData();
+        UpdateSkillData();
     }
 
-    public void SetStore(SkillUI ui)
+    public void SetSkillUI(SkillUI ui)
     {
         m_skillUI = ui;
     }
@@ -185,16 +190,16 @@ public class PlayerSkillController : MonoBehaviour
         else if (SPCount == 30)
         {
             UGUIManager.Instance.SystemMessageSendMessage("최대 스킬 포인트에 도달했습니다.");
-        }*/
+        }*/ // 폐기
     }
     #endregion
 
     #region privateMethod
-    void RefreshSP()
+    void UpdateSP() //스킬 포인트 갱신.
     {
-        m_skillUI.RefreshSP(this);
+        m_skillUI.UpdateSP(this);
     }
-    void CheckActivedSkillLV(SkillType type)
+    void CheckActivedSkillLV(SkillType type) //현재 습득한 스킬들의 타입에 따라, 등급에 따라 분류하고 해당 조건의 스킬을 배운 수를 체크해줌.
     {
         m_lowLvCount = 0;
         m_midLvCount = 0;
@@ -219,18 +224,19 @@ public class PlayerSkillController : MonoBehaviour
         }
     }
    
-    void PushSkillUpSignal()
+    void PushSkillUpSignal() // 스킬 레벨업 시 관련 메소드에 정보 전달.
     {
-        RefreshSP();
+        UpdateSP();
         m_gunmanager.SkillUpSignal();
-        m_playerObject.ObjectUpgrade();
+        m_playerObject.UpdateObjectStat();
         UGUIManager.Instance.GetStatusUI().SetStatus(); // 신 인벤토리
     }
-    void ResetDatas() //이전에 가지고 있던 정보 초기화.
+
+    void ResetDatas() //이전에 가지고 있던 스킬정보 초기화.
     {
         m_playerSkillstat = new TableSkillStat();
     }
-    void RefreshSKillData() //스킬데이터 가져올 때마다 수행할 작업.
+    void UpdateSkillData() //스킬데이터를 최신화해주고 정보 전달.
     {
         ResetDatas(); //데이터를 리셋해주고
         for (int i = 0; i < m_skillList.Count; i++) //리스트 길이만큼 실행
@@ -305,19 +311,19 @@ public class PlayerSkillController : MonoBehaviour
                 */ //이전버전
             }
         }
-        m_player.SetSkillData(m_playerSkillstat);
-    } //플레이어에게 데이터 전송
-    void GetPlayerData()
-    {
-       
-    }
-    private void Awake()
+        m_player.SetSkillData(m_playerSkillstat);//플레이어에게 데이터 전송
+    } 
+    void SetTransform() // 클래스에서 사용할 컴포넌트들을 가져와줌.
     {
         m_player = GetComponent<PlayerController>();
         m_skilldata = new TableSkillStat();
         m_gunmanager = GetComponent<GunManager>();
         m_playerObject = GetComponent<PlayerObjectController>();
         m_abilityType = PlayerAbilityType.None;
+    }
+    private void Awake() 
+    {
+        SetTransform();
         // m_skillPoint = 100;// 테스트
         ObjectManager.Instance.SetPlayer(this);
     }

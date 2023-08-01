@@ -62,7 +62,7 @@ public class Generator : BuildableObject
         if (maxUpgradeDefence > 5) return;
         m_stat.Defence += defence;
     }
-    public void IncreaseHPRegen(int regen)
+    public void IncreaseHPRegen(float regen)
     {
         maxUpgradeRegen++;
         if (maxUpgradeRegen > 5) return;
