@@ -12,6 +12,8 @@ public class ProjectileController : MonoBehaviour
     [SerializeField]
     ProjectileController[] m_child;
     float damageValue;
+
+    #region Coroutine
     IEnumerator Coroutine_FollowTarget(GameObject target) //대상의 위치를 추적하여 계속해서 위치 이동해서 실행하는 코루틴
     {
         while(target.activeSelf)
@@ -21,6 +23,9 @@ public class ProjectileController : MonoBehaviour
         }
         gameObject.SetActive(false); 
     }
+    #endregion
+
+    #region Methods
     public void SetProjectile(MonsterController mon, float value)  // 투사체를 생성하며 공격자, 데미지의 벨류(스킬별 다단히트수가 다르기 때문에) 지정
     {
         m_atkMon = mon;
@@ -42,18 +47,12 @@ public class ProjectileController : MonoBehaviour
         StartCoroutine(Coroutine_FollowTarget(m_atkMon.gameObject));
     }
     private void OnParticleCollision(GameObject other) //투사체가 명중했을 시 실행
-    {
-        /*
-        if (other.CompareTag("Player"))
-        {
-            m_hitPlayer = other.GetComponent<PlayerController>();
-            m_hitPlayer.SetDamage(m_atkMon.GetStatus.damage * damageValue, m_atkMon);
-        }*/
-      
+    {  
         if (other.GetComponent<IDamageAbleObject>() != null)
         {
             IDamageAbleObject target = other.GetComponent<IDamageAbleObject>();
             target.SetDamage(m_atkMon.GetStatus.damage * damageValue,m_atkMon);
         }
     }
+    #endregion
 }

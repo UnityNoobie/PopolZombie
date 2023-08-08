@@ -19,6 +19,12 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
     float totalVolume = 5;
     float bgmVolume = 10;
     float sfxVolume = 10;
+    const string m_dayBGM = "BGM_Day";
+    const string m_nightBGM = "BGM_Night";
+    const string m_dayStart = "SFX_DayStart";
+    const string m_nightStart = "SFX_NightStart";
+    const string m_bossBGM = "BGM_Boss";
+    const string m_bossSart = "SFX_BossStart";
     #endregion
 
     #region Coroutine
@@ -34,38 +40,38 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
     #endregion
 
     #region Methods
-    public void DayStart()
+    public void DayStart() //낮시간 시작 시 재생
     {
-        PlayBGM("BGM_Day");
-        PlaySFX("SFX_DayStart", m_sfx);
+        PlayBGM(m_dayBGM);
+        PlaySFX(m_dayStart, m_sfx);
     }
-    public void NightStart()
+    public void NightStart() //밤 시작 시 재생
     {
-        PlayBGM("BGM_Night");
-        PlaySFX("SFX_NightStart", m_sfx);
+        PlayBGM(m_nightBGM);
+        PlaySFX(m_nightStart, m_sfx);
     }
-    public void BossStart()
+    public void BossStart() //보스 라운드의 경우 재생
     {
-        PlayBGM("BGM_Boss");
-        PlaySFX("SFX_BossStart", m_sfx);
+        PlayBGM(m_bossBGM);
+        PlaySFX(m_bossSart, m_sfx);
     }
-    public void LobbyStart()
+    public void LobbyStart() //로비 로드 시 재생
     {
         PlayBGM("BGM_Lobby");
     }
-    public float GetTotalVolume()
+    public float GetTotalVolume() //마스터 볼륨 반환
     {
         return totalVolume;
     }
-    public float GetBGMVolume()
+    public float GetBGMVolume() //BGM 볼륨 반환
     {
         return bgmVolume;
     }
-    public float GetSFXVolume()
+    public float GetSFXVolume() // SFX 볼륨 반환
     {
         return sfxVolume;
     }
-    public bool IsMute()
+    public bool IsMute() //음소거 여부 반환
     {
         return ismute;
     }
@@ -113,7 +119,7 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
         source.PlayOneShot(sfx);
         StartCoroutine(Couroutine_CheckPlayEnded(sfx, sfx.length));
     }
-    public void SetBgmVolume(float level) //볼륨 설정 기능
+    public void SetBgmVolume(float level) //BGM 볼륨 설정
     {
         if(level >= MaxVolumLevel)  //볼륨이 최대치보다 클 경우
         {
@@ -127,7 +133,7 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
         bgmVolume = level;
         m_bgm.volume = m_bgm.volume = (totalVolume * bgmVolume) / 100;
     }
-    public void SetSfxVolume(float level)
+    public void SetSfxVolume(float level) //SFX 볼륨 설정
     {
         if (level >= MaxVolumLevel)  //볼륨이 최대치보다 클 경우
         {
@@ -140,7 +146,7 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
         }
         sfxVolume = level;
     }
-    public void SetVolumeLevel(float level)
+    public void SetVolumeLevel(float level) //마스터 볼륨 설정
     {
         if (level >= MaxVolumLevel)  //볼륨이 최대치보다 클 경우
         {
@@ -153,7 +159,7 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
         }
         totalVolume = level;
     }
-    public void SetMute(bool isActive)
+    public void SetMute(bool isActive) //음소거 설정
     {
         ismute = isActive;
         if(ismute)
@@ -165,7 +171,7 @@ public class SoundManager : SingletonDontDestroy<SoundManager>
             m_bgm.volume = (totalVolume * bgmVolume) / 100;
         }
     }
-    protected override void OnStart()
+    protected override void OnStart() //좌표설정 + audioclip 리소스 가져오기
     {
         m_bgmClips = Resources.LoadAll<AudioClip>("Audio/BGM");
         m_sfxClips = Resources.LoadAll<AudioClip>("Audio/SFX");

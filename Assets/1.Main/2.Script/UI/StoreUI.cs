@@ -118,7 +118,7 @@ public class StoreUI : MonoBehaviour
         }
 
     }
-    void SetSlotItem(List<int> list,ItemType type)
+    void SetSlotItem(List<int> list,ItemType type) //슬롯에 아이템 정보 추가
     {
       if (type.Equals(ItemType.Item))
         {
@@ -142,7 +142,7 @@ public class StoreUI : MonoBehaviour
             }
         }
     }
-    void SetStore()
+    void SetStore() //좌표 설정해주기
     {
         m_content = Utill.GetChildObject(gameObject, "Content");
         m_slots = m_content.GetComponentsInChildren<Slot>(true);
@@ -152,7 +152,7 @@ public class StoreUI : MonoBehaviour
         m_buyItem = Utill.GetChildObject(gameObject, "BuyItem").GetComponent<BuyItems>();
         m_StoreName = Utill.GetChildObject(gameObject,"StoreName").GetComponent<TextMeshProUGUI>();
     }
-    void LoadUIInfo()
+    void LoadUIInfo() //UI 정보 설정
     {
         SetStore();
         SetItemsInfos();
@@ -164,14 +164,14 @@ public class StoreUI : MonoBehaviour
        // m_closebutton.onClick.AddListener(CloseStore);
         isloaded = true;
     }
-    public void LoadInfo()
+    public void LoadInfo() //정보 로드해주기
     {
         if(!isloaded)
         {
             LoadUIInfo();
         }
     }
-    public bool isLoaded()
+    public bool isLoaded() 
     {
         return isloaded;
     }

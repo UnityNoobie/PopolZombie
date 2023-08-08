@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LightIntensityTween : MonoBehaviour
+public class LightIntensityTween : MonoBehaviour //광원효과의 조명 세기 조절.
 {
     public Light directionalLight;
     public void StartDay()

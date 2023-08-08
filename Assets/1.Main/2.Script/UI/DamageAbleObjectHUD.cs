@@ -20,11 +20,10 @@ public class DamageAbleObjectHUD : MonoBehaviour
 
    
     #region Methods
-    public void SetHUD()
+    public void SetHUD() //HUD 세팅
     {
         m_hpSlider = GetComponentInChildren<Slider>(true);
         m_hpValue = Utill.GetChildObject(gameObject, "ValueText").GetComponent<TextMeshProUGUI>();
-        // m_killCount = Utill.GetChildObject(gameObject,"KillCount").GetComponent<TextMeshProUGUI>();
         m_killCount = Utill.GetChildObject(gameObject, "KillCount").GetComponent<TextMeshProUGUI>() ;
         m_damagedText = Resources.Load<GameObject>("Prefabs/DamageText");
         m_damageTextPool = new GameObjectPool<DamagedText>(5, () =>
@@ -38,7 +37,7 @@ public class DamageAbleObjectHUD : MonoBehaviour
             return text;
         });
     }
-    public void SetTransform(Transform target)
+    public void SetTransform(Transform target) //좌표 설정
     {
         m_targtObj = target;
         transform.parent = m_targtObj;
@@ -47,7 +46,7 @@ public class DamageAbleObjectHUD : MonoBehaviour
         transform.localScale = Vector3.one;
         m_hudPos = Utill.GetChildObject(gameObject, "ObjectHUD");
     }
-    void CreateText(float damage)
+    void CreateText(float damage) //피해, 회복 등의 효과를 받을 때 화면상 표기해줄 Text Object 생성
     {
         var text = m_damageTextPool.Get();
         text.SetTransform(this);
@@ -55,25 +54,25 @@ public class DamageAbleObjectHUD : MonoBehaviour
         text.TextValue(damage);
         text.gameObject.SetActive(true);
     }
-    public void SetKillCount(int count)
+    public void SetKillCount(int count) //머신러닝 특성 등을 위한 처치한 적 카운트.
     {
         m_killCount.text = "처치한 적 : " + count;
     }
-    public void EnqueDamageText(DamagedText text)
+    public void EnqueDamageText(DamagedText text) //데미지텍스트를 풀에 다시 넣어줌
     {
         text.gameObject.SetActive(false);
         m_damageTextPool.Set(text);
     }
-    public void DisplayDamage(float damage, float hp, float maxhp)
+    public void DisplayDamage(float damage, float hp, float maxhp) //화면에 HUD표기해주는 메소드
     {
-        Show();
+        Show(); //호출 되었을 때 게임오브젝트를 켜주고
         if (IsInvoking("Hide"))
         {
             CancelInvoke("Hide");
         }
         if (hp >= maxhp*0.95f)
         {
-            Invoke("Hide", 5f);
+            Invoke("Hide", 5f); //체력이 95퍼센트 이상이라면 5초뒤 화면에서 사라지도록 인보크.
         }
         m_hpSlider.value = hp / maxhp;
         hp = Mathf.CeilToInt(hp);
@@ -82,11 +81,11 @@ public class DamageAbleObjectHUD : MonoBehaviour
         m_hpValue.text = hp + "/" + maxhp;
         CreateText(damage);
     }
-    void Show()
+    void Show() //게임오브젝트 온
     {
         gameObject.SetActive(true);
     }
-    void Hide()
+    void Hide() // 오프
     {
         gameObject.SetActive(false);
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class LoadingScene : MonoBehaviour
+public class LoadingScene : MonoBehaviour //씬 로딩 UI
 {
     #region Constants and Fields
     Slider m_loadingslider;
@@ -14,7 +14,7 @@ public class LoadingScene : MonoBehaviour
     #endregion
 
     #region Coroutine
-    IEnumerator ChangeSliderValue()
+    IEnumerator ChangeSliderValue() //로딩씬 하단에 Slider의 value조절 기능
     {
         float initialValue = m_loadingslider.value;
         float timer = 0f;
@@ -28,13 +28,13 @@ public class LoadingScene : MonoBehaviour
         m_loadingslider.value = 1F;
         LoadFinished();
     }
-    IEnumerator GameStart()
+    IEnumerator GameStart() //게임 시작 시 DoTween의 DoFade 기능 활용하여 로비씬 투명화하며 제거
     {
         m_group.DOFade(0f,0.7f);
         yield return new WaitForSeconds(0.7f);
         gameObject.SetActive(false);
     }
-    IEnumerator Coroutine_ToLobbyScene()
+    IEnumerator Coroutine_ToLobbyScene() //로비씬으로 복귀하는 코루틴
     {
         LoadLoading();
         float initialValue = m_loadingslider.value;
@@ -52,23 +52,23 @@ public class LoadingScene : MonoBehaviour
     #endregion
 
     #region Methods
-    void StartButton()
+    void StartButton() //스타트 버튼 Onclick() 효과에 적용할 효과
     {
         UGUIManager.Instance.PlayClickSFX();
         StartCoroutine(GameStart());
         GameManager.Instance.GameStart();
     }
-    void LoadFinished()
+    void LoadFinished() //로딩이 완료되었을 때 스타트버튼 On 슬라이드 삭제
     {
         m_startButton.gameObject.SetActive(true);
         m_loadingslider.gameObject.SetActive(false);
     }
-    void LoadLobby()
+    void LoadLobby() //로비 로딩
     {
         gameObject.SetActive(false);
         UGUIManager.Instance.ActiveLobbyUI(true);
     }
-    void LoadStart()
+    void LoadStart() //로딩이 시작될 때 값을 초기화 해주고 해당 코루틴 실행
     {
         m_group.alpha = 1.0f;
         m_loadingslider.value = 0;
@@ -76,14 +76,14 @@ public class LoadingScene : MonoBehaviour
         m_startButton.gameObject.SetActive(false);
         StartCoroutine(ChangeSliderValue());
     }
-    void LoadLoading()
+    void LoadLoading() //값 초기화하고 스타트버튼 제거, 로딩 슬라이더 시작
     {
         m_startButton.gameObject.SetActive(false);
         m_group.alpha = 1.0f;
         m_loadingslider.value = 0;
         m_loadingslider.gameObject.SetActive(true);
     }
-    public void StartGameScene()
+    public void StartGameScene() // 게임 씬 시작 시 호출. 처음 실행 시 좌표지정 같이해줌
     {
         if(isFirst)
         {
@@ -97,7 +97,7 @@ public class LoadingScene : MonoBehaviour
         UGUIManager.Instance.ActiveLobbyUI(false);
         LoadStart();
     }
-    public void LoadLobbyScene()
+    public void LoadLobbyScene() // 로비씬 이동 시 실행. 코루틴 호출
     {
         StartCoroutine(Coroutine_ToLobbyScene());
     }

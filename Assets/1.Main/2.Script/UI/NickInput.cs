@@ -4,16 +4,19 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NickInput : MonoBehaviour
+public class NickInput : MonoBehaviour //닉네임 입력 UI
 {
-    // Start is called before the first frame update
+    #region Constants and Fields
     TMP_InputField m_input;
     Button m_return;
     Button accapt;
     Button cancle;
     GameObject m_confirm;
     TextMeshProUGUI m_text;
-    void SetNickName(string str)
+    #endregion
+
+    #region Methods
+    void SetNickName(string str) //인풋 필드에 입력된 닉네임 받아옴.
     {
         if(str.Length <= 1)
         {
@@ -23,30 +26,30 @@ public class NickInput : MonoBehaviour
         GameManager.Instance.SetNickname(str);
         ConfirmNick();
     }
-    void ConfirmNick()
+    void ConfirmNick() //입력된 닉네임 확인창 호출.
     {
         m_confirm.SetActive(true);
         m_text.text = GameManager.Instance.GetNickname() + "\n으로 결정하시겠습니까??";
     }
-    void AccaptNick()
+    void AccaptNick() //닉네임 확정, 게임 시작
     {
         m_confirm.SetActive(false);
         UGUIManager.Instance.GameStart();
         DeActiveUI();
     }
-    void CancleNick()
+    void CancleNick() //닉네임 결정 취소.
     {
         m_confirm.SetActive(false);
     }
-    public void ActiveUI()
+    public void ActiveUI() //UI온
     {
         gameObject.SetActive(true);
     }
-    public void DeActiveUI()
+    public void DeActiveUI() // 오프
     {
         gameObject.SetActive(false);
     }
-    public void SetTransform()
+    public void SetTransform() //좌표 지정.
     {
         m_input = GetComponentInChildren<TMP_InputField>(true);
         m_return = Utill.GetChildObject(gameObject,"Return").GetComponent<Button>();
@@ -59,4 +62,5 @@ public class NickInput : MonoBehaviour
         accapt.onClick.AddListener(AccaptNick);
         cancle.onClick.AddListener(CancleNick);
     }
+    #endregion
 }

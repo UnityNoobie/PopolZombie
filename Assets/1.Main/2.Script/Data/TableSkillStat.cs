@@ -22,7 +22,6 @@ public enum SkillWeaponType
 }
 public class TableSkillStat
 {
-    //Skill	ID	Image	SkillType	WeaponType	Info	Damage	AtkSpeed	Reload	Speed	CriRate	CriDamage	Mag	Defence	DamageRigist	KnockBackRate	HP	Heal	LastFire	Pierce	Boom	
     public string SkillName { get; set; }
     public int ID { get; set; }
     public string Image { get; set; }
@@ -84,7 +83,6 @@ public class TableSkillStat
     public TableSkillStat() { }
     public TableSkillStat(string skillName, int Id, string image, SkillType skilltype, SkillWeaponType skillweapon, string skillInfo, float damage, float atkSpeed, float Reload, float speed, int criRate, float cridam, float mag, float defence, float damageRigist, float hp, float knockbackrate, float heal, float lastfire, int pierce, int boom, int skillpoint, float armorpierce, float remove, int drain, float crush, int burn, bool isactive, int skillPos, int nextID, int prevID, int skillGrade, int turretmaxbuild, int barricademaxbuld, float objectregen, float barricaderegen, float bonushp, float turrethp, float barricadehp, float objecthp, float cyberwear, float publicbuffdamge, int buffarmorpierce, float turretrigist, float barricaderigist, float objectrigist, float turretdamage, float turretrange, float turretattackspeed, int turretarmorpierce, float barricadedefence, float objectdefence, float reflectdamage, int maxmachinelearning, string abilityTypeChecker)
     {
-        // int burn, bool isactive
         this.SkillName = skillName;
         this.ID = Id;
         this.Image = image;

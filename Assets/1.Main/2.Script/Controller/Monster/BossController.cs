@@ -114,11 +114,7 @@ public class BossController : MonsterController
     public override void PlayHitSound(string sound) //피격시 소리 재생
     {
         SoundManager.Instance.PlaySFX(sound, m_source);
-        SoundManager.Instance.PlaySFX("SFX_BossHit", m_source);
-    }
-    protected override void PlayAtkSound()
-    {
-        SoundManager.Instance.PlaySFX("SFX_BossAtk", m_source);
+        SoundManager.Instance.PlaySFX(m_status.hitSound, m_source);
     }
     void PlaySwingSound()
     {

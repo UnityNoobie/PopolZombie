@@ -2,9 +2,9 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class MonsterAnimController : AnimationController
+public class MonsterAnimController : AnimationController //애니메이션컨트롤러를 상속받는 MonsterAnimController
 {
-    public enum Motion
+    public enum Motion //몬스터의 모션(상태) 정의
     {
         Idle,
         Chase,
@@ -21,11 +21,11 @@ public class MonsterAnimController : AnimationController
     Motion m_motion;
     public virtual Motion GetMotion { get { return m_motion; } }
 
-    public void SetMotionState(Motion motion)
+    public void SetMotionState(Motion motion) //모션 설정
     {
         m_motion = motion;
     }
-    public void Play(Motion motion, bool isBlend = true)
+    public void Play(Motion motion, bool isBlend = true) //애니메이션 플레이, 현재 모션을 저장
     {
         m_motion = motion;
         m_sb.Append(motion);

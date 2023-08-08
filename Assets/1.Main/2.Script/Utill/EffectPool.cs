@@ -20,7 +20,7 @@ public class EffectPool : SingletonMonoBehaviour<EffectPool>
     }
     void LoadEffect() //이펙트를 불러오는 메소드
     {
-        EffectPoolUnit unit = null; //
+        EffectPoolUnit unit = null; 
         VFXAutoDestroy autoDestroy;
         foreach (KeyValuePair<int, TableEffect.Data> pair in TableEffect.Instance.m_tableData)
         {
@@ -62,7 +62,7 @@ public class EffectPool : SingletonMonoBehaviour<EffectPool>
 
         }
     }
-    public void AddPool(string effectName, EffectPoolUnit unit)
+    public void AddPool(string effectName, EffectPoolUnit unit) // 풀에 이펙트 넣어주기
     {
         var pool = m_effectPool[effectName];
         if (pool == null)
@@ -73,7 +73,7 @@ public class EffectPool : SingletonMonoBehaviour<EffectPool>
 
     }
 
-    public GameObject Create(string effectName, Vector3 position, Quaternion rotation)
+    public GameObject Create(string effectName, Vector3 position, Quaternion rotation) //이펙트풀에서 이펙트를 꺼내와 실행.
     {
         EffectPoolUnit unit = null;
         GameObjectPool<EffectPoolUnit> pool;
@@ -103,11 +103,11 @@ public class EffectPool : SingletonMonoBehaviour<EffectPool>
 
         return unit.gameObject;
     }
-    public GameObject Create(string effectName)
+    public GameObject Create(string effectName) 
     {
         return Create(effectName, Vector3.zero, Quaternion.identity);
     }
-    protected override void OnStart()
+    protected override void OnStart() //시작할 때 이펙트 로드
     {
         LoadEffect();
     }

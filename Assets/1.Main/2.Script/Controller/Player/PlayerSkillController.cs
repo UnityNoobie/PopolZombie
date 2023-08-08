@@ -50,8 +50,10 @@ public class PlayerSkillController : MonoBehaviour
 
     #endregion
 
+    #region Methods
+
     #region PublicReturnMethod
-    public bool isActiveType(SkillWeaponType skillweapon, WeaponType weaponType)
+    public bool isActiveType(SkillWeaponType skillweapon, WeaponType weaponType) //스킬의 스테이터스 적용 대상과 맞는지 확인용. 큰 데이터가 아니라 Switch문 사용하였음.
     {
         switch (skillweapon)
         {
@@ -117,7 +119,7 @@ public class PlayerSkillController : MonoBehaviour
         if (m_skillList.Contains(id)) return true;
         else return false;
     }
-    public bool IsCanOpen(int grade, SkillType skilltype)
+    public bool IsCanOpen(int grade, SkillType skilltype) //하위스킬의 갯수를 체크하여 상위 스킬을 습득할 수 있는지 확인
     {
         CheckActivedSkillLV(skilltype);
         if (grade == 3 && m_midLvCount < 6)
@@ -132,11 +134,11 @@ public class PlayerSkillController : MonoBehaviour
         }
         else return true;
     }
-    public void ActivedMasterSkill()
+    public void ActivedMasterSkill() //마스터스킬의 엑티브 여부 결정
     {
         m_ismasterskillactived = true;
     }
-    public bool IsMasterSkillActived()
+    public bool IsMasterSkillActived() //마스터스킬의 액티브 여부 리턴
     {
         return m_ismasterskillactived;
     }
@@ -144,11 +146,11 @@ public class PlayerSkillController : MonoBehaviour
     {
         return m_abilityType;
     }
-    public int GetPlayerSP()
+    public int GetPlayerSP() // 플레이어의 SP 반환
     {
         return m_skillPoint;
     }
-    public TableSkillStat GetPlayerSkillData()
+    public TableSkillStat GetPlayerSkillData() // 스킬 데이터 반환
     {
         UpdateSkillData();
         return m_playerSkillstat;
@@ -170,11 +172,11 @@ public class PlayerSkillController : MonoBehaviour
         UpdateSkillData();
     }
 
-    public void SetSkillUI(SkillUI ui)
+    public void SetSkillUI(SkillUI ui) //UI설정
     {
         m_skillUI = ui;
     }
-    public void SetAblityType(PlayerAbilityType type)
+    public void SetAblityType(PlayerAbilityType type) //플레이어의 특성화된 어빌리티 타입 받아옴
     {
         m_abilityType = type;
     }
@@ -327,5 +329,6 @@ public class PlayerSkillController : MonoBehaviour
         // m_skillPoint = 100;// 테스트
         ObjectManager.Instance.SetPlayer(this);
     }
+    #endregion
     #endregion
 }

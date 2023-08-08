@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 public class EffectPoolUnit : MonoBehaviour
 {
+    #region Constants and Fields
     string m_effectName;
     float m_inactiveTime;
     float m_delay = 1f;
+    #endregion
+    #region Methods
     public bool IsReady
     {
         get
@@ -18,7 +21,7 @@ public class EffectPoolUnit : MonoBehaviour
             return false;
         }
     }
-    public void SetObjectPool(string effectName)
+    public void SetObjectPool(string effectName) //이펙트를 설정해줌.
     {
         m_effectName = effectName;
         transform.SetParent(EffectPool.Instance.transform);
@@ -26,10 +29,11 @@ public class EffectPoolUnit : MonoBehaviour
         transform.localScale = Vector3.one;
     }
 
-    void OnDisable()
+    void OnDisable() //사라질 때 풀에 넣어줌.
     {
         m_inactiveTime = Time.time;
         EffectPool.Instance.AddPool(m_effectName, this);
     }
+    #endregion
 }
 

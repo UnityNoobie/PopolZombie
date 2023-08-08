@@ -10,7 +10,7 @@ public enum AttackType
     Critical
 }
 [System.Serializable]
-public struct Status
+public struct Status //플레이어의 스테이터스
 {
 
     public float hp; //현재 체력
@@ -88,8 +88,11 @@ public struct MonStatus //몬스터용 스테이터스창.
     public float score;
     public float coin;
     public float exp;
+    public string hitSound;
+    public string atkSound;
+    public string deathSound;
    
-    public MonStatus(MonsterType type,string name, float hp, float atkSpeed, float damage, float defense, float speed, float attackDist,float knockbackrigist,float score,float coin,float exp) //체력 공속 공격력 방어력 이동속도 사정거리 순서로
+    public MonStatus(MonsterType type,string name, float hp, float atkSpeed, float damage, float defense, float speed, float attackDist,float knockbackrigist,float score,float coin,float exp,string hitsound, string atksound, string deathsound) 
     {
         this.type = type;
         this.name = name;
@@ -103,6 +106,9 @@ public struct MonStatus //몬스터용 스테이터스창.
         this.score = score;
         this.coin = coin;
         this.exp = exp;
+        this.hitSound = hitsound;
+        this.atkSound = atksound;
+        this.deathSound = deathsound;
     }
 
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Utill
 {
-   public static Transform GetChildObject(GameObject parent, string childName)
+   public static Transform GetChildObject(GameObject parent, string childName) //자식 오브젝트를 찾는 메소드
     {
         var childObjects = parent.GetComponentsInChildren<Transform>(true);
         for(int i = 0; i < childObjects.Length; i++) 

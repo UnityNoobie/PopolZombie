@@ -154,7 +154,15 @@ public class GameManager : SingletonDontDestroy<GameManager>
     public void StartNight() //낮 시간이 지난 후 밤 시작 호출
     {
         roundTime = DaynNight.Night;
-        SoundManager.Instance.NightStart();
+        if(m_round % 5 == 0)
+        {
+            SoundManager.Instance.BossStart();
+        }
+        else
+        {
+            SoundManager.Instance.NightStart();
+        }
+       
         UGUIManager.Instance.StartRound();
         m_light.StartNight();
         MonsterManager.Instance.StartNight();

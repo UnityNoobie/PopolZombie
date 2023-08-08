@@ -130,7 +130,7 @@ public class MonsterController : MonoBehaviour
     }
     protected virtual void AnimEvent_SetAttack() //공격 판정 메소드. 
     {
-        PlayAtkSound();
+        SoundManager.Instance.PlaySFX(m_status.atkSound, m_source);
         Collider[] colliders = Physics.OverlapSphere(transform.position, m_status.attackDist);
         foreach (Collider collider in colliders)
         {
@@ -175,15 +175,7 @@ public class MonsterController : MonoBehaviour
     public virtual void PlayHitSound(string sound) //피격시 소리 재생
     {
         SoundManager.Instance.PlaySFX(sound, m_source);
-        SoundManager.Instance.PlaySFX("SFX_ZombieDamaged", m_source);
-    }
-    void PlayDieSound() //사망음
-    {
-        SoundManager.Instance.PlaySFX("SFX_ZombieDeath", m_source);
-    }
-    protected virtual void PlayAtkSound() //공격시 재생
-    {
-        SoundManager.Instance.PlaySFX("SFX_ZombieAtk", m_source);
+        SoundManager.Instance.PlaySFX(m_status.hitSound, m_source);
     }
     #endregion
 
@@ -206,7 +198,7 @@ public class MonsterController : MonoBehaviour
     }
     void InitStatus(MonStat stat,float StatScale) //이 몬스터의 스탯을 적용.
     {
-        m_status = new MonStatus(stat.type, stat.name, stat.hp * StatScale, stat.atkSpeed * StatScale, stat.damage * StatScale, stat.defense * StatScale, stat.speed * StatScale, stat.attackDist,stat.knockbackRegist,stat.Score*StatScale,stat.coin*StatScale,stat.exp *StatScale);
+        m_status = new MonStatus(stat.type, stat.name, stat.hp * StatScale, stat.atkSpeed * StatScale, stat.damage * StatScale, stat.defense * StatScale, stat.speed * StatScale, stat.attackDist,stat.knockbackRegist,stat.Score*StatScale,stat.coin*StatScale,stat.exp *StatScale,stat.hitSound,stat.atkSound,stat.dieSound);
         m_status.hp = m_status.hpMax; //최대체력 설정.
         m_navAgent.stoppingDistance = m_status.attackDist;
         timeafterAttack = m_status.atkSpeed;
@@ -236,7 +228,7 @@ public class MonsterController : MonoBehaviour
 
     protected virtual void SetDie() //사망 시 호출되는 메소드
     {
-        PlayDieSound();
+        SoundManager.Instance.PlaySFX(m_status.deathSound, m_source);
         StopAllCoroutines();
         int money = Mathf.CeilToInt(Random.Range(m_status.coin / 2, m_status.coin / 0.7f));
         int score = Mathf.CeilToInt(Random.Range(m_status.score / 2, m_status.score / 0.7f));

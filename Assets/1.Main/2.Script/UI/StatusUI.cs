@@ -21,21 +21,21 @@ public class StatusUI : MonoBehaviour
     #endregion
 
     #region Methods
-    public void SetActive(bool active)
+    public void SetActive(bool active) //액티브 설정
     {
         gameObject.SetActive(active);
         if(active)
           SetStatus();
     }
 
-    public void SetPlayer(PlayerController player)
+    public void SetPlayer(PlayerController player) //플레이어 정보 설정
     {
         m_player = player;
         m_playeritem = m_player.GetComponent<PlayerGetItem>();
         m_playerObject = m_player.GetComponent<PlayerObjectController>();
         FindNSetSlots();
     }
-    public void FindNSetSlots()
+    public void FindNSetSlots() //좌표 ㅅ설정
     {
         m_panelItemInfo = Utill.GetChildObject(gameObject, "ItemInfo").GetComponent<PanelItemInfo>();
         m_slotPos = Utill.GetChildObject(gameObject, "Panel_ItemSlot");
@@ -55,7 +55,7 @@ public class StatusUI : MonoBehaviour
         m_itemSlots[4] = Utill.GetChildObject(m_slotPos.gameObject, "Slot_Boots").GetComponent<SlotStatus>();
         m_itemSlots[5] = Utill.GetChildObject(m_slotPos.gameObject, "Slot_Weapon").GetComponent<SlotStatus>();
     }
-    public void SetStatus()
+    public void SetStatus() //UI에 현재 스테이터스 정보 표기
     {
         m_stat = new Status();
         m_stat = m_player.GetStatus;
@@ -90,7 +90,7 @@ public class StatusUI : MonoBehaviour
         }
       
     }
-    public int GetEquipItemID(ArmorType armortype, ItemType itemtype)
+    public int GetEquipItemID(ArmorType armortype, ItemType itemtype) //착용중인 아이템 정보 반환
     {
         if (itemtype.Equals(ItemType.Armor))
         {
@@ -115,7 +115,7 @@ public class StatusUI : MonoBehaviour
         return -1;
 
     }
-    public void SetSlot(int id, string imagename, ArmorType armortype,ItemType itemtype)
+    public void SetSlot(int id, string imagename, ArmorType armortype,ItemType itemtype) //슬롯 설정
     {
         if (itemtype.Equals(ItemType.Armor))
         {

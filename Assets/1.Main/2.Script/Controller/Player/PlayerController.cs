@@ -191,9 +191,9 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
                 }
                 mon.SetDamage(type, damage, this, false, this);
                 if (m_meleetype.Equals(MeleeType.Axe))
-                    mon.PlayHitSound("SFX_AxeHit");
+                    mon.PlayHitSound(m_weaponData.AtkSound);
                 else
-                    mon.PlayHitSound("SFX_BatHit");
+                    mon.PlayHitSound(m_weaponData.AtkSound);
                 if (m_status.Drain != 0)
                 {
                     //Debug.Log(Mathf.CeilToInt((damage * m_status.Drain) / 100) + " È¸º¹!!");

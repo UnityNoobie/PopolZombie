@@ -22,32 +22,33 @@ public class BuyItems : MonoBehaviour
     #endregion
 
     #region Methods
-    public void OnclickedTrue()
+    public void OnclickedTrue() // True버튼을 눌렀을 때 아이템 구매 진행.
     {
         UGUIManager.Instance.PlayClickSFX();
         m_slot.BuyItem();
         UGUIManager.Instance.SystemMessageSendMessage(m_name + " 구매에 성공하였습니다.");
         DeActiveUI();
     }
-    public void OnclickedFalse()
+    public void OnclickedFalse() // False버튼을 눌렀을 때 아이템 구매 취소.
     {
         UGUIManager.Instance.PlayClickSFX();
         UGUIManager.Instance.SystemMessageSendMessage("아이템 구입을 취소하였습니다.");
         DeActiveUI();
     }
-    public void DeActiveUI()
+    public void DeActiveUI() //꺼주기
     {
         if (gameObject.activeSelf)
         {
             gameObject.SetActive(false);
         }
     }
-    private void Init()
+    private void ButtonAddListener() //클릭 시 실행할 이벤트 지정
     {
         m_truebutton.onClick.AddListener(OnclickedTrue);
         m_falsebutton.onClick.AddListener(OnclickedFalse);
     }
-    public void ActiveUI(Slot slot, int price, string name)
+
+    public void ActiveUI(Slot slot, int price, string name) //구매할 아이템의 정보를 받아오며 UI켜주기
     {
         if(gameObject.activeSelf)
         {
@@ -66,7 +67,7 @@ public class BuyItems : MonoBehaviour
     }
     private void Start()
     {
-        Init();
+        ButtonAddListener();
     }
     #endregion
 }

@@ -96,10 +96,10 @@ public class ArmorManager : MonoBehaviour //장착 방어구의 정보를 관리하는 클래스
         m_player.SetArmData(Defence, Damage, ReloadTime, AttackSpeed, CriRate, Speed);
     }
     
-    public void ChangeArmor(int Id,StatusUI statusui) // 방어구 획득시 대상 방어구의 아이디를 받아와 교체 실시.
+    public void ChangeArmor(int Id) // 방어구 획득시 대상 방어구의 아이디를 받아와 교체 실시.
     {
         ArmorData m_armorData =  armorData.GetArmorData(Id);//방어궁의 정보를 가져옴
-        statusui.SetSlot(Id, m_armorData.Image, m_armorData.armorType, ItemType.Armor);
+        UGUIManager.Instance.GetStatusUI().SetSlot(Id, m_armorData.Image, m_armorData.armorType, ItemType.Armor); //스테이터스 UI에 정보 전달
         
         if (m_armorData.armorType.Equals(ArmorType.Helmet))
         {

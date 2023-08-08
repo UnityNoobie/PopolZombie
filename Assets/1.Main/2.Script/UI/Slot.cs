@@ -27,18 +27,18 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
     #endregion
 
     #region Methods
-    public void SetStore(StoreUI store, BuyItems buyItem,PanelItemInfo info,PanelItemInfo equip)
+    public void SetStore(StoreUI store, BuyItems buyItem,PanelItemInfo info,PanelItemInfo equip) //슬롯에 필요한 스크립트 지정
     {
         m_store = store;
         m_buyItem = buyItem;
         m_info = info;
         m_equipItem = equip;
     }
-    public void BuyItem()
+    public void BuyItem() //아이템 구매 확정
     {
         m_player.GetComponent<PlayerGetItem>().BuyItem(itemID, itemType,-price);
     }
-    public void OnPointerUp(PointerEventData eventData) //마우스 클릭 시
+    public void OnPointerUp(PointerEventData eventData) //마우스 클릭 시 이벤트
     {
         UGUIManager.Instance.PlayClickSFX();
         if (!isEmpty)
@@ -85,7 +85,7 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
             m_equipItem.DeActiveUI();
        }
     }
-    public void SetStoreItem(int ID,string image,ItemType type,PlayerController player)
+    public void SetStoreItem(int ID,string image,ItemType type,PlayerController player) //슬롯에 아이템 정보 저장
     {
         m_image.sprite = ImageLoader.Instance.GetImage(image);
         m_player = player;
@@ -118,12 +118,13 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
             m_text.text = (m_name + "\n 가격 : " + m_store.m_weapondata[ID].Price);
         }
     }
-    public void ResetSlot()
+    public void ResetSlot() //슬롯 초기화
     {
         m_image = Utill.GetChildObject(gameObject,"ItemImage").GetComponent<Image>(); 
         m_text = GetComponentInChildren<TextMeshProUGUI>();
         m_image.sprite = null;
         m_text.text = null;
+        itemID = -1;
     }
     #endregion
 

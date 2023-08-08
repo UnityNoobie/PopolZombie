@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpiterController : MonsterController
+public class SpiterController : MonsterController  //원거리 공격을 하는 Spiter좀비 컨트롤러
 {
     Transform Dummy_Projectile;
     ProjectileController m_fire;
     SpiterController m_spit;
-    protected override void AnimEvent_SetAttack()
+    protected override void AnimEvent_SetAttack() //애니메이션 이벤트에서 투사체 발사 효과
     {
         var dir = m_target.transform.position - Dummy_Projectile.transform.position;
         dir.y = 0;

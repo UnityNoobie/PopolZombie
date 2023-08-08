@@ -9,36 +9,36 @@ enum TowerState
     Destroyed,
     Max
 }
-public class TowerController : BuildableObject 
+public class TowerController : BuildableObject //빌더블 오브젝트 상속받는 포탑 오브젝트
 {
     #region Constants and Fields
 
     [SerializeField]
-    protected float m_barrelSpeed;
+    float m_barrelSpeed;
     [SerializeField]
-    protected float m_rotationSpeed;
+    float m_rotationSpeed;
     [SerializeField]
-    protected Transform m_baseRoation;
+    Transform m_baseRoation;
     [SerializeField]
-    protected Transform m_gunBody;
+    Transform m_gunBody;
     [SerializeField]
-    protected Transform m_barrel;
+    Transform m_barrel;
     [SerializeField]
-    protected ParticleSystem m_effect;
+    ParticleSystem m_effect;
     [SerializeField]
-    protected LineRenderer m_renderer;
+    LineRenderer m_renderer;
     [SerializeField]
-    protected Transform m_firePos;
-    protected float lastFireTime;
-
+    Transform m_firePos;
+    float lastFireTime;
+    const string m_fireSound = "SFX_MGShot";
 
     int m_machineLearning = 0;
     TowerState m_state;
 
     #endregion
-    IEnumerator ShootEffect(Vector3 hitPos)
+    IEnumerator ShootEffect(Vector3 hitPos) //공격 이펙트 재생
     {
-        SoundManager.Instance.PlaySFX("SFX_MGShot", m_audio);
+        SoundManager.Instance.PlaySFX(m_fireSound, m_audio);
         m_renderer.SetPosition(0, m_firePos.position);  //레이 시작점
         m_renderer.SetPosition(1, hitPos); //레이 도착점
         m_renderer.enabled = true;
@@ -50,14 +50,14 @@ public class TowerController : BuildableObject
 
 
 
-    public void BuildTurretObject(Vector3 buildPos,TableSkillStat skill,ObjectStat stat)
+    public void BuildTurretObject(Vector3 buildPos,TableSkillStat skill,ObjectStat stat) //오브젝트 설치
     {
         transform.position = buildPos;
         gameObject.SetActive(true);
         GameManager.Instance.SetGameObject(gameObject);
         InitStatus(skill,stat);
     }
-    public override void InitStatus(TableSkillStat skill, ObjectStat stat)
+    public override void InitStatus(TableSkillStat skill, ObjectStat stat) //스탯 설정해주기
     {
         SetTransform();
         base.InitStatus(skill,stat);
@@ -68,7 +68,7 @@ public class TowerController : BuildableObject
         SetBarrelSpeed(m_stat.FireRate);
         m_renderer.positionCount = 2;
     }
-    void SetBarrelSpeed(float fireRate)
+    void SetBarrelSpeed(float fireRate) //총열 회전 속도 조절해주기
     {
         m_barrelSpeed = m_stat.FireRate * 100;
     }
@@ -93,15 +93,15 @@ public class TowerController : BuildableObject
             m_targetList.Remove(other.GetComponent<MonsterController>());
         }
     }*/ //AreaChecker로 기능 이동
-    public void AddTargetList(MonsterController mon)
+    public void AddTargetList(MonsterController mon) //타겟 리스트 추가
     {
         m_targetList.Add(mon);
     }
-    public void RemoveTargetList(MonsterController mon)
+    public void RemoveTargetList(MonsterController mon) //타겟 리스트 삭제
     {
         m_targetList.Remove(mon);
     }
-    public void MachineLearning()
+    public void MachineLearning() //특성 효과 적용
     {
         m_machineLearning++;
         if(m_machineLearning >= 50)
@@ -109,7 +109,7 @@ public class TowerController : BuildableObject
             m_machineLearning = 50;
         }
     }
-    protected override void Destroyed()
+    protected override void Destroyed() //체력이 떨어져 파괴되었을 경우
     {
         base.Destroyed();
         m_state = TowerState.Destroyed;
@@ -121,7 +121,7 @@ public class TowerController : BuildableObject
         base.DestroyGameObject();
         ObjectManager.Instance.SetGunTower(this); //풀에 넣기
     }
-    protected void AimAndFire()
+    protected void AimAndFire() // 조준과 발사 담당
     {
        // 총열 회전속도
         m_barrel.transform.Rotate(0, 0, m_rotationSpeed * Time.deltaTime);

@@ -17,7 +17,7 @@ public class SlotStatus : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     #endregion
 
     #region Methods
-    public void SetSlotItem(int id, string image, ItemType type,PanelItemInfo infoui)
+    public void SetSlotItem(int id, string image, ItemType type,PanelItemInfo infoui) //아이템 정보 저장
     {
         m_itemImage = Utill.GetChildObject(gameObject, "ItemImage").GetComponent<Image>();
         m_itemName = Utill.GetChildObject(gameObject,"Info").GetComponent<TextMeshProUGUI>();
@@ -27,16 +27,16 @@ public class SlotStatus : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         m_id = id;
         m_infoUI = infoui;
     }
-    public int GetEquipItemId()
+    public int GetEquipItemId() //장착하고 있는 아이템 정보 반환
     {
         return m_id;
     }
-    public void OnPointerEnter(PointerEventData pointer)
+    public void OnPointerEnter(PointerEventData pointer) //마우스 올라왔을 시 정보 출력
     {
         if (m_id == -1) return;
         m_infoUI.ActiveUI(m_id,m_type);
     }
-    public void OnPointerExit(PointerEventData pointer)
+    public void OnPointerExit(PointerEventData pointer) //나가면 정보UI 꺼주기
     {
         if (m_id == -1) return;
         if (pointer.pointerEnter.CompareTag("Slot"))

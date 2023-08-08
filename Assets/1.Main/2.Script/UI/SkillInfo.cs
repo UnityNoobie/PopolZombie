@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class SkillInfo : MonoBehaviour
+public class SkillInfo : MonoBehaviour //스킬 정보 표기
 {
     Image m_skillImage;
     TextMeshProUGUI m_skillName;

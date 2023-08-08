@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static Unity.VisualScripting.Member;
 
-public class Lobby_UI : MonoBehaviour
+public class Lobby_UI : MonoBehaviour //로비 UI
 {
     #region Constants and Fields
     GameObject m_panelButton;
@@ -19,7 +19,7 @@ public class Lobby_UI : MonoBehaviour
     #endregion
 
     #region Methods
-    void SetListoner()
+    void SetListoner() //OnClick AddListener 통해서 버튼들의 기능을 추가해줌.
     {
         m_startButton.onClick.AddListener(UGUIManager.Instance.InputNickName);
         m_exitButton.onClick.AddListener(GameManager.Instance.ExitGame);
@@ -32,7 +32,7 @@ public class Lobby_UI : MonoBehaviour
         m_creditButton.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
         m_exitButton.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
     }
-    public void SetTransform()
+    public void SetTransform() // 좌표지정
     {
         m_panelButton = Utill.GetChildObject(gameObject, "Panel_Button").gameObject;
         m_startButton = Utill.GetChildObject(m_panelButton, "Button_GameStart").GetComponent<Button>();
@@ -42,7 +42,7 @@ public class Lobby_UI : MonoBehaviour
         m_exitButton = Utill.GetChildObject(m_panelButton, "Button_GameExit").GetComponent<Button>();
         SetListoner();
     }
-    public void SetActiveUI(bool isActive)
+    public void SetActiveUI(bool isActive) //UI온오프
     {
         gameObject.SetActive(isActive);
     }

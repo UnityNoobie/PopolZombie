@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class TweenMove : MonoBehaviour
+public class TweenMove : MonoBehaviour //애니메이션 커브 조정하여 Tween효과 구현
 {
     [SerializeField]
     NavMeshAgent m_navMeshAgent;  
@@ -12,7 +12,7 @@ public class TweenMove : MonoBehaviour
     [SerializeField]
     AnimationCurve m_curve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
     public float m_duration = 1f;    
-    IEnumerator Coroutine_TweenProcess()
+    IEnumerator Coroutine_TweenProcess() 
     {
         float time = 0f;       
         while (true)

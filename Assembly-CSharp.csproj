@@ -147,7 +147,6 @@
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\LoadLevelOnClick.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UITooltip.cs" />
     <Compile Include="Assets\SlimUI\Modern Menu 1\Scripts\Managers\UIMenuManager.cs" />
-    <Compile Include="Assets\1.Main\2.Script\UI\Store.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\DamagedText.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\BMSymbol.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonColor.cs" />
@@ -288,7 +287,6 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\BossAnimController.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\Singleton\SingletonMonoBehaviour.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\System\InvStat.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Data\TableUtilitySkillStat.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\Spin.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\DamageAbleObjectHUD.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonKeys.cs" />

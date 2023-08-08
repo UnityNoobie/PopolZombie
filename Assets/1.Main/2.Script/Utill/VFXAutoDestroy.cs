@@ -13,7 +13,7 @@ public class VFXAutoDestroy : MonoBehaviour
     #endregion
 
     #region Methods
-    void OnEnable()
+    void OnEnable() //켜졌을 때 시간 설정해주고 코루틴 실행
     {
         m_time= Time.time;
         StartCoroutine(Coroutine_AutoDestroy());
@@ -24,7 +24,7 @@ public class VFXAutoDestroy : MonoBehaviour
     }   
     // Update is called once per frame
 
-    IEnumerator Coroutine_AutoDestroy()
+    IEnumerator Coroutine_AutoDestroy() //자동으로 이펙트를 삭제해주는 코루틴
     {
         while (true)
         {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameMenuUI : MonoBehaviour
+public class GameMenuUI : MonoBehaviour //인게임 내 ESC키 눌렀을 시 호출되는 메뉴 UI
 {
     #region Constants and Fields
     Button m_play;
@@ -13,15 +13,19 @@ public class GameMenuUI : MonoBehaviour
     Button m_lobby;
     Button m_exit;
     #endregion
+
+    #region Methods
     void AddListoner()
     {
         m_play.onClick.AddListener(DeactiveUI); //시간 재개 게임오브젝트 종료
         m_sound.onClick.AddListener(UGUIManager.Instance.ActiveVolumeControll); //
         m_lobby.onClick.AddListener(GameManager.Instance.LoadLobbyScene); //로비 불러오기
         m_lobby.onClick.AddListener(DeactiveUI);
-        m_control.onClick.AddListener(UGUIManager.Instance.ActiveTipMenu);
+        m_control.onClick.AddListener(UGUIManager.Instance.ActiveTipMenu); //팁메뉴
         m_exit.onClick.AddListener(UGUIManager.Instance.OpenExitMenu);//게임종료
-        m_play.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
+
+        //SFX플레이
+        m_play.onClick.AddListener(UGUIManager.Instance.PlayClickSFX); 
         m_sound.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
         m_vidio.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
         m_control.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
@@ -48,4 +52,5 @@ public class GameMenuUI : MonoBehaviour
         m_exit = Utill.GetChildObject(gameObject, "Button_Exit").GetComponent<Button>();
         AddListoner();
     }
+    #endregion
 }

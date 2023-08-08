@@ -175,7 +175,11 @@ public class BuildableObject : MonoBehaviour, IDamageAbleObject
         {
             m_stat.HP = m_stat.MaxHP;
         }
-        m_hud.DisplayDamage(healvalue, m_stat.HP, m_stat.MaxHP);
+        if(m_stat.HP < m_stat.MaxHP) //피가 최대체력보다 낮을 때에만 HUD 호출
+        {
+            m_hud.DisplayDamage(healvalue, m_stat.HP, m_stat.MaxHP);
+        }
+        
     }
    
     public virtual void SetTransform()

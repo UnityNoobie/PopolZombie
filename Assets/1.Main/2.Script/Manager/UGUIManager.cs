@@ -45,7 +45,7 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     {
         StartCoroutine(SystemMessage(name + " 을 사용할 수 없습니다. "));
     }
-    public void SystemMessageSendMessage(string text)
+    public void SystemMessageSendMessage(string text) //시스템 메세지
     {
         StopAllCoroutines(); //초기화진행
         StartCoroutine(SystemMessage(text));

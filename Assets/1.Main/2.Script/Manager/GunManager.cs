@@ -26,7 +26,7 @@ public class GunManager : MonoBehaviour
     public static bool isGun;
     public static PlayerAnimController m_animCtr;
     public static bool isChange = false;
-    Dictionary<string, GameObject> weaponDic = new Dictionary<string, GameObject>(); //무기의 정보를 Dictionary에서 관리.      
+    Dictionary<string, GameObject> weaponDic = new Dictionary<string, GameObject>(); //무기의 오브젝트 정보를 Dictionary에서 관리.      
     #endregion
 
     #region property
@@ -35,11 +35,10 @@ public class GunManager : MonoBehaviour
     #endregion
 
     #region Coroutine
-    public IEnumerator ChangeWeaponRoutine(string name, WeaponType type, int ID, int grade, string atkType, string image, StatusUI statusui) //무기변경을 코루틴으로 제어
+    public IEnumerator ChangeWeaponRoutine(WeaponData data) //무기변경을 코루틴으로 제어
     {
-        currentWeaponId = ID;
-        // Debug.Log(image);
-        if (atkType.Equals("Gun")) //무기의 공격타입이 총기라면 
+        currentWeaponId = data.ID;
+        if (data.AtkType.Equals("Gun")) //무기의 공격타입이 총기라면 
         {
             isGun = true;
             if (striker.enabled) //근접공격스크립트 켜져있으면 꺼주기.
@@ -55,13 +54,13 @@ public class GunManager : MonoBehaviour
             m_animCtr.Play("PutWeapon"); //애니메이션 실행
             yield return new WaitForSeconds(weaponChangeTime);
             m_animCtr.Play("GrabWeapon");
-            GunChange(name, type, ID, grade);
-            statusui.SetSlot(ID, image, ArmorType.Max, ItemType.Weapon);
+            GunChange(data);
+            UGUIManager.Instance.GetStatusUI().SetSlot(data.ID, data.Image, ArmorType.Max, ItemType.Weapon);
             yield return new WaitForSeconds(weaponChangeTime);
             isChange = false;
             PlayerShooter.isActive = true; // 재장전 다 끝난뒤에 실행되도록
         }
-        else if (atkType.Equals("Melee"))
+        else if (data.AtkType.Equals("Melee"))
         {
 
             isGun = false;
@@ -81,15 +80,15 @@ public class GunManager : MonoBehaviour
             isChange = true;
             m_animCtr.Play("MeleeArm");
             yield return new WaitForSeconds(weaponChangeTime);
-            MeleeChange(name, type, ID, grade);
-            statusui.SetSlot(ID, image, ArmorType.Max, ItemType.Weapon);
+            MeleeChange(data);
+            UGUIManager.Instance.GetStatusUI().SetSlot(data.ID, data.Image, ArmorType.Max, ItemType.Weapon);
             yield return new WaitForSeconds(weaponChangeTime);
             m_animCtr.Play("MeleeIdle");
             isChange = false;
             PlayerStriker.isActive = true;
-            m_player.SetStatus(ID);
+            m_player.SetStatus(data.ID);
         }
-        UIManager.Instance.WeaponImage(image);
+        UIManager.Instance.WeaponImage(data.Image);
     }
     #endregion
 
@@ -108,13 +107,13 @@ public class GunManager : MonoBehaviour
     {
         if (shooter.enabled)
         {
-            shooter.CheckSkillSignal();
+            shooter.CheckSkillInfo();
         }
     }
     
-    public void ChangeWeapon(int id,StatusUI statusui) //무기변경 루틴 시작
+    public void ChangeWeapon(int id) //무기변경 루틴 시작
         {
-            StartCoroutine(ChangeWeaponRoutine(m_weapondata.GetWeaponStatus(id).Type, m_weapondata.GetWeaponStatus(id).weaponType, id, m_weapondata.GetWeaponStatus(id).Grade, m_weapondata.GetWeaponStatus(id).AtkType, m_weapondata.GetWeaponStatus(id).Image,statusui));
+            StartCoroutine(ChangeWeaponRoutine(m_weapondata.GetWeaponStatus(id)));
         } //ID값 베이스로 무기 변경하는 메소드
     public static AttackType AttackProcess(MonsterController mon, float Pdamage, float criper, float cridam,float armorpierce, out float damage) // 기본 공격과 치명타의 구분을 위한 메서드 damage를 넘겨줌
         {
@@ -128,13 +127,13 @@ public class GunManager : MonoBehaviour
             }
             return attackType; // 공격타입을 반환.
         }
-    void MeleeChange(string Type, WeaponType type, int ID, int grade) //근접무기로 변경
+    void MeleeChange(WeaponData data) //근접무기로 변경
         {
-            striker.ChangeMelee(weaponDic[Type], type, ID, grade);
+            striker.ChangeMelee(weaponDic[data.Type],data);
         }
-    void GunChange(string Type, WeaponType type, int ID, int grade) //총기로 변경
+    void GunChange(WeaponData data) //총기로 변경
         {
-            shooter.ChangeGun(weaponDic[Type], type, ID, grade);
+            shooter.ChangeGun(weaponDic[data.Type],data);
         }
     void SetTransform() //좌표지정
     {

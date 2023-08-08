@@ -21,7 +21,7 @@ public class PanelItemInfo : MonoBehaviour
     #endregion
 
     #region Methods
-    void SetInfo(int m_id, ItemType m_type)
+    void SetInfo(int m_id, ItemType m_type) //화면에 출력할 정보 설정. 아이템 타입에 따라 다른 정보를 설정하며 착용아이템이 있을 경우 비교창 출력
     {
         if (m_type.Equals(ItemType.Item))
         {
@@ -104,7 +104,7 @@ public class PanelItemInfo : MonoBehaviour
             }
         }
     }
-    void LoadData()
+    void LoadData() //아이템 데이터 로드
     {
         isfirst = false;
         if(m_store == null)
@@ -116,7 +116,7 @@ public class PanelItemInfo : MonoBehaviour
         m_ItemName = Utill.GetChildObject(gameObject, "ItemName").GetComponent<TextMeshProUGUI>();
         m_image = Utill.GetChildObject(gameObject, "ItemImage").GetComponent<Image>();
     }
-    private void ResetData()
+    private void ResetData() //설정되어있는 데이터 초기화
     {
         for(int i = 0; i < m_infoText.Length; i++)
         {
@@ -139,7 +139,7 @@ public class PanelItemInfo : MonoBehaviour
             m_image.sprite = null;
         }
     }
-    public void ActiveUI(int ID, ItemType type)
+    public void ActiveUI(int ID, ItemType type) //UI 켜주기
     {
         if(ID == -1) return;
         if (isfirst)
@@ -155,7 +155,7 @@ public class PanelItemInfo : MonoBehaviour
         id = ID;
         SetInfo(ID, type);
     }
-    public void DeActiveUI()
+    public void DeActiveUI() //끄기
     {
          gameObject.SetActive(false);
     }

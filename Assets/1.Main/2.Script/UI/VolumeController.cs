@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class VolumeController : MonoBehaviour
+public class VolumeController : MonoBehaviour //볼륨 조절
 {
     #region Constants and Fields
     Transform m_totalPos;
@@ -56,7 +56,7 @@ public class VolumeController : MonoBehaviour
         m_bgmValue.text = m_bgmVolume.value.ToString();
         m_sfxValue.text = m_sfxVolume.value.ToString();
     }
-    void LoadImage()
+    void LoadImage() //음소겨 설정별 이미지 로드
     {
         if (isMute)
         {
@@ -72,7 +72,7 @@ public class VolumeController : MonoBehaviour
         isMute = !isMute;
         LoadImage();
     }
-    void GetValue()
+    void GetValue() //현재 설정되어있는 벨류값을 가져와줌
     {
         m_totalVolume.value = SoundManager.Instance.GetTotalVolume();
         m_bgmVolume.value = SoundManager.Instance.GetBGMVolume();
@@ -80,19 +80,19 @@ public class VolumeController : MonoBehaviour
         SetValueControl();
         isMute = SoundManager.Instance.IsMute();
     }
-    void SetValue()
+    void SetValue() //현재 슬라이더의 값에 따라 음량 조절
     {
         SoundManager.Instance.SetBgmVolume(m_bgmVolume.value);
         SoundManager.Instance.SetSfxVolume(m_sfxVolume.value);
         SoundManager.Instance.SetVolumeLevel(m_totalVolume.value);
         SoundManager.Instance.SetMute(isMute);
     }
-    public void CancleMenu()
+    public void CancleMenu()//UI종료
     {
         UGUIManager.Instance.PlayClickSFX();
         gameObject.SetActive(false);
     }
-    public void ActiveUI()
+    public void ActiveUI() //켜주기
     {
         UGUIManager.Instance.PlayClickSFX();
         gameObject.SetActive(true); 

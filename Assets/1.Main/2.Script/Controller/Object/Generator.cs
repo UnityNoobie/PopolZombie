@@ -4,44 +4,51 @@ using UnityEngine;
 
 public class Generator : BuildableObject
 {
-    int maxUpgreadeHP = 0;
-    int maxUpgradeDefence = 0;
-    int maxUpgradeRegen = 0;
-
-    #region Coroutine
-
+    #region Constants and Fields
+    int m_upgreadeHP = 0;
+    int m_upgradeDefence = 0;
+    int m_upgradeRegen = 0;
+    const int m_maxUpgrade = 5;
+    float timeAfterWarning = 0f;
+    float cooltime = 3f;
     #endregion
-    public override void SetDamage(float damage, MonsterController mon)
+
+    #region Methods
+    public override void SetDamage(float damage, MonsterController mon) //피해 입을 때 호출.
     {
-        UGUIManager.Instance.SystemMessageSendMessage("발전기가 공격받고 있습니다!!");
+        if(Time.time > cooltime + timeAfterWarning) //너무 중복되어 호출되니 정신이 없어서 쿨타임 있도록 수정.
+        {
+            timeAfterWarning = Time.time;
+            UGUIManager.Instance.SystemMessageSendMessage("발전기가 공격받고 있습니다!!");
+        }
         SoundManager.Instance.PlaySFX("SFX_Generator", m_audio);
         base.SetDamage(damage, mon);
     }
-    protected override void Destroyed()
+    protected override void Destroyed() //파괴되었을 때.
     {
-        base.Destroyed();
-        StopAllCoroutines();   
-        GameManager.Instance.GameOver();
+        base.Destroyed(); // base 메소드 실행
+        StopAllCoroutines();   //회복 등 진행중인 코루틴 모두 중지
+        GameManager.Instance.GameOver(); //발전기가 파괴된 경우니 게임오버상태로 변경
     }
-    public bool IsCanUpgrade(int id)
+    public bool IsCanUpgrade(int id) //현재 최대 업그레이드 수치를 각각 5로 잡았기 때문에  maxUpgrade보다 현재 업그레이드가 적을 시 true반환
     {
         if(id == 38)
         {
-            if(maxUpgreadeHP < 5)
+            if(m_upgreadeHP < m_maxUpgrade)
             {
                 return true;
             }
         }
         else if (id== 39)
         {
-            if(maxUpgradeDefence < 5)
+            if(m_upgradeDefence < m_maxUpgrade)
             {
                 return true;
             }
         }
         else if(id == 40)
         {
-            if(maxUpgradeRegen < 5)
+            if(m_upgradeRegen < m_maxUpgrade)
             {
                 return true;
             }
@@ -50,22 +57,22 @@ public class Generator : BuildableObject
     }
     public void IncreaseMaxHp(int hp) //최대체력 증가
     {
-        maxUpgreadeHP++;
-        if (maxUpgreadeHP > 5) return;
+        m_upgreadeHP++;
+        if (m_upgreadeHP > m_maxUpgrade) return;
         float value = m_stat.HP / m_stat.MaxHP;
         m_stat.MaxHP += hp;
         m_stat.HP = Mathf.CeilToInt(m_stat.MaxHP * value);
     }
-    public void IncreaseDefence(int defence)
+    public void IncreaseDefence(int defence) //방어력 증가
     {
-        maxUpgradeDefence++;
-        if (maxUpgradeDefence > 5) return;
+        m_upgradeDefence++;
+        if (m_upgradeDefence > m_maxUpgrade) return;
         m_stat.Defence += defence;
     }
-    public void IncreaseHPRegen(float regen)
+    public void IncreaseHPRegen(float regen) //체력 리젠 증가
     {
-        maxUpgradeRegen++;
-        if (maxUpgradeRegen > 5) return;
+        m_upgradeRegen++;
+        if (m_upgradeRegen > m_maxUpgrade) return;
         m_stat.Regen += regen;
         if(CoroutineRecovery != null)
         {
@@ -73,7 +80,7 @@ public class Generator : BuildableObject
         }
         CoroutineRecovery =  StartCoroutine(Coroutine_SelfRecovery(m_stat.Regen));
     }
-    void SetObject()
+    void SetObject() //오브젝트 세팅
     {
         SetTransform();
         m_stat = ObjectManager.Instance.GetObjectStat(ObjectType.Generator);
@@ -85,4 +92,5 @@ public class Generator : BuildableObject
     {
         SetObject();
     }
+    #endregion
 }

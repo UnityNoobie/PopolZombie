@@ -5,55 +5,45 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 using static SoundManager;
+public enum GunState
+{
+    Ready,
+    Empty,
+    Reload,
+    Dead,
+    Idle
+}
 
 public class Gun : MonoBehaviour
 {
 
     #region Constants and Fields
-    public enum GunState
-    {
-        Ready,
-        Empty,
-        Reload,
-        Dead,
-        Idle
-    }
-  
+   
     
     [SerializeField]
     ParticleSystem m_flashEffect;
     [SerializeField]
     ParticleSystem m_ShellEffect;
     LineRenderer[] m_bulletRender;
-    [SerializeField]
-    GameObject m_linePrefab;
     AudioSource m_gunAudio;
-    [SerializeField]
-    AudioClip m_shootSound;
-    [SerializeField]
-    AudioClip m_reloadSound;
     [SerializeField]
     PlayerController m_player;
     Transform m_firePos;
+    WeaponData m_data;
     public WeaponData GetStatus = new WeaponData();
-    int m_grade;
-    int m_id;
-    string m_shot;
-    string m_hit;
-    string m_reload;
     int ammoRemain;
     float lastFireTime;
     public bool isfirst = true;
-    bool isReload = false;
     bool lastfire;
     bool pierce;
     bool burn;
     bool boom;
+    public GunState gunstate;
     #endregion
 
     #region Property
     public WeaponType m_type { get; set; }
-    public GunState gunstate { get; set; }
+    
     #endregion
 
     #region Coroutine
@@ -75,7 +65,7 @@ public class Gun : MonoBehaviour
             }
         } 
     }
-    IEnumerator ShotGunReload()
+    IEnumerator ShotGunReload() //샷건 장전 루틴
     {
         while (gunstate == GunState.Reload) //총의 상태가 장전중 일경우 계속 실행
         {
@@ -88,23 +78,22 @@ public class Gun : MonoBehaviour
             }
             GunManager.m_animCtr.Play("ShotReload"); //샷건장전 애니메이션 실행
             yield return new WaitForSeconds(m_player.GetStatus.reloadTime); //샷건 장전시간동안 대기
-            SoundManager.Instance.PlaySFX(m_reload, m_gunAudio);
+            SoundManager.Instance.PlaySFX(m_data.ReloadSound, m_gunAudio);
             ammoRemain++;
-            ammoCheck();
+            ammoCheck(); //총알 체크
         }
     }
     IEnumerator ReloadRoutine() //리로드 루틴 
     {
         float reloadTime = m_player.GetStatus.reloadTime;
-        isReload = true;
         gunstate = GunState.Reload;
         if(m_type == WeaponType.ShotGun) //무기 종류가 샷건일 경우
         {
             StartCoroutine(ShotGunReload());
         }
-        else
+        else //다른 무기들일 경우
         {
-            SoundManager.Instance.PlaySFX(m_reload, m_gunAudio);
+            SoundManager.Instance.PlaySFX(m_data.ReloadSound, m_gunAudio);
             float speed = 2 / reloadTime;
             GunManager.m_animCtr.SetFloat("ReloadTime", speed);
             GunManager.m_animCtr.Play("Reload");
@@ -117,14 +106,11 @@ public class Gun : MonoBehaviour
     #endregion
 
     #region Methods
-    public void SetGun(int id,int grade,WeaponType type)
+    public void SetGun(WeaponData data)
     {
-        m_id = id;
-        m_grade = grade;
-        m_type = type;
-        m_shot = GetStatus.GetWeaponStatus(m_id).ShotSound;
-        m_reload = GetStatus.GetWeaponStatus(m_id).ReloadSound;
-        m_hit = GetStatus.GetWeaponStatus(m_id).AtkSound;
+        m_data = new WeaponData();
+        m_data = data;
+        m_type = data.weaponType;
     }
     public void ResetBoolin() //무기 교체, 스킬 업 등의 상황에서 초기화
     {
@@ -136,19 +122,20 @@ public class Gun : MonoBehaviour
     }
     public void CheckBoolin()
     {
-        if(m_player.GetStatus.LastFire != 0)
+        Status status = m_player.GetStatus;
+        if(status.LastFire != 0)
         {
             lastfire = true;
         }
-        if(m_player.GetStatus.Pierce != 0)
+        if(status.Pierce != 0)
         {
             pierce=true;
         }
-        if(m_player.GetStatus.Burn != 0)
+        if(status.Burn != 0)
         {
             burn = true;
         }
-        if(m_player.GetStatus.Boom != 0)
+        if(status.Boom != 0)
         {
             boom = true;
         }
@@ -157,11 +144,11 @@ public class Gun : MonoBehaviour
     {
         if(m_player.GetStatus.maxammo > 1000) //기관총 특성 표기용.
         {
-            UIManager.Instance.WeaponInfoUI(m_type + ".LV" + m_grade + "\n∞ / ∞");
+            UIManager.Instance.WeaponInfoUI(m_type + ".LV" + m_data.Grade + "\n∞ / ∞");
         }
         else
         {
-            UIManager.Instance.WeaponInfoUI(m_type + ".LV" + m_grade + "\n" + ammoRemain + " / " + m_player.GetStatus.maxammo);
+            UIManager.Instance.WeaponInfoUI(m_type + ".LV" + m_data.Grade + "\n" + ammoRemain + " / " + m_player.GetStatus.maxammo);
         }
     }
     void Start()
@@ -197,8 +184,8 @@ public class Gun : MonoBehaviour
         Vector3 hitPos = Vector3.zero;
         Vector3 shotFire = Vector3.zero;
         shotFire = m_player.transform.forward;
-        float verti = Random.Range(-0.05f, 0.05f);
-        if (m_type == WeaponType.ShotGun) //샷건의 경우 특수한 작동방식을 가지기 때문에 이렇게 합시다.
+        float verti = Random.Range(-0.05f, 0.05f); //총기 탄퍼짐 표현용
+        if (m_data.weaponType == WeaponType.ShotGun) //샷건의 경우 특수한 작동방식을 가지기 때문에 이렇게 합시다.
         {
             for (int i = 0; i < m_player.GetStatus.ShotGun; i++)
             {
@@ -238,11 +225,10 @@ public class Gun : MonoBehaviour
                     StartCoroutine(ShootEffect(hitPos));
 
                 }
-                //Debug.DrawRay(m_firePos.position, shotFire * m_player.GetStatus.AtkDist, Color.yellow, 0.1f);
             }
             m_flashEffect.Play();  //화염이펙트
             m_ShellEffect.Play(); //탄피 이펙트
-            SoundManager.Instance.PlaySFX(m_shot, m_gunAudio);
+            SoundManager.Instance.PlaySFX(m_data.ShotSound, m_gunAudio);
         }
         else //샷건외의 총은
         {
@@ -283,7 +269,7 @@ public class Gun : MonoBehaviour
                 }
             }
             StartCoroutine(ShootEffect(hitPos));
-            SoundManager.Instance.PlaySFX(m_shot, m_gunAudio);
+            SoundManager.Instance.PlaySFX(m_data.ShotSound, m_gunAudio);
         }
         ammoRemain--;
         ammoCheck();
@@ -308,7 +294,7 @@ public class Gun : MonoBehaviour
         Vector3 hitPos = Vector3.zero;
         var mon = hit.collider.GetComponent<MonsterController>();
         var type = GunManager.AttackProcess(mon, m_player.GetStatus.damage, m_player.GetStatus.criRate, m_player.GetStatus.criAttack,m_player.GetStatus.ArmorPierce, out damage);
-        mon.PlayHitSound(m_hit); //피해사실 전달하며 소리재생유도 시도
+        mon.PlayHitSound(m_data.AtkSound); //피해사실 전달하며 소리재생유도 시도
         if (lastfire && ammoRemain == 1) //마지막 한발특성이 활성화 되어있고 탄환이 한발일때 사격을 시도하면 6.66배의 데미지
         {
             mon.SetDamage(type, damage * m_player.GetStatus.LastFire, m_player, burn,m_player);
