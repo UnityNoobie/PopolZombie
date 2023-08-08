@@ -43,7 +43,7 @@ public class MonStat
     {
 
     }
-    public MonStat(MonsterType type,string name, float hp, float atkSpeed, float damage, float defense, float speed, float attackDist, float knockbackRegist, float score,float coin, float texp)
+    public MonStat(MonsterType type,string name, float hp, float atkSpeed, float damage, float defense, float speed, float attackDist, float knockbackRegist, float score,float coin, float texp,string hitsound,string atksound,string diesound,string skillsound ,string stepsound)
     {
         this.type = type;
         this.name = name;
@@ -56,14 +56,18 @@ public class MonStat
         this.knockbackRegist = knockbackRegist;
         this.Score = score;
         this.coin = coin;
-        this.exp = exp;
+        this.exp = texp;
+        this.hitSound = hitsound;
+        this.atkSound = atksound;
+        this.dieSound = diesound;
+        this.skillSound = skillsound;
+        this.stepSound = stepsound;
     }
     public MonStat GetMonStat(MonsterType type)//체력 공속 공격력 방어력 이동속도 사정거리 넉백저항 점수 코인 경험치 순서로
     {
         MonStat stat = null;
         stat = TableMonsterStat.Instance.m_mondic[type];
-        MonStat monstat = new MonStat(stat.type, stat.name, stat.hp, stat.atkSpeed, stat.damage, stat.defense, stat.speed, stat.attackDist, stat.knockbackRegist, stat.Score, stat.coin, stat.exp);
-        return monstat;
+        return stat;
     }
 }
 public class TableMonsterStat : Singleton<TableMonsterStat> 
