@@ -11,7 +11,6 @@ public class TableEffect : Singleton<TableEffect>
         public int Id;
         public string Dummy;
         public string[] Prefab = new string[3];
-
     }
     public Dictionary<int, Data> m_tableData = new Dictionary<int, Data>();
 

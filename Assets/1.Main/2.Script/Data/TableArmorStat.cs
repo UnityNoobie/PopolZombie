@@ -129,7 +129,6 @@ public class TableArmorStat : Singleton<TableArmorStat>
     public List<int> m_highArmor = new List<int>();
     public void Load() //테이블로더에서 방어구 정보를 받아와 딕셔너리에 저장하기 위한 용도.
     {
-
         TableLoader.Instance.LoadData(TableLoader.Instance.LoadTableData("ArmorStat"));
         m_armorData.Clear();
         m_lowArmor.Clear();

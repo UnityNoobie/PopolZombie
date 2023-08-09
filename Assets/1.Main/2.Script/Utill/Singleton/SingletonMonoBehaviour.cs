@@ -9,7 +9,7 @@ public class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBe
     protected virtual void OnStart() { } //Start에서 실행될 메소드
     void Awake() 
     {
-        if(Instance == null) //인스턴스 되어있지 않다면 실행
+        if(Instance == null) //인스턴스 되어있지 않다면 인스턴스 후 실행
         {
             Instance = (T)this;
             OnAwake();
@@ -19,7 +19,6 @@ public class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBe
             Destroy(gameObject);
         }
     }
-    // Start is called before the first frame update
     void Start()
     {
         if(Instance == (T)this)

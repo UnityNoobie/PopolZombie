@@ -35,7 +35,6 @@ public class AnimationController : MonoBehaviour //æ÷¥œ∏ﬁ¿Ã≈Õ∏¶ µø¿€«œ¥¬µ• ªÁøÎ«
             m_animator.Play(animName, 0, 0f);
         }
     }
-    // Start is called before the first frame update
     protected virtual void Start() 
     {
         m_animator = GetComponent<Animator>();

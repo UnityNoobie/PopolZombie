@@ -142,7 +142,6 @@ public class TableGunstat : Singleton<TableGunstat>
         for (int i = 0; i < 21; i++)
         {
             WeaponData data = new WeaponData();
-            // Debug.Log("일단 실행은 했습니다잉");
             data.Type = TableLoader.Instance.GetString("Type", i); //총의 타입값을 인스턴스
             data.ID = TableLoader.Instance.GetInteger("Id", i); //총의 아이디값
             data.Grade = TableLoader.Instance.GetInteger("Grade", i); //총의 레벨값

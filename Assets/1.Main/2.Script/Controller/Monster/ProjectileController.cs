@@ -5,9 +5,7 @@ using UnityEngine;
 
 public class ProjectileController : MonoBehaviour
 {
-    MonsterController m_atkMon; 
-    PlayerController m_hitPlayer;
-    
+    MonsterController m_atkMon;    
 
     [SerializeField]
     ProjectileController[] m_child;

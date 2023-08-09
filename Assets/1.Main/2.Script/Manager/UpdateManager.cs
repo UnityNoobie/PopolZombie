@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UpdateManager : SingletonMonoBehaviour<UpdateManager> //업데이트를 한곳에서 실행하기 위해 만든 클래스
 {
+
     #region Constant and Field
     /*
     bool m_isactive = false;
@@ -12,7 +13,7 @@ public class UpdateManager : SingletonMonoBehaviour<UpdateManager> //업데이트를 
     public PlayerGetItem[] m_playerItem;
     public PlayerController[] m_playersSave;
     int m_playercount;*/
-
+    PlayerController m_player;
     #endregion
 
     #region Method
@@ -39,8 +40,11 @@ public class UpdateManager : SingletonMonoBehaviour<UpdateManager> //업데이트를 
             m_playerItem[i] = m_players[i].GetComponent<PlayerGetItem>();
         }
         m_playercount++;
-    }*/ //처음 멀티플레이로 기획했을 때 생각 한 방식이나 현재 싱글플레이만 지원하기로 하여 폐기. 플레이어 오브젝트는 PlayerController통해 제어
-    // Update is called once per frame
+    }*/ //처음 멀티플레이로 기획했을 때 생각 한 방식이나 현재 싱글플레이만 지원하기로 하여 폐기.
+    public void SetPlayer(PlayerController player) //플레이어 지정
+    {
+        m_player = player;
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -50,16 +54,17 @@ public class UpdateManager : SingletonMonoBehaviour<UpdateManager> //업데이트를 
         }
         if (GameManager.Instance.GetDayInfo() == DaynNight.GameOver)
             return;
-        for (int i = 0; i < MonsterManager.Instance.m_monsterList.Count; i++)
+
+        m_player.BehaviorProcess();
+
+        for (int i = 0; i < MonsterManager.Instance.m_monsterList.Count; i++) //소환되어있는 몬스터에 적용
         {
             MonsterManager.Instance.m_monsterList[i].BehaviourProcess(); //각각 호출하는거보다 하나의 업데이트에서 사용하면 더 효율적임.
         }
-    }/*
-    private void Awake()
-    {
-        m_playercount = 0;
-        m_players = new PlayerController[m_players.Length];
-       
-} */
+        for(int i = 0; i < ObjectManager.Instance.m_towerList.Count; i++) // 포탑의 조준,발사 메커니즘
+        {
+            ObjectManager.Instance.m_towerList[i].AimAndFire();
+        }
+    }
     #endregion
 }

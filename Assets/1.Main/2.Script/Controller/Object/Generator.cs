@@ -11,6 +11,8 @@ public class Generator : BuildableObject
     const int m_maxUpgrade = 5;
     float timeAfterWarning = 0f;
     float cooltime = 3f;
+    const string m_underAttack = "발전기가 공격받고 있습니다!!";
+    const string m_generatorDamaged = "SFX_Generator";
     #endregion
 
     #region Methods
@@ -19,9 +21,9 @@ public class Generator : BuildableObject
         if(Time.time > cooltime + timeAfterWarning) //너무 중복되어 호출되니 정신이 없어서 쿨타임 있도록 수정.
         {
             timeAfterWarning = Time.time;
-            UGUIManager.Instance.SystemMessageSendMessage("발전기가 공격받고 있습니다!!");
+            UGUIManager.Instance.SystemMessageSendMessage(m_underAttack);
         }
-        SoundManager.Instance.PlaySFX("SFX_Generator", m_audio);
+        SoundManager.Instance.PlaySFX(m_generatorDamaged, m_audio);
         base.SetDamage(damage, mon);
     }
     protected override void Destroyed() //파괴되었을 때.

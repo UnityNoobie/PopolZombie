@@ -7,6 +7,7 @@ public class PreviewObject : MonoBehaviour //프리뷰 오브젝트 관리 스크립트.
 {
     #region Constants and Fields
     bool isCanBuild;
+    const float m_activeTime = 0.06f;
     MeshRenderer[] m_materials;
     BoxCollider col;
     List<GameObject> m_object = new List<GameObject>();
@@ -20,7 +21,7 @@ public class PreviewObject : MonoBehaviour //프리뷰 오브젝트 관리 스크립트.
         {
             isCanBuild = true;
             col.enabled = true;
-            yield return new WaitForSeconds(0.06f);
+            yield return new WaitForSeconds(m_activeTime);
             col.enabled = false;
             if (isCanBuild)
             {

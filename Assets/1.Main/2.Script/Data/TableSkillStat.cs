@@ -156,7 +156,6 @@ class Skilldata : Singleton<Skilldata>
     public static List<int> AgilityList = new List<int>();
     public static List<int> StrengthList = new List<int>();
     public static List<int> UtilityList = new List<int>();
-
     public void Load()
     {
         TableLoader.Instance.LoadData(TableLoader.Instance.LoadTableData("Ability"));

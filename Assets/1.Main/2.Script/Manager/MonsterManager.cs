@@ -28,6 +28,7 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
     public List<MonsterController> m_monsterList = new List<MonsterController>();
     GameObjectPool<HUDController> m_hudPool = new GameObjectPool<HUDController>();
     bool isSpawning = false;
+    const int m_maxSpawnMonster = 20;
     #endregion
 
     #region Coroutine
@@ -56,16 +57,8 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
         GameManager.Instance.StartDay();
     }
     #endregion
-    int MaxBossCount()
-    {
-        return 1 + GameManager.Instance.GetRoundInfo() / 10;
-    }
-    float StatScale()
-    {
-        float StatScale = 1 + (GameManager.Instance.GetRoundInfo() * 0.1f);
-        return StatScale;
-    }
-    
+
+    #region Methods
     public void ResetMonster(MonsterController mon, HUDController hud)
     {
         mon.gameObject.SetActive(false); // 몬스터를 비활성화해주기
@@ -75,16 +68,12 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
         m_hudPool.Set(hud); // 풀에 넣어주기
         UIManager.Instance.EnemyLeft(m_monsterList.Count);
     }
-    public void StartNight()
-    {
-        StartCoroutine(Coroutine_SpawnMonsters());
-    }
-    public void CreateMonster() //몬스터를 랜덤확률로 소환하는기능
+    public void CreateMonster() //몬스터를 랜덤확률로 소환
     {
         int a = GameManager.Instance.GetRoundInfo();
         int Count = 5 + (a / 2);
-        if(Count>=20)
-            Count= 20;
+        if(Count>=m_maxSpawnMonster) //최대 스폰 몬스터 조절.
+            Count= m_maxSpawnMonster;
         for (int i = 0; i < Count; i++)
         {
                 var mon = m_monsterPools[(MonsterType)Random.Range(0, (int)MonsterType.Boss)].Get();
@@ -100,8 +89,9 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
                 hud.gameObject.SetActive(true); //어차피 데미지르 줄때 hudcontroller에서 Show()로 키니까 꺼봄  작동이 잘 안됨..
                 m_monsterList.Add(mon);
         }
-        if(GameManager.Instance.GetRoundInfo() % 5 == 0) //10라운드마다 나오는 보스 스테이지
+        if(GameManager.Instance.GetRoundInfo() % 1 == 0) //10라운드마다 나오는 보스 스테이지
         {
+            Debug.Log("현재 테스트중으로 보스 출현합니다. 나중ㅇ에 수정좀요!");
             if(currentBossCound < MaxBossCount())
             {
                 var hud = m_hudPool.Get();
@@ -115,10 +105,22 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
                 mon.SetMonster(m_player, hud);
                 m_monsterList.Add(mon);
                 currentBossCound++;
-            }
-            
+            }        
         }
         UIManager.Instance.EnemyLeft(m_monsterList.Count);
+    }
+    public void StartNight()
+    {
+        StartCoroutine(Coroutine_SpawnMonsters());
+    }
+    int MaxBossCount()
+    {
+        return 1 + GameManager.Instance.GetRoundInfo() / 10;
+    }
+    float StatScale()
+    {
+        float StatScale = 1 + (GameManager.Instance.GetRoundInfo() * 0.1f);
+        return StatScale;
     }
     public void ResetBossCount()
     {
@@ -158,4 +160,5 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
         });
         m_spawnPoint = GetComponentsInChildren<SpawnPos>();
     }
+    #endregion
 }

@@ -7,9 +7,7 @@ using Unity.VisualScripting;
 
 public class TableLoader : Singleton<TableLoader>
 {
-    //  List<List<int>> list; //리스트의 2차원배열
-    // Dictionary<string, string> row; 한 행만을 저장가능.
-    List<Dictionary<string, string>> m_table = new List<Dictionary<string, string>>(); //이런식으로 딕셔너리의 배열 선언가능!
+    List<Dictionary<string, string>> m_table = new List<Dictionary<string, string>>();
     public int Length { get { return m_table.Count; } }
     public void Clear()
     {

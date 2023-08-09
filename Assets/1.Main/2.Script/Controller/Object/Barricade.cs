@@ -6,16 +6,12 @@ public class Barricade : BuildableObject
 {
     #region Constants and Fields
 
-
+    const string m_hitSound = "SFX_GunHit";
     #endregion
-
-    #region Coroutine
-
-    #endregion
-    public override void SetDamage(float damage, MonsterController mon)
+    public override void SetDamage(float damage, MonsterController mon) //피격효과
     {
         base.SetDamage(damage,mon);
-        SoundManager.Instance.PlaySFX("SFX_GunHit", m_audio);
+        SoundManager.Instance.PlaySFX(m_hitSound, m_audio);
     }
     protected override void Destroyed()
     {

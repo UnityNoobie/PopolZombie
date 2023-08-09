@@ -25,10 +25,8 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     Status m_status;
     [SerializeField]
     GameObject m_PlayerHuD;
-    StatusUI m_statusUI;
     [SerializeField]
     QuickSlot m_quickSlot;
-    UpdateManager m_updateManager;
     TableSkillStat m_skillStat;
     AudioSource m_audio;
     GunManager m_manager;
@@ -84,6 +82,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     public PlayerState m_Pstate { get; set; }
     public PlayerAnimController.Motion GetMotion { get { return m_animCtr.GetMotion; } }
     #endregion
+    #region Methods
 
     #region PlayerTitle
     public bool HasTitle()
@@ -253,7 +252,6 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
 
     #endregion
 
-    #region Methods
     #region SFXPlay // SFX재생 메소드
     void PlayDamagedSound()
     {
@@ -360,6 +358,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     {
         // 사망시 작동 x
         if (m_Pstate.Equals(PlayerState.dead)) return;
+
         // 현재 상태가 오브젝트 설치중일 때 실행.
         if (isbuild)
         {
@@ -368,6 +367,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
                 ObjectManager.Instance.RotationChanger();
             }
         }
+
         // 플레이어 스킬창
         if (Input.GetKeyDown(KeyCode.K)) 
         {    
@@ -375,6 +375,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             UGUIManager.Instance.SkillUIChange(m_skillactive,m_skill);
             UGUIManager.Instance.PlayClickSFX();
         }
+
         // 인벤토리 온오프
         if (Input.GetKeyDown(KeyCode.I)) 
         {
@@ -382,6 +383,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             UGUIManager.Instance.GetStatusUI().SetActive(m_isactive);
             UGUIManager.Instance.PlayClickSFX();
         }
+
         // 구급상자 사용
         if (Input.GetKeyDown(KeyCode.Alpha2)) 
         {
@@ -392,6 +394,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             }
             m_quickSlot.UseQuickSlotITem(1, "HealPack");
         }
+
         // 바리케이드 설치
         if (Input.GetKeyDown(KeyCode.Alpha3)) 
         {
@@ -409,6 +412,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
                 }
             }
         }
+
         // 포탑 설치
         if (Input.GetKeyDown(KeyCode.Alpha4)) 
         {
@@ -426,6 +430,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
                 }
             }
         }
+
         // 마우스 클릭을 활용한 공격, 오브젝트 설치
         if (Input.GetMouseButton(0))
         {
@@ -460,7 +465,9 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
                 m_shooter.ReloadProcess();
             }
         }
+
         m_dir = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+
         if(m_dir.x !=0 && m_dir.z !=0)
         {
             m_dir = m_dir / 1.5f; //대각선 이동 시 너무 빠른 움직이 발생하여 적용
@@ -605,7 +612,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     void SetPlayer()
     {
         UGUIManager.Instance.SetPlayer(this);
-     // UpdateManager.Instance.SetPlayerController(this); 
+        UpdateManager.Instance.SetPlayer(this); 
         GameManager.Instance.SetGameObject(gameObject);
     }
 
@@ -750,7 +757,6 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         m_audio = GetComponent<AudioSource>();
         m_animCtr = GetComponent<PlayerAnimController>();
         m_playerObject = GetComponent<PlayerObjectController>();
-        m_statusUI = UGUIManager.Instance.GetStatusUI();
         m_leftDir = Utill.GetChildObject(gameObject, "LeftDir");
         m_weaponData = new WeaponData();
         m_armorManager = GetComponent<ArmorManager>();
@@ -778,11 +784,8 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         HPControl(0);
         SetHudText();
     }
-    private void Update()
-    {
-        BehaviorProcess(); //플레이어 입력 통합 메소드.
-    }
     #endregion
+
     #endregion
 }
 

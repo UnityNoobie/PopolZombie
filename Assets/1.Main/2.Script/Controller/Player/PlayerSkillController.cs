@@ -326,7 +326,7 @@ public class PlayerSkillController : MonoBehaviour
     private void Awake() 
     {
         SetTransform();
-        // m_skillPoint = 100;// 테스트
+         m_skillPoint = 100;// 테스트
         ObjectManager.Instance.SetPlayer(this);
     }
     #endregion

@@ -11,6 +11,7 @@ enum TowerState
 }
 public class TowerController : BuildableObject //ºô´õºí ¿ÀºêÁ§Æ® »ó¼Ó¹Þ´Â Æ÷Å¾ ¿ÀºêÁ§Æ®
 {
+
     #region Constants and Fields
 
     [SerializeField]
@@ -29,11 +30,14 @@ public class TowerController : BuildableObject //ºô´õºí ¿ÀºêÁ§Æ® »ó¼Ó¹Þ´Â Æ÷Å¾ ¿
     LineRenderer m_renderer;
     [SerializeField]
     Transform m_firePos;
+    [SerializeField]
+    List<MonsterController> m_targetList = new List<MonsterController>(); //°ø°Ý °¡´ÉÇÑ Å¸°Ù ¸®½ºÆ®
+    GameObject m_target;
     float lastFireTime;
     const string m_fireSound = "SFX_MGShot";
 
     int m_machineLearning = 0;
-    TowerState m_state;
+    TowerState m_state { get; set; }
 
     #endregion
     IEnumerator ShootEffect(Vector3 hitPos) //°ø°Ý ÀÌÆåÆ® Àç»ý
@@ -47,9 +51,18 @@ public class TowerController : BuildableObject //ºô´õºí ¿ÀºêÁ§Æ® »ó¼Ó¹Þ´Â Æ÷Å¾ ¿
         m_renderer.enabled = false;
     }
     #region Methods
-
-
-
+    protected override void Destroyed() //Ã¼·ÂÀÌ ¶³¾îÁ® ÆÄ±«µÇ¾úÀ» °æ¿ì
+    {
+        base.Destroyed(); 
+        m_state = TowerState.Destroyed;
+        StopAllCoroutines();
+        Invoke("DestroyGameObject", 1f); // ¿ÀºêÁ§Æ® Ç®¸µÇØÁÖ±â
+    }
+    protected override void DestroyGameObject() //È°¼ºÈ­ Á¾·á ÈÄ Ç®¿¡ ´Ù½Ã ³Ö¾îÁÖ±â
+    {
+        base.DestroyGameObject();
+        ObjectManager.Instance.SetGunTower(this); //Ç®¿¡ ³Ö±â
+    }
     public void BuildTurretObject(Vector3 buildPos,TableSkillStat skill,ObjectStat stat) //¿ÀºêÁ§Æ® ¼³Ä¡
     {
         transform.position = buildPos;
@@ -71,6 +84,42 @@ public class TowerController : BuildableObject //ºô´õºí ¿ÀºêÁ§Æ® »ó¼Ó¹Þ´Â Æ÷Å¾ ¿
     void SetBarrelSpeed(float fireRate) //ÃÑ¿­ È¸Àü ¼Óµµ Á¶ÀýÇØÁÖ±â
     {
         m_barrelSpeed = m_stat.FireRate * 100;
+    }
+    bool HasTarget()//°ø°Ý °¡´ÉÇÑ Å¸°Ù ¸®½ºÆ®°¡ ÀÖ´ÂÁö È®ÀÎÇØÁÖ´Â ¸Þ¼Òµå.
+    {
+        if (m_targetList.Count > 0)
+        {
+            List<MonsterController> m_activeTargets = new List<MonsterController>();
+            foreach (MonsterController go in m_targetList)//¸®½ºÆ® ¾ÈÀÇ Ç¥ÀûÀÌ Á×¾úÀ» °æ¿ì¸¦ »ý°¢ÇÏ¿© Ã¼Å©ÇØÁÜ.
+            {
+                if (go.IsAliveObject()) //Å¸°ÙÀÌ »ì¾Æ ÀÖ´Ù¸é activeTargetList¿¡ Ãß°¡ÇØÁÖ¾î targetList¸¦ º¯°æ.
+                {
+                    m_activeTargets.Add(go);
+                }
+            }
+            m_targetList = m_activeTargets;
+        }
+        if (m_targetList.Count > 0)//¸®½ºÆ®¿¡ ÀûÀÌ ³²¾Æ ÀÖÀ¸¸é Æ®·ç
+        {
+            return true;
+        }
+        return false; //¾Æ´Ï¸é false
+    }
+    void FindNearTarget() // Å¸°Ù ¸®½ºÆ®¿¡ ÀÖ´Â Àûµé Áß °¡Àå °¡±î¿î Å¸°Ù Å½»öÇÏ¿© Àü´Þ.
+    {
+        MonsterController closestTarget = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (MonsterController target in m_targetList)
+        {
+            float distance = Vector3.Distance(target.transform.position, transform.position);
+            if (distance <= closestDistance)
+            {
+                closestDistance = distance;
+                closestTarget = target;
+            }
+        }
+        m_target = closestTarget.gameObject;
     }
     void OnDrawGizmosSelected() //»çÁ¤°Å¸® Ã¼Å©¿ë ±âÁî¸ð
     {
@@ -109,24 +158,14 @@ public class TowerController : BuildableObject //ºô´õºí ¿ÀºêÁ§Æ® »ó¼Ó¹Þ´Â Æ÷Å¾ ¿
             m_machineLearning = 50;
         }
     }
-    protected override void Destroyed() //Ã¼·ÂÀÌ ¶³¾îÁ® ÆÄ±«µÇ¾úÀ» °æ¿ì
+   
+    public void AimAndFire() // Á¶ÁØ°ú ¹ß»ç ´ã´ç
     {
-        base.Destroyed();
-        m_state = TowerState.Destroyed;
-        StopAllCoroutines();
-        Invoke("DestroyGameObject", 1f); // ¿ÀºêÁ§Æ® Ç®¸µÇØÁÖ±â
-    }
-    protected override void DestroyGameObject() //È°¼ºÈ­ Á¾·á ÈÄ Ç®¿¡ ´Ù½Ã ³Ö¾îÁÖ±â
-    {
-        base.DestroyGameObject();
-        ObjectManager.Instance.SetGunTower(this); //Ç®¿¡ ³Ö±â
-    }
-    protected void AimAndFire() // Á¶ÁØ°ú ¹ß»ç ´ã´ç
-    {
+        if (m_state != TowerState.Alive) return; //ÇöÀç »óÅÂ°¡ »ýÁ¸ÀÌ ¾Æ´Ò ¶§´Â ¸®ÅÏ
        // ÃÑ¿­ È¸Àü¼Óµµ
         m_barrel.transform.Rotate(0, 0, m_rotationSpeed * Time.deltaTime);
 
-        if (HasTarget()) //Å¸°ÙÀÌ ÀÖ´Ù¸é
+        if (HasTarget()) //Å¸°ÙÀÌ »çÁ¤°Å¸® ³»¿¡ ÀÖ´Ù¸é
         {
              FindNearTarget(); //°¡±î¿î Ç¥ÀûÀ» ÁöÁ¤ÇØÁÖ°í
              m_rotationSpeed = m_barrelSpeed; //È¸Àü , Á¶ÁØ ½ÃÀÛ
@@ -194,11 +233,7 @@ public class TowerController : BuildableObject //ºô´õºí ¿ÀºêÁ§Æ® »ó¼Ó¹Þ´Â Æ÷Å¾ ¿
         return hitPos;
 
     }
-    protected void Update()
-    {
-        if(m_state.Equals(TowerState.Alive)) //»ýÁ¸ »óÅÂÀÏ¶§¸¸ ÀÛµ¿
-            AimAndFire();
-    }
+
 
     #endregion
 }

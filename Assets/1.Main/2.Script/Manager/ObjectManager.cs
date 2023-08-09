@@ -30,7 +30,7 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     GameObjectPool<DamageAbleObjectHUD> m_hudPool = new GameObjectPool<DamageAbleObjectHUD>();
     GameObjectPool<Barricade> m_barricadePool = new GameObjectPool<Barricade>();
     GameObjectPool<TowerController> m_towerPool = new GameObjectPool<TowerController>();
-
+    public List<TowerController> m_towerList = new List<TowerController>();
     PlayerSkillController m_player;
     PlayerObjectController m_playerObject;
     PlayerController m_playerC;
@@ -126,6 +126,7 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
             m_playerC.ObjcetBuildSuccesed(3);
             obj.BuildTurretObject(new Vector3(pointTolook.x, 0f, pointTolook.z),m_player.GetPlayerSkillData(),GetObjectStat(ObjectType.Turret));
             m_playerObject.BuildTurret(obj);
+            m_towerList.Add(obj);
         }
 
     }
@@ -174,8 +175,10 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     }
     public void SetGunTower(TowerController obj) //사용을 끝낸 Turret Object를 풀에 넣어줌.
     {
+        m_towerList.Remove(obj);
         m_playerObject.DestroyedTurret(obj);
         m_towerPool.Set(obj);
+
     }
     public void SetPlayer(PlayerSkillController player) //플레이어 설정.
     {

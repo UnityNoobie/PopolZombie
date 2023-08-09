@@ -27,7 +27,7 @@ public class PlayerStriker : MonoBehaviour
         {
             GunManager.currentWeapon.gameObject.SetActive(false); //무기 엑티브 꺼주기
         }
-        melee = newWeapon.GetComponent<Melee>(); //총을 받아온 총 오브젝트로 변경
+        melee = newWeapon.GetComponent<Melee>(); //무기를 받아온 오브젝트로 변경
         GunManager.currentWeapon = melee.GetComponent<Transform>();
         melee.grade = m_data.Grade;
         melee.m_type = m_data.weaponType;

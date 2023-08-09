@@ -74,7 +74,7 @@ public class GunManager : MonoBehaviour
             }
             if (m_animCtr.GetMotion.Equals(PlayerAnimController.Motion.Combo1) || m_animCtr.GetMotion.Equals(PlayerAnimController.Motion.Combo2))
             {
-                m_player.AnimEvnet_MeleeFinished();
+                m_player.AnimEvnet_MeleeFinished(); 
             }
             PlayerStriker.isActive = false;
             isChange = true;

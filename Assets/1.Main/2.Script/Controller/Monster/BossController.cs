@@ -55,6 +55,7 @@ public class BossController : MonsterController
         isRage= false;
     }
     #endregion
+    #region Methods
 
     #region AnimEvent
     void AnimEvent_CancleSkill() //넉백, 사망 등의 이슈로 스킬 사용이 중단되었을 때 호출.
@@ -63,9 +64,8 @@ public class BossController : MonsterController
     }
     void AnimEvent_Skill1()    //보스 스킬 1 이펙트 생성
     {
+        StopSkill();
         PlaySkill1();
-        m_skill2Pos.gameObject.SetActive(false);
-        m_skill1Pos.gameObject.SetActive(false);
         var effectName = TableEffect.Instance.m_tableData[8].Prefab[0];
         var effect = EffectPool.Instance.Create(effectName);
         m_skill = effect.GetComponent<ProjectileController>();
@@ -73,12 +73,11 @@ public class BossController : MonsterController
         m_skill.transform.position = gameObject.transform.position;
         m_skill.transform.forward = gameObject.transform.forward;
         m_skill.transform.localScale = new Vector3(2f, 2f, 2f);
-    } 
+    }
     void AnimEvent_Skill2()//보스 스킬 2 이펙트 생성
     {
+        StopSkill();
         PlaySkill2();
-        m_skill1Pos.gameObject.SetActive(false);
-        m_skill2Pos.gameObject.SetActive(false);
         var effectName = TableEffect.Instance.m_tableData[8].Prefab[1];
         var effect = EffectPool.Instance.Create(effectName);
         m_skill2 = effect.GetComponent<ProjectileController>();
@@ -98,6 +97,7 @@ public class BossController : MonsterController
         RageCool = 15f;
         base.AnimEvent_SetDie();
     }
+
     protected override void SetDie()
     {
         StopSkill();
@@ -106,64 +106,10 @@ public class BossController : MonsterController
     void StopSkill() //스킬 사용 취소
     {
         m_skill1Pos.gameObject.SetActive(false);
-        m_skill2Pos.gameObject.SetActive(false) ;
+        m_skill2Pos.gameObject.SetActive(false);
     }
     #endregion
-
-    #region SFXPlay
-    public override void PlayHitSound(string sound) //피격시 소리 재생
-    {
-        SoundManager.Instance.PlaySFX(sound, m_source);
-        SoundManager.Instance.PlaySFX(m_status.hitSound, m_source);
-    }
-    void PlaySwingSound()
-    {
-        SoundManager.Instance.PlaySFX("SFX_ZombieAtk", m_source);
-    }
-    void PlayStepSound()
-    {
-        SoundManager.Instance.PlaySFX("SFX_BossChase", m_source);
-    }
-    void PlaySkill1()
-    {
-        SoundManager.Instance.PlaySFX("SFX_BossSkill", m_source);
-    }
-    void PlaySkill2()
-    {
-        SoundManager.Instance.PlaySFX("SFX_BossSkill2", m_source);
-    }
-    void PlayRage()
-    {
-        SoundManager.Instance.PlaySFX("SFX_BossRage", m_source);
-    }
-    #endregion
-
-    #region Methods
-    void SetAttack() //공격 실행.
-    {
-        SetState(MonsterState.Attack); //공격 상태로 변경
-        if(isSkill())  //40퍼센트 확률로 스킬 실행하도록.
-        {
-            if(Random.Range(0,3) <= 1) //스킬 1과 2중 랜덤으로 실행.
-            {
-                
-                m_skill1Pos.gameObject.SetActive(true);
-               // m_navAgent.ResetPath();
-                m_animctr.Play(MonsterAnimController.Motion.Skill1);
-            }
-            else
-            {
-                m_skill2Pos.gameObject.SetActive(true);
-              //  m_navAgent.ResetPath();
-                m_animctr.Play(MonsterAnimController.Motion.Skill2);
-            }
-            
-        }
-        else { //일반 공격 실행
-          //  m_navAgent.ResetPath();
-             PlaySwingSound();
-             m_animctr.Play(MonsterAnimController.Motion.Attack); }
-    }
+   
     public override void BurnDamage() //처음엔 중첩 안되게 하려 했으나 밸런스상 중첩 가능하게 수정(수치조정)
     {
         StartCoroutine(Couroutine_BurnDamage(m_burnDamage / 10));
@@ -215,7 +161,60 @@ public class BossController : MonsterController
             SetDie();
         }
     }
+    void SetAttack() //공격 실행.
+    {
+        SetState(MonsterState.Attack); //공격 상태로 변경
+        if (isSkill())  //40퍼센트 확률로 스킬 실행하도록.
+        {
+            if (Random.Range(0, 3) <= 1) //스킬 1과 2중 랜덤으로 실행.
+            {
 
+                m_skill1Pos.gameObject.SetActive(true);
+                // m_navAgent.ResetPath();
+                m_animctr.Play(MonsterAnimController.Motion.Skill1);
+            }
+            else
+            {
+                m_skill2Pos.gameObject.SetActive(true);
+                //  m_navAgent.ResetPath();
+                m_animctr.Play(MonsterAnimController.Motion.Skill2);
+            }
+
+        }
+        else
+        { //일반 공격 실행
+          //  m_navAgent.ResetPath();
+            PlaySwingSound();
+            m_animctr.Play(MonsterAnimController.Motion.Attack);
+        }
+    }
+    #region SFXPlay
+    public override void PlayHitSound(string sound) //피격시 소리 재생
+    {
+        SoundManager.Instance.PlaySFX(sound, m_source);
+        SoundManager.Instance.PlaySFX(m_status.hitSound, m_source);
+    }
+    void PlaySwingSound()
+    {
+        SoundManager.Instance.PlaySFX("SFX_ZombieAtk", m_source);
+    }
+    void PlayStepSound()
+    {
+        SoundManager.Instance.PlaySFX("SFX_BossChase", m_source);
+    }
+    void PlaySkill1()
+    {
+        SoundManager.Instance.PlaySFX("SFX_BossSkill", m_source);
+    }
+    void PlaySkill2()
+    {
+        SoundManager.Instance.PlaySFX("SFX_BossSkill2", m_source);
+    }
+    void PlayRage()
+    {
+        SoundManager.Instance.PlaySFX("SFX_BossRage", m_source);
+    }
+    #endregion
     public override void BehaviourProcess() //유한상태머신 활용한 패턴 제어.
     {
         if (!gameObject.activeSelf || m_state.Equals(MonsterState.Die)) return; //꺼져있거나 사망상태이면 동작 X

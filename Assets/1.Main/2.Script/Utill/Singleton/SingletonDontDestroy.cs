@@ -9,18 +9,17 @@ public class SingletonDontDestroy<T> : MonoBehaviour where T : SingletonDontDest
     protected virtual void OnStart() { } //Start에서 로드되는 Start 대체 사용 메소드
     void Awake()
     {
-        if (Instance == null) //인스턴스 되어있지 않다면 Awake실행
+        if (Instance == null) //인스턴스 되어있지 않다면 인스턴트 후 Awake실행, DontDestroyOnLoad 적용
         {
             Instance = (T)this;
             OnAwake();
             DontDestroyOnLoad(gameObject);
         }
-        else //아니면 중복이라 삭제
+        else //이미 되어있다면 중복이라 삭제
         {
             Destroy(gameObject);
         }
     }
-    // Start is called before the first frame update
     void Start()
     {
         if (Instance == (T)this)

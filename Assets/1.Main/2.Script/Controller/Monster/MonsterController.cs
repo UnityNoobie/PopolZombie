@@ -111,7 +111,7 @@ public class MonsterController : MonoBehaviour
     }
     protected IEnumerator Coroutine_SerchTargetPath(int frame) // 타겟을 추적하는 코루틴.
     {
-        while (m_state == MonsterState.Chase)
+        while (m_state.Equals(MonsterState.Chase))
         {
             SetTarget();
             m_navAgent.SetDestination(m_target.transform.position);
@@ -121,6 +121,19 @@ public class MonsterController : MonoBehaviour
     }
     #endregion
 
+  
+
+    #region Methods
+    
+    // Start is called before the first frame update
+    #region SFX
+
+    public virtual void PlayHitSound(string sound) //피격시 소리 재생
+    {
+        SoundManager.Instance.PlaySFX(sound, m_source);
+        SoundManager.Instance.PlaySFX(m_status.hitSound, m_source);
+    }
+    #endregion
     #region AnimEvent
     protected virtual void AnimEvent_SetDie() //사망 애니메이션 재생 시 호출되는 메소드
     {
@@ -144,7 +157,7 @@ public class MonsterController : MonoBehaviour
                     var dot = Vector3.Dot(transform.forward, dir.normalized);
                     if (dot >= 0.5f)
                     {
-                        damageableObject.SetDamage(m_status.damage,this);
+                        damageableObject.SetDamage(m_status.damage, this);
                     }
                 }
             }
@@ -166,19 +179,6 @@ public class MonsterController : MonoBehaviour
         }
     }
     #endregion
-
-    #region Methods
-    
-    // Start is called before the first frame update
-    #region SFX
-
-    public virtual void PlayHitSound(string sound) //피격시 소리 재생
-    {
-        SoundManager.Instance.PlaySFX(sound, m_source);
-        SoundManager.Instance.PlaySFX(m_status.hitSound, m_source);
-    }
-    #endregion
-
     void HPControl(int value, AttackType type) //hp값을 조절해주는 메소드
     {
         m_status.hp += value;
@@ -322,7 +322,6 @@ public class MonsterController : MonoBehaviour
         if (!gameObject.activeSelf || m_state.Equals(MonsterState.Die)) return;
 
         timeafterAttack += Time.deltaTime;
-
         switch (m_state)
         {
             case MonsterState.Idle:

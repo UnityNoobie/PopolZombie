@@ -8,7 +8,7 @@ public class BuildableObject : MonoBehaviour, IDamageAbleObject
 {
     #region Constants and Fields
 
-    protected GameObject m_target;
+
     protected GameObject m_destroyd;
     protected AudioSource m_audio;
     protected DamageAbleObjectHUD m_hud;
@@ -17,9 +17,8 @@ public class BuildableObject : MonoBehaviour, IDamageAbleObject
     protected ObjectStat m_stat;
     protected ObjectStat m_baseStat;
     protected TableSkillStat m_skill;
-    [SerializeField]
-    protected List<MonsterController> m_targetList = new List<MonsterController>(); //공격 가능한 타겟 리스트
 
+   
     protected bool m_isReflect =false;
     protected int m_killCount = 0;
     protected float m_machineLearningDamage;
@@ -56,42 +55,7 @@ public class BuildableObject : MonoBehaviour, IDamageAbleObject
             m_stat.ArmorPierce = armorPierce;
         }
     }
-    protected bool HasTarget()//공격 가능한 타겟 리스트가 있는지 확인해주는 메소드.
-    {
-        if (m_targetList.Count > 0)
-        {
-            List<MonsterController> m_activeTargets = new List<MonsterController>();
-            foreach (MonsterController go in m_targetList)//리스트 안의 표적이 죽었을 경우를 생각하여 체크해줌.
-            {
-                if (go.IsAliveObject()) //타겟이 살아 있다면 activeTargetList에 추가해주어 targetList를 변경.
-                {
-                    m_activeTargets.Add(go);
-                }
-            }
-            m_targetList = m_activeTargets;
-        }
-        if (m_targetList.Count > 0)//리스트에 적이 남아 있으면 트루
-        {
-            return true;
-        }
-        return false; //아니면 false
-    }
-    protected void FindNearTarget() // 타겟 리스트에 있는 적들 중 가장 가까운 타겟 탐색하여 전달.
-    {
-        MonsterController closestTarget = null;
-        float closestDistance = Mathf.Infinity;
-
-        foreach (MonsterController target in m_targetList)
-        {
-            float distance = Vector3.Distance(target.transform.position, transform.position);
-            if (distance <= closestDistance)
-            {
-                closestDistance = distance;
-                closestTarget = target;
-            }
-        }
-        m_target = closestTarget.gameObject;
-    }
+   
     public virtual void InitStatus(TableSkillStat skill, ObjectStat stat) //스테이터스 설정.
     {
         float hpvalue = 1;
@@ -181,7 +145,6 @@ public class BuildableObject : MonoBehaviour, IDamageAbleObject
         }
         
     }
-   
     public virtual void SetTransform()
     {
         m_destroyd = Utill.GetChildObject(gameObject, "DestroyEffect").gameObject;

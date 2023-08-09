@@ -18,7 +18,6 @@ public class TweenMove : MonoBehaviour //애니메이션 커브 조정하여 Tween효과 구현
         while (true)
         {
             var value = m_curve.Evaluate(time);
-
             var result = m_from * (1f - value) + m_to * value;
             time += Time.deltaTime / m_duration;
             var dir = (result - transform.position);

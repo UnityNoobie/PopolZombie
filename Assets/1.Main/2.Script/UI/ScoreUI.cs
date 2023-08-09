@@ -33,23 +33,7 @@ public class ScoreUI : MonoBehaviour
     #endregion
 
     #region Methods
-
-    void SetText() //해당 페이지 범위의 점수를 표기해주는 메소드.
-    {
-        int temp = 0;
-        for(int i = page*10; i < (page * 10) + 10; i++)
-        {
-            if (i >= gameDataList.Count)
-            {
-                m_records[temp].text = null;
-            }
-            else
-            {
-                m_records[temp].text = (i + 1) + "\t" + gameDataList[i].level + "\t" + gameDataList[i].nickName + "\t\t" + gameDataList[i].round + "\t\t" + (int)gameDataList[i].gameDuration / 60 + " : " + gameDataList[i].gameDuration % 60 + "\t\t" + gameDataList[i].score + "\t\t";
-            }
-            temp++;
-        }
-    }
+  
     public void SaveGameData(PlayerController player,int gameDuration, int round) // 게임 데이터를 Json형태로 라운드 > 점수 > 게임 시간 순서로 정렬하여 저장
     {
         ScoreData newData = new ScoreData();
@@ -75,6 +59,22 @@ public class ScoreUI : MonoBehaviour
             gameDataList = JsonConvert.DeserializeObject<List<ScoreData>>(jsonData);
         }
     }
+    void SetText() //해당 페이지 범위의 점수를 표기해주는 메소드.
+    {
+        int temp = 0;
+        for (int i = page * 10; i < (page * 10) + 10; i++)
+        {
+            if (i >= gameDataList.Count)
+            {
+                m_records[temp].text = null;
+            }
+            else
+            {
+                m_records[temp].text = (i + 1) + "\t" + gameDataList[i].level + "\t" + gameDataList[i].nickName + "\t\t" + gameDataList[i].round + "\t\t" + (int)gameDataList[i].gameDuration / 60 + " : " + gameDataList[i].gameDuration % 60 + "\t\t" + gameDataList[i].score + "\t\t";
+            }
+            temp++;
+        }
+    }
     void NextPage() //페이지 이동
     {
         if((gameDataList.Count / 10) > page) //데이터 리스트가 페이지를 넘길 조건이 된다면.
@@ -83,7 +83,6 @@ public class ScoreUI : MonoBehaviour
             SetText();
         }
     }
-
     void BeforePage()//페이지 이동
     {
         if (page < 1) // 페이지가 1 미만이면 리턴
