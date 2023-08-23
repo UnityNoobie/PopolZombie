@@ -48,7 +48,6 @@ public class VFXAutoDestroy : MonoBehaviour
                         isPlaying = true;
                         break;
                     }
-
                 }
                 if (!isPlaying)
                 {

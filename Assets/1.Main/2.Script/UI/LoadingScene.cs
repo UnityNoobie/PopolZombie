@@ -18,10 +18,10 @@ public class LoadingScene : MonoBehaviour //¾À ·Îµù UI
     {
         float initialValue = m_loadingslider.value;
         float timer = 0f;
-        while (timer < 6)
+        while (timer < 3)
         {
             timer += Time.deltaTime;
-            float t = timer / 6;
+            float t = timer / 3;
             m_loadingslider.value = Mathf.Lerp(initialValue, 1F, t);
             yield return null;
         }

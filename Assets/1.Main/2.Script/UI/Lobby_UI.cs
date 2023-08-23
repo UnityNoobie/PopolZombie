@@ -32,7 +32,7 @@ public class Lobby_UI : MonoBehaviour //로비 UI
         m_creditButton.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
         m_exitButton.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
     }
-    public void SetTransform() // 좌표지정
+    public void SetTransform() // 오브젝트 참조
     {
         m_panelButton = Utill.GetChildObject(gameObject, "Panel_Button").gameObject;
         m_startButton = Utill.GetChildObject(m_panelButton, "Button_GameStart").GetComponent<Button>();

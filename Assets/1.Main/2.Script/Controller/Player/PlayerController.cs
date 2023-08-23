@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     [SerializeField]
     QuickSlot m_quickSlot;
     TableSkillStat m_skillStat;
+    WearArmorData m_armorData;
     AudioSource m_audio;
     GunManager m_manager;
     PlayerShooter m_shooter;
@@ -61,14 +62,6 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
 
     #endregion
 
-    #region ArmorData  //방어구 정보 임시저장
-    int armDefence;
-    float armDamage;
-    float hpPer;
-    float armAttackSpeed;
-    int armCriRate;
-    float armSpeed;
-    #endregion
     
     #region Property
     public enum PlayerState //플레이어의 상태 알림
@@ -202,6 +195,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             }
         }
     }
+
     //발자국 소리 재생용 이벤트.
     void AnimEvent_FootStep() 
     {
@@ -239,6 +233,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             m_animCtr.Play(PlayerAnimController.Motion.MeleeIdle);
         }
     }
+
     //콤보 공격을 위한 키버퍼 초기화
     void ReleaseKeyBuffer()
     {
@@ -500,24 +495,10 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
 
     #region AboutStatus  //플레이어 스테이터스 관련 메소드
     //방어구 데이터. 데이터 양이 적어 임시 처리 하였음. 추후 수정 해야함.
-    private void ResetData() //방어구 스탯 저장 정보 초기화
+
+    public void SetArmData(WearArmorData data) //방어구 스탯 저장 후 플레이어 스탯 갱신
     {
-        armDefence = 0;
-        armDamage = 0;
-        hpPer = 0;
-        armAttackSpeed = 0;
-        armCriRate = 0;
-        armSpeed = 0;
-    }
-    public void SetArmData(int defence, float damage, float hp, float attackSpeed, int criRate, float speed) //방어구 스탯 저장 후 플레이어 스탯 갱신
-    {
-        ResetData();
-        armDefence = defence;
-        armDamage = damage;
-        hpPer = hp;
-        armAttackSpeed = attackSpeed;
-        armCriRate = criRate;
-        armSpeed = speed;
+        m_armorData = data;
         SetStatus(m_weaponData.ID);
     }
     public void SetSkillData(TableSkillStat stat) //플레이어가 스킬을 활성화 했을 때 호출. 스탯정보를 가져오고 적용.
@@ -573,9 +554,9 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         }
         hpvalue = m_status.hp / m_status.hpMax;
         if(m_skillStat.CyberWear > 0)
-        m_status = new Status(200 * (1 + (m_skillStat.HP + m_weaponData.HP + hpPer + (m_skillStat.ObjectHP * (1 + m_skillStat.CyberWear)))) * hpvalue, 200 * (1 + (m_skillStat.HP + m_weaponData.HP + hpPer + (m_skillStat.ObjectHP *(1 + m_skillStat.CyberWear)))), 10f + m_skillStat.CriRate + m_weaponData.CriRate + armCriRate, 50f + (m_skillStat.CriDamage + m_weaponData.CriRate), 0 + (m_skillStat.AtkSpeed + m_weaponData.AtkSpeed) * (1 + armAttackSpeed), (1 + (m_skillStat.Damage + armDamage + m_skillStat.publicBuffDamage * (1 + m_skillStat.CyberWear))) * m_weaponData.Damage, 0 + m_skillStat.Defence + m_weaponData.Defence + armDefence + m_skillStat.ObjectDefence * (1 + m_skillStat.CyberWear), 130 * (1 + m_skillStat.Speed + penaltyRemove + armSpeed), m_weaponData.Mag * Mathf.CeilToInt(1 + m_skillStat.Mag), m_weaponData.ReloadTime - (m_weaponData.ReloadTime * m_skillStat.Reload), m_weaponData.KnockBack + m_skillStat.KnockBackRate, m_weaponData.KnockBackDist, m_weaponData.AttackDist, m_weaponData.Shotgun,m_status.level, m_skillStat.DamageRigist + m_skillStat.ObjectRigist * (1 + m_skillStat.CyberWear), m_skillStat.LastFire, m_skillStat.Pierce, m_skillStat.Boom, m_skillStat.ArmorPierce+ m_skillStat.BuffArmorPierce * (1 + m_skillStat.CyberWear), m_skillStat.Remove, m_skillStat.Drain, m_skillStat.Crush, m_skillStat.Burn, m_skillStat.Heal + m_skillStat.ObjectRegen * (1 + m_skillStat.CyberWear), m_knickName, m_title);
+        m_status = new Status(200 * (1 + (m_skillStat.HP + m_weaponData.HP + m_armorData.HP + (m_skillStat.ObjectHP * (1 + m_skillStat.CyberWear)))) * hpvalue, 200 * (1 + (m_skillStat.HP + m_weaponData.HP + m_armorData.HP + (m_skillStat.ObjectHP *(1 + m_skillStat.CyberWear)))), 10f + m_skillStat.CriRate + m_weaponData.CriRate + m_armorData.CriRate, 50f + (m_skillStat.CriDamage + m_weaponData.CriRate), 0 + (m_skillStat.AtkSpeed + m_weaponData.AtkSpeed) * (1 + m_armorData.AttackSpeed), (1 + (m_skillStat.Damage + m_armorData.Damage + m_skillStat.publicBuffDamage * (1 + m_skillStat.CyberWear))) * m_weaponData.Damage, 0 + m_skillStat.Defence + m_weaponData.Defence + m_armorData.Defence + m_skillStat.ObjectDefence * (1 + m_skillStat.CyberWear), 130 * (1 + m_skillStat.Speed + penaltyRemove + m_armorData.Speed), m_weaponData.Mag * Mathf.CeilToInt(1 + m_skillStat.Mag), m_weaponData.ReloadTime - (m_weaponData.ReloadTime * m_skillStat.Reload), m_weaponData.KnockBack + m_skillStat.KnockBackRate, m_weaponData.KnockBackDist, m_weaponData.AttackDist, m_weaponData.Shotgun,m_status.level, m_skillStat.DamageRigist + m_skillStat.ObjectRigist * (1 + m_skillStat.CyberWear), m_skillStat.LastFire, m_skillStat.Pierce, m_skillStat.Boom, m_skillStat.ArmorPierce+ m_skillStat.BuffArmorPierce * (1 + m_skillStat.CyberWear), m_skillStat.Remove, m_skillStat.Drain, m_skillStat.Crush, m_skillStat.Burn, m_skillStat.Heal + m_skillStat.ObjectRegen * (1 + m_skillStat.CyberWear), m_knickName, m_title);
         else
-        m_status = new Status(200 * (1 + (m_skillStat.HP + m_weaponData.HP + hpPer)) * hpvalue, 200 * (1 + (m_skillStat.HP + m_weaponData.HP + hpPer)), 10f + m_skillStat.CriRate+ m_weaponData.CriRate + armCriRate, 50f + (m_skillStat.CriDamage + m_weaponData.CriRate), 0 + (m_skillStat.AtkSpeed + m_weaponData.AtkSpeed) * (1 + armAttackSpeed),(1+ (m_skillStat.Damage + armDamage + m_skillStat.publicBuffDamage)) * m_weaponData.Damage, 0 + m_skillStat.Defence + m_weaponData.Defence + armDefence, 130 * (1 + m_skillStat.Speed +penaltyRemove + armSpeed), m_weaponData.Mag * Mathf.CeilToInt(1+ m_skillStat.Mag), m_weaponData.ReloadTime - (m_weaponData.ReloadTime * m_skillStat.Reload) ,m_weaponData.KnockBack + m_skillStat.KnockBackRate, m_weaponData.KnockBackDist,m_weaponData.AttackDist,m_weaponData.Shotgun, m_status.level, m_skillStat.DamageRigist, m_skillStat.LastFire, m_skillStat.Pierce, m_skillStat.Boom, m_skillStat.ArmorPierce + m_skillStat.BuffArmorPierce , m_skillStat.Remove, m_skillStat.Drain, m_skillStat.Crush, m_skillStat.Burn, m_skillStat.Heal, m_knickName,m_title);
+        m_status = new Status(200 * (1 + (m_skillStat.HP + m_weaponData.HP + m_armorData.HP)) * hpvalue, 200 * (1 + (m_skillStat.HP + m_weaponData.HP + m_armorData.HP)), 10f + m_skillStat.CriRate+ m_weaponData.CriRate + m_armorData.CriRate, 50f + (m_skillStat.CriDamage + m_weaponData.CriRate), 0 + (m_skillStat.AtkSpeed + m_weaponData.AtkSpeed) * (1 + m_armorData.AttackSpeed),(1+ (m_skillStat.Damage + m_armorData.Damage + m_skillStat.publicBuffDamage)) * m_weaponData.Damage, 0 + m_skillStat.Defence + m_weaponData.Defence + m_armorData.Defence, 130 * (1 + m_skillStat.Speed +penaltyRemove + m_armorData.Speed), m_weaponData.Mag * Mathf.CeilToInt(1+ m_skillStat.Mag), m_weaponData.ReloadTime - (m_weaponData.ReloadTime * m_skillStat.Reload) ,m_weaponData.KnockBack + m_skillStat.KnockBackRate, m_weaponData.KnockBackDist,m_weaponData.AttackDist,m_weaponData.Shotgun, m_status.level, m_skillStat.DamageRigist, m_skillStat.LastFire, m_skillStat.Pierce, m_skillStat.Boom, m_skillStat.ArmorPierce + m_skillStat.BuffArmorPierce , m_skillStat.Remove, m_skillStat.Drain, m_skillStat.Crush, m_skillStat.Burn, m_skillStat.Heal, m_knickName,m_title);
         HPControl(0); //바뀐 hp정보 UI에 보내주기 위해 0을 보내줌
         SetHudText(); //레벨 갱신을 위해 정보 업로드
         SetAnimSpeed(); //캐릭터의 속도에 비례하여애니메이션 속도 조절용
@@ -762,6 +743,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         m_armorManager = GetComponent<ArmorManager>();
         m_manager = GetComponent<GunManager>();
         m_hitPos = Utill.GetChildObject(gameObject, "Dummy_Pos");
+        m_armorData = new WearArmorData();
         m_shooter = GetComponent<PlayerShooter>();
     }
     #endregion

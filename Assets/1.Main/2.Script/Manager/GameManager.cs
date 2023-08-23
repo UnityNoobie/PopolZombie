@@ -19,26 +19,28 @@ public class GameManager : SingletonDontDestroy<GameManager>
 {
     #region Constants and Field
     LightIntensityTween m_light;
-    List<GameObject> m_attackAbleObject = new List<GameObject>();
-    Scene m_scene;
-    DaynNight roundTime;
+    List<GameObject> m_attackAbleObject = new List<GameObject>(); //공격 가능한 오브젝트 리스트
+    Scene m_scene; //현재 씬
+    DaynNight roundTime; //현재 낮인지 밤인지 저장
     int m_round = 0;
     int gameDuration = 0;
     string playerNickname;
     bool m_isFirst = true;
+    const int m_roundDelay = 20;
+    const int m_reviveDelay = 10;
     #endregion
 
     #region Coroutine
     IEnumerator Coroutine_DayTimeChecker() // 낮동안의 시간을 체크하고 제어하는 코루틴.
     {
-        for(int i = 20; i >= 0; i--)
+        for(int i = m_roundDelay; i >= 0; i--)
         {
             UIManager.Instance.TimeLeft(i);
             yield return new WaitForSeconds(1);
         }
         StartNight();
     }
-    IEnumerator Coroutine_GameStart() //첫 게임 시작때 실행되는 코루틴.
+    IEnumerator Coroutine_GameStart() //게임 시작때 실행되는 코루틴.
     {
         yield return new WaitForSeconds(1);
         StartDay();
@@ -55,7 +57,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     }
     IEnumerator Coroutine_RevivePlayer(PlayerController player) //플레이어 부활에 사용되는 코루틴.
     {
-        for (int i = 10; i > 0; i--)
+        for (int i = m_reviveDelay; i > 0; i--)
         {
             UGUIManager.Instance.SystemMessageSendMessage("부활까지 : " + i);
             yield return new WaitForSeconds(1);
@@ -126,7 +128,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     {
         StartCoroutine(Coroutine_RevivePlayer(player));
     }
-    void ResetRound() //로비전환 등의 상황에서 초기화되어야 하는 데이터
+    void ResetRound() //씬전환 등의 상황에서 초기화되어야 하는 데이터
     {
         gameDuration = 0;
         m_round = 0;
@@ -171,6 +173,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     {
         StopAllCoroutines();
         ResetRound();
+        UGUIManager.Instance.GetStatusUI().ResetSlotList();
         SceneManager.LoadScene("LobbyScene");
         SoundManager.Instance.LobbyStart();
     }
@@ -196,7 +199,6 @@ public class GameManager : SingletonDontDestroy<GameManager>
             StartLobby();
         }
     }
-   
     public void GameStart() //스타트 버튼 누르면 시작되는 함수. 데이터 누적등의 시작.
     {
         if(m_isFirst) //중복실행현상 발생해서 추가한 변수
@@ -253,7 +255,6 @@ public class GameManager : SingletonDontDestroy<GameManager>
         Skilldata.Instance.Load();
         ImageLoader.Instance.Load();
         TableObjectStat.Instance.Load();
-       // UtillData.Instance.Load();
     }
     protected override void OnAwake()
     {

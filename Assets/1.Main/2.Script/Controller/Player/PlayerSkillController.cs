@@ -53,7 +53,7 @@ public class PlayerSkillController : MonoBehaviour
     #region Methods
 
     #region PublicReturnMethod
-    public bool isActiveType(SkillWeaponType skillweapon, WeaponType weaponType) //스킬의 스테이터스 적용 대상과 맞는지 확인용. 큰 데이터가 아니라 Switch문 사용하였음.
+    bool isActiveType(SkillWeaponType skillweapon, WeaponType weaponType) //스킬의 스테이터스 적용 대상과 맞는지 확인용. 큰 데이터가 아니라 Switch문 사용하였음.
     {
         switch (skillweapon)
         {
@@ -225,7 +225,6 @@ public class PlayerSkillController : MonoBehaviour
             }
         }
     }
-   
     void PushSkillUpSignal() // 스킬 레벨업 시 관련 메소드에 정보 전달.
     {
         UpdateSP();
@@ -326,7 +325,7 @@ public class PlayerSkillController : MonoBehaviour
     private void Awake() 
     {
         SetTransform();
-         m_skillPoint = 100;// 테스트
+         //m_skillPoint = 100;// 테스트
         ObjectManager.Instance.SetPlayer(this);
     }
     #endregion

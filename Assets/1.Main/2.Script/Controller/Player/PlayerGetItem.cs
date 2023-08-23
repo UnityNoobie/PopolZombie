@@ -142,7 +142,7 @@ public class PlayerGetItem : MonoBehaviour
     }
     void Start()
     {
-        GetMoney(50000);//테스트용
+      //  GetMoney(50000);//테스트용
     }
     #endregion
 }

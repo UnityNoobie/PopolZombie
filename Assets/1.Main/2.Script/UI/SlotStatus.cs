@@ -27,9 +27,14 @@ public class SlotStatus : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         m_id = id;
         m_infoUI = infoui;
     }
-    public int GetEquipItemId() //장착하고 있는 아이템 정보 반환
+    public void ResetSlotData()
     {
-        return m_id;
+        if (m_id == -1) return;
+        m_id = -1;
+        m_itemImage.sprite = null;
+        m_itemName.text = null;
+        m_itemImage = null;
+        m_itemName = null;
     }
     public void OnPointerEnter(PointerEventData pointer) //마우스 올라왔을 시 정보 출력
     {

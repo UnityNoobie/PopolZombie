@@ -13,10 +13,8 @@ public class HUDController : MonoBehaviour
     HUDText[] m_hudText; 
     [SerializeField]
     UIProgressBar m_hpBar;
-
     const int m_hideRate = 5;
     #endregion
-
     #region Methods
     public void SetHUD(Transform target, string name) // 추적할 대상 Transform을 받아와 NGUI의 기능인 UI FollowTarget을 이용해 추적.
     {

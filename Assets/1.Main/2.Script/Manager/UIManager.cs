@@ -51,11 +51,11 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
     #endregion
 
     #region ScreenUI
-    public void ScoreChange(float score)
+    public void ScoreChange(float score) //화면에 표기되는 점수 표기
     {
        m_Score.text = "Score : " +score;
     }
-    public void MoneyUI(int money)
+    public void MoneyUI(int money) //화면에 표기되는 보유금액 표기
     {
         m_Money.text = money.ToString();
     }
@@ -69,17 +69,17 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
         m_weaponImage.mainTexture = wptex;
         m_quickSlot.SetItem(0,name);
     }
-    public void HPBar(float hp, float max)
+    public void HPBar(float hp, float max) //스크린 체력바 조절
     {
         m_hplable.text = (hp + " / " + max);
         m_hpUI.value = hp / max;
     }
-    public void EXPUI(float exp,float max)
+    public void EXPUI(float exp,float max) //스크린 경험치바 조절
     {
         m_EXP.text = (exp+" / "+max);
         m_EXPBar.value = exp / max;
-    }
-    public void DamagedUI()
+    } 
+    public void DamagedUI() //피해 입을 시 UITween활용하여 스크린 피해 효과( + 체력바의 벨류에 따라 알파값 조정)
     {
         if (!m_damagedUI.gameObject.activeSelf)
         {
@@ -109,7 +109,7 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
         m_damagedUI.PlayReverse();
         m_damagedUI.ResetToBeginning();
     }
-    public void DiedUI()
+    public void DiedUI() //사망 시 화면에 표기할 UI (UITween활용)
     {
         if (!m_DieUI.gameObject.activeSelf)
         {
@@ -120,7 +120,7 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
         m_DieUI.PlayForward();
         m_DieUI.ResetToBeginning();
     }
-    public void ReviveUI()
+    public void ReviveUI() //부활 시 스크린 표기 UI
     {
         m_DieUI.duration = 0.3f;
         m_DieUI.gameObject.SetActive(false);
@@ -135,7 +135,7 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
         m_ReviveUI.PlayForward();
         m_ReviveUI.PlayReverse();
     }
-    public void HealUI()
+    public void HealUI() //스크린 회복 효과
     {
         if (!m_healUI.gameObject.activeSelf)
         {
@@ -147,7 +147,7 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
         m_healUI.PlayForward();
         m_healUI.PlayReverse();
     }
-    public void LevelUPUI(int level)
+    public void LevelUPUI(int level) //스크린 레벨업 효과
     {
         if (!m_levelUpUI.gameObject.activeSelf)
         {
@@ -160,19 +160,19 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
         m_levelUpUI.PlayReverse();
         m_screenLV.text = "LV" + level;
     }
-    public void WeaponInfoUI(string Info)
+    public void WeaponInfoUI(string Info) //무기 정보 화면 표시
     {   
         m_weaponInfoUI.text = Info;
     }
-    public void EnemyLeft(int remain)
+    public void EnemyLeft(int remain) //남은 적 표기
     {
         m_enemyReamain.text = "남은적 : "+remain;
     }
-    public void TimeLeft(int remain)
+    public void TimeLeft(int remain) //다음 라운드까지 남은 시간 표기
     {
         m_enemyReamain.text = "밤까지 : " + remain;
     }
-    public void GameDuration(int time)
+    public void GameDuration(int time)  //게임 진행시간 표기
     {
         m_gameDuration.text = "진행시간 : "+ time/60 +":" + time%60;
     }

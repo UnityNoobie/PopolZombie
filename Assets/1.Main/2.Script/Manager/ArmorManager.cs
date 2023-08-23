@@ -6,7 +6,7 @@ public class ArmorManager : MonoBehaviour //장착 방어구의 정보를 관리하는 클래스
 {
     #region Constants and Fields
     [SerializeField]
-    GameObject[] m_wearArmors = new GameObject[5]; //방어구 목록
+    GameObject[] m_wearArmors = new GameObject[5]; //착용방어구 목록
     [SerializeField]
     GameObject[] m_helmets;
     [SerializeField]
@@ -17,90 +17,42 @@ public class ArmorManager : MonoBehaviour //장착 방어구의 정보를 관리하는 클래스
     GameObject[] m_pants;
     [SerializeField]
     GameObject[] m_boots;
-    Dictionary<string, ArmorData> wearArmor = new Dictionary<string, ArmorData>(); //장착하고 있는 방어구 데이터 저장
+    Dictionary<ArmorType, ArmorData> wearArmor = new Dictionary<ArmorType, ArmorData>(); //장착하고 있는 방어구 데이터 저장
     PlayerController m_player;
-    int Defence;
-    float Damage;
-    float ReloadTime;
-    float AttackSpeed;
-    int CriRate;
-    float Speed;
+    WearArmorData m_wearArmorData;
     ArmorData armorData { get; set; }
     #endregion
 
     #region Methods
     void ResetStatus() //데이터 초기화
     { 
-        Defence = 0;
-        Damage = 0;
-        ReloadTime = 0;
-        AttackSpeed = 0; 
-        CriRate = 0;
-        Speed = 0;
+        m_wearArmorData = new WearArmorData();
     }
     void SetArmorData() // 방어구의 정보를 저장해주기.
     {
         ResetStatus();//일단 TableArmor에 새롭게 저장을 해야하기 때문에 값을 다 초기화해줌.
-
-        if (m_wearArmors[0] != null) //딕셔너리에 저장되어있는 값들을 받아와 적용해주어야 할 값들을 더해줌.
+        foreach(ArmorData data in wearArmor.Values) //장착중인 아이템을 저장하고 있는 딕셔너리에서 값을 찾아서 더해줌.
         {
-            Defence += wearArmor["Helmet"].Defence;
-            Damage += wearArmor["Helmet"].Damage;
-            ReloadTime += wearArmor["Helmet"].HP;
-            AttackSpeed += wearArmor["Helmet"].AttackSpeed;
-            CriRate += wearArmor["Helmet"].CriRate;
-            Speed += wearArmor["Helmet"].Speed;
-
+            m_wearArmorData.Defence += data.Defence;
+            m_wearArmorData.Damage += data.Damage;
+            m_wearArmorData.HP += data.HP;
+            m_wearArmorData.AttackSpeed += data.AttackSpeed;
+            m_wearArmorData.CriRate += data.CriRate;
+            m_wearArmorData.Speed += data.Speed;
         }
-        if (m_wearArmors[1] != null)
-        {
-            Defence += wearArmor["Glove"].Defence;
-            Damage += wearArmor["Glove"].Damage;
-            ReloadTime += wearArmor["Glove"].HP;
-            AttackSpeed += wearArmor["Glove"].AttackSpeed;
-            CriRate += wearArmor["Glove"].CriRate;
-            Speed += wearArmor["Glove"].Speed;
-            
-        }
-        if (m_wearArmors[2] != null)
-        {
-            Defence += wearArmor["Armor"].Defence;
-            Damage += wearArmor["Armor"].Damage;
-            ReloadTime += wearArmor["Armor"].HP;
-            AttackSpeed += wearArmor["Armor"].AttackSpeed;
-            CriRate += wearArmor["Armor"].CriRate;
-            Speed += wearArmor["Armor"].Speed;
-            
-        }
-        if (m_wearArmors[3] != null)
-        {
-            Defence += wearArmor["Pants"].Defence;
-            Damage += wearArmor["Pants"].Damage;
-            ReloadTime += wearArmor["Pants"].HP;
-            AttackSpeed += wearArmor["Pants"].AttackSpeed;
-            CriRate += wearArmor["Pants"].CriRate;
-            Speed += wearArmor["Pants"].Speed;
-        }
-        if (m_wearArmors[4] != null)
-        {
-            Defence += wearArmor["Boots"].Defence;
-            Damage += wearArmor["Boots"].Damage;
-            ReloadTime += wearArmor["Boots"].HP;
-            AttackSpeed += wearArmor["Boots"].AttackSpeed;
-            CriRate += wearArmor["Boots"].CriRate;
-            Speed += wearArmor["Boots"].Speed;
-        }
-
-        WearArmorData aarmorData = new WearArmorData();
-        aarmorData.SetWearArmorData(Defence, Damage, ReloadTime, AttackSpeed, CriRate, Speed);
-        m_player.SetArmData(Defence, Damage, ReloadTime, AttackSpeed, CriRate, Speed);
+        m_player.SetArmData(m_wearArmorData);
     }
-    
+
+    public int GetEquipArmorData(ArmorType type)
+    {
+        if (!wearArmor.ContainsKey(type)) return -1;
+        return wearArmor[type].Id;
+    }
     public void ChangeArmor(int Id) // 방어구 획득시 대상 방어구의 아이디를 받아와 교체 실시.
     {
         ArmorData m_armorData =  armorData.GetArmorData(Id);//방어궁의 정보를 가져옴
         UGUIManager.Instance.GetStatusUI().SetSlot(Id, m_armorData.Image, m_armorData.armorType, ItemType.Armor); //스테이터스 UI에 정보 전달
-        
+        wearArmor[m_armorData.armorType] = m_armorData; //딕셔너리에 새로 들어온 방어구로 갱신.
         if (m_armorData.armorType.Equals(ArmorType.Helmet))
         {
             SetHelmet(Id, m_armorData.Grade - 1);
@@ -123,54 +75,48 @@ public class ArmorManager : MonoBehaviour //장착 방어구의 정보를 관리하는 클래스
         }
         SetArmorData(); //방어구의 교체가 일어났으니 스탯 재정비.
     }
-    public void SetHelmet(int id, int grade) //헬멧 장착을 위한 메서드
+    void SetHelmet(int id, int grade) //헬멧 장착을 위한 메서드
     {
         if (m_wearArmors[0] != null)
         {
             m_wearArmors[0].SetActive(false); //헬멧이 장착되어있는 상태이면 기존 헬멧 꺼주기
         }
-        wearArmor[TableArmorStat.Instance.m_armorData[id].Type] = TableArmorStat.Instance.m_armorData[id];//딕셔너리에 정보 넣어주기.
         m_wearArmors[0] = m_helmets[grade];
         m_wearArmors[0].SetActive(true); //헬멧을 장착아머0번에 넣어주고 액티브 켜주기.
-        
     }
-    public void SetGloves(int id,int grade)//글러브 장착을 위한 메서드
+    void SetGloves(int id,int grade)//글러브 장착을 위한 메서드
     {
         if (m_wearArmors[1] != null)
         {
             m_wearArmors[1].SetActive(false); //헬멧이 장착되어있는 상태이면 기존 헬멧 꺼주기
         }
-        wearArmor[TableArmorStat.Instance.m_armorData[id].Type] = TableArmorStat.Instance.m_armorData[id];//딕셔너리에 정보 넣어주기.
         m_wearArmors[1] = m_gloves[grade];
         m_wearArmors[1].SetActive(true); //헬멧을 장착아머0번에 넣어주고 액티브 켜주기.
     }
-    public void SetArmors(int id, int grade)//방어구 장착을 위한 메서드
+    void SetArmors(int id, int grade)//방어구 장착을 위한 메서드
     {
         if (m_wearArmors[2] != null)
         {
             m_wearArmors[2].SetActive(false); //헬멧이 장착되어있는 상태이면 기존 헬멧 꺼주기
         }
-        wearArmor[TableArmorStat.Instance.m_armorData[id].Type] = TableArmorStat.Instance.m_armorData[id];//딕셔너리에 정보 넣어주기.
         m_wearArmors[2] = m_armors[grade];
         m_wearArmors[2].SetActive(true); //헬멧을 장착아머0번에 넣어주고 액티브 켜주기.
     }
-    public void SetPants(int id, int grade)//바지 장착을 위한 메서드
+    void SetPants(int id, int grade)//바지 장착을 위한 메서드
     {
         if (m_wearArmors[3] != null)
         {
             m_wearArmors[3].SetActive(false); //헬멧이 장착되어있는 상태이면 기존 헬멧 꺼주기
         }
-        wearArmor[TableArmorStat.Instance.m_armorData[id].Type] = TableArmorStat.Instance.m_armorData[id];//딕셔너리에 정보 넣어주기.
         m_wearArmors[3] = m_pants[grade];
         m_wearArmors[3].SetActive(true); //헬멧을 장착아머0번에 넣어주고 액티브 켜주기.
     }
-    public void SetBoots(int id, int grade)//신발 장착을 위한 메서드
+    void SetBoots(int id, int grade)//신발 장착을 위한 메서드
     {
         if (m_wearArmors[4] != null)
         {
             m_wearArmors[4].SetActive(false); //헬멧이 장착되어있는 상태이면 기존 헬멧 꺼주기
         }
-        wearArmor[TableArmorStat.Instance.m_armorData[id].Type] = TableArmorStat.Instance.m_armorData[id];//딕셔너리에 정보 넣어주기.
         m_wearArmors[4] = m_boots[grade];
         m_wearArmors[4].SetActive(true); //헬멧을 장착아머0번에 넣어주고 액티브 켜주기.
     }

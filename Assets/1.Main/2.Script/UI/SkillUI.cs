@@ -37,6 +37,10 @@ public class SkillUI : MonoBehaviour
     #endregion
 
     #region Methods
+    private void OnEnable()
+    {
+        SetSlotList(m_Type);
+    }
     public void SetTransform() // 하위 오브젝트에서 필요한 좌표, 컴포넌트 읽어옴
     {
         m_low = Utill.GetChildObject(gameObject, "Lv1");
@@ -289,6 +293,8 @@ public class SkillUI : MonoBehaviour
     void ResetList() //현재 스킬 리스트를 초기화.
     {
         m_SkillList = new List<int>();
+        m_active.DeActiveUI();
+        m_skillInfo.DeActiveUI();
     }
     public void ActiveSkill(PlayerSkillController skill) //스킬창 열때 플레이어 정보도 호출함
     {

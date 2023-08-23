@@ -220,12 +220,9 @@ public class TowerController : BuildableObject //빌더블 오브젝트 상속받는 포탑 �
         float damage;
         Vector3 hitPos = Vector3.zero;
         var mon = hit.collider.GetComponent<MonsterController>();
-     
         GunManager.AttackProcess(mon, m_stat.Damage + m_machineLearning , m_stat.CriRate, m_stat.CriRate, m_stat.ArmorPierce, out damage);
         mon.SetDamage(AttackType.Normal, damage, null, false, this);
-
         hitPos = hit.point;
-
         var hiteffect = TableEffect.Instance.m_tableData[4].Prefab[2];
         var effect = EffectPool.Instance.Create(hiteffect);
         effect.transform.position = hitPos;
@@ -233,7 +230,5 @@ public class TowerController : BuildableObject //빌더블 오브젝트 상속받는 포탑 �
         return hitPos;
 
     }
-
-
     #endregion
 }

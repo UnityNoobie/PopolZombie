@@ -157,7 +157,8 @@ public class PanelItemInfo : MonoBehaviour
     }
     public void DeActiveUI() //²ô±â
     {
-         gameObject.SetActive(false);
+         if(gameObject.activeSelf)
+            gameObject.SetActive(false);
     }
     #endregion
 }

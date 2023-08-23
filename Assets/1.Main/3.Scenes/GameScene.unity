@@ -5784,11 +5784,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_flashEffect: {fileID: 198000013117135310}
   m_ShellEffect: {fileID: 198000008917208891}
-  m_linePrefab: {fileID: 0}
-  m_shootSound: {fileID: 8300000, guid: 5a7265df145ebf14cb22a06d63a2131a, type: 3}
-  m_reloadSound: {fileID: 8300000, guid: 3fb6d6ef6efd71e48a4f03b024421c16, type: 3}
   m_player: {fileID: 95808264624923301}
   isfirst: 1
+  gunstate: 0
 --- !u!114 &135239024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5803,11 +5801,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_flashEffect: {fileID: 735794420490085746}
   m_ShellEffect: {fileID: 1785613366}
-  m_linePrefab: {fileID: 0}
-  m_shootSound: {fileID: 8300000, guid: 5a7265df145ebf14cb22a06d63a2131a, type: 3}
-  m_reloadSound: {fileID: 8300000, guid: 3fb6d6ef6efd71e48a4f03b024421c16, type: 3}
   m_player: {fileID: 95808264624923301}
   isfirst: 1
+  gunstate: 0
 --- !u!114 &135239025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5822,11 +5818,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_flashEffect: {fileID: 198000011765057493}
   m_ShellEffect: {fileID: 198000009291230992}
-  m_linePrefab: {fileID: 0}
-  m_shootSound: {fileID: 8300000, guid: 5a7265df145ebf14cb22a06d63a2131a, type: 3}
-  m_reloadSound: {fileID: 8300000, guid: 3fb6d6ef6efd71e48a4f03b024421c16, type: 3}
   m_player: {fileID: 95808264624923301}
   isfirst: 1
+  gunstate: 0
 --- !u!114 &135239026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5841,11 +5835,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_flashEffect: {fileID: 198000011228461628}
   m_ShellEffect: {fileID: 198000009455013464}
-  m_linePrefab: {fileID: 0}
-  m_shootSound: {fileID: 8300000, guid: 5a7265df145ebf14cb22a06d63a2131a, type: 3}
-  m_reloadSound: {fileID: 8300000, guid: 3fb6d6ef6efd71e48a4f03b024421c16, type: 3}
   m_player: {fileID: 95808264624923301}
   isfirst: 1
+  gunstate: 0
 --- !u!114 &135239037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5866,7 +5858,6 @@ MonoBehaviour:
   m_PistolleftPos: {fileID: 2032534594}
   m_SMGLeftPos: {fileID: 896528376}
   m_Pivot: {fileID: 1040906316}
-  m_Camera: {fileID: 436251166}
 --- !u!114 &135239038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6522,6 +6513,7 @@ MonoBehaviour:
   m_barricadePrefab: {fileID: 0}
   m_gunTurretPrefab: {fileID: 0}
   preview: {fileID: 0}
+  m_towerList: []
 --- !u!4 &285459331
 Transform:
   m_ObjectHideFlags: 0
@@ -8794,9 +8786,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3242fd133b4ba574d8a919eca255fa39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_players: []
-  m_playerItem: []
-  m_playersSave: []
 --- !u!4 &883698569
 Transform:
   m_ObjectHideFlags: 0
@@ -10876,11 +10865,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_flashEffect: {fileID: 198000013014144112}
   m_ShellEffect: {fileID: 198000010954489800}
-  m_linePrefab: {fileID: 0}
-  m_shootSound: {fileID: 8300000, guid: 5a7265df145ebf14cb22a06d63a2131a, type: 3}
-  m_reloadSound: {fileID: 8300000, guid: 3fb6d6ef6efd71e48a4f03b024421c16, type: 3}
   m_player: {fileID: 95808264624923301}
   isfirst: 1
+  gunstate: 0
 --- !u!114 &1399666919 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 421907679280488569, guid: 9f728d44025ea7743960ce2fe4f34367,
@@ -35503,9 +35490,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c332a9eef98e0464cba5fb48bbe7e08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_barrelSpeed: 0
-  m_rotationSpeed: 0
-  m_targetList: []
 --- !u!65 &2113270005
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -41323,10 +41307,8 @@ MonoBehaviour:
     Title: 
   m_PlayerHuD: {fileID: 198466309}
   m_quickSlot: {fileID: 72392543}
-  m_updateManager: {fileID: 883698568}
   m_area: {fileID: 10758211}
   m_dir: {x: 0, y: 0, z: 0}
-  pDefence: 0
 --- !u!136 &95808264624923302
 CapsuleCollider:
   m_ObjectHideFlags: 0

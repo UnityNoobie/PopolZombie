@@ -178,6 +178,7 @@ public class MonsterController : MonoBehaviour
             StopAllCoroutines();
         }
     }
+
     #endregion
     void HPControl(int value, AttackType type) //hp값을 조절해주는 메소드
     {

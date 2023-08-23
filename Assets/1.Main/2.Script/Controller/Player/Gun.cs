@@ -183,6 +183,7 @@ public class Gun : MonoBehaviour
         RaycastHit hit;
         Vector3 hitPos = Vector3.zero;
         Vector3 shotFire = Vector3.zero;
+        var layer = (1 << LayerMask.NameToLayer("Background") | 1 << LayerMask.NameToLayer("Monster"));
         shotFire = m_player.transform.forward;
         float verti = Random.Range(-0.05f, 0.05f); //총기 탄퍼짐 표현용
         if (m_data.weaponType == WeaponType.ShotGun) //샷건의 경우 특수한 작동방식을 가지기 때문에 이렇게 합시다.
@@ -194,7 +195,7 @@ public class Gun : MonoBehaviour
                 shotFire.x += verti;
                 if (pierce)
                 {
-                    RaycastHit[] hits = Physics.RaycastAll(m_firePos.position, shotFire, m_player.GetStatus.AtkDist);
+                    RaycastHit[] hits = Physics.RaycastAll(m_firePos.position, shotFire, m_player.GetStatus.AtkDist, layer);
                     for (int j = 0; j < hits.Length; j++)
                     {
                         if (hits[j].collider.CompareTag("Zombie"))
@@ -207,7 +208,7 @@ public class Gun : MonoBehaviour
                 }
                 else
                 {
-                    if (Physics.Raycast(m_firePos.position, shotFire, out hit, m_player.GetStatus.AtkDist)) //시작지점, 방향, 충돌정보, 사정거리 
+                    if (Physics.Raycast(m_firePos.position, shotFire, out hit, m_player.GetStatus.AtkDist, layer)) //시작지점, 방향, 충돌정보, 사정거리 
                     {
                         if (hit.collider.CompareTag("Background"))
                         {
@@ -236,7 +237,7 @@ public class Gun : MonoBehaviour
             shotFire.x += verti;
             if (pierce)
             {
-                RaycastHit[] hits = Physics.RaycastAll(m_firePos.position, shotFire, m_player.GetStatus.AtkDist);
+                RaycastHit[] hits = Physics.RaycastAll(m_firePos.position, shotFire, m_player.GetStatus.AtkDist, layer);
                 for (int j = 0; j < hits.Length; j++)
                 {
                     if (hits[j].collider.CompareTag("Zombie"))
@@ -248,7 +249,7 @@ public class Gun : MonoBehaviour
             }
             else
             {
-                if (Physics.Raycast(m_firePos.position, shotFire, out hit, m_player.GetStatus.AtkDist)) //시작지점, 방향, 충돌정보, 사정거리 
+                if (Physics.Raycast(m_firePos.position, shotFire, out hit, m_player.GetStatus.AtkDist, layer)) //시작지점, 방향, 충돌정보, 사정거리 
                 {
                     if (hit.collider.CompareTag("Background"))
                     {

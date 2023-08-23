@@ -21,7 +21,7 @@ public class ScoreData
 public class ScoreUI : MonoBehaviour
 {
     #region Constants and Fields   
-    TextMeshProUGUI[] m_records;
+    Records[] m_records;
     Button m_fore;
     Button m_next;
     Button m_exit;
@@ -44,7 +44,7 @@ public class ScoreUI : MonoBehaviour
         newData.score = player.GetScore();
 
         gameDataList.Add(newData);
-        gameDataList = gameDataList.OrderByDescending(data => data.round).ThenByDescending(data => data.score).ThenBy(data => Mathf.FloorToInt(data.gameDuration)).ToList();
+        gameDataList = gameDataList.OrderByDescending(data => data.round).ThenByDescending(data => data.score).ThenByDescending(data => Mathf.FloorToInt(data.gameDuration)).ToList();
 
         string jsonData = JsonConvert.SerializeObject(gameDataList, Formatting.Indented);
         string filePath = Path.Combine(Application.persistentDataPath, fileName);
@@ -66,11 +66,11 @@ public class ScoreUI : MonoBehaviour
         {
             if (i >= gameDataList.Count)
             {
-                m_records[temp].text = null;
+                m_records[temp].NullRecords();
             }
             else
             {
-                m_records[temp].text = (i + 1) + "\t" + gameDataList[i].level + "\t" + gameDataList[i].nickName + "\t\t" + gameDataList[i].round + "\t\t" + (int)gameDataList[i].gameDuration / 60 + " : " + gameDataList[i].gameDuration % 60 + "\t\t" + gameDataList[i].score + "\t\t";
+                m_records[temp].SetInfo(i + 1, gameDataList[i].level, gameDataList[i].nickName, gameDataList[i].round, (int)gameDataList[i].gameDuration / 60 + " : " + gameDataList[i].gameDuration % 60, gameDataList[i].score);
             }
             temp++;
         }
@@ -96,7 +96,11 @@ public class ScoreUI : MonoBehaviour
         m_exit = Utill.GetChildObject(gameObject, "Button_Exit").GetComponent<Button>();
         m_fore = Utill.GetChildObject(gameObject, "Button_Before").GetComponent<Button>();
         m_next = Utill.GetChildObject(gameObject, "Button_Next").GetComponent<Button>();
-        m_records = Utill.GetChildObject(gameObject, "RecordList").GetComponentsInChildren<TextMeshProUGUI>();
+        m_records = Utill.GetChildObject(gameObject,"RecordList").GetComponentsInChildren<Records>();
+        for(int i = 0; i < m_records.Length; i++)
+        {
+            m_records[i].SetTransform();
+        }
         m_exit.onClick.AddListener(DeactiveUI);
         m_fore.onClick.AddListener(BeforePage);
         m_next.onClick.AddListener(NextPage);

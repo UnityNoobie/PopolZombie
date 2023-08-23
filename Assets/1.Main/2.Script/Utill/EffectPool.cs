@@ -12,12 +12,6 @@ public class EffectPool : SingletonMonoBehaviour<EffectPool>
     Dictionary<string, GameObject> m_dicPrefabList = new Dictionary<string, GameObject>(); //딕셔너리 이용하여 프리펩리스트 저장
     #endregion
     #region Methods
-    /*
-    IEnumerator CorouTine_SetActive(GameObject obj, bool isActive) //모종의 이유로 코드가 작동하지않아 임시로 사용하였으나 수정후 사용X 
-    {
-        yield return new WaitForEndOfFrame(); //한프레임동안 null해서 다음프레임에 다음코드 실행하기위함.
-        obj.SetActive(false);
-    }*/
     void LoadEffect() //이펙트를 불러오는 메소드
     {
         EffectPoolUnit unit = null; 

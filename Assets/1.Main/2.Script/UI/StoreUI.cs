@@ -23,7 +23,6 @@ public class StoreUI : MonoBehaviour
     BuyItems m_buyItem;
     PanelItemInfo m_info;
     PanelItemInfo m_equipItem;
-    StatusUI m_status;
     PlayerController m_player;
     bool isloaded = false;
     public Dictionary<int, ArmorData> m_armordata = new Dictionary<int, ArmorData>();
@@ -77,6 +76,8 @@ public class StoreUI : MonoBehaviour
         {
             m_slots[i].ResetSlot();
         }
+        m_info.DeActiveUI();
+        m_equipItem.DeActiveUI();
     }
     public void SetItemListTable()
     {
@@ -146,7 +147,6 @@ public class StoreUI : MonoBehaviour
     {
         m_content = Utill.GetChildObject(gameObject, "Content");
         m_slots = m_content.GetComponentsInChildren<Slot>(true);
-        m_status = UGUIManager.Instance.GetStatusUI();
         m_info = Utill.GetChildObject(gameObject, "ItemInfo").GetComponent<PanelItemInfo>();
         m_equipItem = Utill.GetChildObject(gameObject, "EquipItem").GetComponent<PanelItemInfo>();
         m_buyItem = Utill.GetChildObject(gameObject, "BuyItem").GetComponent<BuyItems>();

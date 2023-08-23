@@ -11,6 +11,8 @@ public class StatusUI : MonoBehaviour
     PlayerController m_player;
     PlayerGetItem m_playeritem;
     PlayerObjectController m_playerObject;
+    ArmorManager m_armorManager;
+    GunManager m_gunManager;
     TextMeshProUGUI[] m_status;
     TextMeshProUGUI[] m_useAbleItem;
     TextMeshProUGUI m_name;
@@ -33,6 +35,8 @@ public class StatusUI : MonoBehaviour
         m_player = player;
         m_playeritem = m_player.GetComponent<PlayerGetItem>();
         m_playerObject = m_player.GetComponent<PlayerObjectController>();
+        m_armorManager = m_player.GetComponent<ArmorManager>();
+        m_gunManager = m_player.GetComponent<GunManager>();
         FindNSetSlots();
     }
     public void FindNSetSlots() //ÁÂÇ¥ ¤µ¼³Á¤
@@ -94,26 +98,20 @@ public class StatusUI : MonoBehaviour
     {
         if (itemtype.Equals(ItemType.Armor))
         {
-            switch (armortype)
-            {
-                case ArmorType.Helmet:
-                    return m_itemSlots[0].GetEquipItemId();    
-                case ArmorType.Armor:
-                    return m_itemSlots[1].GetEquipItemId();              
-                case ArmorType.Pants:
-                    return m_itemSlots[2].GetEquipItemId();
-                case ArmorType.Glove:
-                    return m_itemSlots[3].GetEquipItemId();
-                case ArmorType.Boots:
-                    return m_itemSlots[4].GetEquipItemId();
-            }
+            return m_armorManager.GetEquipArmorData(armortype);
         }
         else if (itemtype.Equals(ItemType.Weapon))
         {
-            return m_itemSlots[5].GetEquipItemId();
+            return m_gunManager.GetWeaponId();
         }
         return -1;
-
+    }
+    public void ResetSlotList()
+    {
+        for(int i = 0; i < m_itemSlots.Length; i++)
+        {
+            m_itemSlots[i].ResetSlotData();
+        }
     }
     public void SetSlot(int id, string imagename, ArmorType armortype,ItemType itemtype) //½½·Ô ¼³Á¤
     {

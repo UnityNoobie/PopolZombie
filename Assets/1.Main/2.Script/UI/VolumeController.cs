@@ -45,6 +45,7 @@ public class VolumeController : MonoBehaviour //º¼·ý Á¶Àý
         m_muteButton.onClick.AddListener(SetMute);
         m_muteButton.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
         m_accaptButton.onClick.AddListener(SetValue);
+        m_accaptButton.onClick.AddListener(CancleMenu);
         m_accaptButton.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
         m_cancleButton.onClick.AddListener(CancleMenu);
         m_cancleButton.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);

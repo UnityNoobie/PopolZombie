@@ -102,7 +102,6 @@ public class GunManager : MonoBehaviour
     {
         return currentWeaponId;
     }
-
     public void SkillUpSignal() //스킬 레벨이 변경했을 때 스테이터스 변경을 위해 호출
     {
         if (shooter.enabled)
