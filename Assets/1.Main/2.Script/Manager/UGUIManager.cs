@@ -21,6 +21,7 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     Canvas m_canvas;
     Camera m_uiCam;
     VolumeController m_volumeUI;
+    ScreenHUD m_hud;
     GameMenuUI m_menuUI;
     PlayerController m_player;
     #endregion
@@ -55,6 +56,10 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     #region Method
 
     #region returnMethod
+    public ScreenHUD GetScreenHUD()
+    {
+        return m_hud;
+    }
     public StoreUI GetStoreUI()
     {
         return m_storeUI;
@@ -193,6 +198,8 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
         m_input = GetComponentInChildren<NickInput>(true);
         m_tipsUI = GetComponentInChildren<TipsUI>(true);
         m_uiCam = GetComponentInChildren<Camera>();
+        m_hud = GetComponentInChildren<ScreenHUD>(true);
+        m_hud.SetTransform();
         m_tipsUI.SetTransform();
         m_input.SetTransform();
         m_scoreUI.SetTransform();

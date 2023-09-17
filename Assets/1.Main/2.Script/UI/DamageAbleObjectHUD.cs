@@ -2,15 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class DamageAbleObjectHUD : MonoBehaviour
 {
     #region Constants and Fields
-    Slider m_hpSlider;
-    TextMeshProUGUI m_hpValue;
+    UISliderController m_slider;
     TextMeshProUGUI m_killCount;
     GameObject m_damagedText;
     GameObjectPool<DamagedText> m_damageTextPool = new GameObjectPool<DamagedText>();
@@ -22,8 +19,8 @@ public class DamageAbleObjectHUD : MonoBehaviour
     #region Methods
     public void SetHUD() //HUD 세팅
     {
-        m_hpSlider = GetComponentInChildren<Slider>(true);
-        m_hpValue = Utill.GetChildObject(gameObject, "ValueText").GetComponent<TextMeshProUGUI>();
+        m_slider = GetComponentInChildren<UISliderController>(true);
+        m_slider.SetTransform();
         m_killCount = Utill.GetChildObject(gameObject, "KillCount").GetComponent<TextMeshProUGUI>() ;
         m_damagedText = Resources.Load<GameObject>("Prefabs/DamageText");
         m_damageTextPool = new GameObjectPool<DamagedText>(5, () =>
@@ -74,11 +71,10 @@ public class DamageAbleObjectHUD : MonoBehaviour
         {
             Invoke("Hide", 5f); //체력이 95퍼센트 이상이라면 5초뒤 화면에서 사라지도록 인보크.
         }
-        m_hpSlider.value = hp / maxhp;
+        m_slider.SetSliderValue((int)maxhp, (int)hp,true,0.01f);
         hp = Mathf.CeilToInt(hp);
         maxhp = Mathf.CeilToInt(maxhp);
         damage = Mathf.CeilToInt(damage);
-        m_hpValue.text = hp + "/" + maxhp;
         CreateText(damage);
     }
     void Show() //게임오브젝트 온

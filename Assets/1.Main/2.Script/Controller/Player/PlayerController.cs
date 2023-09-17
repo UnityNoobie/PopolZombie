@@ -1,14 +1,12 @@
-using JetBrains.Annotations;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using static Gun;
 using static InvBaseItem;
 using static PlayerStriker;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 
 public class PlayerController : MonoBehaviour ,IDamageAbleObject
@@ -41,6 +39,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     PlayerAnimController m_animCtr;
     PlayerSkillController m_skill;
     PlayerObjectController m_playerObject;
+    PlayerGetItem m_item;
     [SerializeField]
     GameObject m_area;
     [SerializeField]
@@ -233,6 +232,8 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             m_animCtr.Play(PlayerAnimController.Motion.MeleeIdle);
         }
     }
+    
+
 
     //콤보 공격을 위한 키버퍼 초기화
     void ReleaseKeyBuffer()
@@ -351,6 +352,11 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     //플레이어의 전체적인 조작을 담당하는 메소드
     public void BehaviorProcess()
     {
+        if(Input.GetKeyDown(KeyCode.M)) //테스트용 치트키
+        {
+            m_skill.UsingCheatKey();
+            m_item.UsingCheatKey();
+        }
         // 사망시 작동 x
         if (m_Pstate.Equals(PlayerState.dead)) return;
 
@@ -745,6 +751,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         m_hitPos = Utill.GetChildObject(gameObject, "Dummy_Pos");
         m_armorData = new WearArmorData();
         m_shooter = GetComponent<PlayerShooter>();
+        m_item = GetComponent<PlayerGetItem>();
     }
     #endregion
 

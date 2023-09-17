@@ -78,6 +78,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIStretch.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Object\AreaChecker.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\ProjectileController.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\Records.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Object\TowerController.cs" />
     <Compile Include="Assets\External\HUD Text\Examples\Scripts\ColliderDisplayText.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\LookAtTarget.cs" />
@@ -91,7 +92,6 @@
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIPanel.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\Game\UIItemSlot.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIImageButton.cs" />
-    <Compile Include="Assets\1.Main\2.Script\TestMonManager.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\PropertyReference.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\TweenMove.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\AttackAreaUnitFind.cs" />
@@ -104,7 +104,6 @@
     <Compile Include="Assets\External\NGUI\Examples\Scripts\InventorySystem\Game\UIItemStorage.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerObjectController.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\AnimationController.cs" />
-    <Compile Include="Assets\1.Main\2.Script\TestMonster.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonScale.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\PanWithMouse.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerSkillController.cs" />
@@ -305,7 +304,9 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
-    <Compile Include="Assets\1.Main\2.Script\UI\Records.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\UISliderController.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\UIQuickSlot.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\ScreenHUD.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class BuildableObject : MonoBehaviour, IDamageAbleObject

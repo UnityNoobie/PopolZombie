@@ -171,7 +171,10 @@ public class PlayerSkillController : MonoBehaviour
         m_weapontype = type;
         UpdateSkillData();
     }
-
+    public void UsingCheatKey()
+    {
+        m_skillPoint = 100;
+    }
     public void SetSkillUI(SkillUI ui) //UI설정
     {
         m_skillUI = ui;
@@ -232,7 +235,6 @@ public class PlayerSkillController : MonoBehaviour
         m_playerObject.UpdateObjectStat();
         UGUIManager.Instance.GetStatusUI().SetStatus(); // 신 인벤토리
     }
-
     void ResetDatas() //이전에 가지고 있던 스킬정보 초기화.
     {
         m_playerSkillstat = new TableSkillStat();
@@ -325,7 +327,7 @@ public class PlayerSkillController : MonoBehaviour
     private void Awake() 
     {
         SetTransform();
-         //m_skillPoint = 100;// 테스트
+        //m_skillPoint = 100;  // 테스트
         ObjectManager.Instance.SetPlayer(this);
     }
     #endregion

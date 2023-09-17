@@ -110,7 +110,10 @@ public class PlayerGetItem : MonoBehaviour
     {
         m_slot.SetPlayer(player);
     }
-
+    public void UsingCheatKey()
+    {
+        m_playerMoney = 100000;
+    }
     private void OnTriggerEnter(Collider other)//상점 진입 감지를 위한 메소드
     {
         if (other.CompareTag("Store")) //상점 에어리어에 들어갔을경우
