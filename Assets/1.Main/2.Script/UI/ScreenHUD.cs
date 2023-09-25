@@ -29,13 +29,9 @@ public class ScreenHUD : MonoBehaviour
 
     UIQuickSlot[] m_quickSlots;
 
-    public void SetRoundText(string round)
+    public void SetRoundText(int round)
     {
         m_roundText.text = round + " 라운드";
-    }
-    public void SetSubText(string text)
-    {
-        m_roundText.text += text;
     }
     public void GameDuration(int time)
     {
@@ -49,9 +45,50 @@ public class ScreenHUD : MonoBehaviour
     {
         m_subText.text = "남은적 : " + remain;
     }
+    public void SetScore(int score)
+    {
+        m_scoreText.text = "Score : "+ score;
+    }
     public void SetActive(bool active)
     {
+        if(!active)  ResetData();
         gameObject.SetActive(active);
+    }
+    public void SetHPValue(int max, int current)
+    {
+        m_hpSlider.SetSliderValue(max,current);
+    }
+    public void SetEXPValue(int max, int current)
+    {
+        m_expSlider.SetSliderValue(max,current,true,1.5f);
+    }
+    public void SetMoney(int money)
+    {
+        m_moneyText.text = money + "골드";
+    }
+    public void SetMainImage(string image)
+    {
+        m_mainWeapon.texture = ImageLoader.Instance.GetImage(image).texture;
+        if (!m_mainWeapon.enabled) m_mainWeapon.gameObject.SetActive(true);
+        UpdateQuickSlotItem(0, 1, image);
+    }
+    public void UpdateQuickSlotItem(int slottype,int itemCount,string sprite)
+    {
+        m_quickSlots[slottype].UpdateItemSlot(sprite, itemCount);
+    }
+    public void SetWeaponInfo(string info)
+    {
+        m_weaponText.text = info;
+    }
+    void ResetData()
+    {
+        m_roundText.text = null;
+        m_moneyText.text = null;
+        m_timeText.text = null;
+        m_weaponText.text = null;
+        m_scoreText.text = null;
+        m_mainWeapon.texture = null;
+        m_subWeapon.texture = null;
     }
     public void SetTransform()
     {
@@ -76,7 +113,7 @@ public class ScreenHUD : MonoBehaviour
         m_mainWeapon = Utill.GetChildObject(m_slotPos.gameObject,"MainWeapon").GetComponent<RawImage>();
         m_subWeapon = Utill.GetChildObject(m_slotPos.gameObject,"SubWeapon").GetComponent<RawImage>();
 
-        m_quickSlots = m_itemSlotPos.GetComponentsInChildren<UIQuickSlot>();
+        m_quickSlots = m_itemSlotPos.GetComponentsInChildren<UIQuickSlot>(true);
 
         for(int i = 0; i < m_quickSlots.Length; i++)
         {

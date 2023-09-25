@@ -142,6 +142,7 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     }
     public void LoadLobbyScene() // 로딩씬UI의 로비씬 불러오기
     {
+        m_hud.SetActive(false);
         m_loadingScene.gameObject.SetActive(true);
         m_loadingScene.LoadLobbyScene();
     }
@@ -210,8 +211,9 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     }
     protected override void OnStart()
     {
-        SetTransform();    
+        SetTransform();
     }
+
     #endregion
 }
     

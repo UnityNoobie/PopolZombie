@@ -15,7 +15,8 @@ public class Melee : MonoBehaviour
     public int grade;
     void OnEnable()
     {
-        UIManager.Instance.WeaponInfoUI(m_type + ".LV" + grade);
+        UGUIManager.Instance.GetScreenHUD().SetWeaponInfo(m_type + ".LV" + grade);
+        //UIManager.Instance.WeaponInfoUI(m_type + ".LV" + grade); // ±¸¹öÀü
         meleeState = MeleeState.Ready;
     }
 }

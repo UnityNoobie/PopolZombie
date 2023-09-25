@@ -88,7 +88,8 @@ public class GunManager : MonoBehaviour
             PlayerStriker.isActive = true;
             m_player.SetStatus(data.ID);
         }
-        UIManager.Instance.WeaponImage(data.Image);
+        UGUIManager.Instance.GetScreenHUD().SetMainImage(data.Image);
+       // UIManager.Instance.WeaponImage(data.Image); //기존 사용 UI
     }
     #endregion
 

@@ -66,6 +66,7 @@ public class Slot : MonoBehaviour, IPointerUpHandler,IPointerEnterHandler, IPoin
     }
     public void OnPointerEnter(PointerEventData eventData)//마우스가 위에 올라왔을때
     {
+        Debug.Log("응애?");
         if (m_image.sprite != null && eventData.pointerEnter.CompareTag("Slot")) //eventData.pointerEnter.CompareTag("Slot")
         {
             m_info.ActiveUI(itemID, m_type);

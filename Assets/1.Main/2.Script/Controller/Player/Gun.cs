@@ -144,11 +144,13 @@ public class Gun : MonoBehaviour
     {
         if(m_player.GetStatus.maxammo > 1000) //기관총 특성 표기용.
         {
-            UIManager.Instance.WeaponInfoUI(m_type + ".LV" + m_data.Grade + "\n∞ / ∞");
+            UGUIManager.Instance.GetScreenHUD().SetWeaponInfo(m_type + ".LV" + m_data.Grade + "\n∞ / ∞");
+            //UIManager.Instance.WeaponInfoUI(m_type + ".LV" + m_data.Grade + "\n∞ / ∞"); //구버전
         }
         else
         {
-            UIManager.Instance.WeaponInfoUI(m_type + ".LV" + m_data.Grade + "\n" + ammoRemain + " / " + m_player.GetStatus.maxammo);
+            UGUIManager.Instance.GetScreenHUD().SetWeaponInfo(m_type + ".LV" + m_data.Grade + "\n" + ammoRemain + " / " + m_player.GetStatus.maxammo);
+          //  UIManager.Instance.WeaponInfoUI(m_type + ".LV" + m_data.Grade + "\n" + ammoRemain + " / " + m_player.GetStatus.maxammo); //구버전
         }
     }
     void Start()

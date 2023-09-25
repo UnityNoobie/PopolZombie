@@ -2,8 +2,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 using static Gun;
 using static InvBaseItem;
 using static PlayerStriker;
@@ -59,9 +61,10 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     bool isbuild = false;
     bool crush;
 
+
     #endregion
 
-    
+
     #region Property
     public enum PlayerState //플레이어의 상태 알림
     {
@@ -332,15 +335,15 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         killCount++;
     } 
     //성공적으로 오브젝트 건설에 성공했을 때 호출. 소지 아이템 개수 --
-    public void ObjcetBuildSuccesed(int num)
+    public void ObjcetBuildSuccesed(PlayerItemType type)
     {
-        if(num == 2)
+        if(type.Equals(PlayerItemType.Barricade))
         {
-            m_quickSlot.UseQuickSlotITem(2, "Barricade");
+            m_item.UseItem(PlayerItemType.Barricade);
         }
-        else if(num == 3)
+        else if(type.Equals(PlayerItemType.Turret))
         {
-            m_quickSlot.UseQuickSlotITem(3, "Turret");
+            m_item.UseItem(PlayerItemType.Turret);
         }
     } 
     // 현재 상태를 건설 / 평상시 전환
@@ -348,7 +351,19 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     {
         isbuild = !isbuild;
     }
-    
+    bool IsPointerOverClickableLayer()
+    {
+        var layer = (1 << LayerMask.NameToLayer("HUD"));
+        Ray ray = UGUIManager.Instance.GetUICam().ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            return layer == (layer | (1 << hit.collider.gameObject.layer));
+        }
+
+        return false;
+    }
+
     //플레이어의 전체적인 조작을 담당하는 메소드
     public void BehaviorProcess()
     {
@@ -393,13 +408,16 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
                 UGUIManager.Instance.SystemMessageItem("HealPack");
                 return;
             }
-            m_quickSlot.UseQuickSlotITem(1, "HealPack");
+            if(m_item.HaveEnoughItem(PlayerItemType.HealPack))
+            {
+                m_item.UseItem(PlayerItemType.HealPack);
+            }
         }
 
         // 바리케이드 설치
         if (Input.GetKeyDown(KeyCode.Alpha3)) 
         {
-            if (m_quickSlot.CheckItemCount(2) && m_playerObject.IsCanBuildObject(2))
+            if (m_item.HaveEnoughItem(PlayerItemType.Barricade) && m_playerObject.IsCanBuildObject(2))
             {
                 BuildingConvert();
                 if (isbuild)
@@ -417,7 +435,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         // 포탑 설치
         if (Input.GetKeyDown(KeyCode.Alpha4)) 
         {
-            if (m_quickSlot.CheckItemCount(3) && m_playerObject.IsCanBuildObject(3))
+            if (m_item.HaveEnoughItem(PlayerItemType.Turret) && m_playerObject.IsCanBuildObject(3))
             {
                 BuildingConvert();
                 if (isbuild)
@@ -431,15 +449,32 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
                 }
             }
         }
-
+     
+        
         // 마우스 클릭을 활용한 공격, 오브젝트 설치
         if (Input.GetMouseButton(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            Physics.Raycast(ray, out hit);
-            GameObject hitObject = hit.collider.gameObject;
-            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) //마우스 포인터가 UI 위에 있을 시 공격 안하게 만드는 기능.
+        
+            PointerEventData eventData = new PointerEventData(EventSystem.current);
+            eventData.position = Input.mousePosition;
+
+            List<RaycastResult> results = new List<RaycastResult>();
+
+            // UI 레이어에서만 충돌 검사 수행
+            EventSystem.current.RaycastAll(eventData, results);
+
+            // UI 요소 위에 있지 않으면 공격 실행
+            bool isOverHUD = false; // UI 레이어 위에 있는지 여부를 확인하기 위한 변수
+           
+            foreach (RaycastResult result in results)
+            {
+                if (result.gameObject.layer == LayerMask.NameToLayer("UI"))
+                {
+                    isOverHUD = true;
+                    break;
+                }
+            }
+            if (!isOverHUD) //마우스 포인터가 UI 위에 있을 시 공격 안하게 만드는 기능.
             {
                 if (!isbuild) //건설상태가 아닐경우
                 {
@@ -447,7 +482,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
                     {
                         m_shooter.AttackProcess();
                     }
-                    else
+                    else//dd
                     {
                         SetAttack();
                     }
@@ -539,7 +574,8 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     public void AddScore(int score) //점수 추가.
     {
         m_score += score;
-        UIManager.Instance.ScoreChange(m_score);
+        UGUIManager.Instance.GetScreenHUD().SetScore(score);
+       // UIManager.Instance.ScoreChange(m_score); 기존사용 NGUI
     }
     void HPControl(int value) //HP 컨트롤 메소드
     {
@@ -548,7 +584,8 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             m_status.hp = m_status.hpMax; 
         if(m_status.hp < 0)
             m_status.hp = 0;
-        UIManager.Instance.HPBar(m_status.hp,m_status.hpMax);
+        UGUIManager.Instance.GetScreenHUD().SetHPValue((int)m_status.hpMax, (int)m_status.hp);
+        //UIManager.Instance.HPBar(m_status.hp,m_status.hpMax); //구버전.
     }
     void InitStatus() 
     {
@@ -729,7 +766,8 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             m_experience -= m_levelexp;
             LevelUP();
         }
-        UIManager.Instance.EXPUI(m_experience, m_levelexp);
+        UGUIManager.Instance.GetScreenHUD().SetEXPValue(m_levelexp, m_experience);
+        //UIManager.Instance.EXPUI(m_experience, m_levelexp);
     } 
     int Levelexp()
     {

@@ -4,6 +4,12 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static ItemData;
 
+public enum PlayerItemType
+{
+    HealPack,
+    Barricade,
+    Turret
+}
 public class PlayerGetItem : MonoBehaviour
 {
 
@@ -11,13 +17,15 @@ public class PlayerGetItem : MonoBehaviour
     [SerializeField]
     QuickSlot m_slot;
     StoreUI m_storeUI;
-    StatusUI m_statusUI;
     GunManager m_weaponmanager;
     ArmorManager m_armormanager;
     PlayerController m_player;
     CapsuleCollider m_collider;
     
     int m_playerMoney = 0;
+    int m_healpackCount = 0;
+    int m_barricadeCount = 0;
+    int m_turretCount = 0;
     #endregion
 
     #region Property
@@ -41,7 +49,8 @@ public class PlayerGetItem : MonoBehaviour
     void MoneyChange(int money) //플레이어 재화 변경
     {
         m_playerMoney += money;
-        UIManager.Instance.MoneyUI(m_playerMoney);
+        UGUIManager.Instance.GetScreenHUD().SetMoney(m_playerMoney);
+       // UIManager.Instance.MoneyUI(m_playerMoney); //구버전 NGUI
     }
     public void GetMoney(int money) //재화 획득 시 호출되어 재화변경 메소드 실행
     {
@@ -59,15 +68,15 @@ public class PlayerGetItem : MonoBehaviour
         }
         else if (itemtype.Equals("HealPack"))
         {
-            AddHealPack(Id);
+            AddItem(PlayerItemType.HealPack);
         }
         else if (itemtype.Equals("Barricade"))
         {
-            AddBarricade(Id);
+            AddItem(PlayerItemType.Barricade);
         }
         else if (itemtype.Equals("Turret"))
         {
-            AddTurret(Id);
+            AddItem(PlayerItemType.Turret);
         }   
         else if (itemtype.Equals("Generator"))
         {
@@ -86,18 +95,107 @@ public class PlayerGetItem : MonoBehaviour
         }
         MoneyChange(price);
     }
+    public bool HaveEnoughItem(PlayerItemType type)
+    {
+        if (type.Equals(PlayerItemType.HealPack))
+        {
+            if (m_healpackCount <= 0)
+            {
+                UGUIManager.Instance.SystemMessageSendMessage(type.ToString() + "의 갯수가 모자랍니다.");
+                return false;
+            }
+        }
+        else if (type.Equals(PlayerItemType.Barricade))
+        {
+            if (m_barricadeCount <= 0)
+            {
+                UGUIManager.Instance.SystemMessageSendMessage(type.ToString() + "의 갯수가 모자랍니다.");
+                return false;
+            }
+        }
+        else if (type.Equals(PlayerItemType.Turret))
+        {
+            if (m_turretCount <= 0)
+            {
+                UGUIManager.Instance.SystemMessageSendMessage(type.ToString() + "의 갯수가 모자랍니다.");
+                return false;
+            }
+        }
+        return true;
+    }
+    public void UseItem(PlayerItemType type)
+    {
+        if (type.Equals(PlayerItemType.HealPack))
+        {
+            if(m_healpackCount <= 0)
+            {
+                UGUIManager.Instance.SystemMessageSendMessage(type.ToString() + "의 갯수가 모자랍니다.");
+                return;
+            }
+            UGUIManager.Instance.GetScreenHUD().UpdateQuickSlotItem(1, m_healpackCount, "HealPack");
+            m_healpackCount--;
+        }
+        else if (type.Equals(PlayerItemType.Barricade))
+        {
+            if (m_barricadeCount <= 0)
+            {
+                UGUIManager.Instance.SystemMessageSendMessage(type.ToString() + "의 갯수가 모자랍니다.");
+                return;
+            }
+            UGUIManager.Instance.GetScreenHUD().UpdateQuickSlotItem(2, m_barricadeCount, "Barricade");
+            m_barricadeCount--;
+        }
+        else if (type.Equals(PlayerItemType.Turret))
+        {
+            if (m_turretCount <= 0)
+            {
+                UGUIManager.Instance.SystemMessageSendMessage(type.ToString() + "의 갯수가 모자랍니다.");
+                return;
+            }
+            UGUIManager.Instance.GetScreenHUD().UpdateQuickSlotItem(3, m_turretCount, "Turret");
+            m_turretCount--;
+        }
+    }
+    void AddItem(PlayerItemType type)
+    {
+        if(type.Equals(PlayerItemType.HealPack))
+        {
+            //  m_slot.SetItem(1, "HealPack");기존 사용 UI
+            m_healpackCount++;
+            UGUIManager.Instance.GetScreenHUD().UpdateQuickSlotItem(1, m_healpackCount, "HealPack");
+        }
+        else if(type.Equals(PlayerItemType.Barricade))
+        {
+            //  m_slot.SetItem(2, "Barricade");기존 사용 UI
+            m_barricadeCount++;
+            UGUIManager.Instance.GetScreenHUD().UpdateQuickSlotItem(2, m_barricadeCount, "Barricade");
+        }
+        else if (type.Equals(PlayerItemType.Turret))
+        {
+            //  m_slot.SetItem(3, "Turret");기존 사용 UI
+            m_turretCount++;
+            UGUIManager.Instance.GetScreenHUD().UpdateQuickSlotItem(3, m_turretCount, "Turret");
+        }
+    }
+    /*
     void AddHealPack(int Id) //퀵슬롯 클래스에 아이템 획득 신호 전달
     {
-        m_slot.SetItem(1, "HealPack");
+      //  m_slot.SetItem(1, "HealPack");기존 사용 UI
+        m_healpackCount++;
+        UGUIManager.Instance.GetScreenHUD().UpdateQuickSlotItem(1, m_healpackCount, "HealPack");
     }
     void AddBarricade(int Id)//퀵슬롯 클래스에 아이템 획득 신호 전달
     {
-        m_slot.SetItem(2, "Barricade");
+        //  m_slot.SetItem(2, "Barricade");기존 사용 UI
+        m_barricadeCount++;
+        UGUIManager.Instance.GetScreenHUD().UpdateQuickSlotItem(2, m_barricadeCount, "HealPack");
     }
     void AddTurret(int Id)//퀵슬롯 클래스에 아이템 획득 신호 전달
     {
-        m_slot.SetItem(3, "Turret");
-    }
+        //  m_slot.SetItem(3, "Turret");기존 사용 UI
+        m_turretCount++;
+        UGUIManager.Instance.GetScreenHUD().UpdateQuickSlotItem(3, m_turretCount, "HealPack");
+    }*/
     void ChangeArmor(int id) //방어구 제어 클래스에 정보 전달.
     {
         m_armormanager.ChangeArmor(id);
@@ -108,11 +206,11 @@ public class PlayerGetItem : MonoBehaviour
     }
     void SetPlayer(PlayerController player) // 플레이어 지정
     {
-        m_slot.SetPlayer(player);
+        //m_slot.SetPlayer(player);
     }
     public void UsingCheatKey()
     {
-        m_playerMoney = 100000;
+        MoneyChange(100000);
     }
     private void OnTriggerEnter(Collider other)//상점 진입 감지를 위한 메소드
     {
@@ -135,7 +233,6 @@ public class PlayerGetItem : MonoBehaviour
         m_weaponmanager = GetComponent<GunManager>();
         m_armormanager = GetComponent<ArmorManager>();
         m_collider = GetComponent<CapsuleCollider>();
-        m_statusUI = UGUIManager.Instance.GetStatusUI();
         m_storeUI = UGUIManager.Instance.GetStoreUI();
     }
     void Awake()    

@@ -6,27 +6,27 @@ using UnityEngine.UI;
 
 public class UIQuickSlot : MonoBehaviour
 {
-    Image m_itemImage;
+    RawImage m_itemImage;
     TextMeshProUGUI m_itemCount;
 
     public void SetTransform()
     {
-        m_itemImage = GetComponentInChildren<Image>(true);
+        m_itemImage = Utill.GetChildObject(gameObject,"ItemImage").GetComponent<RawImage>();
         m_itemCount = Utill.GetChildObject(gameObject,"ItemCount").GetComponent<TextMeshProUGUI>();
     }
     public void UpdateItemSlot(string image, int itemcount)
     {
-        if(itemcount <= 0) //갯수가 0개 이하면 이미지,갯수 삭제
+        if(itemcount == 0) //갯수가 0개 이하면 이미지,갯수 삭제
         {
-            m_itemImage.enabled = false;
-            m_itemCount.enabled = false;
+            m_itemImage.gameObject.SetActive(false);
+            m_itemCount.gameObject.SetActive(false);
         }
         else //아니면 이미지 키고 이미지, 아이템 갯수 추가
         {
-            m_itemImage.enabled = true;
-            m_itemCount.enabled = true;
+            m_itemImage.gameObject.SetActive(true);
+            m_itemCount.gameObject.SetActive(true);
             m_itemCount.text = itemcount.ToString();
-            m_itemImage.sprite = ImageLoader.Instance.GetImage(image);
+            m_itemImage.texture = ImageLoader.Instance.GetImage(image).texture;
         }
     }
 

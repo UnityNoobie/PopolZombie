@@ -110,7 +110,7 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
             Vector3 pointTolook = cameraRay.GetPoint(rayLength);
             obj.BuildBarricade(new Vector3(pointTolook.x, 0f, pointTolook.z), m_bariRotation, m_hudRotation, m_player.GetPlayerSkillData(), GetObjectStat(ObjectType.Barricade));
             m_playerObject.BuildBarricade(obj);
-            m_playerC.ObjcetBuildSuccesed(2);
+            m_playerC.ObjcetBuildSuccesed(PlayerItemType.Barricade);
         }
     }
     public void BuildTurret() //포탑 설치.
@@ -123,7 +123,7 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         if (GroupPlane.Raycast(cameraRay, out rayLength))
         {
             Vector3 pointTolook = cameraRay.GetPoint(rayLength);
-            m_playerC.ObjcetBuildSuccesed(3);
+            m_playerC.ObjcetBuildSuccesed(PlayerItemType.Barricade);
             obj.BuildTurretObject(new Vector3(pointTolook.x, 0f, pointTolook.z),m_player.GetPlayerSkillData(),GetObjectStat(ObjectType.Turret));
             m_playerObject.BuildTurret(obj);
             m_towerList.Add(obj);

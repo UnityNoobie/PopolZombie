@@ -17,7 +17,7 @@ public class BuildableObject : MonoBehaviour, IDamageAbleObject
     protected TableSkillStat m_skill;
 
    
-    protected bool m_isReflect =false;
+    protected bool m_isReflect = false;
     protected int m_killCount = 0;
     protected float m_machineLearningDamage;
     protected int m_healCool = 2;

@@ -51,6 +51,7 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
     #endregion
 
     #region ScreenUI
+    /*
     public void ScoreChange(float score) //화면에 표기되는 점수 표기
     {
        m_Score.text = "Score : " +score;
@@ -78,7 +79,7 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
     {
         m_EXP.text = (exp+" / "+max);
         m_EXPBar.value = exp / max;
-    } 
+    } */
     public void DamagedUI() //피해 입을 시 UITween활용하여 스크린 피해 효과( + 체력바의 벨류에 따라 알파값 조정)
     {
         if (!m_damagedUI.gameObject.activeSelf)

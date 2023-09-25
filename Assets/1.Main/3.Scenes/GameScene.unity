@@ -8967,7 +8967,7 @@ MonoBehaviour:
   alwaysOnScreen: 0
   anchorOffset: 0
   renderQueue: 0
-  startingRenderQueue: 3007
+  startingRenderQueue: 3001
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -12225,7 +12225,7 @@ MonoBehaviour:
   alwaysOnScreen: 0
   anchorOffset: 0
   renderQueue: 0
-  startingRenderQueue: 3008
+  startingRenderQueue: 3002
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -35623,7 +35623,7 @@ MonoBehaviour:
   alwaysOnScreen: 0
   anchorOffset: 0
   renderQueue: 0
-  startingRenderQueue: 3009
+  startingRenderQueue: 3003
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -114004,7 +114004,7 @@ PrefabInstance:
     - target: {fileID: 421907680005245280, guid: 9f728d44025ea7743960ce2fe4f34367,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 421907680005245281, guid: 9f728d44025ea7743960ce2fe4f34367,
         type: 3}
@@ -129364,6 +129364,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: QuickSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563875081090192665, guid: eb8b84c5d3a5e4f46856481c8a3461b1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4563875081090192670, guid: eb8b84c5d3a5e4f46856481c8a3461b1,
         type: 3}

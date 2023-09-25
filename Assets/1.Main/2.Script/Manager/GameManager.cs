@@ -28,6 +28,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     bool m_isFirst = true;
     const int m_roundDelay = 20;
     const int m_reviveDelay = 10;
+    const int m_gameFrame = 60;
     #endregion
 
     #region Coroutine
@@ -35,7 +36,8 @@ public class GameManager : SingletonDontDestroy<GameManager>
     {
         for(int i = m_roundDelay; i >= 0; i--)
         {
-            UIManager.Instance.TimeLeft(i);
+            UGUIManager.Instance.GetScreenHUD().TimeLeft(i);
+           // UIManager.Instance.TimeLeft(i); //기존사용 NGUI
             yield return new WaitForSeconds(1);
         }
         StartNight();
@@ -52,7 +54,8 @@ public class GameManager : SingletonDontDestroy<GameManager>
         {
             yield return new WaitForSeconds(1);
             gameDuration++;
-            UIManager.Instance.GameDuration(gameDuration);
+            UGUIManager.Instance.GetScreenHUD().GameDuration(gameDuration);
+            // UIManager.Instance.GameDuration(gameDuration); //기존 사용 NGUI
         }
     }
     IEnumerator Coroutine_RevivePlayer(PlayerController player) //플레이어 부활에 사용되는 코루틴.
@@ -180,7 +183,8 @@ public class GameManager : SingletonDontDestroy<GameManager>
     void SetNextRound() //라운드 정보 누적
     {
         m_round++;
-        UIManager.Instance.RoundInfo(m_round);
+        UGUIManager.Instance.GetScreenHUD().SetRoundText(m_round);
+        // UIManager.Instance.RoundInfo(m_round); //기존 사용 NGUI
         if (m_round == 10 || m_round == 20)
         {
             UGUIManager.Instance.GetStoreUI().SetItemListTable();
@@ -262,7 +266,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     }
     protected override void OnStart()
     {
-        Application.targetFrameRate = 60; //타겟프레임
+        Application.targetFrameRate = m_gameFrame; //타겟프레임
         SoundManager.Instance.LobbyStart();
     }
 

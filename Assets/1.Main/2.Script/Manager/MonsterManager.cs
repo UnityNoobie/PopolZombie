@@ -66,7 +66,8 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
         hud.gameObject.SetActive(false); // hud비활성화해주기
         m_monsterPools[mon.Type].Set(mon); // 풀에 넣어주기
         m_hudPool.Set(hud); // 풀에 넣어주기
-        UIManager.Instance.EnemyLeft(m_monsterList.Count);
+        UGUIManager.Instance.GetScreenHUD().EnemyLeft(m_monsterList.Count);
+      //  UIManager.Instance.EnemyLeft(m_monsterList.Count); //구버전 NGUI
     }
     public void CreateMonster() //몬스터를 랜덤확률로 소환
     {

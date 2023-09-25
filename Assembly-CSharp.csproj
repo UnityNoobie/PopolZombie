@@ -129,6 +129,7 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerMeleeAttack.cs" />
     <Compile Include="Assets\1.Main\2.Script\Data\TableMonStatus.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\GameMenuUI.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\UISliderController.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerProjectileCtr.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIDragScrollView.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIMath.cs" />
@@ -229,6 +230,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIWrapContent.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\AnimationOrTween.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UISlider.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\UIQuickSlot.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\UIBasicSprite.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\LoadingScene.cs" />
     <Compile Include="Assets\1.Main\2.Script\Manager\GunManager.cs" />
@@ -291,6 +293,7 @@
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonKeys.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Object\BuildableObject.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Object\IDamageAbleObject.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\ScreenHUD.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIToggledObjects.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\WindowAutoYaw.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\Singleton\Singleton.cs" />
@@ -304,9 +307,6 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
-    <Compile Include="Assets\1.Main\2.Script\UI\UISliderController.cs" />
-    <Compile Include="Assets\1.Main\2.Script\UI\UIQuickSlot.cs" />
-    <Compile Include="Assets\1.Main\2.Script\UI\ScreenHUD.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

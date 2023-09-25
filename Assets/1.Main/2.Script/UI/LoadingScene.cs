@@ -31,7 +31,9 @@ public class LoadingScene : MonoBehaviour //씬 로딩 UI
     IEnumerator GameStart() //게임 시작 시 DoTween의 DoFade 기능 활용하여 로비씬 투명화하며 제거
     {
         m_group.DOFade(0f,0.7f);
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(0.2f);
+        UGUIManager.Instance.GetScreenHUD().SetActive(true);
+        yield return new WaitForSeconds(0.5f);
         gameObject.SetActive(false);
     }
     IEnumerator Coroutine_ToLobbyScene() //로비씬으로 복귀하는 코루틴
