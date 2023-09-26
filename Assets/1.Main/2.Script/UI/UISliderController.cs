@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,12 +23,17 @@ public class UISliderController : MonoBehaviour
     {
         SetTransform();
     }
-    public void SetSliderValue(int MaxValue, int CurrentValue,bool iswiddthControll = true,float widthvalue = 2) //슬라이더의 벨류값조절. 필요한 경우 iswidthControll 통해 MaxValue 비례하여 넓이를 설정.
+    public void SetSliderValue(int MaxValue, int CurrentValue,bool iswiddthControll = false,float widthvalue = 2f,bool issmallSize = false) //슬라이더의 벨류값조절. 필요한 경우 iswidthControll 통해 MaxValue 비례하여 넓이를 설정.
     {
         m_slider.maxValue = MaxValue;
         m_slider.value = CurrentValue;
-        if(iswiddthControll)
-        m_rectTransform.sizeDelta = new Vector2(MaxValue*2,m_rectTransform.sizeDelta.y);
+        float widthValue = MaxValue * widthvalue;
+        if(issmallSize && widthValue > 3f)
+        {
+            widthValue = 3f;
+        }
+        if (iswiddthControll)
+        m_rectTransform.sizeDelta = new Vector2(widthValue,m_rectTransform.sizeDelta.y);
         m_valueText.text = CurrentValue + " / " + MaxValue;
     }
 }

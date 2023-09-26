@@ -127,33 +127,18 @@ public class PlayerGetItem : MonoBehaviour
     {
         if (type.Equals(PlayerItemType.HealPack))
         {
-            if(m_healpackCount <= 0)
-            {
-                UGUIManager.Instance.SystemMessageSendMessage(type.ToString() + "의 갯수가 모자랍니다.");
-                return;
-            }
-            UGUIManager.Instance.GetScreenHUD().UpdateQuickSlotItem(1, m_healpackCount, "HealPack");
             m_healpackCount--;
+            UGUIManager.Instance.GetScreenHUD().UpdateQuickSlotItem(1, m_healpackCount, "HealPack");
         }
         else if (type.Equals(PlayerItemType.Barricade))
         {
-            if (m_barricadeCount <= 0)
-            {
-                UGUIManager.Instance.SystemMessageSendMessage(type.ToString() + "의 갯수가 모자랍니다.");
-                return;
-            }
-            UGUIManager.Instance.GetScreenHUD().UpdateQuickSlotItem(2, m_barricadeCount, "Barricade");
             m_barricadeCount--;
+            UGUIManager.Instance.GetScreenHUD().UpdateQuickSlotItem(2, m_barricadeCount, "Barricade");
         }
         else if (type.Equals(PlayerItemType.Turret))
         {
-            if (m_turretCount <= 0)
-            {
-                UGUIManager.Instance.SystemMessageSendMessage(type.ToString() + "의 갯수가 모자랍니다.");
-                return;
-            }
-            UGUIManager.Instance.GetScreenHUD().UpdateQuickSlotItem(3, m_turretCount, "Turret");
             m_turretCount--;
+            UGUIManager.Instance.GetScreenHUD().UpdateQuickSlotItem(3, m_turretCount, "Turret");
         }
     }
     void AddItem(PlayerItemType type)

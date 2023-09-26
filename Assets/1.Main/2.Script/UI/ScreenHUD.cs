@@ -56,7 +56,7 @@ public class ScreenHUD : MonoBehaviour
     }
     public void SetHPValue(int max, int current)
     {
-        m_hpSlider.SetSliderValue(max,current);
+        m_hpSlider.SetSliderValue(max,current,true,2f);
     }
     public void SetEXPValue(int max, int current)
     {
@@ -70,11 +70,11 @@ public class ScreenHUD : MonoBehaviour
     {
         m_mainWeapon.texture = ImageLoader.Instance.GetImage(image).texture;
         if (!m_mainWeapon.enabled) m_mainWeapon.gameObject.SetActive(true);
-        UpdateQuickSlotItem(0, 1, image);
+        UpdateQuickSlotItem(0, 1, image, true);
     }
-    public void UpdateQuickSlotItem(int slottype,int itemCount,string sprite)
+    public void UpdateQuickSlotItem(int slottype,int itemCount,string sprite,bool isweapon = false)
     {
-        m_quickSlots[slottype].UpdateItemSlot(sprite, itemCount);
+        m_quickSlots[slottype].UpdateItemSlot(sprite, itemCount,isweapon);
     }
     public void SetWeaponInfo(string info)
     {

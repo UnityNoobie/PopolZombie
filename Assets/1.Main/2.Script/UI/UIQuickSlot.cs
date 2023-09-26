@@ -14,9 +14,14 @@ public class UIQuickSlot : MonoBehaviour
         m_itemImage = Utill.GetChildObject(gameObject,"ItemImage").GetComponent<RawImage>();
         m_itemCount = Utill.GetChildObject(gameObject,"ItemCount").GetComponent<TextMeshProUGUI>();
     }
-    public void UpdateItemSlot(string image, int itemcount)
+    public void UpdateItemSlot(string image, int itemcount,bool isweapon)
     {
-        if(itemcount == 0) //갯수가 0개 이하면 이미지,갯수 삭제
+        if (isweapon)
+        {
+            m_itemImage.gameObject.SetActive(true);
+            m_itemImage.texture = ImageLoader.Instance.GetImage(image).texture;
+        }
+        else if(itemcount <= 0) //갯수가 0개 이하면 이미지,갯수 삭제
         {
             m_itemImage.gameObject.SetActive(false);
             m_itemCount.gameObject.SetActive(false);
