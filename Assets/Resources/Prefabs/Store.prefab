@@ -396,7 +396,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2552096612102670039}
-  - component: {fileID: 2552096612102670038}
   m_Layer: 3
   m_Name: Store
   m_TagString: Untagged
@@ -422,22 +421,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2552096612102670038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2552096612102670040}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2f6ff1019a74a34aa6c9e32a294bea1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stores:
-  - {fileID: 2552931908340632068}
-  - {fileID: 2552931907082573458}
-  - {fileID: 2552931907546596937}
 --- !u!1 &2552096612505476410
 GameObject:
   m_ObjectHideFlags: 0
@@ -1035,7 +1018,6 @@ GameObject:
   - component: {fileID: 2552096611506983256}
   - component: {fileID: 2550579905620459347}
   - component: {fileID: 2550579905620459346}
-  - component: {fileID: 2550579905620459345}
   m_Layer: 3
   m_Name: ArmorStore
   m_TagString: Background
@@ -1109,19 +1091,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2550579905620459345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2552931907082573458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2f6ff1019a74a34aa6c9e32a294bea1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stores: []
 --- !u!1 &2552931907546596937
 GameObject:
   m_ObjectHideFlags: 0
@@ -1134,7 +1103,6 @@ GameObject:
   - component: {fileID: 2552096612451637911}
   - component: {fileID: 2550579905150070670}
   - component: {fileID: 2550579905150070669}
-  - component: {fileID: 2550579905150070668}
   m_Layer: 3
   m_Name: WeaponStore
   m_TagString: Background
@@ -1208,19 +1176,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2550579905150070668
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2552931907546596937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2f6ff1019a74a34aa6c9e32a294bea1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stores: []
 --- !u!1 &2552931908340632068
 GameObject:
   m_ObjectHideFlags: 0
@@ -1233,7 +1188,6 @@ GameObject:
   - component: {fileID: 2552096610623364112}
   - component: {fileID: 2550579906476778433}
   - component: {fileID: 2550579906476778432}
-  - component: {fileID: 2550579906476778463}
   m_Layer: 3
   m_Name: ItemStore
   m_TagString: Background
@@ -1307,19 +1261,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2550579906476778463
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2552931908340632068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2f6ff1019a74a34aa6c9e32a294bea1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stores: []
 --- !u!1 &2553210918908201724
 GameObject:
   m_ObjectHideFlags: 0

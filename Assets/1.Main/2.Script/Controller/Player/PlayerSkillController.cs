@@ -173,7 +173,7 @@ public class PlayerSkillController : MonoBehaviour
     }
     public void UsingCheatKey()
     {
-        m_skillPoint = 100;
+        m_skillPoint = 50;
     }
     public void SetSkillUI(SkillUI ui) //UI¼³Á¤
     {

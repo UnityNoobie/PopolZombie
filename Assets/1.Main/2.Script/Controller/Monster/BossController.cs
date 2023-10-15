@@ -105,6 +105,8 @@ public class BossController : MonsterController
     }
     void StopSkill() //스킬 사용 취소
     {
+        if(m_fire!= null && m_fire.enabled) //분노 화염이 켜져있을 시 반사데미지의 무한루프로 추측되는 현상 있어 스킬의 파티클 시스템 종료
+            m_fire.DeActiveEffectDamage();
         m_skill1Pos.gameObject.SetActive(false);
         m_skill2Pos.gameObject.SetActive(false);
     }
@@ -157,7 +159,6 @@ public class BossController : MonsterController
         if (m_status.hp <= 0) //피해를 받은 후 피가 0 이하일때 사망처리
         {
             obj.KillCount();
-            m_hudPanel.Died();
             SetDie();
         }
     }

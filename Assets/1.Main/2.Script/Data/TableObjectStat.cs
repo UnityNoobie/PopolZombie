@@ -35,7 +35,8 @@ public class TableObjectStat : Singleton<TableObjectStat>
             data.CriRate = TableLoader.Instance.GetFloat("CriRate", i);
             data.CriDamage = TableLoader.Instance.GetFloat("CriDamage", i);
             data.ArmorPierce = TableLoader.Instance.GetFloat("ArmorPierce", i);
-            data.DamageReflect = TableLoader.Instance.GetInteger("MaxBuild", i);
+            data.DamageReflect = TableLoader.Instance.GetInteger("Reflect", i);
+            data.MaxBuild = TableLoader.Instance.GetInteger("MaxBuild", i);
             data.Info = TableLoader.Instance.GetString("Info", i);
             m_objectData.Add(data.Objecttype, data);
         }

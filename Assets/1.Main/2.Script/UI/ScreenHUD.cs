@@ -6,6 +6,14 @@ using UnityEditor.UI;
 using UnityEngine.UI;
 using Unity.VisualScripting;
 
+public enum EffectType
+{
+    Damaged,
+    Die,
+    LevelUP,
+    Heal,
+    Revive
+}
 public class ScreenHUD : MonoBehaviour
 {
 
@@ -13,6 +21,7 @@ public class ScreenHUD : MonoBehaviour
     Transform m_textPos;
     Transform m_slotPos;
     Transform m_itemSlotPos;
+    Transform m_screenEffect;
 
     UISliderController m_hpSlider;
     UISliderController m_expSlider;
@@ -29,6 +38,36 @@ public class ScreenHUD : MonoBehaviour
 
     UIQuickSlot[] m_quickSlots;
 
+    HUDTween m_damaged;
+    HUDTween m_heal;
+    HUDTween m_die;
+    HUDTween m_revive;
+    HUDTween m_levelUp;
+    HUDTween m_Destroyed;
+
+    public void SetHudEffect(EffectType type,float to = 1f)
+    {
+        if(type.Equals(EffectType.Damaged))
+        {
+            m_damaged.SetEffect(to);
+        }
+        else if (type.Equals(EffectType.Heal))
+        {
+            m_heal.SetEffect(to);
+        }
+        else if (type.Equals(EffectType.LevelUP))
+        {
+            m_levelUp.SetEffect(to);
+        }
+        else if (type.Equals(EffectType.Die))
+        {
+            m_die.SetEffect(to,9f);
+        }
+        else if (type.Equals(EffectType.Revive))
+        {
+            m_revive.SetEffect(to);
+        }
+    }
     public void SetRoundText(int round)
     {
         m_roundText.text = round + " 라운드";
@@ -48,6 +87,12 @@ public class ScreenHUD : MonoBehaviour
     public void SetScore(int score)
     {
         m_scoreText.text = "Score : "+ score;
+    }
+    public void Destroyed(PlayerController player, int gameDuration, int round)
+    {
+        SetActive(true);
+        string message = "패배하였습니다.\r\n<size=20>플레이타임 : " + gameDuration / 60 + ":" + gameDuration % 60 + "라운드 :" + round + "점수 : " + player.GetScore() + "</size>";
+        m_Destroyed.GeneratorDestroyed(message);
     }
     public void SetActive(bool active)
     {
@@ -96,6 +141,7 @@ public class ScreenHUD : MonoBehaviour
         m_textPos = Utill.GetChildObject(gameObject, "HUD_InfoText");
         m_slotPos = Utill.GetChildObject(gameObject, "HUD_Slots");
         m_itemSlotPos = Utill.GetChildObject(m_slotPos.gameObject, "ItemSlot");
+        m_screenEffect = Utill.GetChildObject(gameObject, "HUD_Effect");
 
         m_hpSlider = Utill.GetChildObject(m_sliderPos.gameObject,"HPSlider").GetComponent<UISliderController>();
         m_expSlider = Utill.GetChildObject(m_sliderPos.gameObject, "EXPSlider").GetComponent<UISliderController>();
@@ -115,7 +161,21 @@ public class ScreenHUD : MonoBehaviour
 
         m_quickSlots = m_itemSlotPos.GetComponentsInChildren<UIQuickSlot>(true);
 
-        for(int i = 0; i < m_quickSlots.Length; i++)
+        m_damaged = Utill.GetChildObject(m_screenEffect.gameObject,"DamagedHUD").GetComponent<HUDTween>();
+        m_die = Utill.GetChildObject(m_screenEffect.gameObject, "DeadHUD").GetComponent<HUDTween>();
+        m_heal = Utill.GetChildObject(m_screenEffect.gameObject, "HealHUD").GetComponent<HUDTween>();
+        m_levelUp = Utill.GetChildObject(m_screenEffect.gameObject, "LevelUPHUD").GetComponent<HUDTween>();
+        m_revive = Utill.GetChildObject(m_screenEffect.gameObject, "ReviveHUD").GetComponent<HUDTween>();
+        m_Destroyed = Utill.GetChildObject(m_screenEffect.gameObject, "GameEndHUD").GetComponent<HUDTween>();
+
+        m_damaged.SetTransform();
+        m_die.SetTransform();
+        m_heal.SetTransform();
+        m_levelUp.SetTransform();
+        m_revive.SetTransform();
+        m_Destroyed.SetTransform();
+
+        for (int i = 0; i < m_quickSlots.Length; i++)
         {
             m_quickSlots[i].SetTransform();
         }

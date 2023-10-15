@@ -112,18 +112,15 @@
     <Compile Include="Assets\External\HUD Text\Examples\Scripts\ChatManager.cs" />
     <Compile Include="Assets\SlimUI\Modern Menu 1\Scripts\Misc\ExtraLinks.cs" />
     <Compile Include="Assets\1.Main\2.Script\Data\TableSkillStat.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Manager\UIManager.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIAtlas.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIForwardEvents.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterAnimController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\EventDelegate.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIDraggableCamera.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIGrid.cs" />
-    <Compile Include="Assets\1.Main\2.Script\UI\QuickSlot_slot.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\BMFont.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\TiltWindow.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIOrthoCamera.cs" />
-    <Compile Include="Assets\1.Main\2.Script\UI\QuickSlot.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\PropertyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIEventTrigger.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Player\PlayerMeleeAttack.cs" />
@@ -307,7 +304,7 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
-    <Compile Include="Assets\1.Main\2.Script\UI\ScreenEffect.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\HUDTween.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

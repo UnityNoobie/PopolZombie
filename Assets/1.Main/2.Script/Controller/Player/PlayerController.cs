@@ -25,8 +25,6 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     Status m_status;
     [SerializeField]
     GameObject m_PlayerHuD;
-    [SerializeField]
-    QuickSlot m_quickSlot;
     TableSkillStat m_skillStat;
     WearArmorData m_armorData;
     AudioSource m_audio;
@@ -369,8 +367,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     {
         if(Input.GetKeyDown(KeyCode.M)) //테스트용 치트키
         {
-            m_skill.UsingCheatKey();
-            m_item.UsingCheatKey();
+            UsingCheatKey();
         }
         // 사망시 작동 x
         if (m_Pstate.Equals(PlayerState.dead)) return;
@@ -454,7 +451,6 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         // 마우스 클릭을 활용한 공격, 오브젝트 설치
         if (Input.GetMouseButton(0))
         {
-        
             PointerEventData eventData = new PointerEventData(EventSystem.current);
             eventData.position = Input.mousePosition;
 
@@ -482,7 +478,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
                     {
                         m_shooter.AttackProcess();
                     }
-                    else//dd
+                    else
                     {
                         SetAttack();
                     }
@@ -563,9 +559,17 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             CheckCoroutine = StartCoroutine(Coroutine_SustainedHeal());
         }
     }
-    public void LevelUp() //플레이어 레벨업
+   void UsingCheatKey() //치트키 플레이어 레벨업
     {
-        m_status.level++;
+        if(m_status.level < 30)
+        {
+            m_status.level = 29;
+        }
+        LevelUP();
+        m_skill.UsingCheatKey();
+        m_item.UsingCheatKey();
+        GameManager.Instance.UsingCheatKey();
+        UGUIManager.Instance.SystemMessageSendMessage("치트키 사용! 돈 + 100000 경험치 획득! 게임 레벨 조정 +10");
     }
     public int GetScore() //플레이어가 획득한 점수 정보 가져오기
     {
@@ -636,7 +640,8 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     void SetPlayer()
     {
         UGUIManager.Instance.SetPlayer(this);
-        UpdateManager.Instance.SetPlayer(this); 
+        UpdateManager.Instance.SetPlayer(this);
+        GameManager.Instance.SetPlayer(this);
         GameManager.Instance.SetGameObject(gameObject);
     }
 
@@ -666,7 +671,8 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         effect.transform.position = m_hitPos.position;
         effect.SetActive(true);
         m_hudText.Add(-damage, Color.red, 0f);
-        UIManager.Instance.DamagedUI();
+       // UIManager.Instance.DamagedUI();
+        UGUIManager.Instance.GetScreenHUD().SetHudEffect(EffectType.Damaged, 1f - m_status.hp / m_status.hpMax);
         if (m_status.hp <= 0)
         {
             Dead(); //hp가 0이하일때 사망처리
@@ -689,7 +695,8 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         var effect = EffectPool.Instance.Create(healeffect);
         effect.transform.position = gameObject.transform.position;
         effect.SetActive(true);
-        UIManager.Instance.HealUI();
+       // UIManager.Instance.HealUI();
+        UGUIManager.Instance.GetScreenHUD().SetHudEffect(EffectType.Heal);
         if (m_status.hp >= m_status.hpMax) //최대체력 초과한 힐은 적용 X
         {
             m_status.hp = m_status.hpMax;
@@ -707,7 +714,8 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         m_Pstate = PlayerState.dead;
         meleeState = MeleeState.Dead;
         m_animCtr.Play("Die");
-        UIManager.Instance.DiedUI();
+       // UIManager.Instance.DiedUI();
+        UGUIManager.Instance.GetScreenHUD().SetHudEffect(EffectType.Die);
     }
     public void Revive() //부활기능
     {
@@ -715,7 +723,8 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         HPControl(Mathf.CeilToInt(m_status.hpMax));
         gameObject.SetActive(true);
         m_PlayerHuD.gameObject.SetActive(true);
-        UIManager.Instance.ReviveUI();
+       // UIManager.Instance.ReviveUI();
+        UGUIManager.Instance.GetScreenHUD().SetHudEffect(EffectType.Revive);
         StartCoroutine(Coroutine_Invincible(2f));
         var reviveeffect = TableEffect.Instance.m_tableData[6].Prefab[0];
         var effect = EffectPool.Instance.Create(reviveeffect);
@@ -729,10 +738,11 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
     void LevelUP()
     {
         PlayLvUpSound();
-        LevelUp();
+        m_status.level++;
         m_levelexp = Levelexp();
         HPControl(Mathf.CeilToInt((m_status.hpMax - m_status.hp) / 2)); //풀피로 만들어줌 은 너무 사기이므로 잃은 피해의 50%로 수정.
-        UIManager.Instance.LevelUPUI(m_status.level);
+        ///UIManager.Instance.LevelUPUI(m_status.level);
+        UGUIManager.Instance.GetScreenHUD().SetHudEffect(EffectType.LevelUP);
         SetHudText();
         m_skill.LevelUP();
         StartCoroutine(Coroutine_Invincible(2f)); //렙업시무적

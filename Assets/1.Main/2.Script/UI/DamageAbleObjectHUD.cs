@@ -71,7 +71,7 @@ public class DamageAbleObjectHUD : MonoBehaviour
         {
             Invoke("Hide", 5f); //체력이 95퍼센트 이상이라면 5초뒤 화면에서 사라지도록 인보크.
         }
-        m_slider.SetSliderValue((int)maxhp, (int)hp,true,0.01f,true);
+        m_slider.SetSliderValue((int)maxhp, (int)hp);
         hp = Mathf.CeilToInt(hp);
         maxhp = Mathf.CeilToInt(maxhp);
         damage = Mathf.CeilToInt(damage);

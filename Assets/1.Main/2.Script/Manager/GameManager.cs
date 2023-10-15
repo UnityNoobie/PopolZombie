@@ -20,13 +20,14 @@ public class GameManager : SingletonDontDestroy<GameManager>
     #region Constants and Field
     LightIntensityTween m_light;
     List<GameObject> m_attackAbleObject = new List<GameObject>(); //공격 가능한 오브젝트 리스트
+    PlayerController m_player;
     Scene m_scene; //현재 씬
     DaynNight roundTime; //현재 낮인지 밤인지 저장
     int m_round = 0;
     int gameDuration = 0;
     string playerNickname;
     bool m_isFirst = true;
-    const int m_roundDelay = 20;
+    const int m_roundDelay = 30;
     const int m_reviveDelay = 10;
     const int m_gameFrame = 60;
     #endregion
@@ -131,6 +132,10 @@ public class GameManager : SingletonDontDestroy<GameManager>
     {
         StartCoroutine(Coroutine_RevivePlayer(player));
     }
+    public void SetPlayer(PlayerController player)
+    {
+        m_player = player;
+    }
     void ResetRound() //씬전환 등의 상황에서 초기화되어야 하는 데이터
     {
         gameDuration = 0;
@@ -146,7 +151,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     {
         if (m_light == null)
         {
-            m_light = UIManager.Instance.GetLight().GetComponent<LightIntensityTween>();
+            m_light = ObjectManager.Instance.GetLight().GetComponent<LightIntensityTween>();
         }
         StartCoroutine(Coroutine_DayTimeChecker());
         roundTime = DaynNight.Day;
@@ -189,6 +194,25 @@ public class GameManager : SingletonDontDestroy<GameManager>
         {
             UGUIManager.Instance.GetStoreUI().SetItemListTable();
         }
+    }
+    public void UsingCheatKey()
+    {
+        if(m_round < 10)
+        {
+            UGUIManager.Instance.GetStoreUI().SetItemListTable();
+            m_round = 10;
+            UGUIManager.Instance.GetStoreUI().SetItemListTable();
+        }
+        else if(m_round < 20)
+        {
+            m_round = 20;
+            UGUIManager.Instance.GetStoreUI().SetItemListTable();
+        }
+        else
+        {
+            m_round += 10;
+        }
+        UGUIManager.Instance.GetScreenHUD().SetRoundText(m_round);
     }
     void SaveScore() //게임 데이터 저장기능
     {
@@ -236,7 +260,8 @@ public class GameManager : SingletonDontDestroy<GameManager>
     }
     public void GameOver() // 발전기 파괴 시 호출되는 함수.
     {
-        SaveScore();
+        if (roundTime.Equals(DaynNight.GameOver)) return;
+        UGUIManager.Instance.GetScreenHUD().Destroyed(m_player,gameDuration,m_round);
         StopAllCoroutines();
         roundTime = DaynNight.GameOver;
     }

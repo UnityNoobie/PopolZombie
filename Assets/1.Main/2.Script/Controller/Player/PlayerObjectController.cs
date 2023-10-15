@@ -15,14 +15,14 @@ public class PlayerObjectController : MonoBehaviour //플레이어의 설치물 관리
     List<TowerController> m_turrets = new List<TowerController>();
     int m_maxTurretBuild = 0;
     int m_maxBarricadeBuild = 0;
-    const int m_maxBuild = 10;
+
     #endregion
     #region Methods
     public void MaxBuild() //오브젝트별 설치 가능한 최대 갯수 받아오기.
     {
         GetSkillData();
-        m_maxBarricadeBuild = m_maxBuild + m_skillData.BarricadeMaxBuild;
-        m_maxTurretBuild =  m_skillData .TurretMaxBuild;
+        m_maxBarricadeBuild = ObjectManager.Instance.GetObjectStat(ObjectType.Barricade).MaxBuild + m_skillData.BarricadeMaxBuild;
+        m_maxTurretBuild = ObjectManager.Instance.GetObjectStat(ObjectType.Turret).MaxBuild + m_skillData .TurretMaxBuild;
     }
     public int[] GetObjectBuildData() //Status에서 표시할 최대 건설 가능한 오브젝트 데이터 리턴
     {

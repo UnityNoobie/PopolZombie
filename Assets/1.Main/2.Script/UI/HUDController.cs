@@ -21,6 +21,7 @@ public class HUDController : MonoBehaviour
         m_uiFollow.target = target;
         m_name.text = name;
         m_hpBar.value = 1f;
+        Hide();
     }
     public void InitHUD(Camera gameCam, Camera uiCam ) //게임 화면을 표시하는 카메라와 UI를 표시하는 카메라 지정
     {
@@ -45,10 +46,6 @@ public class HUDController : MonoBehaviour
             m_hudText[2].Add("CritiCal!", Color.red, 0f);
         }
         m_hpBar.value = normalizedHP;
-    }
-    public void Died() //사망 시 Invoke의 동작이 멈추는지 다음 부활 때 사용 시 켜져서 등장하는 현상 있어 추가.
-    {
-        Hide();
     }
     void Show() // UI화면에 출력하기 위해 활성화
     {

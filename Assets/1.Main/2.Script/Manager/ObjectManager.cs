@@ -26,6 +26,8 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     Generator m_generator;
     [SerializeField]
     PreviewObject preview;
+    [SerializeField]
+    Light m_dirLight;
 
     GameObjectPool<DamageAbleObjectHUD> m_hudPool = new GameObjectPool<DamageAbleObjectHUD>();
     GameObjectPool<Barricade> m_barricadePool = new GameObjectPool<Barricade>();
@@ -75,6 +77,10 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     public void SetGenerator(Generator generator) // 발전기와의 상호작용을 위해 설치한 발전기를 클래스를 가져와주어 보관.
     {
         m_generator = generator;
+    }
+    public Light GetLight()
+    {
+        return m_dirLight;
     }
     public Generator GetGenerator() //발전기를 필요로 하는 스크립트에 보내줌.
     {

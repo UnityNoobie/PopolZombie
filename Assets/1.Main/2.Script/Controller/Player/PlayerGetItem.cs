@@ -14,8 +14,6 @@ public class PlayerGetItem : MonoBehaviour
 {
 
     #region Constants and Fields
-    [SerializeField]
-    QuickSlot m_slot;
     StoreUI m_storeUI;
     GunManager m_weaponmanager;
     ArmorManager m_armormanager;
@@ -31,6 +29,7 @@ public class PlayerGetItem : MonoBehaviour
     #region Property
     public WeaponData m_weapondata { get; set; }
     #endregion
+
 
 
 

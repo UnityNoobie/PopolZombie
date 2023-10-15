@@ -10,7 +10,7 @@ public class ProjectileController : MonoBehaviour
     [SerializeField]
     ProjectileController[] m_child;
     float damageValue;
-
+    bool isActive = false;
     #region Coroutine
     IEnumerator Coroutine_FollowTarget(GameObject target) //대상의 위치를 추적하여 계속해서 위치 이동해서 실행하는 코루틴
     {
@@ -28,6 +28,7 @@ public class ProjectileController : MonoBehaviour
     {
         m_atkMon = mon;
         damageValue = value;
+        isActive = true;
     }
     public void SetProjectileWithChild(MonsterController mon, float value) //스킬패턴때문에 추가 ㅇ여러개의 파티클시스템을 자식오브젝트 형태로 가져와 사용
     {
@@ -42,10 +43,16 @@ public class ProjectileController : MonoBehaviour
     {
         m_atkMon = mon;
         damageValue = value;
+        isActive= true;
         StartCoroutine(Coroutine_FollowTarget(m_atkMon.gameObject));
     }
+    public void DeActiveEffectDamage()
+    {
+        isActive = false;
+    }
     private void OnParticleCollision(GameObject other) //투사체가 명중했을 시 실행
-    {  
+    { 
+        if(!isActive) { return; }
         if (other.GetComponent<IDamageAbleObject>() != null)
         {
             IDamageAbleObject target = other.GetComponent<IDamageAbleObject>();

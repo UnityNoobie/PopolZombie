@@ -84,6 +84,7 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
                 mon.gameObject.SetActive(true);
                 mon.SetStatus(type, StatScale());
                 hud.SetHUD(mon.DummyHud.transform, mon.GetStatus.name);
+                
                 mon.SetMonster(m_player,hud);
                 mon.tag = "Zombie"; //다시 태그를 좀비로 설정하여 맞을 수 있게끔.
                // mon.GetComponent<MonsterAnimController>().SetFloat("Speed",StatScale(thisRound));
@@ -107,7 +108,8 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
                 currentBossCound++;
             }        
         }
-        UIManager.Instance.EnemyLeft(m_monsterList.Count);
+        UGUIManager.Instance.GetScreenHUD().EnemyLeft(m_monsterList.Count);
+       // UIManager.Instance.EnemyLeft(m_monsterList.Count);
     }
     public void StartNight()
     {
