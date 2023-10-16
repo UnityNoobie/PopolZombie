@@ -298,6 +298,7 @@ public class SkillUI : MonoBehaviour
     }
     public void ActiveSkill(PlayerSkillController skill) //스킬창 열때 플레이어 정보도 호출함
     {
+        if(gameObject.activeSelf) { gameObject.SetActive(false);  return; }
         m_player = skill;
         m_player.SetSkillUI(this);
         gameObject.SetActive(true);

@@ -26,9 +26,10 @@ public class ExitMenu : MonoBehaviour  //게임 종료 확인 UI
             SetTransform();
             SetAdlistoner();
         }
+        if(gameObject.activeSelf) { DeActiveUi(); }
         gameObject.SetActive(true);
     }
-    public void DeActiveUi()
+    void DeActiveUi()
     {
         gameObject.SetActive(false);
     }

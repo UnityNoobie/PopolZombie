@@ -50,7 +50,7 @@ public class UpdateManager : SingletonMonoBehaviour<UpdateManager> //업데이트를 
         if (Input.GetKeyDown(KeyCode.Escape))
         {  
             UGUIManager.Instance.CloseAllTabs();
-            UGUIManager.Instance.OpenMenu();
+            UGUIManager.Instance.GetMenuUI().ActiveUI();
         }
         if (GameManager.Instance.GetDayInfo() == DaynNight.GameOver)
             return;

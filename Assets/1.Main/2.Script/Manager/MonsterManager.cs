@@ -87,8 +87,7 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
                 
                 mon.SetMonster(m_player,hud);
                 mon.tag = "Zombie"; //다시 태그를 좀비로 설정하여 맞을 수 있게끔.
-               // mon.GetComponent<MonsterAnimController>().SetFloat("Speed",StatScale(thisRound));
-                hud.gameObject.SetActive(true); //어차피 데미지르 줄때 hudcontroller에서 Show()로 키니까 꺼봄  작동이 잘 안됨..
+                hud.gameObject.SetActive(false); //어차피 데미지르 줄때 hudcontroller에서 Show()로 키니까 꺼봄  작동이 잘 안됨..
                 m_monsterList.Add(mon);
         }
         if(GameManager.Instance.GetRoundInfo() % 5 == 0) //10라운드마다 나오는 보스 스테이지

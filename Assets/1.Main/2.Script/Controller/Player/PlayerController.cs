@@ -385,7 +385,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
         if (Input.GetKeyDown(KeyCode.K)) 
         {    
             m_skillactive = !m_skillactive;
-            UGUIManager.Instance.SkillUIChange(m_skillactive,m_skill);
+            UGUIManager.Instance.GetSkillUI().ActiveSkill(m_skill);
             UGUIManager.Instance.PlayClickSFX();
         }
 

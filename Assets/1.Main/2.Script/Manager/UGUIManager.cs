@@ -18,7 +18,6 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     LoadingScene m_loadingScene;
     AudioSource m_source;
     ExitMenu m_exit;
-    Canvas m_canvas;
     Camera m_uiCam;
     VolumeController m_volumeUI;
     ScreenHUD m_hud;
@@ -80,6 +79,30 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
     {
         return m_uiCam;
     }
+    public VolumeController GetVolumeController()
+    {
+        return m_volumeUI;
+    }
+    public ScoreUI GetScoreUI()
+    {
+        return m_scoreUI;
+    }
+    public TipsUI GetTipUI()
+    {
+        return m_tipsUI;
+    }
+    public GameMenuUI GetMenuUI()
+    {
+        return m_menuUI;
+    }
+    public Lobby_UI GetLobbyUI()
+    {
+        return m_lobbyUI;
+    }
+    public ExitMenu GetExitMenu()
+    {
+        return m_exit;
+    }
     #endregion
     public void SetPlayer(PlayerController player) //플레이어 설정.
     {
@@ -98,33 +121,6 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
         m_skillUI.DeActiveSkill();
         m_volumeUI.CancleMenu();
         m_tipsUI.gameObject.SetActive(false);
-    }
-    public void OpenMenu() //메뉴창 온오프
-    {
-        if(m_menuUI.gameObject.activeSelf)
-        {
-            m_menuUI.DeactiveUI();
-        }
-        else
-        {
-            m_menuUI.ActiveUI();
-        }
-       
-    }
-    public void SkillUIChange(bool aa, PlayerSkillController skill) //스킬창 온오프
-    {
-        if (aa)
-        {
-            m_skillUI.ActiveSkill(skill);
-        }
-        else
-        {
-            m_skillUI.DeActiveSkill();
-        }
-    }
-    public void StartRound() //라운드 UI를 통해 라운드 변경 전송
-    {
-        m_roundUI.ChangeRound();
     }
     public void GameStart() //씬 변경 UI 호출.
     {
@@ -146,44 +142,8 @@ public class UGUIManager : SingletonDontDestroy<UGUIManager>
         m_loadingScene.gameObject.SetActive(true);
         m_loadingScene.LoadLobbyScene();
     }
-    public void ActiveLobbyUI(bool isActive) // 로비씬으로 이동할 때 사용할 LobbyUI 활성화.
-    {
-        m_lobbyUI.SetActiveUI(isActive);
-    }
-    public void LayerChanger(int layer) //UI의 레이어를 변경해주는 기능. 현재는 사용 X
-    {
-        m_canvas.sortingOrder = layer;
-    }
-    public void OpenExitMenu() //게임 종료 UI
-    {
-        if (m_exit.gameObject.activeSelf)
-        {
-            m_exit.DeActiveUi();
-        }
-        else
-        {
-            m_exit.ActiveUI();
-        } 
-    }
-    public void ActiveVolumeControll() // 볼륨 조저 UI 활성화.
-    {
-        m_volumeUI.ActiveUI();
-    }
-    public void SaveData(int gameduration,int round) //점수UI를 통해 현재 게임 진행 데이터를 저장하는 기능.
-    {
-        m_scoreUI.SaveGameData(m_player, gameduration,round);
-    }
-    public void ActiveScoreUI() //점수UI 활성화
-    {
-        m_scoreUI.ActiveUI();
-    }
-    public void ActiveTipMenu() //조작법 UI 활성화
-    {
-        m_tipsUI.ActiveUI();
-    }
     void SetTransform()
     {
-        m_canvas = GetComponent<Canvas>();
         m_source = GetComponentInChildren<AudioSource>();
         m_exit = GetComponentInChildren<ExitMenu>(true);
         m_systemMessage = Utill.GetChildObject(gameObject, "SystemMessage").GetComponent<TextMeshProUGUI>();

@@ -58,9 +58,10 @@
   <ItemGroup>
     <Compile Include="Assets\External\NGUI\Scripts\UI\UIAnchor.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\ScoreUI.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Manager\ImageLoader.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Utill\ImageLoader.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\ResizePanel.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\LagRotation.cs" />
+    <Compile Include="Assets\1.Main\2.Script\UI\HUDTween.cs" />
     <Compile Include="Assets\1.Main\2.Script\Utill\LightIntensityTween.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIScrollView.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIToggle.cs" />
@@ -289,7 +290,7 @@
     <Compile Include="Assets\1.Main\2.Script\UI\DamageAbleObjectHUD.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIButtonKeys.cs" />
     <Compile Include="Assets\1.Main\2.Script\Controller\Object\BuildableObject.cs" />
-    <Compile Include="Assets\1.Main\2.Script\Controller\Object\IDamageAbleObject.cs" />
+    <Compile Include="Assets\1.Main\2.Script\Utill\IDamageAbleObject.cs" />
     <Compile Include="Assets\1.Main\2.Script\UI\ScreenHUD.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIToggledObjects.cs" />
     <Compile Include="Assets\External\NGUI\Examples\Scripts\Other\WindowAutoYaw.cs" />
@@ -304,7 +305,6 @@
     <Compile Include="Assets\1.Main\2.Script\Controller\Monster\MonsterController.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Interaction\UIKeyBinding.cs" />
     <Compile Include="Assets\External\NGUI\Scripts\Internal\NGUIDebug.cs" />
-    <Compile Include="Assets\1.Main\2.Script\UI\HUDTween.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

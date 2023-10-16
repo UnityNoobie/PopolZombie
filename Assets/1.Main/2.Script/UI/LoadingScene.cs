@@ -68,7 +68,7 @@ public class LoadingScene : MonoBehaviour //씬 로딩 UI
     void LoadLobby() //로비 로딩
     {
         gameObject.SetActive(false);
-        UGUIManager.Instance.ActiveLobbyUI(true);
+        UGUIManager.Instance.GetLobbyUI().SetActiveUI(true);
     }
     void LoadStart() //로딩이 시작될 때 값을 초기화 해주고 해당 코루틴 실행
     {
@@ -96,7 +96,7 @@ public class LoadingScene : MonoBehaviour //씬 로딩 UI
             m_startButton.onClick.AddListener(StartButton);
         }
         gameObject.SetActive(true);
-        UGUIManager.Instance.ActiveLobbyUI(false);
+        UGUIManager.Instance.GetLobbyUI().SetActiveUI(false);
         LoadStart();
     }
     public void LoadLobbyScene() // 로비씬 이동 시 실행. 코루틴 호출

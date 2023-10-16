@@ -18,11 +18,11 @@ public class GameMenuUI : MonoBehaviour //인게임 내 ESC키 눌렀을 시 호출되는 메�
     void AddListoner()
     {
         m_play.onClick.AddListener(DeactiveUI); //시간 재개 게임오브젝트 종료
-        m_sound.onClick.AddListener(UGUIManager.Instance.ActiveVolumeControll); //
+        m_sound.onClick.AddListener(UGUIManager.Instance.GetVolumeController().ActiveUI); //
         m_lobby.onClick.AddListener(GameManager.Instance.LoadLobbyScene); //로비 불러오기
         m_lobby.onClick.AddListener(DeactiveUI);
-        m_control.onClick.AddListener(UGUIManager.Instance.ActiveTipMenu); //팁메뉴
-        m_exit.onClick.AddListener(UGUIManager.Instance.OpenExitMenu);//게임종료
+        m_control.onClick.AddListener(UGUIManager.Instance.GetTipUI().ActiveUI); //팁메뉴
+        m_exit.onClick.AddListener(UGUIManager.Instance.GetExitMenu().ActiveUI);//게임종료
 
         //SFX플레이
         m_play.onClick.AddListener(UGUIManager.Instance.PlayClickSFX); 
@@ -32,13 +32,18 @@ public class GameMenuUI : MonoBehaviour //인게임 내 ESC키 눌렀을 시 호출되는 메�
         m_lobby.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
         m_exit.onClick.AddListener(UGUIManager.Instance.PlayClickSFX);
     }
-    public void DeactiveUI()
+    void DeactiveUI()
     {
         GameManager.Instance.SetTimeScale(1);
         gameObject.SetActive(false);
     }
     public void ActiveUI()
     {
+        if (gameObject.activeSelf)
+        {
+            DeactiveUI();
+            return;
+        }
         GameManager.Instance.SetTimeScale(0);
         gameObject.SetActive(true);
     }

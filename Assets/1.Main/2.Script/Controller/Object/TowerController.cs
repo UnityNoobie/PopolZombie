@@ -167,7 +167,7 @@ public class TowerController : BuildableObject //빌더블 오브젝트 상속받는 포탑 �
 
         if (HasTarget()) //타겟이 사정거리 내에 있다면
         {
-             FindNearTarget(); //가까운 표적을 지정해주고
+             
              m_rotationSpeed = m_barrelSpeed; //회전 , 조준 시작
 
              Vector3 baseTargetPostition = new Vector3(m_target.transform.position.x, transform.position.y, m_target.transform.position.z);
@@ -178,6 +178,7 @@ public class TowerController : BuildableObject //빌더블 오브젝트 상속받는 포탑 �
 
              if(Time.time >= lastFireTime + (1 / m_stat.FireRate))
              {
+                FindNearTarget(); //가까운 표적을 지정해주고
                 lastFireTime = Time.time;
                 RaycastHit hit;
                 Vector3 hitPos = Vector3.zero;

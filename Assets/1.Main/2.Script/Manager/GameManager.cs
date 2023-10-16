@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public enum DaynNight
@@ -157,7 +158,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
         roundTime = DaynNight.Day;
         SetNextRound();
         SoundManager.Instance.DayStart();
-        UGUIManager.Instance.StartRound();
+        UGUIManager.Instance.GetRoundUI().ChangeRound();
         MonsterManager.Instance.ResetBossCount();
         m_light.StartDay();
     }
@@ -172,8 +173,8 @@ public class GameManager : SingletonDontDestroy<GameManager>
         {
             SoundManager.Instance.NightStart();
         }
-       
-        UGUIManager.Instance.StartRound();
+
+        UGUIManager.Instance.GetRoundUI().ChangeRound();
         m_light.StartNight();
         MonsterManager.Instance.StartNight();
     }
@@ -216,7 +217,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
     }
     void SaveScore() //게임 데이터 저장기능
     {
-        UGUIManager.Instance.SaveData(gameDuration, m_round);
+        UGUIManager.Instance.GetScoreUI().SaveGameData(m_player, gameDuration, m_round);
     }
     public void LoadScene(Scene sin)// 씬바꿔주는 기능.
     {
