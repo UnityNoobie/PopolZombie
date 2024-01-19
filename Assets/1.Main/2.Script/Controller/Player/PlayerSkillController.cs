@@ -59,7 +59,7 @@ public class PlayerSkillController : MonoBehaviour
         {
             case SkillWeaponType.Every: return true;
             case SkillWeaponType.Personal:
-                if (weaponType.Equals(WeaponType.Pistol) || weaponType.Equals(WeaponType.SubMGun) || weaponType.Equals(WeaponType.Rifle)) return true;
+                if (weaponType.Equals(WeaponType.Pistol) || weaponType.Equals(WeaponType.SMG) || weaponType.Equals(WeaponType.Rifle)) return true;
                 else return false;
             case SkillWeaponType.Heavy:
                 if (weaponType.Equals(WeaponType.Bat) || weaponType.Equals(WeaponType.Axe) || weaponType.Equals(WeaponType.MachineGun) || weaponType.Equals(WeaponType.ShotGun)) return true;
@@ -68,7 +68,7 @@ public class PlayerSkillController : MonoBehaviour
                 if (weaponType.Equals(WeaponType.Pistol)) return true;
                 else return false;
             case SkillWeaponType.SMG:
-                if (weaponType.Equals(WeaponType.SubMGun)) return true;
+                if (weaponType.Equals(WeaponType.SMG)) return true;
                 else return false;
             case SkillWeaponType.Rifle:
                 if (weaponType.Equals(WeaponType.Rifle)) return true;

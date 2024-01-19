@@ -410,11 +410,11 @@ public class MonsterController : MonoBehaviour
         {
             BurnDamage();
         }
-        if(player != null)
+        if(player != null) // 플레이어의 공격에 의한 
         if (player.GetStatus.KnockBackPer > Random.Range(0,100 + m_status.KnockbackRigist)) //넉백이 될때만 아래 적용 넉백없는 공격은 무시하고 돌진하도록!
         {
            m_navAgent.ResetPath();
-           SetState(MonsterState.Damaged);
+           SetState(MonsterState.Damaged); 
            if (m_motionDelaycoroutine != null)
            {
                StopCoroutine(m_motionDelaycoroutine);

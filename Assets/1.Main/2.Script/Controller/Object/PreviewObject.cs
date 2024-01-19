@@ -7,10 +7,11 @@ public class PreviewObject : MonoBehaviour //프리뷰 오브젝트 관리 스크립트.
 {
     #region Constants and Fields
     bool isCanBuild;
+    bool isDetected = true;
     const float m_activeTime = 0.06f;
     MeshRenderer[] m_materials;
     BoxCollider col;
-    List<GameObject> m_object = new List<GameObject>();
+    List<Collider> m_object = new List<Collider>();
     #endregion
 
     #region Coroutine
@@ -19,10 +20,9 @@ public class PreviewObject : MonoBehaviour //프리뷰 오브젝트 관리 스크립트.
     {
         while (true)
         {
-            isCanBuild = true;
-            col.enabled = true;
             yield return new WaitForSeconds(m_activeTime);
-            col.enabled = false;
+            if(m_object.Count > 0) { isCanBuild = false;}
+            else isCanBuild = true;
             if (isCanBuild)
             {
                 for (int i = 0; i < m_materials.Length; i++)
@@ -58,12 +58,21 @@ public class PreviewObject : MonoBehaviour //프리뷰 오브젝트 관리 스크립트.
         col = GetComponent<BoxCollider>();
         m_materials = GetComponentsInChildren<MeshRenderer>(true);
     }
-    private void OnTriggerEnter(Collider other) //충돌 여부 검사하여 isCanBuild 변경
+    private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Background") || other.CompareTag("Tower") || other.CompareTag("Barricade") || other.CompareTag("Generator"))
+        if (other.CompareTag("Background") || other.CompareTag("Tower") || other.CompareTag("Barricade") || other.CompareTag("Generator"))
         {
-            isCanBuild = false;
+            m_object.Add(other);
         }
     }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Background") || other.CompareTag("Tower") || other.CompareTag("Barricade") || other.CompareTag("Generator"))
+        {
+            m_object.Remove(other);
+        }
+    }
+
+
     #endregion
 }

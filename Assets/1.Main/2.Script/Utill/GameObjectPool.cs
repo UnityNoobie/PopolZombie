@@ -5,14 +5,14 @@ using System;
 
 
 
-public class GameObjectPool<T> where T : class //오브젝트 풀링할 때 사용하는 메소드
+public class GameObjectPool<T> where T : class //오브젝트 풀링 메소드
 {
     public delegate T Func();
     Queue<T> m_objPool = new Queue<T>();
     Func m_createFunc;
     int m_count = 0;
     public int Count { get { return m_objPool.Count; } }
-    public GameObjectPool(int count, Func createFunc)//풀 생성 기능.
+    public GameObjectPool(int count, Func createFunc)//풀 초기 설정.
     {
         m_count = count;
         m_createFunc = createFunc;

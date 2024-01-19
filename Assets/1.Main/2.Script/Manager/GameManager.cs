@@ -196,6 +196,12 @@ public class GameManager : SingletonDontDestroy<GameManager>
             UGUIManager.Instance.GetStoreUI().SetItemListTable();
         }
     }
+    public void IncreaseWaitTime()
+    {
+        StopAllCoroutines();
+        UGUIManager.Instance.SystemMessageSendMessage("치트 사용! 라운드 대기시간 초기화");
+        StartCoroutine(Coroutine_DayTimeChecker());
+    }
     public void UsingCheatKey()
     {
         if(m_round < 10)

@@ -129,7 +129,7 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         if (GroupPlane.Raycast(cameraRay, out rayLength))
         {
             Vector3 pointTolook = cameraRay.GetPoint(rayLength);
-            m_playerC.ObjcetBuildSuccesed(PlayerItemType.Barricade);
+            m_playerC.ObjcetBuildSuccesed(PlayerItemType.Turret);
             obj.BuildTurretObject(new Vector3(pointTolook.x, 0f, pointTolook.z),m_player.GetPlayerSkillData(),GetObjectStat(ObjectType.Turret));
             m_playerObject.BuildTurret(obj);
             m_towerList.Add(obj);

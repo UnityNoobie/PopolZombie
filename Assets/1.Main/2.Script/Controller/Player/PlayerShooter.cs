@@ -41,7 +41,7 @@ public class PlayerShooter : MonoBehaviour
         {
             m_leftMount = m_PistolleftPos;
         }
-        else if (data.weaponType.Equals(WeaponType.SubMGun))
+        else if (data.weaponType.Equals(WeaponType.SMG))
         {
             m_leftMount = m_SMGLeftPos;
         }
@@ -76,7 +76,7 @@ public class PlayerShooter : MonoBehaviour
     }
     private void OnAnimatorIK() //무기 타입별 IK애니메이션 조절
     {
-        if(gun!= null&&(gun.gunstate.Equals(GunState.Ready)&&( gun.m_type == WeaponType.Pistol || gun.m_type == WeaponType.SubMGun)))
+        if(gun!= null&&(gun.gunstate.Equals(GunState.Ready)&&( gun.m_type == WeaponType.Pistol || gun.m_type == WeaponType.SMG)))
         {
             m_anim.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1.0f);
             m_anim.SetIKPosition(AvatarIKGoal.LeftHand, m_leftMount.position);

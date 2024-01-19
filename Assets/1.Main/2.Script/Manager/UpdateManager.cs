@@ -56,10 +56,12 @@ public class UpdateManager : SingletonMonoBehaviour<UpdateManager> //업데이트를 
             return;
 
         m_player.BehaviorProcess();
+
+        if(Input.GetKeyDown(KeyCode.N)) GameManager.Instance.IncreaseWaitTime();
         
         for (int i = 0; i < MonsterManager.Instance.m_monsterList.Count; i++) //소환되어있는 몬스터에 적용
         {
-            MonsterManager.Instance.m_monsterList[i].BehaviourProcess(); //각각 호출하는거보다 하나의 업데이트에서 사용하면 더 효율적임.
+            MonsterManager.Instance.m_monsterList[i].BehaviourProcess(); //각각 호출하는거보다 하나의 업데이트에서 사용하면 더 효율적
         }
         for(int i = 0; i < ObjectManager.Instance.m_towerList.Count; i++) // 포탑의 조준,발사 메커니즘
         {

@@ -408,6 +408,7 @@ public class PlayerController : MonoBehaviour ,IDamageAbleObject
             if(m_item.HaveEnoughItem(PlayerItemType.HealPack))
             {
                 m_item.UseItem(PlayerItemType.HealPack);
+                GetHeal(30); //힐값 임의입력
             }
         }
 

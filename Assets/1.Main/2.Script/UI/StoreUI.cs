@@ -31,6 +31,9 @@ public class StoreUI : MonoBehaviour
     List<int> m_armorList = new List<int>();
     List<int> m_weaponList = new List<int>();
     List<int> m_itemList = new List<int>();
+    bool lowitem;
+    bool miditem;
+    bool highitem;
     #endregion
 
     #region Methods
@@ -81,41 +84,44 @@ public class StoreUI : MonoBehaviour
     }
     public void SetItemListTable()
     {
-        if (GameManager.Instance.GetRoundInfo() >= 20) //라운드가 21이상일 때 상점에 상위 아이템 추가
+        if (GameManager.Instance.GetRoundInfo() >= 20 && !highitem) //라운드가 21이상일 때 상점에 상위 아이템 추가
         {
+            highitem = true;
             for (int i = 0; i < TableArmorStat.Instance.m_highArmor.Count; i++)
             {
                 m_armorList.Add(TableArmorStat.Instance.m_highArmor[i]);
             }
             for (int i = 0; i < TableGunstat.Instance.m_highWeapon.Count; i++)
             {
-                m_weaponList.Add(TableGunstat.Instance.m_highWeapon[i]);
+                    m_weaponList.Add(TableGunstat.Instance.m_highWeapon[i]);
             }
             for (int i = 0; i < TableItemData.Instance.m_highItem.Count; i++)
             {
-                m_itemList.Add(TableItemData.Instance.m_highItem[i]);
+                    m_itemList.Add(TableItemData.Instance.m_highItem[i]);
             }
         }
-        else if (GameManager.Instance.GetRoundInfo() >= 10) //라운드가 11이상일 때 상점에 중간아이템 추가
+        else if (GameManager.Instance.GetRoundInfo() >= 10 && !miditem) //라운드가 11이상일 때 상점에 중간아이템 추가
         {
+            miditem = true;
             for (int i = 0; i < TableArmorStat.Instance.m_midArmor.Count; i++)
             {
-                m_armorList.Add(TableArmorStat.Instance.m_midArmor[i]);
+                    m_armorList.Add(TableArmorStat.Instance.m_midArmor[i]);
             }
             for (int i = 0; i < TableGunstat.Instance.m_midWeapon.Count; i++)
             {
-                m_weaponList.Add(TableGunstat.Instance.m_midWeapon[i]);
+                    m_weaponList.Add(TableGunstat.Instance.m_midWeapon[i]);
             }
             for (int i = 0; i < TableItemData.Instance.m_highItem.Count; i++)
             {
-                m_itemList.Add(TableItemData.Instance.m_midItem[i]);
+                    m_itemList.Add(TableItemData.Instance.m_midItem[i]);
             }
         }
-        else //기본 아이템
+        else if(!lowitem)//기본 아이템
         {
             m_armorList = TableArmorStat.Instance.m_lowArmor;
             m_weaponList = TableGunstat.Instance.m_lowWeapon;
             m_itemList = TableItemData.Instance.m_lowItem;
+            lowitem = true;
         }
 
     }
@@ -181,6 +187,9 @@ public class StoreUI : MonoBehaviour
         {
             LoadUIInfo();
         }
+        lowitem = false;
+        miditem = false;
+        highitem = false;
     }
     #endregion
 }

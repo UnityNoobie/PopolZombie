@@ -6,7 +6,7 @@ using static TableGunstat;
 public enum WeaponType
 {
     Pistol,
-    SubMGun,
+    SMG,
     Rifle,
     MachineGun,
     ShotGun,
@@ -87,40 +87,7 @@ public class WeaponData
         //아이템 타입, 아이디, 등급, 데미지, 장탄량, 크리티컬확률, 크리티컬데미지, 방어력, 샷건발사수, 넉백확률,공격속도,재장전속도,이동속도,체력 순서
         WeaponData status = null;
         status = TableGunstat.Instance.m_WeaponData[ID];
-        WeaponType type = new WeaponType();
-        if (status.Type.Equals("Pistol"))
-        {
-            type = WeaponType.Pistol;
-        }
-        else if (status.Type.Equals("SubMGun"))
-        {
-            type = WeaponType.SubMGun;
-        }
-        else if (status.Type.Equals("Rifle"))
-        {
-            type = WeaponType.Rifle;
-        }
-        else if (status.Type.Equals("MachineGun"))
-        {
-            type = WeaponType.MachineGun;
-        }
-        else if (status.Type.Equals("ShotGun"))
-        {
-            type = WeaponType.ShotGun;
-        }
-        else if (status.Type.Equals("Bat"))
-        {
-            type = WeaponType.Bat;
-        }
-        else if (status.Type.Equals("Axe"))
-        {
-            type = WeaponType.Axe;
-        }
-        else
-        {
-            Debug.Log("무기의 타입이 뭔가 이상합니다 선생님");
-        }
-        WeaponData gunstat = new WeaponData(status.Type, status.ID, status.Grade, status.Damage, status.Mag, status.CriRate, status.CriDamage, status.Defence, status.Shotgun, status.KnockBack, status.AtkSpeed, status.ReloadTime, status.Speed, status.HP, status.KnockBackDist,status.AttackDist, status.AtkType, type, status.Image, status.Info, status.ItemType, status.Price,status.ShotSound,status.ReloadSound,status.AtkSound);
+        WeaponData gunstat = new WeaponData(status.Type, status.ID, status.Grade, status.Damage, status.Mag, status.CriRate, status.CriDamage, status.Defence, status.Shotgun, status.KnockBack, status.AtkSpeed, status.ReloadTime, status.Speed, status.HP, status.KnockBackDist,status.AttackDist, status.AtkType, status.weaponType, status.Image, status.Info, status.ItemType, status.Price,status.ShotSound,status.ReloadSound,status.AtkSound);
         return gunstat;
     }
 }
@@ -143,6 +110,38 @@ public class TableGunstat : Singleton<TableGunstat>
         {
             WeaponData data = new WeaponData();
             data.Type = TableLoader.Instance.GetString("Type", i); //총의 타입값을 인스턴스
+            if (data.Type.Equals("Pistol"))
+            {
+                data.weaponType = WeaponType.Pistol;
+            }
+            else if (data.Type.Equals("SMG"))
+            {
+                data.weaponType = WeaponType.SMG;
+            }
+            else if (data.Type.Equals("Rifle"))
+            {
+                data.weaponType = WeaponType.Rifle;
+            }
+            else if (data.Type.Equals("MachineGun"))
+            {
+                data.weaponType = WeaponType.MachineGun;
+            }
+            else if (data.Type.Equals("ShotGun"))
+            {
+                data.weaponType = WeaponType.ShotGun;
+            }
+            else if (data.Type.Equals("Bat"))
+            {
+                data.weaponType = WeaponType.Bat;
+            }
+            else if (data.Type.Equals("Axe"))
+            {
+                data.weaponType = WeaponType.Axe;
+            }
+            else
+            {
+                Debug.Log("무기의 타입이 뭔가 이상합니다 선생님");
+            }
             data.ID = TableLoader.Instance.GetInteger("Id", i); //총의 아이디값
             data.Grade = TableLoader.Instance.GetInteger("Grade", i); //총의 레벨값
             data.Damage = TableLoader.Instance.GetInteger("Damage", i); //총의 데미지

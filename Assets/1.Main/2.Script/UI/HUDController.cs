@@ -35,7 +35,7 @@ public class HUDController : MonoBehaviour
         {
             CancelInvoke("Hide");
         }
-        Invoke("Hide", m_hideRate);
+        Invoke("Hide", m_hideRate); //일정 시간 지난 후 표기 hud 안보이게
         if (type == AttackType.Normal)
         {
             m_hudText[0].Add(-damage, Color.red, 0f);
@@ -54,10 +54,6 @@ public class HUDController : MonoBehaviour
     void Hide() // 비활성화.
     {
         gameObject.SetActive(false);
-    }
-    void Start() // 객체 생성 시 HUD 꺼주어 화면 깨끗하게.
-    {
-        Hide();
     }
     #endregion
 }
